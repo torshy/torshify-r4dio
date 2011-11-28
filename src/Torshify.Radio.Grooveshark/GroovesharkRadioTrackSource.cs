@@ -46,7 +46,10 @@ namespace Torshify.Radio.Grooveshark
                                 Name = s.SongName,
                                 Album = s.AlbumName,
                                 Artist = s.ArtistName,
-                                SongID = s.SongId
+                                SongID = s.SongId,
+                                AlbumID = s.AlbumId,
+                                ArtistID = s.ArtistId,
+                                AlbumArt = "http://images.grooveshark.com/static/albums/90_" + s.AlbumId + ".jpg"
                             });
                         }
                     }
@@ -81,7 +84,10 @@ namespace Torshify.Radio.Grooveshark
                                                  Name = s.SongName,
                                                  Album = s.AlbumName,
                                                  Artist = s.ArtistName,
-                                                 SongID = s.SongId
+                                                 SongID = s.SongId,
+                                                 AlbumID = s.AlbumId,
+                                                 ArtistID = s.ArtistId,
+                                                 AlbumArt = "http://images.grooveshark.com/static/albums/90_" + s.AlbumId + ".jpg"
                                              });
                         }
                     }
@@ -110,7 +116,10 @@ namespace Torshify.Radio.Grooveshark
                                              Name = s.SongName,
                                              Album = s.AlbumName,
                                              Artist = s.ArtistName,
-                                             SongID = s.SongId
+                                             SongID = s.SongId,
+                                             AlbumID = s.AlbumId,
+                                             ArtistID = s.ArtistId,
+                                             AlbumArt = "http://images.grooveshark.com/static/albums/90_" + s.AlbumId + ".jpg"
                                          });
                 }
             }

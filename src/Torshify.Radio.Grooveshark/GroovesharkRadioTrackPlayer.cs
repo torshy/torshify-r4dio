@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -81,8 +82,11 @@ namespace Torshify.Radio.Grooveshark
             get { return _isPlaying; }
             set
             {
-                _isPlaying = value;
-                OnIsPlayingChanged();
+                if (_isPlaying != value)
+                {
+                    _isPlaying = value;
+                    OnIsPlayingChanged();
+                }
             }
         }
 
@@ -174,21 +178,23 @@ namespace Torshify.Radio.Grooveshark
         {
             try
             {
-                if (_playbackState != StreamingPlaybackState.Stopped)
-                {
-                    if (_fullyDownloaded)
-                    {
-                        _webRequest.Abort();
-                    }
-                    _playbackState = StreamingPlaybackState.Stopped;
-                    if (_waveOut != null)
-                    {
-                        _waveOut.Stop();
-                        _waveOut.Dispose();
-                        _waveOut = null;
-                    }
+                _timer.Enabled = false;
+                _playbackState = StreamingPlaybackState.Stopped;
 
-                    _timer.Enabled = false;
+                if (_fullyDownloaded)
+                {
+                    _webRequest.Abort();
+                }
+
+                if (_waveOut != null)
+                {
+                    _waveOut.Stop();
+                    _waveOut.Dispose();
+                    _waveOut = null;
+                }
+
+                if (_bufferThread.IsAlive)
+                {
                     _bufferThread.Join(1000);
                 }
             }
@@ -241,10 +247,20 @@ namespace Torshify.Radio.Grooveshark
             {
                 if (_waveOut == null && _bufferedWaveProvider != null)
                 {
-                    _waveOut = new WaveOut();
-                    _volumeProvider = new VolumeWaveProvider16(_bufferedWaveProvider);
-                    _volumeProvider.Volume = Volume;
-                    _waveOut.Init(_volumeProvider);
+                    try
+                    {
+                        _waveOut = new WaveOut();
+                        _volumeProvider = new VolumeWaveProvider16(_bufferedWaveProvider);
+                        _volumeProvider.Volume = Volume;
+                        _waveOut.Init(_volumeProvider);
+                    }
+                    catch (Exception ex)
+                    {
+                        _log.Log(ex.ToString(), Category.Exception, Priority.High);
+                        _elapsedTimeSpan = TimeSpan.Zero;
+                        IsPlaying = false;
+                        OnTrackComplete(_currentTrack);
+                    }
                 }
                 else if (_bufferedWaveProvider != null)
                 {
@@ -367,8 +383,6 @@ namespace Torshify.Radio.Grooveshark
                                 catch (Exception e)
                                 {
                                     _log.Log("Error decompressing frame: " + e.Message, Category.Exception, Priority.Medium);
-                                    _elapsedTimeSpan = TimeSpan.Zero;
-                                    IsPlaying = false;
                                     OnTrackComplete(_currentTrack);
                                     break;
                                 }

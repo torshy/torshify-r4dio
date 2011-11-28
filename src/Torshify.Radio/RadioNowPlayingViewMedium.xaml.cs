@@ -35,7 +35,7 @@ namespace Torshify.Radio
             Application.Current.MainWindow.Resources.Add(SystemColors.HighlightTextBrushKey, Brushes.White);
             Application.Current.MainWindow.Resources.Add(SystemColors.DesktopBrushKey, new SolidColorBrush(Color.FromArgb(100, 0, 192, 255)));
 
-            if (model != null)
+            if (model != null && model.CurrentTrack != null)
             {
                 var regionManager = ServiceLocator.Current.TryResolve<IRegionManager>();
                 var region = regionManager.Regions["BackgroundRegion"];

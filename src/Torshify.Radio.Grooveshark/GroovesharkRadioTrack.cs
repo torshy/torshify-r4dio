@@ -9,5 +9,17 @@ namespace Torshify.Radio.Grooveshark
             get; 
             set;
         }
+
+        public int AlbumID
+        {
+            get; 
+            set;
+        }
+
+        public int ArtistID
+        {
+            get; 
+            set;
+        }
     }
 }

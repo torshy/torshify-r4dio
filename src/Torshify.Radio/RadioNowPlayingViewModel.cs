@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -14,7 +15,7 @@ namespace Torshify.Radio
 
         private readonly IRadio _radio;
         private Queue<IRadioTrack> _playQueue;
-
+        private TaskScheduler _uiTaskScheduler;
         #endregion Fields
 
         #region Constructors
@@ -24,6 +25,7 @@ namespace Torshify.Radio
             _radio = radio;
             _radio.TrackComplete += OnTrackComplete;
             _playQueue = new Queue<IRadioTrack>();
+            _uiTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
         }
 
         #endregion Constructors
@@ -82,22 +84,28 @@ namespace Torshify.Radio
 
         public void MoveToNext()
         {
-            if (_playQueue.Count > 0)
-            {
-                CurrentTrack = _playQueue.Dequeue();
+            Task.Factory
+                .StartNew(() =>
+                {
+                    if (_playQueue.Count > 0)
+                    {
+                        CurrentTrack = _playQueue.Dequeue();
+                    }
 
-                Action toDo = () =>
-                                  {
-                                      _radio.Load(CurrentTrack);
-                                      _radio.Play();
-                                  };
+                    return CurrentTrack;
+                })
+                .ContinueWith(t =>
+                {
+                    if (t.Result != null)
+                    {
+                        _radio.Load(t.Result);
+                        _radio.Play();
+                    }
 
-                Application.Current.Dispatcher.BeginInvoke(toDo);
-            }
-
-            PeekToNext();
-
-            RaisePropertyChanged("CurrentTrack", "HasTracks");
+                    RaisePropertyChanged("CurrentTrack", "HasTracks");
+                }, _uiTaskScheduler)
+                .ContinueWith(t =>
+                    PeekToNext());
         }
 
         public void PeekToNext()
@@ -127,12 +135,9 @@ namespace Torshify.Radio
 
         private void OnTrackComplete(object sender, TrackEventArgs e)
         {
-            CurrentTrack = null;
-            NextTrack = null;
-
             MoveToNext();
         }
-        
+
         #endregion Methods
     }
 }
