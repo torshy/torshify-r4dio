@@ -35,7 +35,7 @@
                 HorizontalAlignment="Left"
                 Width="200"
                 Height="200"
-                Background="#FF00C0FF"
+                Background="{DynamicResource {x:Static SystemColors.DesktopBrushKey}}"
                 Padding="2">
                 <Image
                     Width="200"

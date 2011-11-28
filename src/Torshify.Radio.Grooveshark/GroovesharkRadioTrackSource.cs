@@ -27,11 +27,8 @@ namespace Torshify.Radio.Grooveshark
 
         public IEnumerable<IRadioTrack> GetTracksByAlbum(string artist, string album)
         {
-            return new IRadioTrack[0];
-        }
+            List<IRadioTrack> tracks = new List<IRadioTrack>();
 
-        public IEnumerable<IRadioTrack> GetTracksByArtist(string artist, int offset, int count)
-        {
             try
             {
                 TinySongSession session = new TinySongSession(TinySongApiKey);
@@ -39,14 +36,20 @@ namespace Torshify.Radio.Grooveshark
 
                 if (result != null)
                 {
-                    return result.Select(s =>
-                                         new GroovesharkRadioTrack
-                                             {
-                                                 Name = s.SongName,
-                                                 Album = s.AlbumName,
-                                                 Artist = s.ArtistName,
-                                                 SongID = s.SongId
-                                             });
+                    foreach (var s in result)
+                    {
+                        if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase) &&
+                            album.Equals(s.AlbumName, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            tracks.Add(new GroovesharkRadioTrack
+                            {
+                                Name = s.SongName,
+                                Album = s.AlbumName,
+                                Artist = s.ArtistName,
+                                SongID = s.SongId
+                            });
+                        }
+                    }
                 }
             }
             catch (Exception e)
@@ -54,7 +57,42 @@ namespace Torshify.Radio.Grooveshark
                 Console.WriteLine(e);
             }
 
-            return new IRadioTrack[0];
+            return tracks;
+        }
+
+        public IEnumerable<IRadioTrack> GetTracksByArtist(string artist, int offset, int count)
+        {
+            List<IRadioTrack> tracks = new List<IRadioTrack>();
+
+            try
+            {
+                TinySongSession session = new TinySongSession(TinySongApiKey);
+                var result = session.Search(artist, 1);
+
+                if (result != null)
+                {
+                    
+                    foreach (var s in result)
+                    {
+                        if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            tracks.Add(new GroovesharkRadioTrack
+                                             {
+                                                 Name = s.SongName,
+                                                 Album = s.AlbumName,
+                                                 Artist = s.ArtistName,
+                                                 SongID = s.SongId
+                                             });
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return tracks;
         }
 
         public IEnumerable<IRadioTrack> GetTracksByName(string name, int offset, int count)

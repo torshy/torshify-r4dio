@@ -4,6 +4,7 @@ using EchoNest;
 using EchoNest.Artist;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Common;
+using System.Linq;
 
 namespace Torshify.Radio.EchoNest.Style
 {
@@ -96,6 +97,12 @@ namespace Torshify.Radio.EchoNest.Style
             {
                 var artistToLookFor = _artistsToLookFor.Dequeue();
                 _currentArtistTracks = _radio.GetTracksByArtist(artistToLookFor.Name, 0, NumberOfTracksPerArtist);
+
+                if (!_currentArtistTracks.Any())
+                {
+                    return MoveNext();
+                }
+
                 return true;
             }
 

@@ -100,6 +100,12 @@ namespace Torshify.Radio.EchoNest.Similar
             {
                 var artistToLookFor = _artistsToLookFor.Dequeue();
                 _currentArtistTracks = _radio.GetTracksByArtist(artistToLookFor.Name, 0, NumberOfTracksPerArtist);
+
+                if (!_currentArtistTracks.Any())
+                {
+                    return MoveNext();
+                }
+
                 return true;
             }
 

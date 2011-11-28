@@ -4,12 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:Controls="clr-namespace:Microsoft.Windows.Shell"
     xmlns:Converters="clr-namespace:Torshify.Radio.Converters"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:Behaviors="clr-namespace:Torshify.Radio.Behaviors"
-    xmlns:Controls1="clr-namespace:Torshify.Radio.Controls"
-    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework" mc:Ignorable="d"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
@@ -65,9 +64,11 @@
                         <Grid>
                             <Border
                                 Margin="0,0,4,4"
-                                Background="#FF00C0FF">
+                                Background="{DynamicResource {x:Static SystemColors.DesktopBrushKey}}">
                                 <i:Interaction.Behaviors>
-                                    <Behaviors:TiltBehavior TiltFactor="10" KeepDragging="False"/>
+                                    <Behaviors:TiltBehavior
+                                        TiltFactor="10"
+                                        KeepDragging="False" />
                                 </i:Interaction.Behaviors>
                                 <Grid>
                                     <Image

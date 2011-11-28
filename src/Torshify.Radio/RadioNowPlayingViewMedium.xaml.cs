@@ -33,6 +33,7 @@ namespace Torshify.Radio
             var model = DataContext as RadioNowPlayingViewModel;
             
             Application.Current.MainWindow.Resources.Add(SystemColors.HighlightTextBrushKey, Brushes.White);
+            Application.Current.MainWindow.Resources.Add(SystemColors.DesktopBrushKey, new SolidColorBrush(Color.FromArgb(100, 0, 192, 255)));
 
             if (model != null)
             {

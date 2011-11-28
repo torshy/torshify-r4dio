@@ -34,6 +34,9 @@
             <SolidColorBrush
                 x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
                 Color="Black" />
+            <SolidColorBrush
+                x:Key="{x:Static SystemColors.DesktopBrushKey}"
+                Color="#FF00C0FF" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

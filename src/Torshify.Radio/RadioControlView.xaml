@@ -10,7 +10,7 @@
     d:DesignHeight="300"
     d:DesignWidth="300"
     Height="60"
-    Background="#FF00C0FF">
+    Background="{DynamicResource {x:Static SystemColors.DesktopBrushKey}}">
     <UserControl.Resources>
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter" />

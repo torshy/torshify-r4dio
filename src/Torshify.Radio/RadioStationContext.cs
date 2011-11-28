@@ -88,7 +88,7 @@ namespace Torshify.Radio
                                               _nowPlayingViewModel.AddTracks(t.Result);
                                               _nowPlayingViewModel.PeekToNext();
                                           }
-                                      });
+                                      }).Wait();
             }
         }
 
