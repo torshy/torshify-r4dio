@@ -13,7 +13,8 @@
             x:Key="StringToUpperConverter" />
     </UserControl.Resources>
     <ListBox
-        ItemsSource="{Binding Results}">
+        ItemsSource="{Binding Results}"
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled">
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <DockPanel

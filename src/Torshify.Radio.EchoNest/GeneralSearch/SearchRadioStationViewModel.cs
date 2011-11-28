@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+
 using Microsoft.Practices.Prism.Commands;
+
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.GeneralSearch
@@ -16,6 +18,7 @@ namespace Torshify.Radio.EchoNest.GeneralSearch
 
         private readonly IRadioStationContext _context;
         private readonly IRadio _radio;
+
         private ObservableCollection<IRadioTrack> _results;
 
         #endregion Fields
@@ -29,25 +32,12 @@ namespace Torshify.Radio.EchoNest.GeneralSearch
             _results = new ObservableCollection<IRadioTrack>();
 
             SearchCommand = new DelegateCommand<string>(ExecuteSearch);
+            PlayCommand = new DelegateCommand<IRadioTrack>(ExecutePlay);
         }
 
         #endregion Constructors
 
         #region Properties
-
-        public ICommand SearchCommand
-        {
-            get;
-            private set;
-        }
-
-        public IEnumerable<IRadioTrack> Results
-        {
-            get
-            {
-                return _results;
-            }
-        }
 
         public ImageSource DefaultImage
         {
@@ -67,15 +57,40 @@ namespace Torshify.Radio.EchoNest.GeneralSearch
                 return coverArtSource;
             }
         }
+
+        public IEnumerable<IRadioTrack> Results
+        {
+            get
+            {
+                return _results;
+            }
+        }
+
+        public ICommand SearchCommand
+        {
+            get;
+            private set;
+        }
+
+        public ICommand PlayCommand
+        {
+            get; private set;
+        }
+
         #endregion Properties
 
         #region Methods
+
+        private void ExecutePlay(IRadioTrack track)
+        {
+            _context.SetTrackProvider(() => new[] {track});
+        }
 
         private void ExecuteSearch(string query)
         {
             var ui = TaskScheduler.FromCurrentSynchronizationContext();
             Task.Factory
-                .StartNew(() => _radio.GetTracksByName(query, 0, 10))
+                .StartNew(() => _radio.GetTracksByName(query, 0, 32))
                 .ContinueWith(t=>
                                   {
                                       _results.Clear();
