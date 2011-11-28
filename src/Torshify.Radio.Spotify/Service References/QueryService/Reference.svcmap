@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="401e76bf-1122-4e46-aa22-38d3095f49e5" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="net.tcp://localhost:1337/torshify/v1/query/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="v1.wsdl" MetadataType="Wsdl" ID="42c55c49-e3ac-49ee-a9b9-ad33fec1b573" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/query/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="f3ea0585-d07c-431c-a6cf-d5c791f9d757" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/query/mex" />
+    <MetadataFile FileName="v1.xsd" MetadataType="Schema" ID="eff1d3ee-ab77-494c-94c7-754f21932d0b" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/query/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="70327359-5847-4e33-ab88-5a5392de7420" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/query/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="8e7b042e-fbe8-4007-a9ae-e5cebf7a7c76" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/query/mex" />
+    <MetadataFile FileName="Torshify.Origo.Contracts.V1.Query.xsd" MetadataType="Schema" ID="e8400794-df96-4ebc-8677-666e9d880345" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/query/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

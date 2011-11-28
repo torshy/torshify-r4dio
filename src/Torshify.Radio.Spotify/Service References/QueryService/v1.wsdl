@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://schemas.torshify/v1" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://schemas.torshify/v1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://schemas.torshify/v1/Imports">
+      <xsd:import namespace="http://schemas.torshify/v1" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1.Query" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="QueryService_Query_InputMessage">
+    <wsdl:part name="parameters" element="tns:Query" />
+  </wsdl:message>
+  <wsdl:message name="QueryService_Query_OutputMessage">
+    <wsdl:part name="parameters" element="tns:QueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryService_AlbumBrowse_InputMessage">
+    <wsdl:part name="parameters" element="tns:AlbumBrowse" />
+  </wsdl:message>
+  <wsdl:message name="QueryService_AlbumBrowse_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AlbumBrowseResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryService_ArtistBrowse_InputMessage">
+    <wsdl:part name="parameters" element="tns:ArtistBrowse" />
+  </wsdl:message>
+  <wsdl:message name="QueryService_ArtistBrowse_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ArtistBrowseResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryService_GetPlaylist_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPlaylist" />
+  </wsdl:message>
+  <wsdl:message name="QueryService_GetPlaylist_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPlaylistResponse" />
+  </wsdl:message>
+  <wsdl:portType name="QueryService">
+    <wsdl:operation name="Query">
+      <wsdl:input wsaw:Action="http://schemas.torshify/v1/QueryService/Query" message="tns:QueryService_Query_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/QueryService/QueryResponse" message="tns:QueryService_Query_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AlbumBrowse">
+      <wsdl:input wsaw:Action="http://schemas.torshify/v1/QueryService/AlbumBrowse" message="tns:QueryService_AlbumBrowse_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/QueryService/AlbumBrowseResponse" message="tns:QueryService_AlbumBrowse_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ArtistBrowse">
+      <wsdl:input wsaw:Action="http://schemas.torshify/v1/QueryService/ArtistBrowse" message="tns:QueryService_ArtistBrowse_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/QueryService/ArtistBrowseResponse" message="tns:QueryService_ArtistBrowse_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPlaylist">
+      <wsdl:input wsaw:Action="http://schemas.torshify/v1/QueryService/GetPlaylist" message="tns:QueryService_GetPlaylist_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/QueryService/GetPlaylistResponse" message="tns:QueryService_GetPlaylist_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

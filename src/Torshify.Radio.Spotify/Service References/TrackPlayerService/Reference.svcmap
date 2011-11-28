@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="abc6ed6a-878a-45f6-b958-2a551d0dd4c8" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="v1.wsdl" MetadataType="Wsdl" ID="35aa1881-64b2-49e8-b93c-088f6f7eb2c8" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="5a1f534f-689c-4f88-8baa-9363a313c9ea" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
+    <MetadataFile FileName="v1.xsd" MetadataType="Schema" ID="e9bad49d-6198-4b78-b0c4-17e16bd2fd1a" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="30522b64-eb5d-45df-a00d-e7c7d4a44c25" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

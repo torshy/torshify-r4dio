@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1.Query" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1.Query" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="ArtistBrowsingType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Full" />
+      <xs:enumeration value="NoAlbums" />
+      <xs:enumeration value="NoTracks" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ArtistBrowsingType" nillable="true" type="tns:ArtistBrowsingType" />
+</xs:schema>

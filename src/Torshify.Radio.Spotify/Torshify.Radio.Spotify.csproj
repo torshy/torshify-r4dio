@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7916AD21-D3AA-42D6-BDD2-03ECBC429011}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Torshify.Radio.Spotify</RootNamespace>
+    <AssemblyName>Torshify.Radio.Spotify</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\lib\Torshify\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>..\..\packages\Prism.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="NAudio">
+      <HintPath>..\..\lib\NAudio\NAudio.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Torshify">
+      <HintPath>..\..\lib\Torshify\Torshify.dll</HintPath>
+    </Reference>
+    <Reference Include="Torshify.Origo">
+      <HintPath>..\..\lib\Torshify\Torshify.Origo.dll</HintPath>
+    </Reference>
+    <Reference Include="Torshify.Origo.Contracts">
+      <HintPath>..\..\lib\Torshify\Torshify.Origo.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="WcfContrib">
+      <HintPath>..\..\lib\Torshify\WcfContrib.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Options.cs" />
+    <Compile Include="OrigoBootstrapperWrapper.cs" />
+    <Compile Include="OrigoConnectionManager.cs" />
+    <Compile Include="SpotifyPlaylistRadioStation.cs" />
+    <Compile Include="SpotifyRadioTrack.cs" />
+    <Compile Include="SpotifyRadioTrackPlayer.cs" />
+    <Compile Include="SpotifyRadioTrackSource.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\PlayerControlService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\QueryService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\TrackPlayerService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.PlayerStatus.datasource" />
+    <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.Playlist.datasource" />
+    <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.Query.AlbumBrowseResult.datasource" />
+    <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.Query.ArtistBrowseResult.datasource" />
+    <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.Query.QueryResult.datasource" />
+    <None Include="Service References\PlayerControlService\service.wsdl" />
+    <None Include="Service References\PlayerControlService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PlayerControlService\v1.wsdl" />
+    <None Include="Service References\PlayerControlService\v1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QueryService\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QueryService\service.wsdl" />
+    <None Include="Service References\QueryService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QueryService\Torshify.Origo.Contracts.V1.Query.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QueryService\v1.wsdl" />
+    <None Include="Service References\QueryService\v1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TrackPlayerService\service.wsdl" />
+    <None Include="Service References\TrackPlayerService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TrackPlayerService\v1.wsdl" />
+    <None Include="Service References\TrackPlayerService\v1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\PlayerControlService\" />
+    <WCFMetadataStorage Include="Service References\QueryService\" />
+    <WCFMetadataStorage Include="Service References\TrackPlayerService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PlayerControlService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PlayerControlService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PlayerControlService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\QueryService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\QueryService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\QueryService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TrackPlayerService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TrackPlayerService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TrackPlayerService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Torshify.Radio.Framework\Torshify.Radio.Framework.csproj">
+      <Project>{A14DD4A9-0888-47D2-8FF1-F3E659ECB6EB}</Project>
+      <Name>Torshify.Radio.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

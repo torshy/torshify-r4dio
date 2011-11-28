@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C408ACB6-B967-4D02-8F0C-A8FA70C43E6D}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Torshify.Radio.EchoNest</RootNamespace>
+    <AssemblyName>Torshify.Radio.EchoNest</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EchoNest-Sharp">
+      <HintPath>..\..\lib\EchoNestSharp\EchoNest-Sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism">
+      <HintPath>..\..\packages\Prism.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Controls.Input.Toolkit, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\WpfToolkit\System.Windows.Controls.Input.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ColorExtensions.cs" />
+    <Compile Include="EchoNestConstants.cs" />
+    <Compile Include="GeneralSearch\SearchRadioStationViewSmall.xaml.cs">
+      <DependentUpon>SearchRadioStationViewSmall.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HslColor.cs" />
+    <Compile Include="Mood\MoodRadioStation.cs" />
+    <Compile Include="Mood\MoodRadioStationView.xaml.cs">
+      <DependentUpon>MoodRadioStationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Mood\MoodRadioStationViewModel.cs" />
+    <Compile Include="Mood\MoodsToArtistEnumerator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="AutoCompleteViewModel.cs" />
+    <Compile Include="GeneralSearch\SearchRadioStation.cs" />
+    <Compile Include="GeneralSearch\SearchRadioStationView.xaml.cs">
+      <DependentUpon>SearchRadioStationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GeneralSearch\SearchRadioStationViewModel.cs" />
+    <Compile Include="Similar\ArtistNameToArtistEnumerator.cs" />
+    <Compile Include="Similar\SimilarArtistsRadioStation.cs" />
+    <Compile Include="Similar\SimilarArtistsRadioStationView.xaml.cs">
+      <DependentUpon>SimilarArtistsRadioStationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Similar\SimilarArtistsRadioStationViewModel.cs" />
+    <Compile Include="Similar\SimilarArtistsRadioStationViewSmall.xaml.cs">
+      <DependentUpon>SimilarArtistsRadioStationViewSmall.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Style\StyleRadioStation.cs" />
+    <Compile Include="Style\StyleRadioStationView.xaml.cs">
+      <DependentUpon>StyleRadioStationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Style\StyleRadioStationViewModel.cs" />
+    <Compile Include="Style\StylesToArtistEnumerator.cs" />
+    <Compile Include="TermModel.cs" />
+    <Compile Include="TopHot\TopHotttTracksRadioStation.cs" />
+    <Compile Include="ValueToIntensityBrushConverter.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="GeneralSearch\SearchRadioStationViewSmall.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Mood\MoodRadioStationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="GeneralSearch\SearchRadioStationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Similar\SimilarArtistsRadioStationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Similar\SimilarArtistsRadioStationViewSmall.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Style\StyleRadioStationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Torshify.Radio.Framework\Torshify.Radio.Framework.csproj">
+      <Project>{A14DD4A9-0888-47D2-8FF1-F3E659ECB6EB}</Project>
+      <Name>Torshify.Radio.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

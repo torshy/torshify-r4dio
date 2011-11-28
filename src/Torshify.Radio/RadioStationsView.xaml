@@ -1,0 +1,95 @@
+﻿<UserControl
+    x:Class="Torshify.Radio.RadioStationsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Controls="clr-namespace:Microsoft.Windows.Shell"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Converters"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Behaviors"
+    xmlns:Controls1="clr-namespace:Torshify.Radio.Controls"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework" mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:PathCombineConverter
+            x:Key="IconsFolderCombineConverter"
+            Folder="Resources\LargeIcons" />
+        <Style
+            x:Key="NoChromeButtonStyle"
+            TargetType="{x:Type Button}">
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="{x:Type Button}">
+                        <Border
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter
+                Property="RenderTransformOrigin"
+                Value="0.5,0.5" />
+            <Setter
+                Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Disabled">
+        <ItemsControl
+            Background="Transparent"
+            BorderThickness="0"
+            ItemsSource="{Binding Radio.Stations}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel
+                        ItemHeight="128"
+                        ItemWidth="128" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button
+                        Command="{x:Static Framework:GlobalCommands.TuneInStationCommand}"
+                        CommandParameter="{Binding}"
+                        Style="{StaticResource NoChromeButtonStyle}"
+                        Background="Transparent">
+                        <Grid>
+                            <Border
+                                Margin="0,0,4,4"
+                                Background="#FF00C0FF">
+                                <i:Interaction.Behaviors>
+                                    <Behaviors:TiltBehavior TiltFactor="10" KeepDragging="False"/>
+                                </i:Interaction.Behaviors>
+                                <Grid>
+                                    <Image
+                                        RenderOptions.BitmapScalingMode="HighQuality"
+                                        Margin="12,0,12,12"
+                                        Source="{Binding Metadata.Icon, Converter={StaticResource IconsFolderCombineConverter}}" />
+                                    <TextBlock
+                                        Foreground="White"
+                                        FontSize="14"
+                                        Text="{Binding Metadata.Name}"
+                                        TextWrapping="Wrap"
+                                        VerticalAlignment="Bottom"
+                                        HorizontalAlignment="Left"
+                                        Margin="4" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>
+
+    
