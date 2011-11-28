@@ -43,6 +43,7 @@
                     MinWidth="120" />
             </StackPanel>
             <StackPanel
+                HorizontalAlignment="Center"
                 Orientation="Horizontal"
                 Margin="25,0,0,0">
                 <TextBlock

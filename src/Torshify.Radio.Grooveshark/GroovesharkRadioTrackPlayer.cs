@@ -321,7 +321,7 @@ namespace Torshify.Radio.Grooveshark
                         }
                         else
                         {
-                            Mp3Frame frame;
+                            Mp3Frame frame = null;
                             try
                             {
                                 frame = Mp3Frame.LoadFromStream(readFullyStream);
@@ -342,10 +342,9 @@ namespace Torshify.Radio.Grooveshark
                             catch (Exception e)
                             {
                                 _log.Log(e.Message, Category.Exception, Priority.High);
-                                break;
                             }
 
-                            if (decompressor == null)
+                            if (frame != null && decompressor == null)
                             {
                                 // don't think these details matter too much - just help ACM select the right codec
                                 // however, the buffered provider doesn't know what sample rate it is working at
@@ -367,15 +366,17 @@ namespace Torshify.Radio.Grooveshark
                                 }
                                 catch (Exception e)
                                 {
-                                    Console.WriteLine(e);
+                                    _log.Log("Error decompressing frame: " + e.Message, Category.Exception, Priority.Medium);
                                     _elapsedTimeSpan = TimeSpan.Zero;
                                     IsPlaying = false;
                                     OnTrackComplete(_currentTrack);
+                                    break;
                                 }
                             }
                             else
                             {
                                 _fullyDownloaded = true;
+                                break;
                             }
                         }
 

@@ -81,6 +81,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Behaviors\MultiSelectionBehavior.cs" />
     <Compile Include="Behaviors\TiltBehavior.cs" />
     <Compile Include="ConsoleManager.cs" />
@@ -260,11 +263,6 @@
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.PlayerStatus.datasource" />
-    <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.Playlist.datasource" />
-    <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.Query.AlbumBrowseResult.datasource" />
-    <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.Query.ArtistBrowseResult.datasource" />
-    <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.Query.QueryResult.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
