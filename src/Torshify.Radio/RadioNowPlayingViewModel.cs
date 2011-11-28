@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
@@ -14,15 +15,17 @@ namespace Torshify.Radio
         #region Fields
 
         private readonly IRadio _radio;
+        private readonly IEventAggregator _eventAggregator;
         private Queue<IRadioTrack> _playQueue;
         private TaskScheduler _uiTaskScheduler;
         #endregion Fields
 
         #region Constructors
 
-        public RadioNowPlayingViewModel(IRadio radio)
+        public RadioNowPlayingViewModel(IRadio radio, IEventAggregator eventAggregator)
         {
             _radio = radio;
+            _eventAggregator = eventAggregator;
             _radio.TrackComplete += OnTrackComplete;
             _playQueue = new Queue<IRadioTrack>();
             _uiTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();

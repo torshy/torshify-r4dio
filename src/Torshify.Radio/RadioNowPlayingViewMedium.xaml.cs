@@ -4,11 +4,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Prism;
 using System.Linq;
 using Torshify.Radio.Controls;
+using Torshify.Radio.Framework;
+using Torshify.Radio.Framework.Events;
 
 namespace Torshify.Radio
 {
@@ -35,6 +38,9 @@ namespace Torshify.Radio
             Application.Current.MainWindow.Resources.Add(SystemColors.HighlightTextBrushKey, Brushes.White);
             Application.Current.MainWindow.Resources.Add(SystemColors.DesktopBrushKey, new SolidColorBrush(Color.FromArgb(100, 0, 192, 255)));
 
+            var eventAggregator = ServiceLocator.Current.TryResolve<IEventAggregator>();
+            eventAggregator.GetEvent<TrackChangedEvent>().Subscribe(OnTrackChanged);
+
             if (model != null && model.CurrentTrack != null)
             {
                 var regionManager = ServiceLocator.Current.TryResolve<IRegionManager>();
@@ -51,6 +57,16 @@ namespace Torshify.Radio
                 BackdropService backdropService = new BackdropService();
                 backdropService.CacheLocation = Path.Combine(Environment.CurrentDirectory, "Cache");
                 backdropService.GetBackdrop(model.CurrentTrack.Artist, OnBackdropFound);
+            }
+        }
+
+        private void OnTrackChanged(IRadioTrack track)
+        {
+            if (track != null)
+            {
+                BackdropService backdropService = new BackdropService();
+                backdropService.CacheLocation = Path.Combine(Environment.CurrentDirectory, "Cache");
+                backdropService.GetBackdrop(track.Artist, OnBackdropFound);
             }
         }
 
@@ -89,6 +105,8 @@ namespace Torshify.Radio
         private void OnViewUnloaded(object sender, RoutedEventArgs e)
         {
             Application.Current.MainWindow.Resources.Clear();
+            var eventAggregator = ServiceLocator.Current.TryResolve<IEventAggregator>();
+            eventAggregator.GetEvent<TrackChangedEvent>().Unsubscribe(OnTrackChanged);
 
             var regionManager = ServiceLocator.Current.TryResolve<IRegionManager>();
             var region = regionManager.Regions["BackgroundRegion"];

@@ -74,6 +74,7 @@
     <Compile Include="Converters\InstanceToObjectTypeConverter.cs" />
     <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToUpperConverter.cs" />
+    <Compile Include="Events\TrackChangedEvent.cs" />
     <Compile Include="GlobalCommands.cs" />
     <Compile Include="IRadio.cs" />
     <Compile Include="IRadioStation.cs" />

@@ -9,11 +9,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
+using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
+using Torshify.Radio.Framework.Events;
 
 namespace Torshify.Radio
 {
@@ -27,6 +29,7 @@ namespace Torshify.Radio
         private TimeSpan _currentTrackElapsed;
         private float _currentVolume = 0.5f;
         private ILoggerFacade _logger;
+        private readonly IEventAggregator _eventAggregator;
         private RadioNowPlayingViewModel _nowPlayingViewModel;
         private Lazy<IRadioStation, IRadioStationMetadata> _radioStation;
         private RadioStationContext _radioStationContext;
@@ -44,10 +47,11 @@ namespace Torshify.Radio
         #region Constructors
 
         [ImportingConstructor]
-        public RadioBox(ILoggerFacade logger)
+        public RadioBox(ILoggerFacade logger, IEventAggregator eventAggregator)
         {
             _logger = logger;
-            _nowPlayingViewModel = new RadioNowPlayingViewModel(this);
+            _eventAggregator = eventAggregator;
+            _nowPlayingViewModel = new RadioNowPlayingViewModel(this, eventAggregator);
             _nowPlayingViewModel.AtEndOfPlaylist += OnAtEndOfPlaylist;
         }
 
@@ -337,6 +341,8 @@ namespace Torshify.Radio
                 {
                     _logger.Log(e.Message, Category.Exception, Priority.Medium);
                 }
+
+                _eventAggregator.GetEvent<TrackChangedEvent>().Publish(CurrentTrack);
             }
         }
 
