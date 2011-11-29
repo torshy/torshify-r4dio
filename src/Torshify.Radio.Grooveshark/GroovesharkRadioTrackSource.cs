@@ -271,7 +271,7 @@ namespace Torshify.Radio.Grooveshark
                 }
             }
 
-            return new IRadioTrack[0];
+            return tracks;
         }
 
         private bool IsRateLimitExceeded()

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using EchoNest;
 using EchoNest.Artist;
 using Torshify.Radio.Framework;
+using System.Linq;
 
 namespace Torshify.Radio.EchoNest.TopHot
 {
@@ -48,9 +49,9 @@ namespace Torshify.Radio.EchoNest.TopHot
             {
                 _currentOffset += response.Artists.Count;
 
-                foreach (var artist in response.Artists)
+                foreach (var artist in response.Artists.OrderBy(t => Guid.NewGuid()))
                 {
-                    var artistTracks = _radio.GetTracksByArtist(artist.Name, 0, 5);
+                    var artistTracks = _radio.GetTracksByArtist(artist.Name, 0, 1);
                     tracks.AddRange(artistTracks);
                 }
             }
