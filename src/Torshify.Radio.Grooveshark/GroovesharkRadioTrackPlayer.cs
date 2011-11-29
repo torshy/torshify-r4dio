@@ -18,7 +18,7 @@ using Timer = System.Timers.Timer;
 
 namespace Torshify.Radio.Grooveshark
 {
-    [RadioTrackPlayerMetadata(Name = "Grooveshark", Icon = "Grooveshark_Logo.png")]
+    [RadioTrackPlayerMetadata(Name = "Grooveshark", Icon = "pack://siteoforigin:,,,/Resources/Icons/Grooveshark_Logo.png")]
     public class GroovesharkRadioTrackPlayer : IRadioTrackPlayer
     {
         #region Fields
