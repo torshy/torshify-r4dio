@@ -28,6 +28,7 @@ namespace Torshify.Radio
         private IRadioTrack _currentTrack;
         private TimeSpan _currentTrackElapsed;
         private float _currentVolume = 0.5f;
+        private Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata> _currentPlayer;
         private ILoggerFacade _logger;
         private readonly IEventAggregator _eventAggregator;
         private RadioNowPlayingViewModel _nowPlayingViewModel;
@@ -38,9 +39,9 @@ namespace Torshify.Radio
         [Import]
         private IRegionManager _regionManager = null;
         [ImportMany]
-        private IEnumerable<IRadioTrackPlayer> _trackPlayers = null;
+        private IEnumerable<Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata>> _trackPlayers = null;
         [ImportMany]
-        private IEnumerable<IRadioTrackSource> _trackSources = null;
+        private IEnumerable<Lazy<IRadioTrackSource, IRadioTrackSourceMetadata>> _trackSources = null;
 
         #endregion Fields
 
@@ -79,6 +80,19 @@ namespace Torshify.Radio
             }
         }
 
+        public Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata> CurrentPlayer
+        {
+            get { return _currentPlayer; }
+            private set
+            {
+                if (_currentPlayer != value)
+                {
+                    _currentPlayer = value;
+                    RaisePropertyChanged("CurrentPlayer");
+                }
+            }
+        }
+
         public IRadioTrack CurrentTrack
         {
             get { return _currentTrack; }
@@ -110,7 +124,7 @@ namespace Torshify.Radio
             {
                 try
                 {
-                    return _trackPlayers.Any(t => t.IsPlaying);
+                    return _trackPlayers.Any(t => t.Value.IsPlaying);
                 }
                 catch (Exception e)
                 {
@@ -126,12 +140,12 @@ namespace Torshify.Radio
             get { return _radioStations; }
         }
 
-        public IEnumerable<IRadioTrackPlayer> TrackPlayers
+        public IEnumerable<Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata>> TrackPlayers
         {
             get { return _trackPlayers; }
         }
 
-        public IEnumerable<IRadioTrackSource> TrackSources
+        public IEnumerable<Lazy<IRadioTrackSource, IRadioTrackSourceMetadata>> TrackSources
         {
             get { return _trackSources; }
         }
@@ -152,7 +166,7 @@ namespace Torshify.Radio
                 {
                     try
                     {
-                        player.Volume = _currentVolume;
+                        player.Value.Volume = _currentVolume;
                     }
                     catch (Exception e)
                     {
@@ -172,7 +186,7 @@ namespace Torshify.Radio
         {
             try
             {
-                return _trackPlayers.Any(t => t.CanPlay(radioTrack));
+                return _trackPlayers.Any(t => t.Value.CanPlay(radioTrack));
             }
             catch (Exception e)
             {
@@ -185,17 +199,17 @@ namespace Torshify.Radio
         {
             foreach (var radioTrackPlayer in _trackPlayers)
             {
-                radioTrackPlayer.TrackComplete += OnRadioStationTrackComplete;
-                radioTrackPlayer.TrackProgress += OnRadioStationTrackProgress;
-                radioTrackPlayer.IsPlayingChanged += OnRadioStationIsPlayingChanged;
+                radioTrackPlayer.Value.TrackComplete += OnRadioStationTrackComplete;
+                radioTrackPlayer.Value.TrackProgress += OnRadioStationTrackProgress;
+                radioTrackPlayer.Value.IsPlayingChanged += OnRadioStationIsPlayingChanged;
 
                 try
                 {
-                    radioTrackPlayer.Initialize();
+                    radioTrackPlayer.Value.Initialize();
                 }
                 catch (Exception e)
                 {
-                    _logger.Log(e.Message, Category.Exception, Priority.Medium);
+                    _logger.Log("Error initializing player " + radioTrackPlayer.Metadata.Name + ". " + e.Message, Category.Exception, Priority.Medium);
                 }
             }
 
@@ -203,11 +217,11 @@ namespace Torshify.Radio
             {
                 try
                 {
-                    radioTrackSource.Initialize();
+                    radioTrackSource.Value.Initialize();
                 }
                 catch (Exception e)
                 {
-                    _logger.Log(e.Message, Category.Exception, Priority.Medium);
+                    _logger.Log("Error initializing tracksource " + radioTrackSource.Metadata.Name + ". " + e.Message, Category.Exception, Priority.Medium);
                 }
             }
 
@@ -219,7 +233,7 @@ namespace Torshify.Radio
                 }
                 catch (Exception e)
                 {
-                    _logger.Log(e.Message, Category.Exception, Priority.Medium);
+                    _logger.Log("Error initializing station " + radioStation.Metadata.Name + ". " + e.Message, Category.Exception, Priority.Medium);
                 }
             }
 
@@ -276,7 +290,7 @@ namespace Torshify.Radio
 
                     if (currentPlayer != null)
                     {
-                        currentPlayer.Stop();
+                        currentPlayer.Value.Stop();
                     }
                 }
             }
@@ -293,9 +307,9 @@ namespace Torshify.Radio
 
                 if (currentPlayer != null)
                 {
-                    _logger.Log("Loading " + CurrentTrack.Name + " [" + currentPlayer.GetType().Name + "]", Category.Info, Priority.Low);
+                    _logger.Log("Loading " + CurrentTrack.Name + " [" + currentPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
 
-                    currentPlayer.Load(track);
+                    currentPlayer.Value.Load(track);
                 }
             }
             catch (Exception e)
@@ -313,9 +327,9 @@ namespace Torshify.Radio
             {
                 try
                 {
-                    _logger.Log("Pausing" + " [" + currentPlayer.GetType().Name + "]", Category.Info, Priority.Low);
+                    _logger.Log("Pausing" + " [" + currentPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
 
-                    currentPlayer.Pause();
+                    currentPlayer.Value.Pause();
                 }
                 catch (Exception e)
                 {
@@ -332,17 +346,18 @@ namespace Torshify.Radio
             {
                 try
                 {
-                    _logger.Log("Playing " + CurrentTrack.Name + " [" + currentPlayer.GetType().Name + "]", Category.Info, Priority.Low);
+                    _logger.Log("Playing " + CurrentTrack.Name + " [" + currentPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
 
-                    currentPlayer.Play();
-                    currentPlayer.Volume = Volume;
+                    currentPlayer.Value.Play();
+                    currentPlayer.Value.Volume = Volume;
+                    CurrentPlayer = currentPlayer;
+
+                    _eventAggregator.GetEvent<TrackChangedEvent>().Publish(CurrentTrack);
                 }
                 catch (Exception e)
                 {
                     _logger.Log(e.Message, Category.Exception, Priority.Medium);
                 }
-
-                _eventAggregator.GetEvent<TrackChangedEvent>().Publish(CurrentTrack);
             }
         }
 
@@ -354,9 +369,9 @@ namespace Torshify.Radio
             {
                 try
                 {
-                    _logger.Log("Stopping" + " [" + currentPlayer.GetType().Name + "]", Category.Info, Priority.Low);
+                    _logger.Log("Stopping" + " [" + currentPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
 
-                    currentPlayer.Stop();
+                    currentPlayer.Value.Stop();
                 }
                 catch (Exception e)
                 {
@@ -377,7 +392,7 @@ namespace Torshify.Radio
                 {
                     try
                     {
-                        var result = trackSource.GetTracksByAlbum(artist, album);
+                        var result = trackSource.Value.GetTracksByAlbum(artist, album);
 
                         foreach (var radioTrack in result)
                         {
@@ -406,7 +421,7 @@ namespace Torshify.Radio
                 {
                     try
                     {
-                        var result = trackSource.GetTracksByArtist(artist, offset, count);
+                        var result = trackSource.Value.GetTracksByArtist(artist, offset, count);
 
                         foreach (var radioTrack in result)
                         {
@@ -435,7 +450,7 @@ namespace Torshify.Radio
                 {
                     try
                     {
-                        var result = trackSource.GetTracksByName(name, offset, count);
+                        var result = trackSource.Value.GetTracksByName(name, offset, count);
 
                         foreach (var radioTrack in result)
                         {
@@ -456,9 +471,9 @@ namespace Torshify.Radio
         {
         }
 
-        private IRadioTrackPlayer GetTrackPlayerForSource(IRadioTrack radioTrack)
+        private Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata> GetTrackPlayerForSource(IRadioTrack radioTrack)
         {
-            return _trackPlayers.FirstOrDefault(t => t.CanPlay(radioTrack));
+            return _trackPlayers.FirstOrDefault(t => t.Value.CanPlay(radioTrack));
         }
 
         private void OnAtEndOfPlaylist(object sender, EventArgs e)

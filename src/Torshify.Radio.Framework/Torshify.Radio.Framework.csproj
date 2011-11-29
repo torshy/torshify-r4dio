@@ -83,7 +83,9 @@
     <Compile Include="IRadioStationTrackProvider.cs" />
     <Compile Include="IRadioTrack.cs" />
     <Compile Include="IRadioTrackPlayer.cs" />
+    <Compile Include="IRadioTrackPlayerMetadata.cs" />
     <Compile Include="IRadioTrackSource.cs" />
+    <Compile Include="IRadioTrackSourceMetadata.cs" />
     <Compile Include="MediaPlayerRadioTrack.cs" />
     <Compile Include="MediaPlayerRadioTrackPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

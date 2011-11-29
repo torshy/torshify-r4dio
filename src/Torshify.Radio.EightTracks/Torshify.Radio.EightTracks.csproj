@@ -83,7 +83,11 @@
       <Name>Torshify.Radio.Framework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\Icons\EightTracks_Logo.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <Page Include="EightTracksRadioStationView.xaml">
       <SubType>Designer</SubType>

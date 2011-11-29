@@ -5,7 +5,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
-    xmlns:Radio="clr-namespace:Torshify.Radio" xmlns:Converters1="clr-namespace:Torshify.Radio.Converters" mc:Ignorable="d"
+    xmlns:Converters1="clr-namespace:Torshify.Radio.Converters"
+    mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
@@ -16,6 +17,9 @@
         <Converters:BoolToVisibleOrHidden
             x:Key="BoolToVisibleOrHidden"
             Collapse="False" />
+        <Converters1:PathCombineConverter
+            x:Key="IconsFolderCombineConverter"
+            Folder="Resources\Icons" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -49,6 +53,11 @@
                 TextTrimming="CharacterEllipsis"
                 FontWeight="Bold"
                 FontSize="16" />
+            <Image
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Height="40"
+                Width="40"
+                Source="{Binding DataContext.Radio.CurrentPlayer.Metadata.Icon, Converter={StaticResource IconsFolderCombineConverter}, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
         </StackPanel>
         <Decorator
             Grid.Row="1"

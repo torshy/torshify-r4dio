@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using Grooveshark_Sharp;
 using Grooveshark_Sharp.TinySong;
 
+using Microsoft.Practices.Prism.Logging;
+
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Grooveshark
 {
-    [Export(typeof(IRadioTrackSource))]
+    [RadioTrackSourceMetadata(Name = "Grooveshark")]
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class GroovesharkRadioTrackSource : IRadioTrackSource
     {
@@ -19,9 +21,25 @@ namespace Torshify.Radio.Grooveshark
 
         public static GroovesharkSession Session;
 
+        // Note  : Yes yes i know, but the damn thing is getting rate limit exceeded all the time when some stupid bug occurrs. 
+        // This way i can rotate between two keys when one is wrecked :x Sowwy grooveshark.
         private const string TinySongApiKey = "d55e33ec381ba3566d3984af64f65d8c";
+        private const string TinySongApiKey1 = "e5496c78cf106ccdc54aac2a835ec838";
+        private readonly ILoggerFacade _logger;
+        private bool _rateLimitExceeded;
+        private DateTime _rateLimitExceededTimestamp;
 
         #endregion Fields
+
+        #region Constructors
+
+        [ImportingConstructor]
+        public GroovesharkRadioTrackSource(ILoggerFacade logger)
+        {
+            _logger = logger;
+        }
+
+        #endregion Constructors
 
         #region Methods
 
@@ -29,35 +47,79 @@ namespace Torshify.Radio.Grooveshark
         {
             List<IRadioTrack> tracks = new List<IRadioTrack>();
 
-            try
+            if (IsRateLimitExceeded())
             {
-                TinySongSession session = new TinySongSession(TinySongApiKey);
-                var result = session.Search(artist, 1);
-
-                if (result != null)
+                try
                 {
-                    foreach (var s in result)
+                    GroovesharkSearch search = new GroovesharkSearch(Session);
+                    var searchResult = search.Search(artist + " " +  album);
+
+                    if (searchResult.Results != null && searchResult.Results.Songs != null)
                     {
-                        if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase) &&
-                            album.Equals(s.AlbumName, StringComparison.InvariantCultureIgnoreCase))
+                        foreach (var s in searchResult.Results.Songs)
                         {
-                            tracks.Add(new GroovesharkRadioTrack
+                            if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase) &&
+                                album.Equals(s.AlbumName, StringComparison.InvariantCultureIgnoreCase))
                             {
-                                Name = s.SongName,
-                                Album = s.AlbumName,
-                                Artist = s.ArtistName,
-                                SongID = s.SongId,
-                                AlbumID = s.AlbumId,
-                                ArtistID = s.ArtistId,
-                                AlbumArt = "http://images.grooveshark.com/static/albums/90_" + s.AlbumId + ".jpg"
-                            });
+                                tracks.Add(new GroovesharkRadioTrack
+                                               {
+                                                   Name = s.SongName,
+                                                   Album = s.AlbumName,
+                                                   Artist = s.ArtistName,
+                                                   SongID = s.SongId,
+                                                   AlbumID = s.AlbumId,
+                                                   ArtistID = s.ArtistId,
+                                                   AlbumArt =
+                                                       "http://images.grooveshark.com/static/albums/90_" + s.AlbumId +
+                                                       ".jpg"
+                                               });
+                            }
                         }
                     }
                 }
+                catch (Exception e)
+                {
+                    _logger.Log("Grooveshark - " + e, Category.Info, Priority.Medium);
+                }
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine(e);
+                try
+                {
+                    TinySongSession session = new TinySongSession(TinySongApiKey);
+                    var result = session.Search(artist, 1);
+
+                    if (result != null)
+                    {
+                        _rateLimitExceeded = false;
+                        foreach (var s in result)
+                        {
+                            if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase) &&
+                                album.Equals(s.AlbumName, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                tracks.Add(new GroovesharkRadioTrack
+                                               {
+                                                   Name = s.SongName,
+                                                   Album = s.AlbumName,
+                                                   Artist = s.ArtistName,
+                                                   SongID = s.SongId,
+                                                   AlbumID = s.AlbumId,
+                                                   ArtistID = s.ArtistId,
+                                                   AlbumArt =
+                                                       "http://images.grooveshark.com/static/albums/90_" + s.AlbumId +
+                                                       ".jpg"
+                                               });
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    _rateLimitExceededTimestamp = DateTime.Now;
+                    _rateLimitExceeded = true;
+                    _logger.Log("Grooveshark - " + e, Category.Info, Priority.Medium);
+                }
+
             }
 
             return tracks;
@@ -67,68 +129,154 @@ namespace Torshify.Radio.Grooveshark
         {
             List<IRadioTrack> tracks = new List<IRadioTrack>();
 
-            try
+            if (IsRateLimitExceeded())
             {
-                TinySongSession session = new TinySongSession(TinySongApiKey);
-                var result = session.Search(artist, 1);
-
-                if (result != null)
+                try
                 {
-                    
-                    foreach (var s in result)
+                    GroovesharkSearch search = new GroovesharkSearch(Session);
+                    var searchResult = search.Search(artist);
+
+                    if (searchResult.Results != null && searchResult.Results.Songs != null)
                     {
-                        if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase))
+                        foreach (var s in searchResult.Results.Songs)
                         {
-                            tracks.Add(new GroovesharkRadioTrack
-                                             {
-                                                 Name = s.SongName,
-                                                 Album = s.AlbumName,
-                                                 Artist = s.ArtistName,
-                                                 SongID = s.SongId,
-                                                 AlbumID = s.AlbumId,
-                                                 ArtistID = s.ArtistId,
-                                                 AlbumArt = "http://images.grooveshark.com/static/albums/90_" + s.AlbumId + ".jpg"
-                                             });
+                            if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                tracks.Add(new GroovesharkRadioTrack
+                                {
+                                    Name = s.SongName,
+                                    Album = s.AlbumName,
+                                    Artist = s.ArtistName,
+                                    SongID = s.SongId,
+                                    AlbumID = s.AlbumId,
+                                    ArtistID = s.ArtistId,
+                                    AlbumArt =
+                                        "http://images.grooveshark.com/static/albums/90_" + s.AlbumId +
+                                        ".jpg"
+                                });
+                            }
                         }
                     }
                 }
+                catch (Exception e)
+                {
+                    _logger.Log("Grooveshark - " + e, Category.Info, Priority.Medium);
+                }
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine(e);
-            }
+                try
+                {
+                    TinySongSession session = new TinySongSession(TinySongApiKey);
+                    var result = session.Search(artist, 1);
 
+                    if (result != null)
+                    {
+                        _rateLimitExceeded = false;
+                        foreach (var s in result)
+                        {
+                            if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                tracks.Add(new GroovesharkRadioTrack
+                                               {
+                                                   Name = s.SongName,
+                                                   Album = s.AlbumName,
+                                                   Artist = s.ArtistName,
+                                                   SongID = s.SongId,
+                                                   AlbumID = s.AlbumId,
+                                                   ArtistID = s.ArtistId,
+                                                   AlbumArt =
+                                                       "http://images.grooveshark.com/static/albums/90_" + s.AlbumId +
+                                                       ".jpg"
+                                               });
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    _rateLimitExceededTimestamp = DateTime.Now;
+                    _rateLimitExceeded = true;
+                    _logger.Log("Grooveshark - " + e.Message, Category.Info, Priority.Medium);
+                }
+            }
             return tracks;
         }
 
         public IEnumerable<IRadioTrack> GetTracksByName(string name, int offset, int count)
         {
-            try
-            {
-                TinySongSession session = new TinySongSession(TinySongApiKey);
-                var result = session.Search(name, count);
+            List<IRadioTrack> tracks = new List<IRadioTrack>();
 
-                if (result != null)
+            if (IsRateLimitExceeded())
+            {
+                try
                 {
-                    return result.Select(s =>
-                                         new GroovesharkRadioTrack
-                                         {
-                                             Name = s.SongName,
-                                             Album = s.AlbumName,
-                                             Artist = s.ArtistName,
-                                             SongID = s.SongId,
-                                             AlbumID = s.AlbumId,
-                                             ArtistID = s.ArtistId,
-                                             AlbumArt = "http://images.grooveshark.com/static/albums/90_" + s.AlbumId + ".jpg"
-                                         });
+                    GroovesharkSearch search = new GroovesharkSearch(Session);
+                    var searchResult = search.Search(name);
+
+                    if (searchResult.Results != null && searchResult.Results.Songs != null)
+                    {
+                        foreach (var s in searchResult.Results.Songs)
+                        {
+                            tracks.Add(new GroovesharkRadioTrack
+                            {
+                                Name = s.SongName,
+                                Album = s.AlbumName,
+                                Artist = s.ArtistName,
+                                SongID = s.SongId,
+                                AlbumID = s.AlbumId,
+                                ArtistID = s.ArtistId,
+                                AlbumArt =
+                                    "http://images.grooveshark.com/static/albums/90_" + s.AlbumId +
+                                    ".jpg"
+                            });
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.Log("Grooveshark - " + e, Category.Info, Priority.Medium);
                 }
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine(e);
+                try
+                {
+                    TinySongSession session = new TinySongSession(TinySongApiKey);
+                    var result = session.Search(name, count);
+
+                    if (result != null)
+                    {
+                        _rateLimitExceeded = false;
+                        return result.Select(s =>
+                                             new GroovesharkRadioTrack
+                                                 {
+                                                     Name = s.SongName,
+                                                     Album = s.AlbumName,
+                                                     Artist = s.ArtistName,
+                                                     SongID = s.SongId,
+                                                     AlbumID = s.AlbumId,
+                                                     ArtistID = s.ArtistId,
+                                                     AlbumArt =
+                                                         "http://images.grooveshark.com/static/albums/90_" + s.AlbumId +
+                                                         ".jpg"
+                                                 });
+                    }
+                }
+                catch (Exception e)
+                {
+                    _rateLimitExceededTimestamp = DateTime.Now;
+                    _rateLimitExceeded = true;
+                    _logger.Log("Grooveshark - " + e.Message, Category.Info, Priority.Medium);
+                }
             }
 
             return new IRadioTrack[0];
+        }
+
+        private bool IsRateLimitExceeded()
+        {
+            return _rateLimitExceeded && DateTime.Now - _rateLimitExceededTimestamp < TimeSpan.FromMinutes(10);
         }
 
         public void Initialize()

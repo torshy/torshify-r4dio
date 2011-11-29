@@ -12,17 +12,22 @@ namespace Torshify.Radio.Framework
             get;
         }
 
+        Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata> CurrentPlayer
+        {
+            get;
+        }
+
         IEnumerable<Lazy<IRadioStation, IRadioStationMetadata>> Stations
         {
             get;
         }
 
-        IEnumerable<IRadioTrackSource> TrackSources
+        IEnumerable<Lazy<IRadioTrackSource, IRadioTrackSourceMetadata>> TrackSources
         {
             get;
         }
 
-        IEnumerable<IRadioTrackPlayer> TrackPlayers
+        IEnumerable<Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata>> TrackPlayers
         {
             get;
         }

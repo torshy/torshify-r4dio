@@ -41,6 +41,11 @@ namespace Torshify.Radio
 
         #region Properties
 
+        public IRadio Radio
+        {
+            get { return _radio; }
+        }
+
         public bool HasTracks
         {
             get { return CurrentTrack != null || _playQueue.Count > 0; }
@@ -111,7 +116,7 @@ namespace Torshify.Radio
                     PeekToNext());
         }
 
-        public void PeekToNext()
+        public void PeekToNext(bool fireAtEndPlaylistIfAtEnd = true)
         {
             if (_playQueue.Count > 0)
             {
@@ -120,7 +125,11 @@ namespace Torshify.Radio
             else
             {
                 NextTrack = null;
-                OnAtEndAtPlaylist();
+
+                if (fireAtEndPlaylistIfAtEnd)
+                {
+                    OnAtEndAtPlaylist();
+                }
             }
 
             RaisePropertyChanged("NextTrack", "HasUpNext");

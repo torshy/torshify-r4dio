@@ -10,7 +10,7 @@ using Torshify.Radio.Spotify.QueryService;
 
 namespace Torshify.Radio.Spotify
 {
-    [Export(typeof(IRadioTrackSource))]
+    [RadioTrackSourceMetadata(Name = "Spotify")]
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class SpotifyRadioTrackSource : IRadioTrackSource
     {

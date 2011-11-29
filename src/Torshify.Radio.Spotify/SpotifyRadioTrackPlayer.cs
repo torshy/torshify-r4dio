@@ -10,7 +10,7 @@ using Torshify.Radio.Spotify.TrackPlayerService;
 
 namespace Torshify.Radio.Spotify
 {
-    [Export(typeof(IRadioTrackPlayer))]
+    [RadioTrackPlayerMetadata(Name = "Spotify", Icon = "Spotify_Logo.png")]
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class SpotifyRadioTrackPlayer : IRadioTrackPlayer, PlayerControlServiceCallback
     {

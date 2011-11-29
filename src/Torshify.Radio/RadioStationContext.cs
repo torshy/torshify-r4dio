@@ -86,9 +86,9 @@ namespace Torshify.Radio
                                           {
                                               _getNextBatchProviderIsComplete = false;
                                               _nowPlayingViewModel.AddTracks(t.Result);
-                                              _nowPlayingViewModel.PeekToNext();
+                                              _nowPlayingViewModel.PeekToNext(false);
                                           }
-                                      }).Wait();
+                                      });
             }
         }
 

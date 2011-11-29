@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Timers;
 
 using EightTracks;
@@ -8,7 +7,7 @@ using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EightTracks
 {
-    [Export(typeof(IRadioTrackPlayer))]
+    [RadioTrackPlayerMetadata(Name = "8tracks", Icon = "EightTracks_Logo.jpg")]
     public class EightTracksRadioTrackPlayer : MediaPlayerRadioTrackPlayer
     {
         #region Fields
