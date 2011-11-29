@@ -138,7 +138,7 @@ namespace Torshify.Radio.Grooveshark
 
                     if (searchResult.Results != null && searchResult.Results.Songs != null)
                     {
-                        foreach (var s in searchResult.Results.Songs)
+                        foreach (var s in searchResult.Results.Songs.Skip(offset).Take(count))
                         {
                             if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase))
                             {
@@ -216,7 +216,7 @@ namespace Torshify.Radio.Grooveshark
 
                     if (searchResult.Results != null && searchResult.Results.Songs != null)
                     {
-                        foreach (var s in searchResult.Results.Songs)
+                        foreach (var s in searchResult.Results.Songs.Skip(offset).Take(count))
                         {
                             tracks.Add(new GroovesharkRadioTrack
                             {

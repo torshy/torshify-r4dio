@@ -25,6 +25,7 @@ namespace Torshify.Radio
     {
         #region Fields
 
+        private Random _random;
         private IRadioTrack _currentTrack;
         private TimeSpan _currentTrackElapsed;
         private float _currentVolume = 0.5f;
@@ -50,6 +51,7 @@ namespace Torshify.Radio
         [ImportingConstructor]
         public RadioBox(ILoggerFacade logger, IEventAggregator eventAggregator)
         {
+            _random = new Random();
             _logger = logger;
             _eventAggregator = eventAggregator;
             _nowPlayingViewModel = new RadioNowPlayingViewModel(this, eventAggregator);
@@ -406,13 +408,11 @@ namespace Torshify.Radio
                 });
             }
 
-            return bag.ToArray();
+            return bag.OrderBy(x => _random.Next()).ToArray();
         }
 
         IEnumerable<IRadioTrack> IRadioTrackSource.GetTracksByArtist(string artist, int offset, int count)
         {
-            _logger.Log("GetTracksByArtist " + artist, Category.Info, Priority.Low);
-
             ConcurrentBag<IRadioTrack> bag = new ConcurrentBag<IRadioTrack>();
 
             if (_trackSources != null)
@@ -427,15 +427,17 @@ namespace Torshify.Radio
                         {
                             bag.Add(radioTrack);
                         }
+
+                        _logger.Log("GetTracksByArtist " + artist + " @ " + trackSource.Metadata.Name + " = " + result.Count(), Category.Info, Priority.Low);
                     }
                     catch (Exception e)
                     {
-                        _logger.Log(e.Message, Category.Exception, Priority.Medium);
+                        _logger.Log(e.ToString(), Category.Exception, Priority.Medium);
                     }
                 });
             }
 
-            return bag.ToArray();
+            return bag.OrderBy(x => _random.Next()).ToArray();
         }
 
         IEnumerable<IRadioTrack> IRadioTrackSource.GetTracksByName(string name, int offset, int count)
@@ -463,8 +465,8 @@ namespace Torshify.Radio
                     }
                 });
             }
-
-            return bag.ToArray();
+            
+            return bag.OrderBy(x => _random.Next()).ToArray();
         }
 
         void IRadioTrackSource.Initialize()
