@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -82,16 +83,23 @@ namespace Torshify.Radio.EchoNest.Similar
             Task.Factory
                 .StartNew(() =>
                 {
-                    using (EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
+                    try
                     {
-                        var response = session
-                            .Query<SuggestArtist>()
-                            .Execute(searchText);
-
-                        if (response.Status.Code == ResponseCode.Success)
+                        using (EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
                         {
-                            return response.Artists.Select(t => t.Name);
+                            var response = session
+                                .Query<SuggestArtist>()
+                                .Execute(searchText);
+
+                            if (response.Status.Code == ResponseCode.Success)
+                            {
+                                return response.Artists.Select(t => t.Name);
+                            }
                         }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
                     }
 
                     return new string[0];

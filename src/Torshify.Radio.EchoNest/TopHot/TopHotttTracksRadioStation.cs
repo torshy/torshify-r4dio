@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EchoNest;
@@ -66,10 +67,25 @@ namespace Torshify.Radio.EchoNest.TopHot
 
         private TopHotttResponse GetTopHotttArtists()
         {
-            using (EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
+            try
             {
-                return session.Query<TopHottt>().Execute(_batchSize, _currentOffset);
+                using (EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
+                {
+                    return session.Query<TopHottt>().Execute(_batchSize, _currentOffset);
+                }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return new TopHotttResponse
+                       {
+                           Status = new ResponseStatus
+                                        {
+                                            Code = ResponseCode.UnknownError
+                                        }
+                       };
         }
 
         #endregion Methods

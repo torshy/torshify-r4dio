@@ -54,7 +54,7 @@ namespace Torshify.Radio.Grooveshark
                     GroovesharkSearch search = new GroovesharkSearch(Session);
                     var searchResult = search.Search(artist + " " +  album);
 
-                    if (searchResult.Results != null && searchResult.Results.Songs != null)
+                    if (searchResult != null && searchResult.Results != null && searchResult.Results.Songs != null)
                     {
                         foreach (var s in searchResult.Results.Songs)
                         {
@@ -136,7 +136,7 @@ namespace Torshify.Radio.Grooveshark
                     GroovesharkSearch search = new GroovesharkSearch(Session);
                     var searchResult = search.Search(artist);
 
-                    if (searchResult.Results != null && searchResult.Results.Songs != null)
+                    if (searchResult != null && searchResult.Results != null && searchResult.Results.Songs != null)
                     {
                         foreach (var s in searchResult.Results.Songs.Skip(offset).Take(count))
                         {
@@ -214,7 +214,7 @@ namespace Torshify.Radio.Grooveshark
                     GroovesharkSearch search = new GroovesharkSearch(Session);
                     var searchResult = search.Search(name);
 
-                    if (searchResult.Results != null && searchResult.Results.Songs != null)
+                    if (searchResult != null && searchResult.Results != null && searchResult.Results.Songs != null)
                     {
                         foreach (var s in searchResult.Results.Songs.Skip(offset).Take(count))
                         {

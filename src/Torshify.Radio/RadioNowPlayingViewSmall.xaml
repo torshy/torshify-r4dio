@@ -24,16 +24,22 @@
             <RowDefinition
                 Height="Auto" />
         </Grid.RowDefinitions>
-        
+
         <Image
             Grid.Row="1"
             Opacity="0.8"
+            RenderOptions.BitmapScalingMode="HighQuality"
             HorizontalAlignment="Left"
             Height="50"
             Width="50"
-            Source="{Binding DataContext.Radio.CurrentPlayer.Metadata.Icon, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
-        
-        <StackPanel
+            Source="{Binding Radio.CurrentPlayer.Metadata.Icon}">
+            <Image.ToolTip>
+                <TextBlock
+                    Text="{Binding Radio.CurrentPlayer.Metadata.Name, StringFormat={}Track provided by {0}}" />
+            </Image.ToolTip>
+        </Image>
+
+            <StackPanel
             Grid.Row="0"
             DataContext="{Binding CurrentTrack, Mode=OneWay}"
             VerticalAlignment="Bottom"
@@ -47,6 +53,7 @@
                 <Image
                     Width="150"
                     Height="150"
+                    RenderOptions.BitmapScalingMode="HighQuality"
                     Stretch="UniformToFill"
                     Source="{Binding AlbumArt, Converter={StaticResource UriToImageSourceConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
             </Border>

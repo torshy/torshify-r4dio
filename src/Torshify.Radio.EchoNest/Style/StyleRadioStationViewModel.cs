@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -81,16 +82,23 @@ namespace Torshify.Radio.EchoNest.Style
 
         private IEnumerable<TermModel> GetAvailableStyles()
         {
-            using (EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
+            try
             {
-                var response = session
-                    .Query<ListTerms>()
-                    .Execute();
-
-                if (response.Status.Code == ResponseCode.Success)
+                using (EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
                 {
-                    return response.Terms.Select(t => new TermModel {Name = t.Name});
+                    var response = session
+                        .Query<ListTerms>()
+                        .Execute();
+
+                    if (response.Status.Code == ResponseCode.Success)
+                    {
+                        return response.Terms.Select(t => new TermModel {Name = t.Name});
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
 
             return new TermModel[0];
