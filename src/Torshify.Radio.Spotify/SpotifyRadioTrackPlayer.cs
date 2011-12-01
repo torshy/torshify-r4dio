@@ -25,7 +25,7 @@ namespace Torshify.Radio.Spotify
 
         static SpotifyRadioTrackPlayer()
         {
-            OrigoConnectionManager.Instance.ToString();
+            OrigoConnectionManager.Instance.Initialize();
         }
 
         #region Events
@@ -112,7 +112,7 @@ namespace Torshify.Radio.Spotify
             };
         }
 
-        public bool CanPlay(IRadioTrack radioTrack)
+        public bool CanPlay(RadioTrack radioTrack)
         {
             return radioTrack is SpotifyRadioTrack;
         }
@@ -220,7 +220,7 @@ namespace Torshify.Radio.Spotify
             }
         }
 
-        public void Load(IRadioTrack track)
+        public void Load(RadioTrack track)
         {
             SpotifyRadioTrack spotifyTrack = track as SpotifyRadioTrack;
 

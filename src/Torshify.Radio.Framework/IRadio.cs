@@ -37,7 +37,7 @@ namespace Torshify.Radio.Framework
             get;
         }
 
-        IRadioTrack CurrentTrack
+        RadioTrack CurrentTrack
         {
             get;
         }

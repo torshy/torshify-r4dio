@@ -43,9 +43,9 @@ namespace Torshify.Radio.Grooveshark
 
         #region Methods
 
-        public IEnumerable<IRadioTrack> GetTracksByAlbum(string artist, string album)
+        public IEnumerable<RadioTrack> GetTracksByAlbum(string artist, string album)
         {
-            List<IRadioTrack> tracks = new List<IRadioTrack>();
+            List<RadioTrack> tracks = new List<RadioTrack>();
 
             if (IsRateLimitExceeded())
             {
@@ -54,9 +54,9 @@ namespace Torshify.Radio.Grooveshark
                     GroovesharkSearch search = new GroovesharkSearch(Session);
                     var searchResult = search.Search(artist + " " +  album);
 
-                    if (searchResult != null && searchResult.Results != null && searchResult.Results.Songs != null)
+                    if (searchResult != null)
                     {
-                        foreach (var s in searchResult.Results.Songs)
+                        foreach (var s in searchResult)
                         {
                             if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase) &&
                                 album.Equals(s.AlbumName, StringComparison.InvariantCultureIgnoreCase))
@@ -125,9 +125,9 @@ namespace Torshify.Radio.Grooveshark
             return tracks;
         }
 
-        public IEnumerable<IRadioTrack> GetTracksByArtist(string artist, int offset, int count)
+        public IEnumerable<RadioTrack> GetTracksByArtist(string artist, int offset, int count)
         {
-            List<IRadioTrack> tracks = new List<IRadioTrack>();
+            List<RadioTrack> tracks = new List<RadioTrack>();
 
             if (IsRateLimitExceeded())
             {
@@ -136,9 +136,9 @@ namespace Torshify.Radio.Grooveshark
                     GroovesharkSearch search = new GroovesharkSearch(Session);
                     var searchResult = search.Search(artist);
 
-                    if (searchResult != null && searchResult.Results != null && searchResult.Results.Songs != null)
+                    if (searchResult != null)
                     {
-                        foreach (var s in searchResult.Results.Songs.Skip(offset).Take(count))
+                        foreach (var s in searchResult.Skip(offset).Take(count))
                         {
                             if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase))
                             {
@@ -203,9 +203,9 @@ namespace Torshify.Radio.Grooveshark
             return tracks;
         }
 
-        public IEnumerable<IRadioTrack> GetTracksByName(string name, int offset, int count)
+        public IEnumerable<RadioTrack> GetTracksByName(string name, int offset, int count)
         {
-            List<IRadioTrack> tracks = new List<IRadioTrack>();
+            List<RadioTrack> tracks = new List<RadioTrack>();
 
             if (IsRateLimitExceeded())
             {
@@ -214,9 +214,9 @@ namespace Torshify.Radio.Grooveshark
                     GroovesharkSearch search = new GroovesharkSearch(Session);
                     var searchResult = search.Search(name);
 
-                    if (searchResult != null && searchResult.Results != null && searchResult.Results.Songs != null)
+                    if (searchResult != null)
                     {
-                        foreach (var s in searchResult.Results.Songs.Skip(offset).Take(count))
+                        foreach (var s in searchResult.Skip(offset).Take(count))
                         {
                             tracks.Add(new GroovesharkRadioTrack
                             {

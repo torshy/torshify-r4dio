@@ -8,12 +8,12 @@ using System.Linq;
 
 namespace Torshify.Radio.EchoNest.Style
 {
-    public class StylesToArtistEnumerator : IEnumerator<IEnumerable<IRadioTrack>>
+    public class StylesToArtistEnumerator : IEnumerator<IEnumerable<RadioTrack>>
     {
         #region Fields
 
         private Queue<ArtistBucketItem> _artistsToLookFor;
-        private IEnumerable<IRadioTrack> _currentArtistTracks;
+        private IEnumerable<RadioTrack> _currentArtistTracks;
         private IRadio _radio;
         private IEnumerable<TermModel> _terms;
 
@@ -35,7 +35,7 @@ namespace Torshify.Radio.EchoNest.Style
             get; set;
         }
 
-        public IEnumerable<IRadioTrack> Current
+        public IEnumerable<RadioTrack> Current
         {
             get { return _currentArtistTracks; }
         }
@@ -68,14 +68,14 @@ namespace Torshify.Radio.EchoNest.Style
             Start = 0;
         }
 
-        public IEnumerable<IRadioTrack> DoIt()
+        public IEnumerable<RadioTrack> DoIt()
         {
             if (MoveNext())
             {
                 return Current;
             }
 
-            return new IRadioTrack[0];
+            return new RadioTrack[0];
         }
 
         public void Initialize(IEnumerable<TermModel> terms, IRadio radio)

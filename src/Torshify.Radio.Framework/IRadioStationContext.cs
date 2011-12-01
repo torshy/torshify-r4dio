@@ -6,7 +6,7 @@ namespace Torshify.Radio.Framework
 {
     public interface IRadioStationContext
     {
-        Task SetTrackProvider(Func<IEnumerable<IRadioTrack>> getNextBatchProvider);
+        Task SetTrackProvider(Func<IEnumerable<RadioTrack>> getNextBatchProvider);
         void SetView(ViewData viewData);
         void GoToTracks();
         void GoToStations();

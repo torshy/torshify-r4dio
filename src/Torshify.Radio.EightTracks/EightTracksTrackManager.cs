@@ -64,11 +64,11 @@ namespace Torshify.Radio.EightTracks
             }
         }
 
-        private IEnumerable<IRadioTrack> GetTrackFactory()
+        private IEnumerable<RadioTrack> GetTrackFactory()
         {
             if (_currentMix == null || _playToken == null)
             {
-                return new IRadioTrack[0];
+                return new RadioTrack[0];
             }
 
             using (var session = new EightTracksSession(EightTracksRadioStation.ApiKey))
@@ -92,7 +92,7 @@ namespace Torshify.Radio.EightTracks
 
             MixToImageConverter imageUrlConverter = new MixToImageConverter();
 
-            return new IRadioTrack[]
+            return new RadioTrack[]
                        {
                            new EightTracksRadioTrack
                                {

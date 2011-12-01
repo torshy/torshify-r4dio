@@ -60,7 +60,7 @@ namespace Torshify.Radio
             }
         }
 
-        private void OnTrackChanged(IRadioTrack track)
+        private void OnTrackChanged(RadioTrack track)
         {
             if (track != null)
             {

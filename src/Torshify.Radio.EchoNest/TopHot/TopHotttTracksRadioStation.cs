@@ -41,9 +41,9 @@ namespace Torshify.Radio.EchoNest.TopHot
                 .ContinueWith(t => context.GoToTracks(), TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        private IEnumerable<IRadioTrack> ConvertToTracks(TopHotttResponse response)
+        private IEnumerable<RadioTrack> ConvertToTracks(TopHotttResponse response)
         {
-            var tracks = new List<IRadioTrack>();
+            var tracks = new List<RadioTrack>();
 
             if (response.Status.Code == ResponseCode.Success)
             {
@@ -59,7 +59,7 @@ namespace Torshify.Radio.EchoNest.TopHot
             return tracks;
         }
 
-        private IEnumerable<IRadioTrack> GetTaskFactory()
+        private IEnumerable<RadioTrack> GetTaskFactory()
         {
             return Task.Factory
                 .StartNew(() => GetTopHotttArtists())

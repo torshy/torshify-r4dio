@@ -28,12 +28,12 @@ namespace Torshify.Radio.EightTracks
 
         #region Methods
 
-        public override bool CanPlay(IRadioTrack radioTrack)
+        public override bool CanPlay(RadioTrack radioTrack)
         {
             return radioTrack is EightTracksRadioTrack;
         }
 
-        public override void Load(IRadioTrack track)
+        public override void Load(RadioTrack track)
         {
             var eightTracksRadioTrack = track as EightTracksRadioTrack;
 

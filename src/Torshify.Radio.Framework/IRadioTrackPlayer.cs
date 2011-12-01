@@ -33,9 +33,9 @@ namespace Torshify.Radio.Framework
 
         void Initialize();
 
-        bool CanPlay(IRadioTrack track);
+        bool CanPlay(RadioTrack track);
 
-        void Load(IRadioTrack track);
+        void Load(RadioTrack track);
 
         void Stop();
 

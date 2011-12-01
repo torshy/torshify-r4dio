@@ -16,14 +16,14 @@ namespace Torshify.Radio.Spotify
     {
         static SpotifyRadioTrackSource()
         {
-            OrigoConnectionManager.Instance.ToString();
+            OrigoConnectionManager.Instance.Initialize();
         }
 
         #region Methods
 
-        public IEnumerable<IRadioTrack> GetTracksByAlbum(string artist, string album)
+        public IEnumerable<RadioTrack> GetTracksByAlbum(string artist, string album)
         {
-            IEnumerable<IRadioTrack> tracks = new IRadioTrack[0];
+            IEnumerable<RadioTrack> tracks = new RadioTrack[0];
 
             QueryServiceClient query = new QueryServiceClient();
 
@@ -53,9 +53,9 @@ namespace Torshify.Radio.Spotify
             return tracks;
         }
 
-        public IEnumerable<IRadioTrack> GetTracksByArtist(string artist, int offset, int count)
+        public IEnumerable<RadioTrack> GetTracksByArtist(string artist, int offset, int count)
         {
-            IEnumerable<IRadioTrack> tracks = new IRadioTrack[0];
+            IEnumerable<RadioTrack> tracks = new RadioTrack[0];
 
             QueryServiceClient query = new QueryServiceClient();
 
@@ -73,9 +73,9 @@ namespace Torshify.Radio.Spotify
             return tracks;
         }
 
-        public IEnumerable<IRadioTrack> GetTracksByName(string name, int offset, int count)
+        public IEnumerable<RadioTrack> GetTracksByName(string name, int offset, int count)
         {
-            IEnumerable<IRadioTrack> tracks = new IRadioTrack[0];
+            IEnumerable<RadioTrack> tracks = new RadioTrack[0];
 
             QueryServiceClient query = new QueryServiceClient();
 

@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Torshify.Radio.Framework
 {
-    public class RadioTrack : IRadioTrack, INotifyPropertyChanged
+    public class RadioTrack : INotifyPropertyChanged
     {
         #region Fields
 

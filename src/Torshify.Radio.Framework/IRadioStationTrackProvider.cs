@@ -7,7 +7,7 @@ namespace Torshify.Radio.Framework
     {
         #region Methods
 
-        Task<IEnumerable<IRadioTrack>> GetNextTracks();
+        Task<IEnumerable<RadioTrack>> GetNextTracks();
 
         #endregion Methods
     }

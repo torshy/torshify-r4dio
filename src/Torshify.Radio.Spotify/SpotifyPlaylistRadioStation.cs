@@ -33,7 +33,7 @@ namespace Torshify.Radio.Spotify
             context.GoToTracks();
         }
 
-        private IEnumerable<IRadioTrack> GetPlaylistTracks()
+        private IEnumerable<RadioTrack> GetPlaylistTracks()
         {
             var tracks = new List<Track>();
             var query = new QueryServiceClient();

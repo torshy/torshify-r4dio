@@ -17,7 +17,6 @@ namespace Torshify.Radio.Spotify
 
         private OrigoConnectionManager()
         {
-            Initialize();
         }
 
         #endregion Constructors
@@ -36,7 +35,7 @@ namespace Torshify.Radio.Spotify
 
         #region Methods
 
-        private void Initialize()
+        public void Initialize()
         {
             try
             {

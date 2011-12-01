@@ -2,7 +2,7 @@
 
 namespace Torshify.Radio.Framework.Events
 {
-    public class TrackChangedEvent : CompositePresentationEvent<IRadioTrack>
+    public class TrackChangedEvent : CompositePresentationEvent<RadioTrack>
     {
          
     }

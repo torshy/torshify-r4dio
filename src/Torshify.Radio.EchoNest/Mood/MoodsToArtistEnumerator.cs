@@ -8,12 +8,12 @@ using Torshify.Radio.Framework.Common;
 
 namespace Torshify.Radio.EchoNest.Mood
 {
-    public class MoodsToArtistEnumerator : IEnumerator<IEnumerable<IRadioTrack>>
+    public class MoodsToArtistEnumerator : IEnumerator<IEnumerable<RadioTrack>>
     {
         #region Fields
 
         private Queue<ArtistBucketItem> _artistsToLookFor;
-        private IEnumerable<IRadioTrack> _currentArtistTracks;
+        private IEnumerable<RadioTrack> _currentArtistTracks;
         private IRadio _radio;
         private IEnumerable<TermModel> _terms;
 
@@ -35,7 +35,7 @@ namespace Torshify.Radio.EchoNest.Mood
             get; set;
         }
 
-        public IEnumerable<IRadioTrack> Current
+        public IEnumerable<RadioTrack> Current
         {
             get { return _currentArtistTracks; }
         }
@@ -77,14 +77,14 @@ namespace Torshify.Radio.EchoNest.Mood
             Count = 10;
         }
 
-        public IEnumerable<IRadioTrack> DoIt()
+        public IEnumerable<RadioTrack> DoIt()
         {
             if (MoveNext())
             {
                 return Current;
             }
 
-            return new IRadioTrack[0];
+            return new RadioTrack[0];
         }
 
         public bool MoveNext()

@@ -8,13 +8,13 @@ using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Similar
 {
-    public class ArtistNameToArtistEnumerator : IEnumerator<IEnumerable<IRadioTrack>>
+    public class ArtistNameToArtistEnumerator : IEnumerator<IEnumerable<RadioTrack>>
     {
         #region Fields
 
         private IEnumerable<ArtistBucketItem> _artistNames;
         private Queue<ArtistBucketItem> _artistsToLookFor;
-        private IEnumerable<IRadioTrack> _currentArtistTracks;
+        private IEnumerable<RadioTrack> _currentArtistTracks;
         private IRadio _radio;
 
         #endregion Fields
@@ -35,7 +35,7 @@ namespace Torshify.Radio.EchoNest.Similar
             get; set;
         }
 
-        public IEnumerable<IRadioTrack> Current
+        public IEnumerable<RadioTrack> Current
         {
             get { return _currentArtistTracks; }
         }
@@ -69,14 +69,14 @@ namespace Torshify.Radio.EchoNest.Similar
             Start = 0;
         }
 
-        public IEnumerable<IRadioTrack> DoIt()
+        public IEnumerable<RadioTrack> DoIt()
         {
             if (MoveNext())
             {
                 return Current;
             }
 
-            return new IRadioTrack[0];
+            return new RadioTrack[0];
         }
 
         public void Initialize(IEnumerable<ArtistBucketItem> artistNames, IRadio radio)

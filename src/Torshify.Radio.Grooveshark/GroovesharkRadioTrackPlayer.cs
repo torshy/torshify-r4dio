@@ -107,7 +107,7 @@ namespace Torshify.Radio.Grooveshark
 
         #region Methods
 
-        public bool CanPlay(IRadioTrack track)
+        public bool CanPlay(RadioTrack track)
         {
             return track is GroovesharkRadioTrack;
         }
@@ -116,31 +116,41 @@ namespace Torshify.Radio.Grooveshark
         {
         }
 
-        public void Load(IRadioTrack track)
+        public void Load(RadioTrack track)
         {
             _currentTrack = track as GroovesharkRadioTrack;
 
             if (_currentTrack != null && GroovesharkRadioTrackSource.Session != null)
             {
-                var streaming = new GroovesharkStreaming(GroovesharkRadioTrackSource.Session);
-                var key = streaming.GetStreamingKey(_currentTrack.SongID);
-
-                if (key.Result == null)
+                try
                 {
+                    var streaming = new GroovesharkStreaming(GroovesharkRadioTrackSource.Session);
+                    var key = streaming.GetStreamingKey(_currentTrack.SongID);
+
+                    if (key == null)
+                    {
+                        _elapsedTimeSpan = TimeSpan.Zero;
+                        IsPlaying = false;
+                        OnTrackComplete(_currentTrack);
+                    }
+                    else
+                    {
+                        var url = streaming.GetStreamingUrl(key);
+
+                        _playbackState = StreamingPlaybackState.Buffering;
+                        _bufferedWaveProvider = null;
+
+                        _bufferThread = new Thread(StreamMp3);
+                        _bufferThread.IsBackground = true;
+                        _bufferThread.Start(url);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _log.Log(e.ToString(), Category.Exception, Priority.High);
                     _elapsedTimeSpan = TimeSpan.Zero;
                     IsPlaying = false;
                     OnTrackComplete(_currentTrack);
-                }
-                else
-                {
-                    var url = streaming.GetStreamingUrl(key);
-
-                    _playbackState = StreamingPlaybackState.Buffering;
-                    _bufferedWaveProvider = null;
-
-                    _bufferThread = new Thread(StreamMp3);
-                    _bufferThread.IsBackground = true;
-                    _bufferThread.Start(url);
                 }
             }
         }
@@ -210,7 +220,7 @@ namespace Torshify.Radio.Grooveshark
             }
         }
 
-        protected virtual void OnTrackComplete(IRadioTrack currentTrack)
+        protected virtual void OnTrackComplete(RadioTrack currentTrack)
         {
             var handler = TrackComplete;
 

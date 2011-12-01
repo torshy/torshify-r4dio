@@ -26,7 +26,7 @@ namespace Torshify.Radio
         #region Fields
 
         private Random _random;
-        private IRadioTrack _currentTrack;
+        private RadioTrack _currentTrack;
         private TimeSpan _currentTrackElapsed;
         private float _currentVolume = 0.5f;
         private Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata> _currentPlayer;
@@ -95,7 +95,7 @@ namespace Torshify.Radio
             }
         }
 
-        public IRadioTrack CurrentTrack
+        public RadioTrack CurrentTrack
         {
             get { return _currentTrack; }
             private set
@@ -184,7 +184,7 @@ namespace Torshify.Radio
 
         #region Methods
 
-        public bool CanPlay(IRadioTrack radioTrack)
+        public bool CanPlay(RadioTrack radioTrack)
         {
             try
             {
@@ -280,7 +280,7 @@ namespace Torshify.Radio
         {
         }
 
-        void IRadioTrackPlayer.Load(IRadioTrack track)
+        void IRadioTrackPlayer.Load(RadioTrack track)
         {
             try
             {
@@ -382,11 +382,11 @@ namespace Torshify.Radio
             }
         }
 
-        IEnumerable<IRadioTrack> IRadioTrackSource.GetTracksByAlbum(string artist, string album)
+        IEnumerable<RadioTrack> IRadioTrackSource.GetTracksByAlbum(string artist, string album)
         {
             _logger.Log("GetTracksByAlbum " + artist + " -" + album, Category.Info, Priority.Low);
 
-            ConcurrentBag<IRadioTrack> bag = new ConcurrentBag<IRadioTrack>();
+            ConcurrentBag<RadioTrack> bag = new ConcurrentBag<RadioTrack>();
 
             if (_trackSources != null)
             {
@@ -411,9 +411,9 @@ namespace Torshify.Radio
             return bag.OrderBy(x => _random.Next()).ToArray();
         }
 
-        IEnumerable<IRadioTrack> IRadioTrackSource.GetTracksByArtist(string artist, int offset, int count)
+        IEnumerable<RadioTrack> IRadioTrackSource.GetTracksByArtist(string artist, int offset, int count)
         {
-            ConcurrentBag<IRadioTrack> bag = new ConcurrentBag<IRadioTrack>();
+            ConcurrentBag<RadioTrack> bag = new ConcurrentBag<RadioTrack>();
 
             if (_trackSources != null)
             {
@@ -440,11 +440,11 @@ namespace Torshify.Radio
             return bag.OrderBy(x => _random.Next()).ToArray();
         }
 
-        IEnumerable<IRadioTrack> IRadioTrackSource.GetTracksByName(string name, int offset, int count)
+        IEnumerable<RadioTrack> IRadioTrackSource.GetTracksByName(string name, int offset, int count)
         {
             _logger.Log("GetTracksByName " + name, Category.Info, Priority.Low);
 
-            ConcurrentBag<IRadioTrack> bag = new ConcurrentBag<IRadioTrack>();
+            ConcurrentBag<RadioTrack> bag = new ConcurrentBag<RadioTrack>();
 
             if (_trackSources != null)
             {
@@ -473,7 +473,7 @@ namespace Torshify.Radio
         {
         }
 
-        private Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata> GetTrackPlayerForSource(IRadioTrack radioTrack)
+        private Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata> GetTrackPlayerForSource(RadioTrack radioTrack)
         {
             return _trackPlayers.FirstOrDefault(t => t.Value.CanPlay(radioTrack));
         }

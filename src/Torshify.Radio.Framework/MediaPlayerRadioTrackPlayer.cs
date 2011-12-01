@@ -76,12 +76,12 @@ namespace Torshify.Radio.Framework
 
         #region Methods
 
-        public virtual bool CanPlay(IRadioTrack radioTrack)
+        public virtual bool CanPlay(RadioTrack radioTrack)
         {
             return radioTrack is MediaPlayerRadioTrack;
         }
 
-        public virtual void Load(IRadioTrack track)
+        public virtual void Load(RadioTrack track)
         {
             var mediaPlayerTrack = track as MediaPlayerRadioTrack;
 
@@ -137,7 +137,7 @@ namespace Torshify.Radio.Framework
             }
         }
 
-        protected virtual void OnTrackComplete(IRadioTrack currentTrack)
+        protected virtual void OnTrackComplete(RadioTrack currentTrack)
         {
             var handler = TrackComplete;
 

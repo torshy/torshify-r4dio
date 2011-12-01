@@ -16,7 +16,7 @@ namespace Torshify.Radio
 
         private readonly IRadio _radio;
         private readonly IEventAggregator _eventAggregator;
-        private Queue<IRadioTrack> _playQueue;
+        private Queue<RadioTrack> _playQueue;
         private TaskScheduler _uiTaskScheduler;
         #endregion Fields
 
@@ -27,7 +27,7 @@ namespace Torshify.Radio
             _radio = radio;
             _eventAggregator = eventAggregator;
             _radio.TrackComplete += OnTrackComplete;
-            _playQueue = new Queue<IRadioTrack>();
+            _playQueue = new Queue<RadioTrack>();
             _uiTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
         }
 
@@ -56,13 +56,13 @@ namespace Torshify.Radio
             get { return NextTrack != null; }
         }
 
-        public IRadioTrack CurrentTrack
+        public RadioTrack CurrentTrack
         {
             get;
             private set;
         }
 
-        public IRadioTrack NextTrack
+        public RadioTrack NextTrack
         {
             get;
             private set;
@@ -72,7 +72,7 @@ namespace Torshify.Radio
 
         #region Methods
 
-        public void AddTracks(IEnumerable<IRadioTrack> tracks)
+        public void AddTracks(IEnumerable<RadioTrack> tracks)
         {
             foreach (var radioTrack in tracks)
             {

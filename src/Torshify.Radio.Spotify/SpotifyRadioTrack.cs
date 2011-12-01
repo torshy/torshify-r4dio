@@ -6,70 +6,15 @@ using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Spotify
 {
-    public class SpotifyRadioTrack : NotificationObject, IRadioTrack
+    public class SpotifyRadioTrack : RadioTrack 
     {
         #region Fields
 
-        private string _album;
-        private string _albumArt;
-        private string _artist;
-        private string _name;
-        private TimeSpan _totalDuration;
         private string _trackID;
 
         #endregion Fields
 
         #region Properties
-
-        public string Album
-        {
-            get { return _album; }
-            set
-            {
-                _album = value;
-                RaisePropertyChanged("Album");
-            }
-        }
-
-        public string AlbumArt
-        {
-            get { return _albumArt; }
-            set
-            {
-                _albumArt = value;
-                RaisePropertyChanged("AlbumArt");
-            }
-        }
-
-        public TimeSpan TotalDuration
-        {
-            get { return _totalDuration; }
-            set
-            {
-                _totalDuration = value;
-                RaisePropertyChanged("TotalDuration");
-            }
-        }
-
-        public string Artist
-        {
-            get { return _artist; }
-            set
-            {
-                _artist = value;
-                RaisePropertyChanged("Artist");
-            }
-        }
-
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                _name = value;
-                RaisePropertyChanged("Name");
-            }
-        }
 
         public string TrackID
         {
@@ -77,7 +22,7 @@ namespace Torshify.Radio.Spotify
             set
             {
                 _trackID = value;
-                RaisePropertyChanged("TrackID");
+                OnPropertyChanged("TrackID");
             }
         }
 

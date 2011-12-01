@@ -6,7 +6,7 @@ namespace Torshify.Radio.Framework
     {
         #region Constructors
 
-        public TrackEventArgs(IRadioTrackPlayer source, IRadioTrack track)
+        public TrackEventArgs(IRadioTrackPlayer source, RadioTrack track)
         {
             Source = source;
             Track = track;
@@ -21,7 +21,7 @@ namespace Torshify.Radio.Framework
             get; private set;
         }
 
-        public IRadioTrack Track
+        public RadioTrack Track
         {
             get; private set;
         }

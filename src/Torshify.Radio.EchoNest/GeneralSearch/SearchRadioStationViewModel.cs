@@ -19,7 +19,7 @@ namespace Torshify.Radio.EchoNest.GeneralSearch
         private readonly IRadioStationContext _context;
         private readonly IRadio _radio;
 
-        private ObservableCollection<IRadioTrack> _results;
+        private ObservableCollection<RadioTrack> _results;
 
         #endregion Fields
 
@@ -29,10 +29,10 @@ namespace Torshify.Radio.EchoNest.GeneralSearch
         {
             _radio = radio;
             _context = context;
-            _results = new ObservableCollection<IRadioTrack>();
+            _results = new ObservableCollection<RadioTrack>();
 
             SearchCommand = new DelegateCommand<string>(ExecuteSearch);
-            PlayCommand = new DelegateCommand<IRadioTrack>(ExecutePlay);
+            PlayCommand = new DelegateCommand<RadioTrack>(ExecutePlay);
         }
 
         #endregion Constructors
@@ -58,7 +58,7 @@ namespace Torshify.Radio.EchoNest.GeneralSearch
             }
         }
 
-        public IEnumerable<IRadioTrack> Results
+        public IEnumerable<RadioTrack> Results
         {
             get
             {
@@ -81,7 +81,7 @@ namespace Torshify.Radio.EchoNest.GeneralSearch
 
         #region Methods
 
-        private void ExecutePlay(IRadioTrack track)
+        private void ExecutePlay(RadioTrack track)
         {
             _context.SetTrackProvider(() => new[] {track});
         }

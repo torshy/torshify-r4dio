@@ -17,7 +17,7 @@ namespace Torshify.Radio
 
         private readonly IRegionManager _regionManager;
         private readonly RadioNowPlayingViewModel _nowPlayingViewModel;
-        private Func<IEnumerable<IRadioTrack>> _getNextBatchProvider;
+        private Func<IEnumerable<RadioTrack>> _getNextBatchProvider;
         private bool _getNextBatchProviderIsComplete;
 
         #endregion Fields
@@ -44,7 +44,7 @@ namespace Torshify.Radio
             ActivateView(RadioStandardViews.Tracks);
         }
 
-        public Task SetTrackProvider(Func<IEnumerable<IRadioTrack>> getNextBatchProvider)
+        public Task SetTrackProvider(Func<IEnumerable<RadioTrack>> getNextBatchProvider)
         {
             _getNextBatchProvider = getNextBatchProvider;
             ShowLoadingView();
