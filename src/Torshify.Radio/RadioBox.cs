@@ -261,7 +261,7 @@ namespace Torshify.Radio
                 }
             }
 
-            RadioStationContext context = new RadioStationContext(_regionManager, _nowPlayingViewModel);
+            RadioStationContext context = new RadioStationContext(this, _regionManager, _nowPlayingViewModel);
             context.RemoveCurrentView();
             _radioStationContext = context;
             CurrentStation = radioStation;

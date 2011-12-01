@@ -381,11 +381,13 @@ namespace Torshify.Radio.Grooveshark
                                 // don't think these details matter too much - just help ACM select the right codec
                                 // however, the buffered provider doesn't know what sample rate it is working at
                                 // until we have a frame
-                                WaveFormat waveFormat = new Mp3WaveFormat(frame.SampleRate, frame.ChannelMode == ChannelMode.Mono ? 1 : 2, frame.FrameLength, frame.BitRate);
+                                //WaveFormat waveFormat = new Mp3WaveFormat(frame.SampleRate, frame.ChannelMode == ChannelMode.Mono ? 1 : 2, frame.FrameLength, frame.BitRate);
+                                WaveFormat waveFormat = new Mp3WaveFormat(44100, frame.ChannelMode == ChannelMode.Mono ? 1 : 2, frame.FrameLength, frame.BitRate);
                                 decompressor = new AcmMp3FrameDecompressor(waveFormat);
                                 _bufferedWaveProvider = new BufferedWaveProvider(decompressor.OutputFormat);
-                                _bufferedWaveProvider.BufferDuration = TimeSpan.FromSeconds(20); // allow us to get well ahead of ourselves
-                                //this.bufferedWaveProvider.BufferedDuration = 250;
+                                //_bufferedWaveProvider.BufferDuration = TimeSpan.FromSeconds(20); // allow us to get well ahead of ourselves
+                                _bufferedWaveProvider.BufferLength = (int)resp.ContentLength;
+
                             }
 
                             if (frame != null && _bufferedWaveProvider != null)
