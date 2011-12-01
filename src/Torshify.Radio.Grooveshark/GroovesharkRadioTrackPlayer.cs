@@ -118,14 +118,14 @@ namespace Torshify.Radio.Grooveshark
 
         public void Load(RadioTrack track)
         {
-            _currentTrack = track as GroovesharkRadioTrack;
+            var currentTrack = track as GroovesharkRadioTrack;
 
-            if (_currentTrack != null && GroovesharkRadioTrackSource.Session != null)
+            if (currentTrack != null && GroovesharkRadioTrackSource.Session != null)
             {
                 try
                 {
                     var streaming = new GroovesharkStreaming(GroovesharkRadioTrackSource.Session);
-                    var key = streaming.GetStreamingKey(_currentTrack.SongID);
+                    var key = streaming.GetStreamingKey(currentTrack.SongID);
 
                     if (key == null)
                     {
@@ -136,7 +136,7 @@ namespace Torshify.Radio.Grooveshark
                     else
                     {
                         var url = streaming.GetStreamingUrl(key);
-
+                        _currentTrack = currentTrack;
                         _playbackState = StreamingPlaybackState.Buffering;
                         _bufferedWaveProvider = null;
 

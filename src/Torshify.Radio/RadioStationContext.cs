@@ -79,14 +79,28 @@ namespace Torshify.Radio
             ActivateView(RadioStandardViews.Tracks);
         }
 
+        public void ShowLoadingView()
+        {
+            if (_regionManager.Regions.ContainsRegionWithName(RegionNames.MainRegion))
+            {
+                IRegion region = _regionManager.Regions[RegionNames.MainRegionOverlay];
+                var currentViews = region.Views.ToArray();
+
+                foreach (var currentView in currentViews)
+                {
+                    region.Remove(currentView);
+                }
+
+                LoadingScreen loadingScreen = new LoadingScreen();
+                region.Add(loadingScreen);
+                region.Activate(loadingScreen);
+            }
+        }
+
         public void HideLoadingView()
         {
             if (_regionManager.Regions.ContainsRegionWithName(RegionNames.MainRegion))
             {
-                ProgressBar progressBar = new ProgressBar();
-                progressBar.IsIndeterminate = true;
-                progressBar.SetResourceReference(FrameworkElement.StyleProperty, "ProgressBar_LoadingDots");
-
                 IRegion region = _regionManager.Regions[RegionNames.MainRegionOverlay];
                 var currentViews = region.Views.ToArray();
 
@@ -156,31 +170,6 @@ namespace Torshify.Radio
 
                 region.Add(viewData, "CurrentStation");
                 region.Activate(viewData);
-            }
-        }
-
-        public void ShowLoadingView()
-        {
-            if (_regionManager.Regions.ContainsRegionWithName(RegionNames.MainRegion))
-            {
-                Border border = new Border();
-                border.Background = Brushes.White;
-
-                ProgressBar progressBar = new ProgressBar();
-                progressBar.IsIndeterminate = true;
-                progressBar.SetResourceReference(FrameworkElement.StyleProperty, "ProgressBar_LoadingDots");
-                border.Child = progressBar;
-
-                IRegion region = _regionManager.Regions[RegionNames.MainRegionOverlay];
-                var currentViews = region.Views.ToArray();
-
-                foreach (var currentView in currentViews)
-                {
-                    region.Remove(currentView);
-                }
-
-                region.Add(border);
-                region.Activate(border);
             }
         }
 

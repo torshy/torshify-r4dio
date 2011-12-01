@@ -7,9 +7,17 @@
     xmlns:fx="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     xmlns:Similar="clr-namespace:Torshify.Radio.EchoNest.Similar"
     xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:BoolToVisibleOrHidden
+            Collapse="False"
+            x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
     <DockPanel
         LastChildFill="True">
         <DockPanel
@@ -27,18 +35,32 @@
                 <Controls:AutoCompleteBox
                     x:Name="_autocomplete"
                     x:FieldModifier="private"
+                    Text="{Binding SearchText}"
                     TextChanged="AutoCompleteBoxTextChanged"
                     ItemsSource="{Binding AutoCompleteSuggestions}">
+                    <i:Interaction.Behaviors>
+                        <Behaviors:KeyboardBehavior
+                            Key="Enter"
+                            Command="{Binding SearchCommand}"
+                            CommandParameter="{Binding SearchText, ElementName=_autocomplete}" />
+                    </i:Interaction.Behaviors>
                 </Controls:AutoCompleteBox>
             </DockPanel>
         </DockPanel>
         <DockPanel
             LastChildFill="True">
-            <Button
-                DockPanel.Dock="Bottom"
-                Margin="0,4,0,4"
-                Content="create playlist"
-                Command="{Binding CreatePlaylistCommand}" />
+            <StackPanel
+                DockPanel.Dock="Bottom">
+                <Button
+                    Margin="0,4,0,0"
+                    Content="play all"
+                    Command="{Binding CreatePlaylistCommand}" />
+                <ProgressBar
+                    Margin="0,4,0,0"
+                    Style="{DynamicResource ProgressBar_LoadingDots}"
+                    IsIndeterminate="True"
+                    Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </StackPanel>
             <fx:SizeTemplateControl>
                 <fx:SizeTemplateControl.Templates>
                     <fx:SizeControlTemplate>

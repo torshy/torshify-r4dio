@@ -87,7 +87,7 @@ namespace Torshify.Radio.Grooveshark
                 try
                 {
                     TinySongSession session = new TinySongSession(TinySongApiKey);
-                    var result = session.Search(artist, 1);
+                    var result = session.Search(artist, 32);
 
                     if (result != null)
                     {
@@ -168,7 +168,7 @@ namespace Torshify.Radio.Grooveshark
                 try
                 {
                     TinySongSession session = new TinySongSession(TinySongApiKey);
-                    var result = session.Search(artist, 1);
+                    var result = session.Search(artist, count);
 
                     if (result != null)
                     {

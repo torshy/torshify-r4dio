@@ -20,6 +20,7 @@ namespace Torshify.Radio.EchoNest.GeneralSearch
         private readonly IRadio _radio;
 
         private ObservableCollection<RadioTrack> _results;
+        private bool _isLoading;
 
         #endregion Fields
 
@@ -77,6 +78,16 @@ namespace Torshify.Radio.EchoNest.GeneralSearch
             get; private set;
         }
 
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            private set
+            {
+                _isLoading = value;
+                RaisePropertyChanged("IsLoading");
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -90,7 +101,11 @@ namespace Torshify.Radio.EchoNest.GeneralSearch
         {
             var ui = TaskScheduler.FromCurrentSynchronizationContext();
             Task.Factory
-                .StartNew(() => _radio.GetTracksByName(query, 0, 32))
+                .StartNew(() =>
+                              {
+                                  IsLoading = true;
+                                  return _radio.GetTracksByName(query, 0, 32);
+                              })
                 .ContinueWith(t=>
                                   {
                                       _results.Clear();
@@ -98,6 +113,8 @@ namespace Torshify.Radio.EchoNest.GeneralSearch
                                       {
                                           _results.Add(radioTrack);
                                       }
+
+                                      IsLoading = false;
                                   }, ui);
         }
 

@@ -14,7 +14,8 @@
     </UserControl.Resources>
     <ListBox
         ItemsSource="{Binding Results}"
-        ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        BorderThickness="0">
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <DockPanel
