@@ -30,6 +30,7 @@ namespace Torshify.Radio.Grooveshark
         private GroovesharkRadioTrack _currentTrack;
         private TimeSpan _elapsedTimeSpan;
         private volatile bool _fullyDownloaded;
+        private bool _isBuffering;
         private bool _isPlaying;
         private volatile StreamingPlaybackState _playbackState;
         private Timer _timer;
@@ -66,6 +67,8 @@ namespace Torshify.Radio.Grooveshark
 
         #region Events
 
+        public event EventHandler IsBufferingChanged;
+
         public event EventHandler IsPlayingChanged;
 
         public event EventHandler<TrackEventArgs> TrackComplete;
@@ -75,6 +78,16 @@ namespace Torshify.Radio.Grooveshark
         #endregion Events
 
         #region Properties
+
+        public bool IsBuffering
+        {
+            get { return _isBuffering; }
+            private set
+            {
+                _isBuffering = value;
+                OnIsBufferingChanged();
+            }
+        }
 
         public bool IsPlaying
         {
@@ -127,30 +140,26 @@ namespace Torshify.Radio.Grooveshark
                     var streaming = new GroovesharkStreaming(GroovesharkRadioTrackSource.Session);
                     var key = streaming.GetStreamingKey(currentTrack.SongID);
 
-                    if (key == null)
+                    if (key == null || key.Length == 0)
                     {
-                        _elapsedTimeSpan = TimeSpan.Zero;
-                        IsPlaying = false;
-                        OnTrackComplete(_currentTrack);
+                        throw new Exception("Unable to load track");
                     }
-                    else
-                    {
-                        var url = streaming.GetStreamingUrl(key);
-                        _currentTrack = currentTrack;
-                        _playbackState = StreamingPlaybackState.Buffering;
-                        _bufferedWaveProvider = null;
 
-                        _bufferThread = new Thread(StreamMp3);
-                        _bufferThread.IsBackground = true;
-                        _bufferThread.Start(url);
-                    }
+                    var url = streaming.GetStreamingUrl(key);
+                    _currentTrack = currentTrack;
+                    _playbackState = StreamingPlaybackState.Buffering;
+                    _bufferedWaveProvider = null;
+
+                    _bufferThread = new Thread(StreamMp3);
+                    _bufferThread.IsBackground = true;
+                    _bufferThread.Start(url);
                 }
                 catch (Exception e)
                 {
+                    GroovesharkRadioTrackSource.Session = new GroovesharkSession();
+                    GroovesharkRadioTrackSource.Session.Connect();
                     _log.Log(e.ToString(), Category.Exception, Priority.High);
-                    _elapsedTimeSpan = TimeSpan.Zero;
-                    IsPlaying = false;
-                    OnTrackComplete(_currentTrack);
+                    throw;
                 }
             }
         }
@@ -190,7 +199,7 @@ namespace Torshify.Radio.Grooveshark
                 _timer.Enabled = false;
                 _playbackState = StreamingPlaybackState.Stopped;
 
-                if (_fullyDownloaded)
+                if (_fullyDownloaded && _webRequest != null)
                 {
                     _webRequest.Abort();
                 }
@@ -240,6 +249,16 @@ namespace Torshify.Radio.Grooveshark
             }
         }
 
+        private void OnIsBufferingChanged()
+        {
+            var handler = IsBufferingChanged;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
         private void OnIsPlayingChanged()
         {
             var handler = IsPlayingChanged;
@@ -279,6 +298,8 @@ namespace Torshify.Radio.Grooveshark
                     // make it stutter less if we buffer up a decent amount before playing
                     if (bufferedSeconds < 0.5 && _playbackState == StreamingPlaybackState.Playing && !_fullyDownloaded)
                     {
+                        IsBuffering = true;
+
                         _log.Log("Buffering..", Category.Info, Priority.Medium);
 
                         _playbackState = StreamingPlaybackState.Buffering;
@@ -299,6 +320,8 @@ namespace Torshify.Radio.Grooveshark
                             _playbackState = StreamingPlaybackState.Playing;
                             IsPlaying = true;
                         }
+
+                        IsBuffering = false;
                     }
                     else if (_fullyDownloaded && bufferedSeconds < 0.5)
                     {
@@ -320,6 +343,12 @@ namespace Torshify.Radio.Grooveshark
         private void StreamMp3(object state)
         {
             string url = (string)state;
+
+            if (string.IsNullOrEmpty(url))
+            {
+                _fullyDownloaded = true;
+                return;
+            }
 
             _fullyDownloaded = false;
             _webRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -433,7 +462,6 @@ namespace Torshify.Radio.Grooveshark
             }
 
             _log.Log("Buffer thread exiting", Category.Info, Priority.Medium);
-
         }
 
         #endregion Methods

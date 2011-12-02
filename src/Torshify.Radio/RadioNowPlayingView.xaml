@@ -9,20 +9,30 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
-    <Controls:SizeTemplateControl>
-        <Controls:SizeTemplateControl.Templates>
-            <Controls:SizeControlTemplate
-                MinWidth="500"
-                MinHeight="350">
-                <ControlTemplate>
-                    <Radio:RadioNowPlayingViewMedium />
-                </ControlTemplate>
-            </Controls:SizeControlTemplate>
-            <Controls:SizeControlTemplate>
-                <ControlTemplate>
-                    <Radio:RadioNowPlayingViewSmall />
-                </ControlTemplate>
-            </Controls:SizeControlTemplate>
-        </Controls:SizeTemplateControl.Templates>
-    </Controls:SizeTemplateControl>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <Controls:SizeTemplateControl>
+            <Controls:SizeTemplateControl.Templates>
+                <Controls:SizeControlTemplate
+                    MinWidth="500"
+                    MinHeight="350">
+                    <ControlTemplate>
+                        <Radio:RadioNowPlayingViewMedium />
+                    </ControlTemplate>
+                </Controls:SizeControlTemplate>
+                <Controls:SizeControlTemplate>
+                    <ControlTemplate>
+                        <Radio:RadioNowPlayingViewSmall />
+                    </ControlTemplate>
+                </Controls:SizeControlTemplate>
+            </Controls:SizeTemplateControl.Templates>
+        </Controls:SizeTemplateControl>
+        <ProgressBar
+            Style="{DynamicResource ProgressBar_LoadingDots}"
+            IsIndeterminate="True"
+            Visibility="{Binding Radio.IsBuffering, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+    </Grid>
 </UserControl>

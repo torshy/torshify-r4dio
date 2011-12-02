@@ -18,12 +18,16 @@ namespace Torshify.Radio.Framework
         public MediaPlayerRadioTrackPlayer()
         {
             Player = new MediaPlayer();
+            Player.BufferingStarted += OnBufferingStarted;
+            Player.BufferingEnded += OnBufferingEnded;
             _mediaElementProgressTimer = new Timer(100);
         }
 
         #endregion Constructors
 
         #region Events
+
+        public event EventHandler IsBufferingChanged;
 
         public event EventHandler IsPlayingChanged;
 
@@ -34,6 +38,14 @@ namespace Torshify.Radio.Framework
         #endregion Events
 
         #region Properties
+
+        public bool IsBuffering
+        {
+            get
+            {
+                return Player.IsBuffering;
+            }
+        }
 
         public bool IsPlaying
         {
@@ -56,19 +68,19 @@ namespace Torshify.Radio.Framework
 
         protected MediaPlayerRadioTrack CurrentTrack
         {
-            get; 
+            get;
             set;
         }
 
         protected TimeSpan CurrentTrackElapsed
         {
-            get; 
+            get;
             set;
         }
 
         protected MediaPlayer Player
         {
-            get; 
+            get;
             private set;
         }
 
@@ -79,6 +91,14 @@ namespace Torshify.Radio.Framework
         public virtual bool CanPlay(RadioTrack radioTrack)
         {
             return radioTrack is MediaPlayerRadioTrack;
+        }
+
+        public virtual void Initialize()
+        {
+            Player.MediaEnded += OnMediaEnded;
+            Player.MediaOpened += OnMediaOpened;
+
+            _mediaElementProgressTimer.Elapsed += OnProgressTimerElapsed;
         }
 
         public virtual void Load(RadioTrack track)
@@ -94,21 +114,6 @@ namespace Torshify.Radio.Framework
             }
         }
 
-        public virtual void Stop()
-        {
-            Player.Stop();
-            CurrentTrack = null;
-            CurrentTrackElapsed = TimeSpan.Zero;
-
-            _mediaElementProgressTimer.Stop();
-        }
-
-        public virtual void Play()
-        {
-            Player.Play();
-            IsPlaying = true;
-        }
-
         public void Pause()
         {
             if (Player.CanPause)
@@ -119,12 +124,19 @@ namespace Torshify.Radio.Framework
             }
         }
 
-        public virtual void Initialize()
+        public virtual void Play()
         {
-            Player.MediaEnded += OnMediaEnded;
-            Player.MediaOpened += OnMediaOpened;
+            Player.Play();
+            IsPlaying = true;
+        }
 
-            _mediaElementProgressTimer.Elapsed += OnProgressTimerElapsed;
+        public virtual void Stop()
+        {
+            Player.Stop();
+            CurrentTrack = null;
+            CurrentTrackElapsed = TimeSpan.Zero;
+
+            _mediaElementProgressTimer.Stop();
         }
 
         protected virtual void OnIsPlayingChanged()
@@ -135,6 +147,32 @@ namespace Torshify.Radio.Framework
             {
                 handler(this, EventArgs.Empty);
             }
+        }
+
+        protected virtual void OnMediaEnded(object sender, EventArgs e)
+        {
+            _mediaElementProgressTimer.Stop();
+
+            IsPlaying = false;
+            OnTrackComplete(CurrentTrack);
+            CurrentTrack = null;
+        }
+
+        protected virtual void OnMediaOpened(object sender, EventArgs e)
+        {
+            _mediaElementProgressTimer.Start();
+            IsPlaying = true;
+
+            if (Player.NaturalDuration.HasTimeSpan && CurrentTrack.TotalDuration == TimeSpan.Zero)
+            {
+                CurrentTrack.TotalDuration = Player.NaturalDuration.TimeSpan;
+            }
+        }
+
+        protected virtual void OnProgressTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            CurrentTrackElapsed = CurrentTrackElapsed.Add(TimeSpan.FromMilliseconds(_mediaElementProgressTimer.Interval));
+            OnTrackProgress(CurrentTrack.TotalDuration.TotalMilliseconds, CurrentTrackElapsed.TotalMilliseconds);
         }
 
         protected virtual void OnTrackComplete(RadioTrack currentTrack)
@@ -157,30 +195,24 @@ namespace Torshify.Radio.Framework
             }
         }
 
-        protected virtual void OnMediaEnded(object sender, EventArgs e)
+        private void OnBufferingEnded(object sender, EventArgs e)
         {
-            _mediaElementProgressTimer.Stop();
-            
-            IsPlaying = false;
-            OnTrackComplete(CurrentTrack);
-            CurrentTrack = null;
+            OnIsBufferingChanged();
         }
 
-        protected virtual void OnMediaOpened(object sender, EventArgs e)
+        private void OnBufferingStarted(object sender, EventArgs e)
         {
-            _mediaElementProgressTimer.Start();
-            IsPlaying = true;
+            OnIsBufferingChanged();
+        }
 
-            if (Player.NaturalDuration.HasTimeSpan && CurrentTrack.TotalDuration == TimeSpan.Zero)
+        private void OnIsBufferingChanged()
+        {
+            var handler = IsBufferingChanged;
+
+            if (handler != null)
             {
-                CurrentTrack.TotalDuration = Player.NaturalDuration.TimeSpan;
+                handler(this, EventArgs.Empty);
             }
-        }
-
-        protected virtual void OnProgressTimerElapsed(object sender, ElapsedEventArgs e)
-        {
-            CurrentTrackElapsed = CurrentTrackElapsed.Add(TimeSpan.FromMilliseconds(_mediaElementProgressTimer.Interval));
-            OnTrackProgress(CurrentTrack.TotalDuration.TotalMilliseconds, CurrentTrackElapsed.TotalMilliseconds);
         }
 
         #endregion Methods

@@ -8,6 +8,8 @@ namespace Torshify.Radio.Framework
 
         event EventHandler IsPlayingChanged;
 
+        event EventHandler IsBufferingChanged;
+
         event EventHandler<TrackEventArgs> TrackComplete;
 
         event EventHandler<TrackProgressEventArgs> TrackProgress;
@@ -15,6 +17,11 @@ namespace Torshify.Radio.Framework
         #endregion Events
 
         #region Properties
+
+        bool IsBuffering
+        {
+            get;
+        }
 
         bool IsPlaying
         {

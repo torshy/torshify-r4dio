@@ -112,8 +112,7 @@ namespace Torshify.Radio
 
                     RaisePropertyChanged("CurrentTrack", "HasTracks");
                 }, _uiTaskScheduler)
-                .ContinueWith(t =>
-                    PeekToNext());
+                .ContinueWith(t => PeekToNext());
         }
 
         public void PeekToNext(bool fireAtEndPlaylistIfAtEnd = true)

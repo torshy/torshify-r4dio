@@ -17,18 +17,24 @@ namespace Torshify.Radio.Spotify
         #region Fields
 
         private PlayerControlServiceClient _controlService;
-        private bool _isPlaying;
         private SpotifyRadioTrack _currentTrack;
         private bool _isPaused;
+        private bool _isPlaying;
 
         #endregion Fields
+
+        #region Constructors
 
         static SpotifyRadioTrackPlayer()
         {
             OrigoConnectionManager.Instance.Initialize();
         }
 
+        #endregion Constructors
+
         #region Events
+
+        public event EventHandler IsBufferingChanged;
 
         public event EventHandler IsPlayingChanged;
 
@@ -39,6 +45,11 @@ namespace Torshify.Radio.Spotify
         #endregion Events
 
         #region Properties
+
+        public bool IsBuffering
+        {
+            get { return false; }
+        }
 
         public bool IsPlaying
         {
@@ -117,7 +128,38 @@ namespace Torshify.Radio.Spotify
             return radioTrack is SpotifyRadioTrack;
         }
 
-        public void Stop()
+        public void Initialize()
+        {
+            try
+            {
+                _controlService = new PlayerControlServiceClient(new InstanceContext(this));
+                _controlService.Subscribe();
+            }
+            catch (Exception)
+            {
+                _controlService.Abort();
+
+                Thread thread = new Thread(() =>
+                {
+                    Thread.Sleep(5000);
+                    Initialize();
+                });
+                thread.IsBackground = true;
+                thread.Start();
+            }
+        }
+
+        public void Load(RadioTrack track)
+        {
+            SpotifyRadioTrack spotifyTrack = track as SpotifyRadioTrack;
+
+            if (spotifyTrack != null)
+            {
+                _currentTrack = spotifyTrack;
+            }
+        }
+
+        public void Pause()
         {
             if (IsPlaying)
             {
@@ -134,8 +176,7 @@ namespace Torshify.Radio.Spotify
                     controlService.Abort();
                 }
 
-                _currentTrack = null;
-                _isPaused = false;
+                _isPaused = true;
             }
         }
 
@@ -178,58 +219,6 @@ namespace Torshify.Radio.Spotify
             _isPaused = false;
         }
 
-        public void Pause()
-        {
-            if (IsPlaying)
-            {
-                EnsureControlServiceIsAlive();
-
-                PlayerControlServiceClient controlService = new PlayerControlServiceClient(new InstanceContext(this));
-                try
-                {
-                    controlService.TogglePause();
-                    controlService.Close();
-                }
-                catch (Exception)
-                {
-                    controlService.Abort();
-                }
-
-                _isPaused = true;
-            }
-        }
-
-        public void Initialize()
-        {
-            try
-            {
-                _controlService = new PlayerControlServiceClient(new InstanceContext(this));
-                _controlService.Subscribe();
-            }
-            catch (Exception)
-            {
-                _controlService.Abort();
-
-                Thread thread = new Thread(() =>
-                {
-                    Thread.Sleep(5000);
-                    Initialize();
-                });
-                thread.IsBackground = true;
-                thread.Start();
-            }
-        }
-
-        public void Load(RadioTrack track)
-        {
-            SpotifyRadioTrack spotifyTrack = track as SpotifyRadioTrack;
-
-            if (spotifyTrack != null)
-            {
-                _currentTrack = spotifyTrack;
-            }
-        }
-
         void PlayerControlServiceCallback.OnElapsed(double elapsedMs, double totalMs)
         {
             if (IsPlaying)
@@ -261,7 +250,6 @@ namespace Torshify.Radio.Spotify
 
         void PlayerControlServiceCallback.OnTrackChanged(Track track)
         {
-
         }
 
         void PlayerControlServiceCallback.OnTrackComplete(Track track)
@@ -276,6 +264,28 @@ namespace Torshify.Radio.Spotify
 
         void PlayerControlServiceCallback.OnVolumeChanged(float volume)
         {
+        }
+
+        public void Stop()
+        {
+            if (IsPlaying)
+            {
+                EnsureControlServiceIsAlive();
+
+                PlayerControlServiceClient controlService = new PlayerControlServiceClient(new InstanceContext(this));
+                try
+                {
+                    controlService.TogglePause();
+                    controlService.Close();
+                }
+                catch (Exception)
+                {
+                    controlService.Abort();
+                }
+
+                _currentTrack = null;
+                _isPaused = false;
+            }
         }
 
         private void EnsureControlServiceIsAlive()

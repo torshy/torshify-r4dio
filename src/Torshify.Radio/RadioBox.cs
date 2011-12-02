@@ -25,18 +25,20 @@ namespace Torshify.Radio
     {
         #region Fields
 
-        private Random _random;
+        private readonly IEventAggregator _eventAggregator;
+
+        private Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata> _currentPlayer;
         private RadioTrack _currentTrack;
         private TimeSpan _currentTrackElapsed;
         private float _currentVolume = 0.5f;
-        private Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata> _currentPlayer;
+        private bool _isBuffering;
         private ILoggerFacade _logger;
-        private readonly IEventAggregator _eventAggregator;
         private RadioNowPlayingViewModel _nowPlayingViewModel;
         private Lazy<IRadioStation, IRadioStationMetadata> _radioStation;
         private RadioStationContext _radioStationContext;
         [ImportMany]
         private IEnumerable<Lazy<IRadioStation, IRadioStationMetadata>> _radioStations = null;
+        private Random _random;
         [Import]
         private IRegionManager _regionManager = null;
         [ImportMany]
@@ -62,6 +64,8 @@ namespace Torshify.Radio
 
         #region Events
 
+        public event EventHandler IsBufferingChanged;
+
         public event EventHandler IsPlayingChanged;
 
         public event EventHandler<TrackEventArgs> TrackComplete;
@@ -71,16 +75,6 @@ namespace Torshify.Radio
         #endregion Events
 
         #region Properties
-
-        public Lazy<IRadioStation, IRadioStationMetadata> CurrentStation
-        {
-            get { return _radioStation; }
-            private set
-            {
-                _radioStation = value;
-                RaisePropertyChanged("CurrentStation");
-            }
-        }
 
         public Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata> CurrentPlayer
         {
@@ -92,6 +86,16 @@ namespace Torshify.Radio
                     _currentPlayer = value;
                     RaisePropertyChanged("CurrentPlayer");
                 }
+            }
+        }
+
+        public Lazy<IRadioStation, IRadioStationMetadata> CurrentStation
+        {
+            get { return _radioStation; }
+            private set
+            {
+                _radioStation = value;
+                RaisePropertyChanged("CurrentStation");
             }
         }
 
@@ -118,6 +122,14 @@ namespace Torshify.Radio
         public bool HasCurrentTrack
         {
             get { return CurrentTrack != null; }
+        }
+
+        public bool IsBuffering
+        {
+            get { return _isBuffering; }
+            private set { _isBuffering = value;
+            RaisePropertyChanged("IsBuffering");
+            }
         }
 
         public bool IsPlaying
@@ -204,6 +216,7 @@ namespace Torshify.Radio
                 radioTrackPlayer.Value.TrackComplete += OnRadioStationTrackComplete;
                 radioTrackPlayer.Value.TrackProgress += OnRadioStationTrackProgress;
                 radioTrackPlayer.Value.IsPlayingChanged += OnRadioStationIsPlayingChanged;
+                radioTrackPlayer.Value.IsBufferingChanged += OnRadioStationIsBufferingChanged;
 
                 try
                 {
@@ -303,15 +316,16 @@ namespace Torshify.Radio
 
             try
             {
-                CurrentTrack = track;
+                CurrentTrack = null;
 
-                var currentPlayer = GetTrackPlayerForSource(CurrentTrack);
+                var currentPlayer = GetTrackPlayerForSource(track);
 
                 if (currentPlayer != null)
                 {
-                    _logger.Log("Loading " + CurrentTrack.Name + " [" + currentPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
+                    _logger.Log("Loading " + track.Name + " [" + currentPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
 
                     currentPlayer.Value.Load(track);
+                    CurrentTrack = track;
                 }
             }
             catch (Exception e)
@@ -348,6 +362,7 @@ namespace Torshify.Radio
             {
                 try
                 {
+                    IsBuffering = false;
                     _logger.Log("Playing " + CurrentTrack.Name + " [" + currentPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
 
                     currentPlayer.Value.Play();
@@ -380,6 +395,8 @@ namespace Torshify.Radio
                     _logger.Log(e.Message, Category.Exception, Priority.Medium);
                 }
             }
+
+            IsBuffering = false;
         }
 
         IEnumerable<RadioTrack> IRadioTrackSource.GetTracksByAlbum(string artist, string album)
@@ -465,7 +482,7 @@ namespace Torshify.Radio
                     }
                 });
             }
-            
+
             return bag.OrderBy(x => _random.Next()).ToArray();
         }
 
@@ -501,6 +518,12 @@ namespace Torshify.Radio
             {
                 handler(this, EventArgs.Empty);
             }
+        }
+
+        private void OnRadioStationIsBufferingChanged(object sender, EventArgs e)
+        {
+            IRadioTrackPlayer player = (IRadioTrackPlayer) sender;
+            IsBuffering = player.IsBuffering;
         }
 
         private void OnRadioStationIsPlayingChanged(object sender, EventArgs e)
