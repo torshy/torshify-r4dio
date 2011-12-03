@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using EchoNest;
 using EchoNest.Artist;
@@ -32,7 +33,8 @@ namespace Torshify.Radio.EchoNest.Style
 
         public int Count
         {
-            get; set;
+            get;
+            set;
         }
 
         public IEnumerable<RadioTrack> Current
@@ -42,12 +44,14 @@ namespace Torshify.Radio.EchoNest.Style
 
         public int NumberOfTracksPerArtist
         {
-            get; set;
+            get;
+            set;
         }
 
         public int Start
         {
-            get; set;
+            get;
+            set;
         }
 
         object IEnumerator.Current
@@ -149,7 +153,7 @@ namespace Torshify.Radio.EchoNest.Style
                 if (result != null && result.Status.Code == ResponseCode.Success)
                 {
                     Start += result.Artists.Count;
-                    return new Queue<ArtistBucketItem>(result.Artists);
+                    return new Queue<ArtistBucketItem>(result.Artists.OrderBy(a => Guid.NewGuid()));
                 }
 
                 return new Queue<ArtistBucketItem>();

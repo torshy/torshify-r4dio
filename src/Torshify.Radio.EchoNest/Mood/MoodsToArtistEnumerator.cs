@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using EchoNest;
@@ -18,7 +19,7 @@ namespace Torshify.Radio.EchoNest.Mood
         private IEnumerable<TermModel> _terms;
 
         #endregion Fields
-                
+
         #region Constructors
 
         public MoodsToArtistEnumerator()
@@ -32,7 +33,8 @@ namespace Torshify.Radio.EchoNest.Mood
 
         public int Count
         {
-            get; set;
+            get;
+            set;
         }
 
         public IEnumerable<RadioTrack> Current
@@ -42,7 +44,8 @@ namespace Torshify.Radio.EchoNest.Mood
 
         public int Start
         {
-            get; set;
+            get;
+            set;
         }
 
         public int NumberOfTracksPerArtist
@@ -150,7 +153,7 @@ namespace Torshify.Radio.EchoNest.Mood
                 if (result != null && result.Status.Code == ResponseCode.Success)
                 {
                     Start += result.Artists.Count;
-                    return new Queue<ArtistBucketItem>(result.Artists);
+                    return new Queue<ArtistBucketItem>(result.Artists.OrderBy(a => Guid.NewGuid()));
                 }
 
                 return new Queue<ArtistBucketItem>();

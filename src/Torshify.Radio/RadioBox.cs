@@ -194,19 +194,6 @@ namespace Torshify.Radio
 
         #region Methods
 
-        public bool CanPlay(RadioTrack radioTrack)
-        {
-            try
-            {
-                return _trackPlayers.Any(t => t.Value.CanPlay(radioTrack));
-            }
-            catch (Exception e)
-            {
-                _logger.Log(e.Message, Category.Exception, Priority.Medium);
-                return false;
-            }
-        }
-
         void IPartImportsSatisfiedNotification.OnImportsSatisfied()
         {
             foreach (var radioTrackPlayer in _trackPlayers)
@@ -322,22 +309,16 @@ namespace Torshify.Radio
             }
         }
 
-        void IRadioTrackPlayer.Pause()
+        bool IRadioTrackPlayer.CanPlay(RadioTrack radioTrack)
         {
-            var currentPlayer = GetTrackPlayerForSource(CurrentTrack);
-
-            if (currentPlayer != null)
+            try
             {
-                try
-                {
-                    _logger.Log("Pausing" + " [" + currentPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
-
-                    currentPlayer.Value.Pause();
-                }
-                catch (Exception e)
-                {
-                    _logger.Log(e.Message, Category.Exception, Priority.Medium);
-                }
+                return _trackPlayers.Any(t => t.Value.CanPlay(radioTrack));
+            }
+            catch (Exception e)
+            {
+                _logger.Log(e.Message, Category.Exception, Priority.Medium);
+                return false;
             }
         }
 
@@ -355,6 +336,25 @@ namespace Torshify.Radio
                 CurrentPlayer = currentPlayer;
 
                 _eventAggregator.GetEvent<TrackChangedEvent>().Publish(CurrentTrack);
+            }
+        }
+
+        void IRadioTrackPlayer.Pause()
+        {
+            var currentPlayer = GetTrackPlayerForSource(CurrentTrack);
+
+            if (currentPlayer != null)
+            {
+                try
+                {
+                    _logger.Log("Pausing" + " [" + currentPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
+
+                    currentPlayer.Value.Pause();
+                }
+                catch (Exception e)
+                {
+                    _logger.Log(e.Message, Category.Exception, Priority.Medium);
+                }
             }
         }
 

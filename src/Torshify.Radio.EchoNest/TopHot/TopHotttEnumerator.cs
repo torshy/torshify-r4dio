@@ -33,7 +33,8 @@ namespace Torshify.Radio.EchoNest.TopHot
 
         public int Count
         {
-            get; set;
+            get;
+            set;
         }
 
         public IEnumerable<RadioTrack> Current
@@ -43,12 +44,14 @@ namespace Torshify.Radio.EchoNest.TopHot
 
         public int NumberOfTracksPerArtist
         {
-            get; set;
+            get;
+            set;
         }
 
         public int Start
         {
-            get; set;
+            get;
+            set;
         }
 
         object IEnumerator.Current
@@ -114,7 +117,12 @@ namespace Torshify.Radio.EchoNest.TopHot
                 using (EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
                 {
                     var topHotttResponse = session.Query<TopHottt>().Execute(Count, Start);
-                    return new Queue<ArtistBucketItem>(topHotttResponse.Artists);
+
+                    if (topHotttResponse.Status.Code == ResponseCode.Success && topHotttResponse.Artists != null)
+                    {
+                        Start += topHotttResponse.Artists.Count;
+                        return new Queue<ArtistBucketItem>(topHotttResponse.Artists.OrderBy(a => Guid.NewGuid()));
+                    }
                 }
             }
             catch (Exception e)
