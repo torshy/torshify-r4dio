@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -6,10 +7,13 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Torshify.Radio.Framework;
 
-namespace Torshify.Radio
+namespace Torshify.Radio.Services
 {
-    public class BackdropService
+    [Export(typeof(IBackdropService))]
+    [PartCreationPolicy(CreationPolicy.Shared)]
+    public class BackdropService : IBackdropService
     {
         #region Fields
 

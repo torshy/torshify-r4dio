@@ -14,6 +14,7 @@ namespace Torshify.Radio.Framework
         public static readonly CompositeCommand VolumeDownCommand = new CompositeCommand();
         public static readonly CompositeCommand TuneInStationCommand = new CompositeCommand();
         public static readonly CompositeCommand ToggleDebugWindowCommand = new CompositeCommand();
+        public static readonly CompositeCommand OpenSettingsCommand = new CompositeCommand();
 
     }
 }

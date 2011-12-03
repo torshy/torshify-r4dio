@@ -9,7 +9,7 @@
     xmlns:Radio="clr-namespace:Torshify.Radio"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
-    Title="R4dio"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework" Title="R4dio"
     Height="350"
     Width="555"
     MinWidth="310"
@@ -39,7 +39,8 @@
                     VerticalAlignment="Center"
                     BorderThickness="0"
                     Padding="2"
-                    Content="Dummy">
+                    Content="Dummy"
+                    Command="{x:Static Framework:GlobalCommands.OpenSettingsCommand}">
                     <i:Interaction.Behaviors>
                         <Behaviors:InactivityFadeBehavior />
                     </i:Interaction.Behaviors>

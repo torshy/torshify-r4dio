@@ -177,6 +177,10 @@ namespace Torshify.Radio.Grooveshark
                     IsPlaying = true;
                     _playbackState = StreamingPlaybackState.Playing;
                 }
+                else
+                {
+                    Load(_currentTrack);
+                }
 
                 _timer.Enabled = true;
             }
@@ -352,8 +356,14 @@ namespace Torshify.Radio.Grooveshark
             {
                 if (e.Status != WebExceptionStatus.RequestCanceled)
                 {
-                    Console.WriteLine(e);
+                    _elapsedTimeSpan = TimeSpan.Zero;
+                    IsPlaying = false;
+                    OnTrackComplete(_currentTrack);
+                    _fullyDownloaded = true;
                 }
+
+                _log.Log(url + ": " + e.ToString(), Category.Exception, Priority.Medium);
+
                 return;
             }
             byte[] buffer = new byte[16384 * 4]; // needs to be big enough to hold a decompressed frame

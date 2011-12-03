@@ -136,9 +136,6 @@ namespace Torshify.Radio
         private void ExecuteToggleDebugWindow()
         {
             ConsoleManager.Toggle();
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("...torshify debug window...");
-            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
         private void ExecuteTogglePlayPause()

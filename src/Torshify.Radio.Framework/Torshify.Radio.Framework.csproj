@@ -90,6 +90,7 @@
     <Compile Include="Events\SystemInactivityEvent.cs" />
     <Compile Include="Events\TrackChangedEvent.cs" />
     <Compile Include="GlobalCommands.cs" />
+    <Compile Include="IBackdropService.cs" />
     <Compile Include="ICommandBar.cs" />
     <Compile Include="IRadio.cs" />
     <Compile Include="IRadioStation.cs" />
