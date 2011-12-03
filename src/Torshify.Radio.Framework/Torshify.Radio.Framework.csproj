@@ -48,6 +48,7 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Behaviors\KeyboardBehavior.cs" />
+    <Compile Include="CommandModel.cs" />
     <Compile Include="Commands\AutomaticCommand%28of T%29.cs" />
     <Compile Include="Commands\AutomaticCommand.cs" />
     <Compile Include="Commands\AutomaticCompositeCommand.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Commands\WeakCollection.cs" />
     <Compile Include="Commands\WeakReference.cs" />
     <Compile Include="Common\DoubleUtilities.cs" />
+    <Compile Include="Controls\CommandBarContextMenu.cs" />
     <Compile Include="Controls\SizeControlTemplate.cs" />
     <Compile Include="Controls\SizeControlTemplateCollection.cs" />
     <Compile Include="Controls\SizeTemplateControl.cs" />
@@ -76,8 +78,12 @@
     <Compile Include="Converters\InstanceToObjectTypeConverter.cs" />
     <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToUpperConverter.cs" />
+    <Compile Include="Events\ApplicationInactivityEvent.cs" />
+    <Compile Include="Events\CommandBarEvent.cs" />
+    <Compile Include="Events\SystemInactivityEvent.cs" />
     <Compile Include="Events\TrackChangedEvent.cs" />
     <Compile Include="GlobalCommands.cs" />
+    <Compile Include="ICommandBar.cs" />
     <Compile Include="IRadio.cs" />
     <Compile Include="IRadioStation.cs" />
     <Compile Include="IRadioStationContext.cs" />
@@ -87,6 +93,7 @@
     <Compile Include="IRadioTrackPlayerMetadata.cs" />
     <Compile Include="IRadioTrackSource.cs" />
     <Compile Include="IRadioTrackSourceMetadata.cs" />
+    <Compile Include="IStartable.cs" />
     <Compile Include="MediaPlayerRadioTrack.cs" />
     <Compile Include="MediaPlayerRadioTrackPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,6 +102,16 @@
     <Compile Include="TrackEventArgs.cs" />
     <Compile Include="TrackProgressEventArgs.cs" />
     <Compile Include="ViewData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Themes\CommandBarContextMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

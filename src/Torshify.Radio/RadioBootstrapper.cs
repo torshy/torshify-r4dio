@@ -2,18 +2,40 @@
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Windows;
-using Microsoft.Practices.Prism.MefExtensions;
+
 using log4net;
 using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 
+using Microsoft.Practices.Prism.MefExtensions;
+
 namespace Torshify.Radio
 {
     public class RadioBootstrapper : MefBootstrapper
     {
-        private ILog BootLogger;
+        #region Fields
+
+        private ILog _bootLogger;
+
+        #endregion Fields
+
+        #region Methods
+
+        protected override void ConfigureAggregateCatalog()
+        {
+            base.ConfigureAggregateCatalog();
+
+            AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(RadioBootstrapper).Assembly));
+            AggregateCatalog.Catalogs.Add(new DirectoryCatalog(Environment.CurrentDirectory, "Torshify.Radio*.dll"));
+        }
+
+        protected override Microsoft.Practices.Prism.Logging.ILoggerFacade CreateLogger()
+        {
+            InitializeLogging();
+            return new Log4NetFacade();
+        }
 
         protected override DependencyObject CreateShell()
         {
@@ -26,12 +48,6 @@ namespace Torshify.Radio
 
             Application.Current.MainWindow = (MainWindow)Shell;
             Application.Current.MainWindow.Show();
-        }
-
-        protected override Microsoft.Practices.Prism.Logging.ILoggerFacade CreateLogger()
-        {
-            InitializeLogging();
-            return new Log4NetFacade();
         }
 
         private void InitializeLogging()
@@ -80,11 +96,11 @@ namespace Torshify.Radio
                     Level = Level.Info
                 });
             consoleAppender.Layout = new PatternLayout("%date{dd MM HH:mm} %-5level - %message%newline");
-#if DEBUG
+            #if DEBUG
             consoleAppender.Threshold = Level.All;
-#else
+            #else
             consoleAppender.Threshold = Level.Info;
-#endif
+            #endif
             consoleAppender.ActivateOptions();
 
             Logger root;
@@ -93,28 +109,21 @@ namespace Torshify.Radio
             root.AddAppender(fileAppender);
             root.Repository.Configured = true;
 
-            BootLogger = LogManager.GetLogger("Bootstrapper");
+            _bootLogger = LogManager.GetLogger("Bootstrapper");
 
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
             {
                 Exception exception = (Exception)e.ExceptionObject;
-                BootLogger.Fatal(exception);
+                _bootLogger.Fatal(exception);
             };
 
             Application.Current.Dispatcher.UnhandledException += (s, e) =>
             {
                 Exception exception = e.Exception;
-                BootLogger.Fatal(exception);
+                _bootLogger.Fatal(exception);
             };
         }
 
-        protected override void ConfigureAggregateCatalog()
-        {
-            base.ConfigureAggregateCatalog();
-
-            AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(RadioBootstrapper).Assembly));
-            AggregateCatalog.Catalogs.Add(new DirectoryCatalog(Environment.CurrentDirectory, "Torshify.Radio*.dll"));
-        }
-
+        #endregion Methods
     }
 }

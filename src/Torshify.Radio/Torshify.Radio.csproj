@@ -160,6 +160,7 @@
     <Compile Include="RadioBox.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Converters\UriToImageSourceConverter.cs" />
+    <Compile Include="Services\InactivityNotificatorService.cs" />
     <Page Include="Controls\ColorOverlayFrame.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

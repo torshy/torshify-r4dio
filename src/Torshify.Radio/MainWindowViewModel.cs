@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows.Input;
 
@@ -10,10 +11,12 @@ using Torshify.Radio.Framework;
 namespace Torshify.Radio
 {
     [Export(typeof(MainWindowViewModel))]
-    public class MainWindowViewModel : NotificationObject
+    public class MainWindowViewModel : NotificationObject, IPartImportsSatisfiedNotification
     {
         #region Fields
 
+        [ImportMany]
+        private IEnumerable<IStartable> _startables = null;
         private MainWindow _view;
 
         #endregion Fields
@@ -69,6 +72,12 @@ namespace Torshify.Radio
                 _view.InputBindings.Add(
                     new KeyBinding
                     {
+                        Command = GlobalCommands.NextCommand,
+                        Gesture = new KeyGesture(Key.MediaNextTrack)
+                    });
+                _view.InputBindings.Add(
+                    new KeyBinding
+                    {
                         Command = GlobalCommands.TogglePlayPauseCommand,
                         Gesture = new KeyGesture(Key.MediaPlayPause)
                     });
@@ -115,6 +124,14 @@ namespace Torshify.Radio
         #endregion Properties
 
         #region Methods
+
+        void IPartImportsSatisfiedNotification.OnImportsSatisfied()
+        {
+            foreach (var startable in _startables)
+            {
+                startable.Start();
+            }
+        }
 
         private void ExecuteToggleDebugWindow()
         {
