@@ -7,7 +7,9 @@
     xmlns:Controls1="clr-namespace:Torshify.Radio.Controls"
     xmlns:Resources="clr-namespace:Torshify.Radio.Resources"
     xmlns:Radio="clr-namespace:Torshify.Radio"
-    Title="r4dio"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    Title="R4dio"
     Height="350"
     Width="555"
     MinWidth="310"
@@ -38,6 +40,9 @@
                     BorderThickness="0"
                     Padding="2"
                     Content="Dummy">
+                    <i:Interaction.Behaviors>
+                        <Behaviors:InactivityFadeBehavior />
+                    </i:Interaction.Behaviors>
                     <Button.ContentTemplate>
                         <DataTemplate>
                             <Image
