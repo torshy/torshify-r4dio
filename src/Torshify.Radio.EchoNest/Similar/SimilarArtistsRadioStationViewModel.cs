@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -174,7 +175,11 @@ namespace Torshify.Radio.EchoNest.Similar
 
             _context
                 .SetTrackProvider(enumerator.DoIt)
-                .ContinueWith(t => _context.GoToTracks(), TaskScheduler.FromCurrentSynchronizationContext());
+                .ContinueWith(
+                    t => _context.GoToTracks(),
+                    CancellationToken.None,
+                    TaskContinuationOptions.OnlyOnRanToCompletion,
+                    TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         private void ExecuteSearch(string searchPhrase)

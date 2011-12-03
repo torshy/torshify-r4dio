@@ -20,9 +20,11 @@ namespace Torshify.Radio.EchoNest.TopHot
 
         #region Constructors
 
-        public TopHotttEnumerator()
+        public TopHotttEnumerator(IRadioStationContext context)
         {
+            _context = context;
             NumberOfTracksPerArtist = 2;
+            Count = 10;
         }
 
         #endregion Constructors
@@ -74,12 +76,6 @@ namespace Torshify.Radio.EchoNest.TopHot
             }
 
             return new RadioTrack[0];
-        }
-
-        public void Initialize(IRadioStationContext context)
-        {
-            _context = context;
-            Count = 10;
         }
 
         public bool MoveNext()

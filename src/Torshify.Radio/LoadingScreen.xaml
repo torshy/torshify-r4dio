@@ -1,4 +1,6 @@
 ﻿<UserControl
+    x:Name="Root"
+    x:FieldModifier="private"
     x:Class="Torshify.Radio.LoadingScreen"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -20,5 +22,11 @@
         <ProgressBar
             Style="{DynamicResource ProgressBar_LoadingDots}"
             IsIndeterminate="True" />
+
+        <Button
+            Content="Cancel"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Command="{Binding CancelCommand, ElementName=Root}" />
     </Grid>
 </UserControl>

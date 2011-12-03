@@ -1,49 +1,56 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+
+using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Events;
+using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio
 {
-    public class RadioNowPlayingViewModel : NotificationObject
+    public class RadioNowPlayingViewModel : NotificationObject, IRadioStationContext
     {
         #region Fields
 
-        private readonly IRadio _radio;
         private readonly IEventAggregator _eventAggregator;
-        private Queue<RadioTrack> _playQueue;
+        private readonly IRadio _radio;
+        private readonly IRegionManager _regionManager;
+
+        private Func<IEnumerable<RadioTrack>> _getNextBatchProvider;
+        private bool _getNextBatchProviderIsComplete;
+        private ConcurrentQueue<RadioTrack> _playQueue;
         private TaskScheduler _uiTaskScheduler;
+
         #endregion Fields
 
         #region Constructors
 
-        public RadioNowPlayingViewModel(IRadio radio, IEventAggregator eventAggregator)
+        public RadioNowPlayingViewModel(IRadio radio, IEventAggregator eventAggregator, IRegionManager regionManager)
         {
             _radio = radio;
             _eventAggregator = eventAggregator;
+            _regionManager = regionManager;
             _radio.TrackComplete += OnTrackComplete;
-            _playQueue = new Queue<RadioTrack>();
+            _playQueue = new ConcurrentQueue<RadioTrack>();
             _uiTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
         }
 
         #endregion Constructors
 
-        #region Events
-
-        public event EventHandler AtEndOfPlaylist;
-
-        #endregion Events
-
         #region Properties
 
-        public IRadio Radio
+        public RadioTrack CurrentTrack
         {
-            get { return _radio; }
+            get;
+            private set;
         }
 
         public bool HasTracks
@@ -56,16 +63,15 @@ namespace Torshify.Radio
             get { return NextTrack != null; }
         }
 
-        public RadioTrack CurrentTrack
+        public RadioTrack NextTrack
         {
             get;
             private set;
         }
 
-        public RadioTrack NextTrack
+        public IRadio Radio
         {
-            get;
-            private set;
+            get { return _radio; }
         }
 
         #endregion Properties
@@ -82,7 +88,7 @@ namespace Torshify.Radio
 
         public void ClearTracks()
         {
-            _playQueue.Clear();
+            _playQueue = new ConcurrentQueue<RadioTrack>();
 
             CurrentTrack = null;
             NextTrack = null;
@@ -90,63 +96,189 @@ namespace Torshify.Radio
             RaisePropertyChanged("CurrentTrack", "NextTrack", "HasTracks", "HasUpNext");
         }
 
-        public void MoveToNext()
+        public void GoToStations()
         {
-            Task.Factory
-                .StartNew(() =>
-                {
-                    if (_playQueue.Count > 0)
-                    {
-                        CurrentTrack = _playQueue.Dequeue();
-                    }
-
-                    return CurrentTrack;
-                })
-                .ContinueWith(t =>
-                {
-                    if (t.Result != null)
-                    {
-                        _radio.Load(t.Result);
-                        _radio.Play();
-                    }
-
-                    RaisePropertyChanged("CurrentTrack", "HasTracks");
-                }, _uiTaskScheduler)
-                .ContinueWith(t => PeekToNext());
+            ActivateView(RadioStandardViews.Stations);
         }
 
-        public void PeekToNext(bool fireAtEndPlaylistIfAtEnd = true)
+        public void GoToTracks()
         {
-            if (_playQueue.Count > 0)
+            ActivateView(RadioStandardViews.Tracks);
+        }
+
+        public void MoveToNext()
+        {
+            RadioTrack track;
+            if (_playQueue.TryDequeue(out track))
             {
-                NextTrack = _playQueue.Peek();
+                if (track != null)
+                {
+                    _radio.Load(track);
+                    _radio.Play();
+                    CurrentTrack = track;
+                }
+            }
+
+            PeekToNext();
+            RaisePropertyChanged("CurrentTrack", "HasTracks");
+        }
+
+        public void PeekToNext(bool getNextBatchIfNoMoreTracks = true)
+        {
+            RadioTrack track;
+
+            if (_playQueue.TryPeek(out track))
+            {
+                NextTrack = track;
             }
             else
             {
                 NextTrack = null;
 
-                if (fireAtEndPlaylistIfAtEnd)
+                if (getNextBatchIfNoMoreTracks)
                 {
-                    OnAtEndAtPlaylist();
+                    GetNextBatch();
                 }
             }
 
             RaisePropertyChanged("NextTrack", "HasUpNext");
         }
 
-        private void OnAtEndAtPlaylist()
+        public Task SetTrackProvider(Func<IEnumerable<RadioTrack>> getNextBatchProvider)
         {
-            var handler = AtEndOfPlaylist;
+            _getNextBatchProvider = getNextBatchProvider;
+            _getNextBatchProviderIsComplete = false;
 
-            if (handler != null)
+            var cts = new CancellationTokenSource();
+            ShowLoadingView(cts);
+            return Task.Factory
+                .StartNew(getNextBatchProvider, cts.Token)
+                .ContinueWith(t =>
+                {
+                    if (cts.Token.IsCancellationRequested)
+                    {
+                        cts.Token.ThrowIfCancellationRequested();
+                    }
+
+                    ClearTracks();
+
+                    if (!t.Result.Any())
+                    {
+                        _getNextBatchProviderIsComplete = true;
+                    }
+                    else
+                    {
+                        _getNextBatchProviderIsComplete = false;
+                        AddTracks(t.Result);
+                        MoveToNext();
+                    }
+                }, cts.Token)
+                .ContinueWith(t => HideLoadingView(), cts.Token, TaskContinuationOptions.None, _uiTaskScheduler);
+        }
+
+        public void SetView(ViewData viewData)
+        {
+            if (viewData == null)
+                return;
+
+            if (_regionManager.Regions.ContainsRegionWithName(RegionNames.MainRegion))
             {
-                handler(this, EventArgs.Empty);
+                IRegion region = _regionManager.Regions[RegionNames.MainRegion];
+
+                ViewData currentStationView = region.GetView("CurrentStation") as ViewData;
+
+                if (currentStationView != null)
+                {
+                    region.Remove(currentStationView);
+                }
+
+                region.Add(viewData, "CurrentStation");
+                region.Activate(viewData);
+            }
+        }
+
+        public void ShowLoadingView(CancellationTokenSource cts)
+        {
+            if (_regionManager.Regions.ContainsRegionWithName(RegionNames.MainRegion))
+            {
+                IRegion region = _regionManager.Regions[RegionNames.MainRegionOverlay];
+                var currentViews = region.Views.ToArray();
+
+                foreach (var currentView in currentViews)
+                {
+                    region.Remove(currentView);
+                }
+
+                LoadingScreen loadingScreen = new LoadingScreen();
+                loadingScreen.CancelCommand = new DelegateCommand(() =>
+                {
+                    cts.Cancel();
+                    HideLoadingView();
+                });
+                region.Add(loadingScreen);
+                region.Activate(loadingScreen);
+            }
+        }
+
+        private void ActivateView(string viewId)
+        {
+            if (_regionManager.Regions.ContainsRegionWithName(RegionNames.MainRegion))
+            {
+                IRegion region = _regionManager.Regions[RegionNames.MainRegion];
+
+                object view = region.GetView(viewId);
+
+                if (view != null)
+                {
+                    region.Activate(view);
+                }
+            }
+        }
+
+        private void GetNextBatch()
+        {
+            if (_getNextBatchProvider != null && !_getNextBatchProviderIsComplete)
+            {
+                var result = _getNextBatchProvider();
+
+                if (result.Count() == 0)
+                {
+                    _getNextBatchProviderIsComplete = true;
+                }
+                else
+                {
+                    _getNextBatchProviderIsComplete = false;
+                    AddTracks(result);
+                    PeekToNext(false);
+                }
+            }
+        }
+
+        private void HideLoadingView()
+        {
+            if (_regionManager.Regions.ContainsRegionWithName(RegionNames.MainRegion))
+            {
+                IRegion region = _regionManager.Regions[RegionNames.MainRegionOverlay];
+                var currentViews = region.Views.ToArray();
+
+                foreach (var currentView in currentViews)
+                {
+                    region.Remove(currentView);
+                }
             }
         }
 
         private void OnTrackComplete(object sender, TrackEventArgs e)
         {
-            MoveToNext();
+            try
+            {
+                MoveToNext();
+                
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
         }
 
         #endregion Methods

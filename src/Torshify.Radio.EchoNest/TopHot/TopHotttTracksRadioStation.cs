@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Torshify.Radio.Framework;
 
@@ -18,12 +19,15 @@ namespace Torshify.Radio.EchoNest.TopHot
 
         public void OnTunedIn(IRadioStationContext context)
         {
-            var trackEnumerator = new TopHotttEnumerator();
-            trackEnumerator.Initialize(context);
+            var trackEnumerator = new TopHotttEnumerator(context);
             context.SetView(new ViewData { Header = "Top hot", IsEnabled = false });
             context
-                .SetTrackProvider(trackEnumerator.DoIt).
-                ContinueWith(t => context.GoToTracks(), TaskScheduler.FromCurrentSynchronizationContext());
+                .SetTrackProvider(trackEnumerator.DoIt)
+                .ContinueWith(
+                    t => context.GoToTracks(),
+                    CancellationToken.None,
+                    TaskContinuationOptions.OnlyOnRanToCompletion,
+                    TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         #endregion Methods

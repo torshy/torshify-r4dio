@@ -146,7 +146,6 @@
     </Compile>
     <Compile Include="RadioControlViewModel.cs" />
     <Compile Include="RadioStandardViews.cs" />
-    <Compile Include="RadioStationContext.cs" />
     <Compile Include="RadioStationsView.xaml.cs">
       <DependentUpon>RadioStationsView.xaml</DependentUpon>
     </Compile>

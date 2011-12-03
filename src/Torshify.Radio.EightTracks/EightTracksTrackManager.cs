@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 using EightTracks;
@@ -59,8 +60,13 @@ namespace Torshify.Radio.EightTracks
                     _playToken = session.Query<Play>().GetPlayToken();
                 }
 
-                var ui = TaskScheduler.FromCurrentSynchronizationContext();
-                _context.SetTrackProvider(GetTrackFactory).ContinueWith(t => _context.GoToTracks(), ui);
+                _context
+                    .SetTrackProvider(GetTrackFactory)
+                    .ContinueWith(
+                        t => _context.GoToTracks(),
+                        CancellationToken.None,
+                        TaskContinuationOptions.OnlyOnRanToCompletion,
+                        TaskScheduler.FromCurrentSynchronizationContext());
             }
         }
 

@@ -135,32 +135,22 @@ namespace Torshify.Radio.Grooveshark
 
             if (currentTrack != null && GroovesharkRadioTrackSource.Session != null)
             {
-                try
+                var streaming = new GroovesharkStreaming(GroovesharkRadioTrackSource.Session);
+                var key = streaming.GetStreamingKey(currentTrack.SongID);
+
+                if (key == null || key.Length == 0)
                 {
-                    var streaming = new GroovesharkStreaming(GroovesharkRadioTrackSource.Session);
-                    var key = streaming.GetStreamingKey(currentTrack.SongID);
-
-                    if (key == null || key.Length == 0)
-                    {
-                        throw new Exception("Unable to load track");
-                    }
-
-                    var url = streaming.GetStreamingUrl(key);
-                    _currentTrack = currentTrack;
-                    _playbackState = StreamingPlaybackState.Buffering;
-                    _bufferedWaveProvider = null;
-
-                    _bufferThread = new Thread(StreamMp3);
-                    _bufferThread.IsBackground = true;
-                    _bufferThread.Start(url);
+                    throw new Exception("Unable to load track");
                 }
-                catch (Exception e)
-                {
-                    GroovesharkRadioTrackSource.Session = new GroovesharkSession();
-                    GroovesharkRadioTrackSource.Session.Connect();
-                    _log.Log(e.ToString(), Category.Exception, Priority.High);
-                    throw;
-                }
+
+                var url = streaming.GetStreamingUrl(key);
+                _currentTrack = currentTrack;
+                _playbackState = StreamingPlaybackState.Buffering;
+                _bufferedWaveProvider = null;
+
+                _bufferThread = new Thread(StreamMp3);
+                _bufferThread.IsBackground = true;
+                _bufferThread.Start(url);
             }
         }
 

@@ -78,7 +78,7 @@
                 <TextBlock
                     DockPanel.Dock="Left"
                     VerticalAlignment="Top"
-                    Text="up next:"
+                    Text="next:"
                     TextTrimming="CharacterEllipsis"
                     Foreground="#FF555555"
                     FontSize="12"

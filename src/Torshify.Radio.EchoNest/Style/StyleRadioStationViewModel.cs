@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using EchoNest;
@@ -76,8 +77,12 @@ namespace Torshify.Radio.EchoNest.Style
             termEnumerator.Initialize(_currentTermList, _radio);
 
             _context
-                .SetTrackProvider(termEnumerator.DoIt).
-                ContinueWith(t => _context.GoToTracks(), TaskScheduler.FromCurrentSynchronizationContext());
+                .SetTrackProvider(termEnumerator.DoIt)
+                .ContinueWith(
+                    t => _context.GoToTracks(),
+                    CancellationToken.None,
+                    TaskContinuationOptions.OnlyOnRanToCompletion,
+                    TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         private IEnumerable<TermModel> GetAvailableStyles()
@@ -92,7 +97,7 @@ namespace Torshify.Radio.EchoNest.Style
 
                     if (response.Status.Code == ResponseCode.Success)
                     {
-                        return response.Terms.Select(t => new TermModel {Name = t.Name});
+                        return response.Terms.Select(t => new TermModel { Name = t.Name });
                     }
                 }
             }
