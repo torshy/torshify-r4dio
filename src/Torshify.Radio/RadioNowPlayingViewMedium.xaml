@@ -48,17 +48,20 @@
                 <TextBlock
                     Text="{Binding Name, Mode=OneWay}"
                     TextTrimming="CharacterEllipsis"
+                    TextOptions.TextFormattingMode="Ideal"
                     FontSize="30"
                     Foreground="White" />
                 <TextBlock
                     Text="{Binding Artist, Mode=OneWay, Converter={StaticResource StringToUpperConverter}}"
                     TextTrimming="CharacterEllipsis"
+                    TextOptions.TextFormattingMode="Ideal"
                     FontWeight="Bold"
                     FontSize="22"
                     Foreground="White" />
                 <TextBlock
                     Text="{Binding Album, Mode=OneWay, Converter={StaticResource StringToUpperConverter}}"
                     TextTrimming="CharacterEllipsis"
+                    TextOptions.TextFormattingMode="Ideal"
                     FontWeight="Light"
                     FontSize="22"
                     Foreground="White" />

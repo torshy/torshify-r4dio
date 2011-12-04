@@ -277,24 +277,7 @@ namespace Torshify.Radio
 
         void IRadioTrackPlayer.Load(RadioTrack track)
         {
-            try
-            {
-                if (CurrentTrack != null)
-                {
-                    _logger.Log("Stopping " + CurrentTrack.Name, Category.Info, Priority.Low);
-
-                    var currentPlayer = GetTrackPlayerForSource(CurrentTrack);
-
-                    if (currentPlayer != null)
-                    {
-                        currentPlayer.Value.Stop();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Log(e.Message, Category.Exception, Priority.Medium);
-            }
+            ((IRadioTrackPlayer)this).Stop();
 
             CurrentTrack = null;
 
@@ -360,6 +343,11 @@ namespace Torshify.Radio
 
         void IRadioTrackPlayer.Stop()
         {
+            if (CurrentTrack == null)
+            {
+                return;
+            }
+
             var currentPlayer = GetTrackPlayerForSource(CurrentTrack);
 
             if (currentPlayer != null)
@@ -542,7 +530,7 @@ namespace Torshify.Radio
                         binding.Source = _nowPlayingViewModel;
                         binding.Converter = new BooleanToVisibilityConverter();
                         BindingOperations.SetBinding(viewData, ViewData.VisibilityProperty, binding);
-
+                        
                         region.Add(viewData, RadioStandardViews.Tracks);
                     }
                     else if (region.Name == RegionNames.BottomRegion)

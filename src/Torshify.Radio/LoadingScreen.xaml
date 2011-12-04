@@ -12,7 +12,7 @@
     Background="White">
     <Grid>
         <TextBlock
-            Text="LOADING..."
+            Text="LOADING"
             FontSize="54"
             FontWeight="Bold"
             HorizontalAlignment="Center"

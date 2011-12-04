@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Events;
@@ -106,21 +104,45 @@ namespace Torshify.Radio
             ActivateView(RadioStandardViews.Tracks);
         }
 
+        private object _lock = new object();
+
+
         public void MoveToNext()
         {
-            RadioTrack track;
-            if (_playQueue.TryDequeue(out track))
+            lock (_lock)
             {
-                if (track != null)
-                {
-                    _radio.Load(track);
-                    _radio.Play();
-                    CurrentTrack = track;
-                }
-            }
+                bool success = false;
 
-            PeekToNext();
-            RaisePropertyChanged("CurrentTrack", "HasTracks");
+                while (!success)
+                {
+                    RadioTrack track;
+                    if (_playQueue.TryDequeue(out track))
+                    {
+                        try
+                        {
+                            if (track != null)
+                            {
+                                _radio.Load(track);
+                                _radio.Play();
+                                CurrentTrack = track;
+                                success = true;
+                                RaisePropertyChanged("CurrentTrack", "HasTracks");
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                PeekToNext();
+                RaisePropertyChanged("CurrentTrack", "HasTracks");
+            }
         }
 
         public void PeekToNext(bool getNextBatchIfNoMoreTracks = true)
@@ -173,7 +195,16 @@ namespace Torshify.Radio
                         MoveToNext();
                     }
                 }, cts.Token)
-                .ContinueWith(t => HideLoadingView(), cts.Token, TaskContinuationOptions.None, _uiTaskScheduler);
+                .ContinueWith(t =>
+                {
+                    HideLoadingView();
+
+                    if (t.Status == TaskStatus.Faulted)
+                    {
+                        MoveToNext();
+                    }
+
+                }, cts.Token, TaskContinuationOptions.None, _uiTaskScheduler);
         }
 
         public void SetView(ViewData viewData)
@@ -270,14 +301,9 @@ namespace Torshify.Radio
 
         private void OnTrackComplete(object sender, TrackEventArgs e)
         {
-            try
+            if (e.Track == CurrentTrack)
             {
-                MoveToNext();
-                
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
+                Task.Factory.StartNew(MoveToNext);
             }
         }
 
