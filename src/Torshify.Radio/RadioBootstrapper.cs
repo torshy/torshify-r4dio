@@ -53,7 +53,7 @@ namespace Torshify.Radio
         private void InitializeLogging()
         {
             var fileAppender = new RollingFileAppender();
-            fileAppender.File = Path.Combine(Environment.CurrentDirectory, "Torshify.Radio.log");
+            fileAppender.File = Path.Combine(AppConstants.LogFolder, "Torshify.Radio.log");
             fileAppender.AppendToFile = true;
             fileAppender.MaxSizeRollBackups = 10;
             fileAppender.MaxFileSize = 1024 * 1024;

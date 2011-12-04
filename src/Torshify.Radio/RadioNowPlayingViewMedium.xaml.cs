@@ -56,7 +56,6 @@ namespace Torshify.Radio
                 }
 
                 BackdropService backdropService = new BackdropService();
-                backdropService.CacheLocation = Path.Combine(Environment.CurrentDirectory, "Cache");
                 backdropService.GetBackdrop(model.CurrentTrack.Artist, OnBackdropFound);
             }
         }
@@ -66,7 +65,6 @@ namespace Torshify.Radio
             if (track != null)
             {
                 BackdropService backdropService = new BackdropService();
-                backdropService.CacheLocation = Path.Combine(Environment.CurrentDirectory, "Cache");
                 backdropService.GetBackdrop(track.Artist, OnBackdropFound);
             }
         }

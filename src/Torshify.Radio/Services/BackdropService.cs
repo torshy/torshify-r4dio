@@ -26,7 +26,8 @@ namespace Torshify.Radio.Services
 
         public BackdropService()
         {
-            CacheLocation = Environment.CurrentDirectory;
+            CacheLocation = AppConstants.BackdropCacheFolder;
+            Directory.CreateDirectory(CacheLocation);
         }
 
         #endregion Constructors

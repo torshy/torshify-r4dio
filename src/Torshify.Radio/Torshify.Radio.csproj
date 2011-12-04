@@ -81,6 +81,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AppConstants.cs" />
     <Compile Include="Behaviors\MultiSelectionBehavior.cs" />
     <Compile Include="Behaviors\TiltBehavior.cs" />
     <Compile Include="ConsoleManager.cs" />
