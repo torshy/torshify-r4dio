@@ -6,7 +6,7 @@ using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Research
 {
-    [RadioStationMetadata(Name = "Research", Icon = "MB_0019_profiles.png")]
+    //[RadioStationMetadata(Name = "Research", Icon = "MB_0019_profiles.png")]
     public class ResearchStation : IRadioStation
     {
         private IRegionManager _regionManager;
@@ -32,7 +32,6 @@ namespace Torshify.Radio.EchoNest.Research
         public void OnTunedIn(IRadioStationContext context)
         {
             var regionManager = new RegionManager();
-
 
             Lazy<UIElement> viewFactory = new Lazy<UIElement>(() => new ResearchView(regionManager));
 

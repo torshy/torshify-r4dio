@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Timers;
+using System.Windows;
 using System.Windows.Media;
 
 namespace Torshify.Radio.Framework
@@ -62,8 +63,8 @@ namespace Torshify.Radio.Framework
 
         public float Volume
         {
-            get { return (float)Player.Volume; }
-            set { Player.Volume = value; }
+            get { return (float)Application.Current.Dispatcher.Invoke(new Func<float>(() => (float)Player.Volume)); }
+            set { Application.Current.Dispatcher.BeginInvoke(new Action<double>(v => Player.Volume = v), value); }
         }
 
         protected MediaPlayerRadioTrack CurrentTrack

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Timers;
-
+using System.Windows;
 using EightTracks;
 
 using Torshify.Radio.Framework;
@@ -39,23 +39,32 @@ namespace Torshify.Radio.EightTracks
 
             if (eightTracksRadioTrack != null && !string.IsNullOrEmpty(eightTracksRadioTrack.Track.Url))
             {
-                CurrentTrack = eightTracksRadioTrack;
-                CurrentTrackElapsed = TimeSpan.Zero;
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                                                                     {
+                                                                         CurrentTrack = eightTracksRadioTrack;
+                                                                         CurrentTrackElapsed = TimeSpan.Zero;
 
-                Player.Open(eightTracksRadioTrack.Uri);
+                                                                         Player.Open(eightTracksRadioTrack.Uri);
+                                                                     }));
             }
         }
 
         public override void Play()
         {
-            base.Play();
-            _reportTimer.Start();
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+                                                                 {
+                                                                     base.Play();
+                                                                     _reportTimer.Start();
+                                                                 }));
         }
 
         public override void Stop()
         {
-            base.Stop();
-            _reportTimer.Stop();
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+                                                                 {
+                                                                     base.Stop();
+                                                                     _reportTimer.Stop();
+                                                                 }));
         }
 
         protected override void OnMediaEnded(object sender, EventArgs e)
