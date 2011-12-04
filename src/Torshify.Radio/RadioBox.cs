@@ -9,13 +9,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
+using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-
+using Microsoft.Practices.ServiceLocation;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Events;
+using Microsoft.Practices.Prism;
+using Torshify.Radio.Views.Configuration;
 
 namespace Torshify.Radio
 {
@@ -56,6 +59,8 @@ namespace Torshify.Radio
             _eventAggregator = eventAggregator;
             _regionManager = regionManager;
             _nowPlayingViewModel = new RadioNowPlayingViewModel(this, eventAggregator, regionManager);
+
+            GlobalCommands.OpenSettingsCommand.RegisterCommand(new DelegateCommand(ExecuteOpenSettings));
         }
 
         #endregion Constructors
@@ -125,8 +130,10 @@ namespace Torshify.Radio
         public bool IsBuffering
         {
             get { return _isBuffering; }
-            private set { _isBuffering = value;
-            RaisePropertyChanged("IsBuffering");
+            private set
+            {
+                _isBuffering = value;
+                RaisePropertyChanged("IsBuffering");
             }
         }
 
@@ -271,6 +278,19 @@ namespace Torshify.Radio
             }
         }
 
+        bool IRadioTrackPlayer.CanPlay(RadioTrack radioTrack)
+        {
+            try
+            {
+                return _trackPlayers.Any(t => t.Value.CanPlay(radioTrack));
+            }
+            catch (Exception e)
+            {
+                _logger.Log(e.Message, Category.Exception, Priority.Medium);
+                return false;
+            }
+        }
+
         void IRadioTrackPlayer.Initialize()
         {
         }
@@ -292,16 +312,22 @@ namespace Torshify.Radio
             }
         }
 
-        bool IRadioTrackPlayer.CanPlay(RadioTrack radioTrack)
+        void IRadioTrackPlayer.Pause()
         {
-            try
+            var currentPlayer = GetTrackPlayerForSource(CurrentTrack);
+
+            if (currentPlayer != null)
             {
-                return _trackPlayers.Any(t => t.Value.CanPlay(radioTrack));
-            }
-            catch (Exception e)
-            {
-                _logger.Log(e.Message, Category.Exception, Priority.Medium);
-                return false;
+                try
+                {
+                    _logger.Log("Pausing" + " [" + currentPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
+
+                    currentPlayer.Value.Pause();
+                }
+                catch (Exception e)
+                {
+                    _logger.Log(e.Message, Category.Exception, Priority.Medium);
+                }
             }
         }
 
@@ -319,25 +345,6 @@ namespace Torshify.Radio
                 CurrentPlayer = currentPlayer;
 
                 _eventAggregator.GetEvent<TrackChangedEvent>().Publish(CurrentTrack);
-            }
-        }
-
-        void IRadioTrackPlayer.Pause()
-        {
-            var currentPlayer = GetTrackPlayerForSource(CurrentTrack);
-
-            if (currentPlayer != null)
-            {
-                try
-                {
-                    _logger.Log("Pausing" + " [" + currentPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
-
-                    currentPlayer.Value.Pause();
-                }
-                catch (Exception e)
-                {
-                    _logger.Log(e.Message, Category.Exception, Priority.Medium);
-                }
             }
         }
 
@@ -458,6 +465,26 @@ namespace Torshify.Radio
         {
         }
 
+        private void ExecuteOpenSettings()
+        {
+            var region = _regionManager.Regions[RegionNames.MainRegion];
+            var settingsView = region.GetView("Settings");
+
+            if (settingsView != null)
+            {
+                region.Activate(settingsView);
+            }
+            else
+            {
+                ViewData viewData = new ViewData();
+                viewData.Header = "Settings";
+                viewData.View = new Lazy<UIElement>(() => ServiceLocator.Current.TryResolve<ConfigurationView>());
+
+                region.Add(viewData, "Settings");
+                region.Activate(viewData);
+            }
+        }
+
         private Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata> GetTrackPlayerForSource(RadioTrack radioTrack)
         {
             return _trackPlayers.FirstOrDefault(t => t.Value.CanPlay(radioTrack));
@@ -475,7 +502,7 @@ namespace Torshify.Radio
 
         private void OnRadioStationIsBufferingChanged(object sender, EventArgs e)
         {
-            IRadioTrackPlayer player = (IRadioTrackPlayer) sender;
+            IRadioTrackPlayer player = (IRadioTrackPlayer)sender;
             IsBuffering = player.IsBuffering;
         }
 
@@ -530,7 +557,7 @@ namespace Torshify.Radio
                         binding.Source = _nowPlayingViewModel;
                         binding.Converter = new BooleanToVisibilityConverter();
                         BindingOperations.SetBinding(viewData, ViewData.VisibilityProperty, binding);
-                        
+
                         region.Add(viewData, RadioStandardViews.Tracks);
                     }
                     else if (region.Name == RegionNames.BottomRegion)
