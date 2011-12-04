@@ -89,18 +89,21 @@ namespace Torshify.Radio
 
         private void OnShowBackdrop(ImageSource imageSource)
         {
-            var regionManager = ServiceLocator.Current.TryResolve<IRegionManager>();
-            var region = regionManager.Regions["BackgroundRegion"];
-            var kenBurnsBackground = region.Views.OfType<KenBurnsPhotoFrame>().FirstOrDefault();
-
-            if (kenBurnsBackground == null)
+            if (IsLoaded)
             {
-                kenBurnsBackground = new KenBurnsPhotoFrame();
-                region.Add(kenBurnsBackground);
-                region.Add(new ColorOverlayFrame());
-            }
+                var regionManager = ServiceLocator.Current.TryResolve<IRegionManager>();
+                var region = regionManager.Regions["BackgroundRegion"];
+                var kenBurnsBackground = region.Views.OfType<KenBurnsPhotoFrame>().FirstOrDefault();
 
-            kenBurnsBackground.SetImageSource(imageSource);
+                if (kenBurnsBackground == null)
+                {
+                    kenBurnsBackground = new KenBurnsPhotoFrame();
+                    region.Add(kenBurnsBackground);
+                    region.Add(new ColorOverlayFrame());
+                }
+
+                kenBurnsBackground.SetImageSource(imageSource);
+            }
         }
 
         private void OnViewUnloaded(object sender, RoutedEventArgs e)
