@@ -6,6 +6,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
+                    Source="pack://application:,,,/Torshify.Radio;component/Themes/Hyperlink.xaml" />
+                <ResourceDictionary
                     Source="pack://application:,,,/Torshify.Radio;component/Themes/TabControl.xaml" />
                 <ResourceDictionary
                     Source="pack://application:,,,/Torshify.Radio;component/Themes/ScrollViewer.xaml" />

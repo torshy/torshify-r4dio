@@ -55,11 +55,15 @@
                             Text="{Binding Name, Mode=OneWay}"
                             TextTrimming="CharacterEllipsis"
                             FontSize="24" />
-                        <TextBlock
-                            Text="{Binding Artist, Mode=OneWay, Converter={StaticResource StringToUpperConverter}}"
-                            TextTrimming="CharacterEllipsis"
-                            FontWeight="Bold"
-                            FontSize="16" />
+                        <TextBlock>
+                            <Hyperlink>
+                                <TextBlock
+                                        Text="{Binding Artist, Mode=OneWay, Converter={StaticResource StringToUpperConverter}}"
+                                        TextTrimming="CharacterEllipsis"
+                                        FontWeight="Bold"
+                                        FontSize="16" />
+                            </Hyperlink>
+                        </TextBlock>
                     </StackPanel>
                 </DockPanel>
                 <DataTemplate.Triggers>
