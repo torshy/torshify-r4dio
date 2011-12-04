@@ -310,7 +310,7 @@ namespace Torshify.Radio
 
         private void OnTrackComplete(object sender, TrackEventArgs e)
         {
-            if (e.Track == CurrentTrack)
+            if (e.Track.Equals(CurrentTrack))
             {
                 Task.Factory.StartNew(MoveToNext);
             }
