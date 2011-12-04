@@ -104,45 +104,54 @@ namespace Torshify.Radio
             ActivateView(RadioStandardViews.Tracks);
         }
 
-        private object _lock = new object();
-
-
         public void MoveToNext()
         {
-            lock (_lock)
-            {
-                bool success = false;
+            bool success = false;
 
-                while (!success)
+            while (!success)
+            {
+                RadioTrack track;
+                if (_playQueue.TryDequeue(out track))
                 {
-                    RadioTrack track;
-                    if (_playQueue.TryDequeue(out track))
+                    try
                     {
-                        try
+                        if (track != null)
                         {
-                            if (track != null)
-                            {
-                                _radio.Load(track);
-                                _radio.Play();
-                                CurrentTrack = track;
-                                success = true;
-                                RaisePropertyChanged("CurrentTrack", "HasTracks");
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
+                            _radio.Load(track);
+                            _radio.Play();
+                            CurrentTrack = track;
+                            success = true;
+                            RaisePropertyChanged("CurrentTrack", "HasTracks");
                         }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        break;
+                        Console.WriteLine(e);
                     }
                 }
-
-                PeekToNext();
-                RaisePropertyChanged("CurrentTrack", "HasTracks");
+                else
+                {
+                    break;
+                }
             }
+
+            if (!success && _playQueue.IsEmpty)
+            {
+                var result = _getNextBatchProvider();
+
+                if (result.Count() == 0)
+                {
+                    _getNextBatchProviderIsComplete = true;
+                }
+                else
+                {
+                    AddTracks(result);
+                    MoveToNext();
+                }
+            }
+
+            PeekToNext();
+            RaisePropertyChanged("CurrentTrack", "HasTracks");
         }
 
         public void PeekToNext(bool getNextBatchIfNoMoreTracks = true)
