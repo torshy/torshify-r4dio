@@ -104,7 +104,7 @@ namespace Torshify.Radio
             ActivateView(RadioStandardViews.Tracks);
         }
 
-        public void MoveToNext()
+        public void MoveToNext(CancellationToken token)
         {
             bool success = false;
 
@@ -115,6 +115,11 @@ namespace Torshify.Radio
                 {
                     try
                     {
+                        if (token.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
                         if (track != null)
                         {
                             _radio.Load(track);
@@ -146,7 +151,7 @@ namespace Torshify.Radio
                 else
                 {
                     AddTracks(result);
-                    MoveToNext();
+                    MoveToNext(token);
                 }
             }
 
@@ -201,7 +206,7 @@ namespace Torshify.Radio
                     {
                         _getNextBatchProviderIsComplete = false;
                         AddTracks(t.Result);
-                        MoveToNext();
+                        MoveToNext(cts.Token);
                     }
                 }, cts.Token)
                 .ContinueWith(t =>
@@ -210,7 +215,7 @@ namespace Torshify.Radio
 
                     if (t.Status == TaskStatus.Faulted)
                     {
-                        MoveToNext();
+                        MoveToNext(cts.Token);
                     }
 
                 }, cts.Token, TaskContinuationOptions.None, _uiTaskScheduler);
@@ -312,7 +317,7 @@ namespace Torshify.Radio
         {
             if (e.Track.Equals(CurrentTrack))
             {
-                Task.Factory.StartNew(MoveToNext);
+                Task.Factory.StartNew(() => MoveToNext(CancellationToken.None));
             }
         }
 
