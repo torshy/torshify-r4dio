@@ -133,6 +133,18 @@ namespace Torshify.Radio.Grooveshark
 
                 try
                 {
+                    if (_trackPlayer != null)
+                    {
+                        _trackPlayer.Stop();
+                    }
+                }
+                catch(Exception e)
+                {
+                    _log.Log("While disposing old trackplayer: " + e.Message, Category.Warn, Priority.Medium);
+                }
+
+                try
+                {
                     HttpWebResponse response = (HttpWebResponse)webRequest.GetResponse();
 
                     Action<RadioTrack> trackComplete = OnTrackComplete;

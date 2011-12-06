@@ -131,6 +131,7 @@ namespace Torshify.Radio.Grooveshark
             try
             {
                 _timer.Enabled = false;
+                _timer.Dispose();
                 _playbackState = StreamingPlaybackState.Stopped;
 
                 if (_waveOut != null)
@@ -177,6 +178,7 @@ namespace Torshify.Radio.Grooveshark
                         _elapsedTimeSpan = TimeSpan.Zero;
                         _playbackState = StreamingPlaybackState.Stopped;
                         _timer.Stop();
+                        _isPlaying(false);
                         _trackComplete(_track);
                     }
                 }
@@ -278,9 +280,10 @@ namespace Torshify.Radio.Grooveshark
                             catch (Exception e)
                             {
                                 _log.Log(e.Message, Category.Exception, Priority.High);
+                                break;
                             }
 
-                            if (frame != null && decompressor == null)
+                            if (decompressor == null)
                             {
                                 WaveFormat waveFormat = new Mp3WaveFormat(44100, frame.ChannelMode == ChannelMode.Mono ? 1 : 2, frame.FrameLength, frame.BitRate);
                                 decompressor = new AcmMp3FrameDecompressor(waveFormat);
@@ -288,7 +291,7 @@ namespace Torshify.Radio.Grooveshark
                                 _bufferedWaveProvider.BufferLength = (int)response.ContentLength;
                             }
 
-                            if (frame != null && _bufferedWaveProvider != null)
+                            if (_bufferedWaveProvider != null)
                             {
                                 try
                                 {
