@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,88 +43,6 @@ namespace Torshify.Radio.Grooveshark
         #endregion Constructors
 
         #region Methods
-
-        public IEnumerable<RadioTrack> GetTracksByAlbum(string artist, string album)
-        {
-            List<RadioTrack> tracks = new List<RadioTrack>();
-
-            if (IsRateLimitExceeded())
-            {
-                try
-                {
-                    GroovesharkSearch search = new GroovesharkSearch(Session);
-                    var searchResult = search.Search(artist + " " +  album);
-
-                    if (searchResult != null)
-                    {
-                        foreach (var s in searchResult)
-                        {
-                            if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase) &&
-                                album.Equals(s.AlbumName, StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                tracks.Add(new GroovesharkRadioTrack
-                                               {
-                                                   Name = s.SongName,
-                                                   Album = s.AlbumName,
-                                                   Artist = s.ArtistName,
-                                                   SongID = s.SongId,
-                                                   AlbumID = s.AlbumId,
-                                                   ArtistID = s.ArtistId,
-                                                   AlbumArt =
-                                                       "http://images.grooveshark.com/static/albums/90_" + s.AlbumId +
-                                                       ".jpg"
-                                               });
-                            }
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.Log("Grooveshark - " + e, Category.Info, Priority.Medium);
-                }
-            }
-            else
-            {
-                try
-                {
-                    TinySongSession session = new TinySongSession(TinySongApiKey);
-                    var result = session.Search(artist, 32);
-
-                    if (result != null)
-                    {
-                        _rateLimitExceeded = false;
-                        foreach (var s in result)
-                        {
-                            if (artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase) &&
-                                album.Equals(s.AlbumName, StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                tracks.Add(new GroovesharkRadioTrack
-                                               {
-                                                   Name = s.SongName,
-                                                   Album = s.AlbumName,
-                                                   Artist = s.ArtistName,
-                                                   SongID = s.SongId,
-                                                   AlbumID = s.AlbumId,
-                                                   ArtistID = s.ArtistId,
-                                                   AlbumArt =
-                                                       "http://images.grooveshark.com/static/albums/90_" + s.AlbumId +
-                                                       ".jpg"
-                                               });
-                            }
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    _rateLimitExceededTimestamp = DateTime.Now;
-                    _rateLimitExceeded = true;
-                    _logger.Log("Grooveshark - " + e, Category.Info, Priority.Medium);
-                }
-
-            }
-
-            return tracks;
-        }
 
         public IEnumerable<RadioTrack> GetTracksByArtist(string artist, int offset, int count)
         {
@@ -272,6 +191,61 @@ namespace Torshify.Radio.Grooveshark
             }
 
             return tracks;
+        }
+
+        public IEnumerable<RadioTrackContainer> GetAlbumsByArtist(string artist)
+        {
+            List<RadioTrackContainer> containers = new List<RadioTrackContainer>();
+
+            try
+            {
+                GroovesharkSearch search = new GroovesharkSearch(Session);
+                var searchResult = search.Search(artist);
+
+                if (searchResult != null)
+                {
+                    var albums = searchResult.Where(s => artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase)).
+                        GroupBy(s => s.AlbumName);
+
+                    foreach (var album in albums)
+                    {
+                        RadioTrackContainer container = new RadioTrackContainer();
+                        container.ArtistName = artist;
+                        container.Name = album.Key;
+                        ObservableCollection<RadioTrack> tracks = new ObservableCollection<RadioTrack>();
+                        foreach (var s in album)
+                        {
+                            if (string.IsNullOrEmpty(container.ContainerArt))
+                            {
+                                container.ContainerArt = "http://images.grooveshark.com/static/albums/90_" + s.AlbumId +
+                                                         ".jpg";
+                            }
+
+                            tracks.Add(new GroovesharkRadioTrack
+                            {
+                                Name = s.SongName,
+                                Album = s.AlbumName,
+                                Artist = s.ArtistName,
+                                SongID = s.SongId,
+                                AlbumID = s.AlbumId,
+                                ArtistID = s.ArtistId,
+                                AlbumArt =
+                                    "http://images.grooveshark.com/static/albums/90_" + s.AlbumId +
+                                    ".jpg"
+                            });
+                        }
+
+                        container.Tracks = tracks;
+                        containers.Add(container);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Log("Grooveshark - " + e, Category.Info, Priority.Medium);
+            }
+
+            return containers;
         }
 
         private bool IsRateLimitExceeded()

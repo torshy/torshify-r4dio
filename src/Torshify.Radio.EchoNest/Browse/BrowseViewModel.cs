@@ -41,9 +41,9 @@ namespace Torshify.Radio.EchoNest.Browse
         private void ExecuteSearch(string query)
         {
             UriQuery uri = new UriQuery();
-            uri.Add("Query", query);
+            uri.Add("query", query);
 
-            RegionManager.RequestNavigate("BrowseMainRegion", new Uri("SearchResultsView" + uri, UriKind.Relative));
+            RegionManager.RequestNavigate("BrowseMainRegion", new Uri(typeof(SearchResultsView).FullName + uri, UriKind.Relative));
         }
 
         #endregion Methods

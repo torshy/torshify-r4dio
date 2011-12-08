@@ -9,28 +9,9 @@ using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Browse
 {
-    //[RadioStationMetadata(Name = "Browse", Icon = "MS_0000s_0036_search.png")]
+    [RadioStationMetadata(Name = "Browse", Icon = "MS_0000s_0036_search.png")]
     public class BrowseStation : IRadioStation
     {
-        #region Fields
-
-        private readonly IRegionManager _regionManager;
-
-        #endregion Fields
-
-        #region Constructors
-
-        [ImportingConstructor]
-        public BrowseStation(IRegionManager regionManager)
-        {
-            _regionManager = regionManager;
-            _regionManager.RegisterViewWithRegion("BrowseMainRegion", typeof(BrowseViewStartPage));
-            _regionManager.RegisterViewWithRegion("BrowseMainRegion", typeof(SearchResultsView));
-            _regionManager.RegisterViewWithRegion("BrowseMainRegion", typeof(ArtistBrowseView));
-        }
-
-        #endregion Constructors
-
         #region Methods
 
         public void Initialize(IRadio radio)
@@ -43,18 +24,17 @@ namespace Torshify.Radio.EchoNest.Browse
 
         public void OnTunedIn(IRadioStationContext context)
         {
-            Lazy<UIElement> factory = new Lazy<UIElement>(CreateView);
+            var factory = new Lazy<UIElement>(() =>
+            {
+                var view = ServiceLocator.Current.TryResolve<BrowseView>();
+                return view;
+            });
 
-            ViewData viewData = new ViewData();
+            var viewData = new ViewData();
             viewData.Header = "Browse";
             viewData.View = factory;
 
             context.SetView(viewData);
-        }
-
-        private UIElement CreateView()
-        {
-            return ServiceLocator.Current.TryResolve<BrowseView>();
         }
 
         #endregion Methods

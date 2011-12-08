@@ -92,6 +92,14 @@ namespace Torshify.Radio
             }
         }
 
+        public IRadioStationContext CurrentContext
+        {
+            get
+            {
+                return _nowPlayingViewModel;
+            }
+        }
+
         public Lazy<IRadioStation, IRadioStationMetadata> CurrentStation
         {
             get { return _radioStation; }
@@ -355,15 +363,12 @@ namespace Torshify.Radio
                 return;
             }
 
-            var currentPlayer = GetTrackPlayerForSource(CurrentTrack);
-
-            if (currentPlayer != null)
+            foreach (var trackPlayer in TrackPlayers)
             {
                 try
                 {
-                    _logger.Log("Stopping" + " [" + currentPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
-
-                    currentPlayer.Value.Stop();
+                    _logger.Log("Stopping" + " [" + trackPlayer.Metadata.Name + "]", Category.Info, Priority.Low);
+                    trackPlayer.Value.Stop();
                 }
                 catch (Exception e)
                 {
@@ -372,35 +377,6 @@ namespace Torshify.Radio
             }
 
             IsBuffering = false;
-        }
-
-        IEnumerable<RadioTrack> IRadioTrackSource.GetTracksByAlbum(string artist, string album)
-        {
-            _logger.Log("GetTracksByAlbum " + artist + " -" + album, Category.Info, Priority.Low);
-
-            ConcurrentBag<RadioTrack> bag = new ConcurrentBag<RadioTrack>();
-
-            if (_trackSources != null)
-            {
-                Parallel.ForEach(_trackSources, trackSource =>
-                {
-                    try
-                    {
-                        var result = trackSource.Value.GetTracksByAlbum(artist, album);
-
-                        foreach (var radioTrack in result)
-                        {
-                            bag.Add(radioTrack);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.Log(e.Message, Category.Exception, Priority.Medium);
-                    }
-                });
-            }
-
-            return bag.OrderBy(x => _random.Next()).ToArray();
         }
 
         IEnumerable<RadioTrack> IRadioTrackSource.GetTracksByArtist(string artist, int offset, int count)
@@ -434,8 +410,6 @@ namespace Torshify.Radio
 
         IEnumerable<RadioTrack> IRadioTrackSource.GetTracksByName(string name, int offset, int count)
         {
-            _logger.Log("GetTracksByName " + name, Category.Info, Priority.Low);
-
             ConcurrentBag<RadioTrack> bag = new ConcurrentBag<RadioTrack>();
 
             if (_trackSources != null)
@@ -450,6 +424,37 @@ namespace Torshify.Radio
                         {
                             bag.Add(radioTrack);
                         }
+
+                        _logger.Log("GetTracksByName " + name + " @ " + trackSource.Metadata.Name + " = " + result.Count(), Category.Info, Priority.Low);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Log(e.Message, Category.Exception, Priority.Medium);
+                    }
+                });
+            }
+
+            return bag.OrderBy(x => _random.Next()).ToArray();
+        }
+        
+        IEnumerable<RadioTrackContainer> IRadioTrackSource.GetAlbumsByArtist(string artist)
+        {
+            ConcurrentBag<RadioTrackContainer> bag = new ConcurrentBag<RadioTrackContainer>();
+
+            if (_trackSources != null)
+            {
+                Parallel.ForEach(_trackSources, trackSource =>
+                {
+                    try
+                    {
+                        var result = trackSource.Value.GetAlbumsByArtist(artist);
+
+                        foreach (var container in result)
+                        {
+                            bag.Add(container);
+                        }
+
+                        _logger.Log("GetAlbumsByArtist " + artist + " @ " + trackSource.Metadata.Name + " = " + result.Count(), Category.Info, Priority.Low);
                     }
                     catch (Exception e)
                     {

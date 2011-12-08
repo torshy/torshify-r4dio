@@ -6,16 +6,20 @@ using System.Windows.Input;
 using System.Windows.Threading;
 
 using Microsoft.Practices.Prism.Regions;
+using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Browse
 {
     [Export(typeof(BrowseView))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class BrowseView : UserControl
     {
         #region Fields
 
         private readonly DispatcherTimer _deferredCompleteTimer;
+
         private IRegionManager _regionManager;
+
         #endregion Fields
 
         #region Constructors
@@ -25,6 +29,10 @@ namespace Torshify.Radio.EchoNest.Browse
             InitializeComponent();
 
             _regionManager = new RegionManager();
+            _regionManager.RegisterViewWithRegion("BrowseMainRegion", typeof(BrowseViewStartPage));
+            _regionManager.RegisterViewWithRegion("BrowseMainRegion", typeof(SearchResultsView));
+            _regionManager.RegisterViewWithRegion("BrowseMainRegion", typeof(ArtistBrowseView));
+
             RegionManager.SetRegionManager(_regionHost, _regionManager);
             RegionManager.SetRegionName(_regionHost, "BrowseMainRegion");
 
@@ -47,7 +55,6 @@ namespace Torshify.Radio.EchoNest.Browse
             set
             {
                 DataContext = value;
-
                 value.RegionManager = _regionManager;
             }
         }
@@ -72,12 +79,28 @@ namespace Torshify.Radio.EchoNest.Browse
             _deferredCompleteTimer.Stop();
         }
 
-        #endregion Methods
-
-        private void UserControl_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void UserControlPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
+            var region = _regionManager.Regions["BrowseMainRegion"];
+
             if (e.XButton1 == MouseButtonState.Pressed)
-            _regionManager.Regions["BrowseMainRegion"].NavigationService.Journal.GoBack();
+            {
+                if (region.NavigationService.Journal.CanGoBack)
+                {
+                    region.NavigationService.Journal.GoBack();
+                    e.Handled = true;
+                }
+            }
+            else if (e.XButton2 == MouseButtonState.Pressed)
+            {
+                if (region.NavigationService.Journal.CanGoForward)
+                {
+                    region.NavigationService.Journal.GoForward();
+                    e.Handled = true;
+                }
+            }
         }
+
+        #endregion Methods
     }
 }

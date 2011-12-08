@@ -1,15 +1,14 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
-
 using Torshify.Radio.Framework.Controls;
 
 namespace Torshify.Radio.EchoNest.Browse
 {
-    public partial class ArtistBrowseViewSmall : UserControl
+    public partial class ArtistBrowseViewMedium : UserControl
     {
         #region Constructors
 
-        public ArtistBrowseViewSmall()
+        public ArtistBrowseViewMedium()
         {
             InitializeComponent();
         }

@@ -15,6 +15,7 @@ using Torshify.Radio.Framework;
 namespace Torshify.Radio.EchoNest.Browse
 {
     [Export(typeof(SearchResultsViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class SearchResultsViewModel : NotificationObject, INavigationAware, IRegionMemberLifetime
     {
         #region Fields
@@ -94,7 +95,7 @@ namespace Torshify.Radio.EchoNest.Browse
         {
             _navService = navigationContext.NavigationService;
 
-            var query = navigationContext.Parameters["Query"];
+            var query = navigationContext.Parameters["query"];
 
             if (!string.IsNullOrEmpty(query))
             {
@@ -105,9 +106,9 @@ namespace Torshify.Radio.EchoNest.Browse
         private void ExecuteGoToArtist(RadioTrack track)
         {
             UriQuery uri = new UriQuery();
-            uri.Add("Artist", track.Artist);
+            uri.Add("name", track.Artist);
 
-            _navService.RequestNavigate(new Uri("ArtistBrowseView" + uri, UriKind.Relative));
+            _navService.RequestNavigate(new Uri(typeof(ArtistBrowseView).FullName + uri, UriKind.Relative));
         }
 
         private void ExecuteSearch(string query)

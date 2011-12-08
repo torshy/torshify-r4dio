@@ -7,6 +7,11 @@ namespace Torshify.Radio.Framework
     {
         #region Properties
 
+        IRadioStationContext CurrentContext
+        {
+            get;
+        }
+
         Lazy<IRadioStation, IRadioStationMetadata> CurrentStation
         {
             get;

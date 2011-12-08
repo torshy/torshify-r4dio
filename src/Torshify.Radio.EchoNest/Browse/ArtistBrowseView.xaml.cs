@@ -4,6 +4,7 @@ using System.Windows.Controls;
 namespace Torshify.Radio.EchoNest.Browse
 {
     [Export(typeof(ArtistBrowseView))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class ArtistBrowseView : UserControl
     {
         public ArtistBrowseView()

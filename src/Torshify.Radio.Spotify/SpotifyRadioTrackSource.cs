@@ -21,38 +21,6 @@ namespace Torshify.Radio.Spotify
 
         #region Methods
 
-        public IEnumerable<RadioTrack> GetTracksByAlbum(string artist, string album)
-        {
-            IEnumerable<RadioTrack> tracks = new RadioTrack[0];
-
-            QueryServiceClient query = new QueryServiceClient();
-
-            try
-            {
-                QueryResult result = query.Query(artist + " " + album, 0, 50, 0, 50, 0, 0);
-                Album albumResult = result.Albums.FirstOrDefault(a => a.Artist.Name.Equals(artist, StringComparison.InvariantCultureIgnoreCase) &&
-                                                                      a.Name.Equals(album, StringComparison.InvariantCultureIgnoreCase));
-
-                if (albumResult != null)
-                {
-                    AlbumBrowseResult albumBrowse = query.AlbumBrowse(albumResult.ID);
-                    tracks = albumBrowse.Tracks.Select(SpotifyRadioTrackPlayer.ConvertTrack).ToArray();
-                }
-                else
-                {
-                    tracks = result.Tracks.Select(SpotifyRadioTrackPlayer.ConvertTrack).ToArray();
-                }
-
-                query.Close();
-            }
-            catch (Exception e)
-            {
-                query.Abort();
-            }
-
-            return tracks;
-        }
-
         public IEnumerable<RadioTrack> GetTracksByArtist(string artist, int offset, int count)
         {
             IEnumerable<RadioTrack> tracks = new RadioTrack[0];
@@ -93,9 +61,59 @@ namespace Torshify.Radio.Spotify
             return tracks;
         }
 
+        public IEnumerable<RadioTrackContainer> GetAlbumsByArtist(string artist)
+        {
+            List<RadioTrackContainer> albums = new List<RadioTrackContainer>();
+
+            QueryServiceClient query = new QueryServiceClient();
+
+            try
+            {
+                var queryResult = query.Query(artist, 0, 0, 0, 0, 0, 10);
+                var result =
+                    queryResult.Artists.FirstOrDefault(
+                        a => a.Name.Equals(artist, StringComparison.InvariantCultureIgnoreCase));
+
+                if (result == null && queryResult.Artists.Any())
+                {
+                    result = queryResult.Artists.FirstOrDefault();
+                }
+
+                if (result != null)
+                {
+                    var browse = query.ArtistBrowse(result.ID, ArtistBrowsingType.Full);
+                    var albumGroups = browse.Tracks.GroupBy(t => t.Album.ID);
+
+                    foreach (IGrouping<string, Track> albumGroup in albumGroups)
+                    {
+                        RadioTrackContainer container = new RadioTrackContainer();
+                        container.ArtistName = artist;
+                        container.Name = albumGroup.Key;
+                        container.Tracks = albumGroup.Select(SpotifyRadioTrackPlayer.ConvertTrack).ToArray();
+
+                        var firstOrDefault = container.Tracks.FirstOrDefault();
+                        if (firstOrDefault != null)
+                        {
+                            container.ContainerArt = container.ContainerArt = firstOrDefault.AlbumArt;
+                        }
+
+                        albums.Add(container);
+                    }
+                }
+
+                query.Close();
+            }
+            catch (Exception e)
+            {
+                query.Abort();
+            }
+
+            return albums;
+        }
+
         public void Initialize()
         {
-            
+
         }
 
         #endregion Methods

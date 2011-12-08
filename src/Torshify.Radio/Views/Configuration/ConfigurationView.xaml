@@ -27,6 +27,7 @@
                 Name="ConfigurationsListBox"
                 DockPanel.Dock="Left"
                 ItemsSource="{Binding Configurations}"
+                SelectedIndex="0"
                 Width="150">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -45,7 +46,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <ContentControl
-                Content="{Binding SelectedItem.UI, ElementName=ConfigurationsListBox}" />
+                Content="{Binding SelectedItem.Value.UI, ElementName=ConfigurationsListBox}" />
         </DockPanel>
     </DockPanel>
 </UserControl>

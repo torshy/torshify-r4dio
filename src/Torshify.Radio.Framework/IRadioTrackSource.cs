@@ -6,11 +6,11 @@ namespace Torshify.Radio.Framework
     {
         #region Methods
 
-        IEnumerable<RadioTrack> GetTracksByAlbum(string artist, string album);
-
         IEnumerable<RadioTrack> GetTracksByArtist(string artist, int offset, int count);
 
         IEnumerable<RadioTrack> GetTracksByName(string name, int offset, int count);
+
+        IEnumerable<RadioTrackContainer> GetAlbumsByArtist(string artist);
 
         void Initialize();
 

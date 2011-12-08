@@ -10,7 +10,7 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300"
-    PreviewMouseDown="UserControl_PreviewMouseDown">
+    PreviewMouseDown="UserControlPreviewMouseDown">
     <DockPanel
         LastChildFill="True">
         <DockPanel

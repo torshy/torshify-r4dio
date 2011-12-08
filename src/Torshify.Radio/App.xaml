@@ -23,6 +23,8 @@
                     Source="pack://application:,,,/Torshify.Radio;component/Themes/TextBox.xaml" />
                 <ResourceDictionary
                     Source="pack://application:,,,/Torshify.Radio;component/Themes/AutoCompleteBox.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/Torshify.Radio;component/Themes/DataGrid.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <SolidColorBrush
                 x:Key="{x:Static SystemColors.HighlightBrushKey}"

@@ -6,17 +6,29 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fx="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     xmlns:Browse="clr-namespace:Torshify.Radio.EchoNest.Browse"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="300"
-    Background="Green">
-    <fx:SizeTemplateControl>
-        <fx:SizeTemplateControl.Templates>
-            <fx:SizeControlTemplate>
-                <ControlTemplate>
-                    <Browse:SearchResultsViewSmall />
-                </ControlTemplate>
-            </fx:SizeControlTemplate>
-        </fx:SizeTemplateControl.Templates>
-    </fx:SizeTemplateControl>
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:BoolToVisibleOrHidden
+            Collapse="True"
+            x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <fx:SizeTemplateControl>
+            <fx:SizeTemplateControl.Templates>
+                <fx:SizeControlTemplate>
+                    <ControlTemplate>
+                        <Browse:SearchResultsViewSmall />
+                    </ControlTemplate>
+                </fx:SizeControlTemplate>
+            </fx:SizeTemplateControl.Templates>
+        </fx:SizeTemplateControl>
+        <ProgressBar
+            VerticalAlignment="Bottom"
+            Style="{DynamicResource ProgressBar_LoadingDots}"
+            IsIndeterminate="{Binding IsLoading}"
+            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </Grid>
 </UserControl>

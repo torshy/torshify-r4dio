@@ -4,6 +4,7 @@ using System.Windows.Controls;
 namespace Torshify.Radio.EchoNest.Browse
 {
     [Export(typeof(SearchResultsView))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class SearchResultsView : UserControl
     {
         #region Constructors

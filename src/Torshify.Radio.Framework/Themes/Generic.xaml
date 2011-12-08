@@ -4,5 +4,9 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary
             Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/CommandBarContextMenu.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/HeaderedTreeView.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/HeaderedScrollViewer.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

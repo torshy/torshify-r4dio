@@ -59,6 +59,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\..\lib\WpfToolkitExtended\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
@@ -67,10 +70,20 @@
     <Compile Include="Browse\ArtistBrowseView.xaml.cs">
       <DependentUpon>ArtistBrowseView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Browse\ArtistBrowseViewMedium.xaml.cs">
+      <DependentUpon>ArtistBrowseViewMedium.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Browse\ArtistBrowseViewMediumHeader.xaml.cs">
+      <DependentUpon>ArtistBrowseViewMediumHeader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Browse\ArtistBrowseViewModel.cs" />
     <Compile Include="Browse\ArtistBrowseViewSmall.xaml.cs">
       <DependentUpon>ArtistBrowseViewSmall.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Browse\ArtistBrowseViewSmallHeader.xaml.cs">
+      <DependentUpon>ArtistBrowseViewSmallHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Browse\ArtistModel.cs" />
     <Compile Include="Browse\BrowseStation.cs" />
     <Compile Include="Browse\BrowseView.xaml.cs">
       <DependentUpon>BrowseView.xaml</DependentUpon>
@@ -161,7 +174,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Browse\ArtistBrowseViewMedium.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Browse\ArtistBrowseViewMediumHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Browse\ArtistBrowseViewSmall.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Browse\ArtistBrowseViewSmallHeader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
