@@ -19,10 +19,10 @@
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <DockPanel
-                    Height="75"
+                    Height="50"
                     LastChildFill="True">
                     <Button
-                        Width="75"
+                        Width="50"
                         Name="MixArtButton"
                         Padding="2"
                         Background="#FF00C0FF"
@@ -54,7 +54,7 @@
                         <TextBlock
                             Text="{Binding Name, Mode=OneWay}"
                             TextTrimming="CharacterEllipsis"
-                            FontSize="24" />
+                            FontSize="16" />
                         <TextBlock>
                             <Hyperlink
                                 Command="{Binding DataContext.GoToArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
@@ -63,7 +63,7 @@
                                     Text="{Binding Artist, Mode=OneWay, Converter={StaticResource StringToUpperConverter}}"
                                     TextTrimming="CharacterEllipsis"
                                     FontWeight="Bold"
-                                    FontSize="16" />
+                                    FontSize="12" />
                             </Hyperlink>
                         </TextBlock>
                     </StackPanel>

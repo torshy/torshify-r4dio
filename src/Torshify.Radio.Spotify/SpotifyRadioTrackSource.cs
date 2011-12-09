@@ -84,16 +84,16 @@ namespace Torshify.Radio.Spotify
                     var browse = query.ArtistBrowse(result.ID, ArtistBrowsingType.Full);
                     var albumGroups = browse.Tracks.GroupBy(t => t.Album.ID);
 
-                    foreach (IGrouping<string, Track> albumGroup in albumGroups)
+                    foreach (var albumGroup in albumGroups)
                     {
                         RadioTrackContainer container = new RadioTrackContainer();
                         container.ArtistName = artist;
-                        container.Name = albumGroup.Key;
                         container.Tracks = albumGroup.Select(SpotifyRadioTrackPlayer.ConvertTrack).ToArray();
 
                         var firstOrDefault = container.Tracks.FirstOrDefault();
                         if (firstOrDefault != null)
                         {
+                            container.Name = firstOrDefault.Album;
                             container.ContainerArt = container.ContainerArt = firstOrDefault.AlbumArt;
                         }
 
