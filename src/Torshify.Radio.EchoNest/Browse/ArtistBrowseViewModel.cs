@@ -167,7 +167,14 @@ namespace Torshify.Radio.EchoNest.Browse
             var track = parameter as RadioTrack;
             if (track != null)
             {
-                _radio.CurrentContext.SetTrackProvider(() => new[] { track });
+                foreach (var album in CurrentArtist.Albums)
+                {
+                    if (album.Tracks.Contains(track))
+                    {
+                        var remaining = album.Tracks.SkipWhile(t => t != track).ToArray();
+                        _radio.CurrentContext.SetTrackProvider(() => remaining);
+                    }
+                }
             }
         }
 
