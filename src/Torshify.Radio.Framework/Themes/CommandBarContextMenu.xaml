@@ -45,7 +45,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition
-                                    Width="15" />
+                                    Width="24" />
                                 <ColumnDefinition
                                     Width="Auto" />
                                 <ColumnDefinition
@@ -55,7 +55,7 @@
                             <Border
                                 Grid.Column="0"
                                 BorderBrush="Gray"
-                                BorderThickness="1"
+                                BorderThickness="0,1,0,0"
                                 VerticalAlignment="Center" />
                             <ContentPresenter
                                 Name="HeaderHost"
@@ -70,7 +70,7 @@
                             <Border
                                 Grid.Column="2"
                                 BorderBrush="Gray"
-                                BorderThickness="1"
+                                BorderThickness="0,1,0,0"
                                 VerticalAlignment="Center" />
                         </Grid>
                     </Border>
@@ -166,6 +166,9 @@
                 </Style>
             </Setter.Value>
         </Setter>
+        <Setter
+            Property="ItemsSource"
+            Value="{Binding ChildMenuItems}" />
         <Setter
             Property="Template">
             <Setter.Value>

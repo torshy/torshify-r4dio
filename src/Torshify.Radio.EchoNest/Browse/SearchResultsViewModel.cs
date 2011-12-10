@@ -36,7 +36,7 @@ namespace Torshify.Radio.EchoNest.Browse
             _radio = radio;
             _results = new ObservableCollection<RadioTrack>();
 
-            GoToArtistCommand = new DelegateCommand<RadioTrack>(ExecuteGoToArtist);
+            GoToArtistCommand = new DelegateCommand<string>(ExecuteGoToArtist);
         }
 
         #endregion Constructors
@@ -103,10 +103,10 @@ namespace Torshify.Radio.EchoNest.Browse
             }
         }
 
-        private void ExecuteGoToArtist(RadioTrack track)
+        private void ExecuteGoToArtist(string artistName)
         {
             UriQuery uri = new UriQuery();
-            uri.Add("name", track.Artist);
+            uri.Add("name", artistName);
 
             _navService.RequestNavigate(new Uri(typeof(ArtistBrowseView).FullName + uri, UriKind.Relative));
         }

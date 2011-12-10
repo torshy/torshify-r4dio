@@ -6,6 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     xmlns:Converters1="clr-namespace:Torshify.Radio.Converters"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -39,7 +41,7 @@
             </Image.ToolTip>
         </Image>
 
-            <StackPanel
+        <StackPanel
             Grid.Row="0"
             DataContext="{Binding CurrentTrack, Mode=OneWay}"
             VerticalAlignment="Bottom"
@@ -65,7 +67,12 @@
                 Text="{Binding Artist, Mode=OneWay, Converter={StaticResource StringToUpperConverter}}"
                 TextTrimming="CharacterEllipsis"
                 FontWeight="Bold"
-                FontSize="16" />
+                FontSize="16">
+                <i:Interaction.Behaviors>
+                    <Behaviors:ArtistCommandsBehavior
+                        ArtistName="{Binding Artist}" />
+                </i:Interaction.Behaviors>
+            </TextBlock>
         </StackPanel>
         <Decorator
             Grid.Row="1"

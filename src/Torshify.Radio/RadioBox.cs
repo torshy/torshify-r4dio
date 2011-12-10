@@ -259,7 +259,12 @@ namespace Torshify.Radio
 
         object IRadio.GetService(Type serviceType)
         {
-            return null;
+            return ServiceLocator.Current.TryResolve(serviceType);
+        }
+
+        T IRadio.GetService<T>()
+        {
+            return ServiceLocator.Current.TryResolve<T>();
         }
 
         void IRadio.TuneIn(Lazy<IRadioStation, IRadioStationMetadata> radioStation)

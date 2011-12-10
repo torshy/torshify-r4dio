@@ -5,7 +5,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
-    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework" mc:Ignorable="d"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
@@ -58,13 +61,17 @@
                         <TextBlock>
                             <Hyperlink
                                 Command="{Binding DataContext.GoToArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                CommandParameter="{Binding}">
+                                CommandParameter="{Binding Artist}">
                                 <TextBlock
                                     Text="{Binding Artist, Mode=OneWay, Converter={StaticResource StringToUpperConverter}}"
                                     TextTrimming="CharacterEllipsis"
                                     FontWeight="Bold"
                                     FontSize="12" />
                             </Hyperlink>
+                            <i:Interaction.Behaviors>
+                                <Behaviors:ArtistCommandsBehavior
+                                    ArtistName="{Binding Artist}" />
+                            </i:Interaction.Behaviors>
                         </TextBlock>
                     </StackPanel>
                 </DockPanel>

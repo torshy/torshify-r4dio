@@ -54,6 +54,8 @@ namespace Torshify.Radio.Framework
 
         object GetService(Type serviceType);
 
+        T GetService<T>() where T : class;
+
         void TuneIn(Lazy<IRadioStation, IRadioStationMetadata> radioStation);
 
         #endregion Properties

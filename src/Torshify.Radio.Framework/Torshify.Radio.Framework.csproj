@@ -50,6 +50,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Behaviors\ArtistCommandsBehavior.cs" />
     <Compile Include="Behaviors\DataGridRowActionBehavior.cs" />
     <Compile Include="Behaviors\IgnoreMouseWheelBehavior.cs" />
     <Compile Include="Behaviors\InactivityBehavior of T.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToUpperConverter.cs" />
     <Compile Include="Events\ApplicationInactivityEvent.cs" />
+    <Compile Include="Events\ArtistCommandsEvent.cs" />
     <Compile Include="Events\CommandBarEvent.cs" />
     <Compile Include="Events\SystemInactivityEvent.cs" />
     <Compile Include="Events\TrackChangedEvent.cs" />
