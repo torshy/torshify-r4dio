@@ -29,7 +29,7 @@ namespace Torshify.Radio.EchoNest.Browse
             });
 
             var viewData = new ViewData();
-            viewData.Header = "Browse";
+            viewData.Header = "Search";
             viewData.View = factory;
 
             context.SetView(viewData);
