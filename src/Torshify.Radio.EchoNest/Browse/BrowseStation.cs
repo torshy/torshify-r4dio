@@ -1,15 +1,13 @@
 ﻿using System;
-using System.ComponentModel.Composition;
 using System.Windows;
 using Microsoft.Practices.Prism;
-using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.ServiceLocation;
 
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Browse
 {
-    [RadioStationMetadata(Name = "Browse", Icon = "MS_0000s_0036_search.png")]
+    [RadioStationMetadata(Name = "Search", Icon = "MS_0000s_0036_search.png")]
     public class BrowseStation : IRadioStation
     {
         #region Methods

@@ -3,8 +3,10 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using EchoNest;
 using EchoNest.Artist;
+
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
@@ -119,11 +121,11 @@ namespace Torshify.Radio.EchoNest.Browse
                     using(EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
                     {
                         var profile = session.Query<Profile>().Execute(
-                            t.Result.Name, 
-                            ArtistBucket.News | 
-                            ArtistBucket.Images | 
-                            ArtistBucket.Biographies | 
-                            ArtistBucket.Blogs | 
+                            t.Result.Name,
+                            ArtistBucket.News |
+                            ArtistBucket.Images |
+                            ArtistBucket.Biographies |
+                            ArtistBucket.Blogs |
                             ArtistBucket.Video);
 
                         if (profile.Status.Code == ResponseCode.Success)
@@ -180,7 +182,6 @@ namespace Torshify.Radio.EchoNest.Browse
 
         private void ExecuteQueue(object parameter)
         {
-
         }
 
         #endregion Methods

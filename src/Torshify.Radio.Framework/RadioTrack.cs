@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Dynamic;
 
 namespace Torshify.Radio.Framework
 {
@@ -14,6 +15,15 @@ namespace Torshify.Radio.Framework
         private TimeSpan _totalDuration;
 
         #endregion Fields
+
+        #region Constructors
+
+        public RadioTrack()
+        {
+            ExtraData = new ExpandoObject();
+        }
+
+        #endregion Constructors
 
         #region Events
 
@@ -43,16 +53,6 @@ namespace Torshify.Radio.Framework
             }
         }
 
-        public TimeSpan TotalDuration
-        {
-            get { return _totalDuration; }
-            set
-            {
-                _totalDuration = value;
-                OnPropertyChanged("TotalDuration");
-            }
-        }
-
         public string Artist
         {
             get { return _artist; }
@@ -63,6 +63,12 @@ namespace Torshify.Radio.Framework
             }
         }
 
+        public dynamic ExtraData
+        {
+            get;
+            private set;
+        }
+
         public string Name
         {
             get { return _name; }
@@ -70,6 +76,16 @@ namespace Torshify.Radio.Framework
             {
                 _name = value;
                 OnPropertyChanged("Name");
+            }
+        }
+
+        public TimeSpan TotalDuration
+        {
+            get { return _totalDuration; }
+            set
+            {
+                _totalDuration = value;
+                OnPropertyChanged("TotalDuration");
             }
         }
 

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
-using Microsoft.Practices.Prism.ViewModel;
+using System.ComponentModel;
+using System.Dynamic;
 
 namespace Torshify.Radio.Framework
 {
-    public class RadioTrackContainer : NotificationObject
+    public class RadioTrackContainer : INotifyPropertyChanged
     {
         #region Fields
 
@@ -21,9 +21,16 @@ namespace Torshify.Radio.Framework
         public RadioTrackContainer()
         {
             Tracks = new ObservableCollection<RadioTrack>();
+            ExtraData = new ExpandoObject();
         }
 
         #endregion Constructors
+
+        #region Events
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        #endregion Events
 
         #region Properties
 
@@ -79,6 +86,26 @@ namespace Torshify.Radio.Framework
             }
         }
 
+        public dynamic ExtraData
+        {
+            get; 
+            private set;
+        }
+
         #endregion Properties
+
+        #region Methods
+
+        protected virtual void RaisePropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion Methods
     }
 }

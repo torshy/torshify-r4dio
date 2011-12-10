@@ -117,7 +117,7 @@
                                             <TextBlock
                                                 Text="{Binding Name}"
                                                 TextTrimming="CharacterEllipsis" />
-                                        </DataTemplate>
+                                           </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                             </DataGrid.Columns>

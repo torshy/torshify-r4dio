@@ -38,6 +38,7 @@
     <Reference Include="EchoNest-Sharp">
       <HintPath>..\..\lib\EchoNestSharp\EchoNest-Sharp.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\..\packages\Prism.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
     </Reference>
@@ -99,9 +100,6 @@
     </Compile>
     <Compile Include="ColorExtensions.cs" />
     <Compile Include="EchoNestConstants.cs" />
-    <Compile Include="GeneralSearch\SearchRadioStationViewSmall.xaml.cs">
-      <DependentUpon>SearchRadioStationViewSmall.xaml</DependentUpon>
-    </Compile>
     <Compile Include="HslColor.cs" />
     <Compile Include="Mood\MoodRadioStation.cs" />
     <Compile Include="Mood\MoodRadioStationView.xaml.cs">
@@ -123,11 +121,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="AutoCompleteViewModel.cs" />
-    <Compile Include="GeneralSearch\SearchRadioStation.cs" />
-    <Compile Include="GeneralSearch\SearchRadioStationView.xaml.cs">
-      <DependentUpon>SearchRadioStationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="GeneralSearch\SearchRadioStationViewModel.cs" />
     <Compile Include="Research\ResearchStation.cs" />
     <Compile Include="Research\ResearchView.xaml.cs">
       <DependentUpon>ResearchView.xaml</DependentUpon>
@@ -202,20 +195,12 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="GeneralSearch\SearchRadioStationViewSmall.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Mood\MoodRadioStationView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="GeneralSearch\SearchRadioStationView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Research\ResearchView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
