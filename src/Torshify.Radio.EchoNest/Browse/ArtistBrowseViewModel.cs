@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -115,14 +116,16 @@ namespace Torshify.Radio.EchoNest.Browse
                     IsLoading = true;
                     artist.Albums = GetAlbums(artist);
                     IsLoading = false;
-                    return artistModel;
-                }, artistModel)
-                .ContinueWith(t =>
+                }, artistModel);
+
+            Task.Factory
+                .StartNew(state =>
                 {
+                    var artist = (ArtistModel)state;
                     using (EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
                     {
                         var profile = session.Query<Profile>().Execute(
-                            t.Result.Name,
+                            artist.Name,
                             ArtistBucket.News |
                             ArtistBucket.Images |
                             ArtistBucket.Biographies |
@@ -131,16 +134,16 @@ namespace Torshify.Radio.EchoNest.Browse
 
                         if (profile.Status.Code == ResponseCode.Success)
                         {
-                            t.Result.News = profile.Artist.News;
-                            t.Result.Images = profile.Artist.Images;
-                            t.Result.Image = profile.Artist.Images.FirstOrDefault();
-                            t.Result.Biographies = profile.Artist.Biographies;
-                            t.Result.Biography = profile.Artist.Biographies.FirstOrDefault();
-                            t.Result.Blogs = profile.Artist.Blogs;
-                            t.Result.Videos = profile.Artist.Videos;
+                            artist.News = profile.Artist.News;
+                            artist.Images = profile.Artist.Images;
+                            artist.Image = profile.Artist.Images.FirstOrDefault();
+                            artist.Biographies = profile.Artist.Biographies;
+                            artist.Biography = profile.Artist.Biographies.FirstOrDefault();
+                            artist.Blogs = profile.Artist.Blogs;
+                            artist.Videos = profile.Artist.Videos;
                         }
                     }
-                });
+                }, artistModel);
         }
 
         private void ExecutePlay(object parameter)
