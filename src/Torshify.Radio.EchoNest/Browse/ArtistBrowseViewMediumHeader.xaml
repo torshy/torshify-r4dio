@@ -152,6 +152,61 @@
                 <extToolkit:DropDownButton
                     Content="News"
                     Margin="4,0,0,0">
+                    <extToolkit:DropDownButton.DropDownContent>
+                        <Border
+                            Background="White"
+                            BorderBrush="#FF00C0FF"
+                            BorderThickness="2"
+                            Padding="4"
+                            MaxHeight="500"
+                            MaxWidth="500">
+                            <ScrollViewer>
+                                <ItemsControl
+                                    AlternationCount="2"
+                                    ItemsSource="{Binding CurrentArtist.News}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel
+                                                Name="Panel"
+                                                Margin="4">
+                                                <TextBlock
+                                                    Text="{Binding Summary}"
+                                                    TextWrapping="Wrap"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    MaxHeight="75" />
+                                                <TextBlock>
+                                                <Hyperlink>
+                                                    <TextBlock
+                                                            Text="{Binding Url, StringFormat={}[MORE] {0}}"
+                                                            FontWeight="Bold"
+                                                            Foreground="#FF00C0FF" />
+                                                </Hyperlink>
+                                        </TextBlock>
+                                            </StackPanel>
+                                            <DataTemplate.Triggers>
+                                                <Trigger
+                                                    Property="ItemsControl.AlternationIndex"
+                                                    Value="0">
+                                                    <Setter
+                                                        Property="Background"
+                                                        Value="#44CCCCCC"
+                                                        TargetName="Panel" />
+                                                </Trigger>
+                                                <Trigger
+                                                    Property="ItemsControl.AlternationIndex"
+                                                    Value="1">
+                                                    <Setter
+                                                        Property="Background"
+                                                        Value="Transparent"
+                                                        TargetName="Panel" />
+                                                </Trigger>
+                                            </DataTemplate.Triggers>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Border>
+                    </extToolkit:DropDownButton.DropDownContent>
                 </extToolkit:DropDownButton>
             </StackPanel>
         </DockPanel>
