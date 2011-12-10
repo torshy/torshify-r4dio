@@ -100,7 +100,12 @@
                         Text="{Binding Artist, Mode=OneWay, Converter={StaticResource StringToUpperConverter}}"
                         TextTrimming="CharacterEllipsis"
                         Foreground="#FFCCCCCC"
-                        FontSize="16" />
+                        FontSize="16">
+                        <i:Interaction.Behaviors>
+                            <Behaviors:ArtistCommandsBehavior
+                                    ArtistName="{Binding Artist}" />
+                        </i:Interaction.Behaviors>
+                    </TextBlock>
                 </StackPanel>
             </DockPanel>
         </Decorator>
