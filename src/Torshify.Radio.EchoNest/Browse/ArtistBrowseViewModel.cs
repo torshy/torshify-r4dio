@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -110,15 +111,15 @@ namespace Torshify.Radio.EchoNest.Browse
             Task.Factory
                 .StartNew(state =>
                 {
-                    var artist = (ArtistModel) state;
+                    var artist = (ArtistModel)state;
                     IsLoading = true;
-                    artist.Albums = _radio.GetAlbumsByArtist(artist.Name).OrderBy(a => a.Name);
+                    artist.Albums = GetAlbums(artist);
                     IsLoading = false;
                     return artistModel;
                 }, artistModel)
                 .ContinueWith(t =>
                 {
-                    using(EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
+                    using (EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
                     {
                         var profile = session.Query<Profile>().Execute(
                             t.Result.Name,
@@ -182,6 +183,27 @@ namespace Torshify.Radio.EchoNest.Browse
 
         private void ExecuteQueue(object parameter)
         {
+        }
+
+        private IEnumerable<RadioTrackContainer> GetAlbums(ArtistModel artist)
+        {
+            var albumsByArtist = new List<RadioTrackContainer>();
+            var albumsContainingArtist = new List<RadioTrackContainer>();
+            var albums = _radio.GetAlbumsByArtist(artist.Name).ToArray();
+
+            foreach (var album in albums)
+            {
+                if (album.Tracks.All(t => t.Artist.Equals(artist.Name, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    albumsByArtist.Add(album);
+                }
+                else
+                {
+                    albumsContainingArtist.Add(album);
+                }
+            }
+
+            return albumsByArtist.OrderBy(a => a.Name).Concat(albumsContainingArtist.OrderBy(a => a.Name)).ToArray();
         }
 
         #endregion Methods
