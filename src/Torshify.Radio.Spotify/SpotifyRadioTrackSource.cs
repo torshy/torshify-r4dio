@@ -28,6 +28,7 @@ namespace Torshify.Radio.Spotify
             OrigoConnectionManager.Instance.Initialize();
         }
 
+        [ImportingConstructor]
         public SpotifyRadioTrackSource(ILoggerFacade logger)
         {
             _logger = logger;
