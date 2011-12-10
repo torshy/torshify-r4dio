@@ -123,7 +123,8 @@ namespace Torshify.Radio.EchoNest.Browse
                             ArtistBucket.News | 
                             ArtistBucket.Images | 
                             ArtistBucket.Biographies | 
-                            ArtistBucket.Blogs);
+                            ArtistBucket.Blogs | 
+                            ArtistBucket.Video);
 
                         if (profile.Status.Code == ResponseCode.Success)
                         {
@@ -133,6 +134,7 @@ namespace Torshify.Radio.EchoNest.Browse
                             t.Result.Biographies = profile.Artist.Biographies;
                             t.Result.Biography = profile.Artist.Biographies.FirstOrDefault();
                             t.Result.Blogs = profile.Artist.Blogs;
+                            t.Result.Videos = profile.Artist.Videos;
                         }
                     }
                 });

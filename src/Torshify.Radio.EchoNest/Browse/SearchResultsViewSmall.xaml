@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
-    mc:Ignorable="d"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework" mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
@@ -27,7 +27,7 @@
                         Padding="2"
                         Background="#FF00C0FF"
                         BorderThickness="0"
-                        Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                        Command="{x:Static Framework:GlobalCommands.PlayCommand}"
                         CommandParameter="{Binding}">
                         <Grid>
                             <Image

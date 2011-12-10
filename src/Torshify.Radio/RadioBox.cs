@@ -9,15 +9,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
+using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 using Microsoft.Practices.ServiceLocation;
+
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Events;
-using Microsoft.Practices.Prism;
 using Torshify.Radio.Views.Configuration;
 
 namespace Torshify.Radio
@@ -61,6 +62,7 @@ namespace Torshify.Radio
             _nowPlayingViewModel = new RadioNowPlayingViewModel(this, eventAggregator, regionManager);
 
             GlobalCommands.OpenSettingsCommand.RegisterCommand(new DelegateCommand(ExecuteOpenSettings));
+            GlobalCommands.PlayCommand.RegisterCommand(new DelegateCommand<object>(ExecutePlay));
         }
 
         #endregion Constructors
@@ -79,6 +81,14 @@ namespace Torshify.Radio
 
         #region Properties
 
+        public IRadioStationContext CurrentContext
+        {
+            get
+            {
+                return _nowPlayingViewModel;
+            }
+        }
+
         public Lazy<IRadioTrackPlayer, IRadioTrackPlayerMetadata> CurrentPlayer
         {
             get { return _currentPlayer; }
@@ -89,14 +99,6 @@ namespace Torshify.Radio
                     _currentPlayer = value;
                     RaisePropertyChanged("CurrentPlayer");
                 }
-            }
-        }
-
-        public IRadioStationContext CurrentContext
-        {
-            get
-            {
-                return _nowPlayingViewModel;
             }
         }
 
@@ -379,6 +381,35 @@ namespace Torshify.Radio
             IsBuffering = false;
         }
 
+        IEnumerable<RadioTrackContainer> IRadioTrackSource.GetAlbumsByArtist(string artist)
+        {
+            ConcurrentBag<RadioTrackContainer> bag = new ConcurrentBag<RadioTrackContainer>();
+
+            if (_trackSources != null)
+            {
+                Parallel.ForEach(_trackSources, trackSource =>
+                {
+                    try
+                    {
+                        var result = trackSource.Value.GetAlbumsByArtist(artist);
+
+                        foreach (var container in result)
+                        {
+                            bag.Add(container);
+                        }
+
+                        _logger.Log("GetAlbumsByArtist " + artist + " @ " + trackSource.Metadata.Name + " = " + result.Count(), Category.Info, Priority.Low);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Log(e.Message, Category.Exception, Priority.Medium);
+                    }
+                });
+            }
+
+            return bag.OrderBy(x => _random.Next()).ToArray();
+        }
+
         IEnumerable<RadioTrack> IRadioTrackSource.GetTracksByArtist(string artist, int offset, int count)
         {
             ConcurrentBag<RadioTrack> bag = new ConcurrentBag<RadioTrack>();
@@ -436,35 +467,6 @@ namespace Torshify.Radio
 
             return bag.OrderBy(x => _random.Next()).ToArray();
         }
-        
-        IEnumerable<RadioTrackContainer> IRadioTrackSource.GetAlbumsByArtist(string artist)
-        {
-            ConcurrentBag<RadioTrackContainer> bag = new ConcurrentBag<RadioTrackContainer>();
-
-            if (_trackSources != null)
-            {
-                Parallel.ForEach(_trackSources, trackSource =>
-                {
-                    try
-                    {
-                        var result = trackSource.Value.GetAlbumsByArtist(artist);
-
-                        foreach (var container in result)
-                        {
-                            bag.Add(container);
-                        }
-
-                        _logger.Log("GetAlbumsByArtist " + artist + " @ " + trackSource.Metadata.Name + " = " + result.Count(), Category.Info, Priority.Low);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.Log(e.Message, Category.Exception, Priority.Medium);
-                    }
-                });
-            }
-
-            return bag.OrderBy(x => _random.Next()).ToArray();
-        }
 
         void IRadioTrackSource.Initialize()
         {
@@ -487,6 +489,16 @@ namespace Torshify.Radio
 
                 region.Add(viewData, "Settings");
                 region.Activate(viewData);
+            }
+        }
+
+        private void ExecutePlay(object parameter)
+        {
+            RadioTrack radioTrack = parameter as RadioTrack;
+
+            if (radioTrack != null)
+            {
+                CurrentContext.SetTrackProvider(() => new[] {radioTrack});
             }
         }
 

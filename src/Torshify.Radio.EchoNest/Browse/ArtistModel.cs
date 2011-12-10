@@ -21,6 +21,7 @@ namespace Torshify.Radio.EchoNest.Browse
         private BiographyItem _biography;
         private IEnumerable<BiographyItem> _biographies;
         private IEnumerable<BlogItem> _blogs;
+        private IEnumerable<VideoItem> _videos;
 
         #endregion Fields
 
@@ -133,6 +134,19 @@ namespace Torshify.Radio.EchoNest.Browse
             {
                 _blogs = value;
                 RaisePropertyChanged("Blogs");
+            }
+        }
+
+        public IEnumerable<VideoItem> Videos
+        {
+            get 
+            {
+                return _videos;
+            }
+            set 
+            {
+                _videos = value;
+                RaisePropertyChanged("Videos");
             }
         }
 
