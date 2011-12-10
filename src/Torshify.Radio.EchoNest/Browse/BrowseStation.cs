@@ -71,7 +71,7 @@ namespace Torshify.Radio.EchoNest.Browse
             payload
                 .CommandBar
                 .AddCommand(
-                    "Find albums",
+                    "Browse",
                     new DelegateCommand<string>(ExecuteFindAlbums), payload.ArtistName);
         }
 
