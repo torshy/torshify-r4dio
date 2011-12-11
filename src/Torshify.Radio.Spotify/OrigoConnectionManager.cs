@@ -1,9 +1,12 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
+using Torshify.Origo;
 using Torshify.Origo.Host;
 
 namespace Torshify.Radio.Spotify
 {
-    public class OrigoConnectionManager
+    public class OrigoConnectionManager : MarshalByRefObject
     {
         #region Fields
 
@@ -41,19 +44,23 @@ namespace Torshify.Radio.Spotify
             {
                 if (!_initialized)
                 {
-                    AppDomainSetup origoSetup = new AppDomainSetup();
-                    origoSetup.ApplicationBase = Environment.CurrentDirectory;
+                    AppDomainSetup setup = new AppDomainSetup();
+                    setup.ApplicationName = "Spotify";
+                    setup.ApplicationBase = Environment.CurrentDirectory;
+                    setup.PrivateBinPath = Path.Combine("Modules", "Spotify");
+                    setup.PrivateBinPathProbe = "true";
 
-                    AppDomain origoDomain = AppDomain.CreateDomain("OrigoDomain", null, origoSetup);
-
-                    OrigoBootstrapperWrapper host = origoDomain.CreateInstanceAndUnwrap(
-                        typeof (OrigoBootstrapperWrapper).Assembly.FullName,
-                        "Torshify.Radio.Spotify.OrigoBootstrapperWrapper") as OrigoBootstrapperWrapper;
+                    AppDomain origoDomain = AppDomain.CreateDomain("OrigoDomain", null, setup);
+                    AppDomain.CurrentDomain.AssemblyResolve += OrigoDomainOnAssemblyResolve;
+                    OrigoBootstrapper host = origoDomain.CreateInstanceAndUnwrap(
+                        typeof(OrigoBootstrapper).Assembly.FullName,
+                        "Torshify.Origo.OrigoBootstrapper") as OrigoBootstrapper;
+                    AppDomain.CurrentDomain.AssemblyResolve -= OrigoDomainOnAssemblyResolve;
 
                     if (host != null)
                     {
                         InitializeCommandLineOptions(Environment.GetCommandLineArgs(), host);
-                        host.Start();
+                        host.Run();
                     }
 
                     _initialized = true;
@@ -65,7 +72,32 @@ namespace Torshify.Radio.Spotify
             }
         }
 
-        private void InitializeCommandLineOptions(string[] args, OrigoBootstrapperWrapper bootstrapper)
+        private Assembly OrigoDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            try
+            {
+                Assembly assembly = System.Reflection.Assembly.Load(args.Name);
+                if (assembly != null)
+                    return assembly;
+            }
+            catch
+            {
+                // ignore load error 
+            }
+
+                // *** Try to load by filename - split out the filename of the full assembly name
+                // *** and append the base path of the original assembly (ie. look in the same dir)
+                // *** NOTE: this doesn't account for special search paths but then that never
+                //           worked before either.
+                string[] Parts = args.Name.Split(',');
+                string File = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + Parts[0].Trim() +
+                              ".dll";
+
+                return System.Reflection.Assembly.LoadFrom(File);
+            
+        }
+
+        private void InitializeCommandLineOptions(string[] args, OrigoBootstrapper bootstrapper)
         {
             bool showHelp = false;
 
