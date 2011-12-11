@@ -51,7 +51,9 @@ namespace Torshify.Radio.Spotify
                     setup.PrivateBinPathProbe = "true";
 
                     AppDomain origoDomain = AppDomain.CreateDomain("OrigoDomain", null, setup);
+                    origoDomain.UnhandledException += OrigoDomainOnUnhandledException;
                     AppDomain.CurrentDomain.AssemblyResolve += OrigoDomainOnAssemblyResolve;
+                    AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
                     OrigoBootstrapper host = origoDomain.CreateInstanceAndUnwrap(
                         typeof(OrigoBootstrapper).Assembly.FullName,
                         "Torshify.Origo.OrigoBootstrapper") as OrigoBootstrapper;
@@ -60,7 +62,11 @@ namespace Torshify.Radio.Spotify
                     if (host != null)
                     {
                         InitializeCommandLineOptions(Environment.GetCommandLineArgs(), host);
-                        host.Run();
+
+                        if (!string.IsNullOrEmpty(host.UserName) && !string.IsNullOrEmpty(host.Password))
+                        {
+                            host.Run();
+                        }
                     }
 
                     _initialized = true;
@@ -70,6 +76,15 @@ namespace Torshify.Radio.Spotify
             {
                 Console.WriteLine(e);
             }
+        }
+
+        private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
+        {
+        }
+
+        private void OrigoDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
+        {
+            
         }
 
         private Assembly OrigoDomainOnAssemblyResolve(object sender, ResolveEventArgs args)

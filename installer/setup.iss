@@ -30,11 +30,22 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
+[Dirs]
+Name: "{app}\Modules"
+Name: "{app}\Modules\EchoNest"
+Name: "{app}\Modules\EightTracks"
+Name: "{app}\Modules\Grooveshark"
+Name: "{app}\Modules\Spotify"
+
 [Files]
 Source: "..\src\Torshify.Radio\bin\Release\Torshify.Radio.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\src\Torshify.Radio\bin\Release\Torshify.Radio.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\src\Torshify.Radio\bin\Release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Radio\bin\Release\Resources\LargeIcons\*.*"; DestDir: "{app}\Resources\LargeIcons"; Flags: ignoreversion 
+Source: "..\src\Torshify.Radio\bin\Release\Resources\LargeIcons\*.*"; DestDir: "{app}\Resources\LargeIcons"; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\EchoNest\*.*"; DestDir: "{app}\Modules\EchoNest"; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\EightTracks\*.*"; DestDir: "{app}\Modules\EightTracks"; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\Grooveshark\*.*"; DestDir: "{app}\Modules\Grooveshark"; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\Spotify\*.*"; DestDir: "{app}\Modules\Spotify"; Flags: ignoreversion recursesubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
