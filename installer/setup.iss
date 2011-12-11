@@ -42,10 +42,10 @@ Source: "..\src\Torshify.Radio\bin\Release\Torshify.Radio.exe"; DestDir: "{app}"
 Source: "..\src\Torshify.Radio\bin\Release\Torshify.Radio.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\src\Torshify.Radio\bin\Release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\src\Torshify.Radio\bin\Release\Resources\LargeIcons\*.*"; DestDir: "{app}\Resources\LargeIcons"; Flags: ignoreversion recursesubdirs
-Source: "..\src\Torshify.Radio\bin\Release\Modules\EchoNest\*.*"; DestDir: "{app}\Modules\EchoNest"; Flags: ignoreversion recursesubdirs
-Source: "..\src\Torshify.Radio\bin\Release\Modules\EightTracks\*.*"; DestDir: "{app}\Modules\EightTracks"; Flags: ignoreversion recursesubdirs
-Source: "..\src\Torshify.Radio\bin\Release\Modules\Grooveshark\*.*"; DestDir: "{app}\Modules\Grooveshark"; Flags: ignoreversion recursesubdirs
-Source: "..\src\Torshify.Radio\bin\Release\Modules\Spotify\*.*"; DestDir: "{app}\Modules\Spotify"; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\EchoNest\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\EchoNest"; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\EightTracks\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\EightTracks"; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\Grooveshark\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Grooveshark"; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\Spotify\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Spotify"; Flags: ignoreversion recursesubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

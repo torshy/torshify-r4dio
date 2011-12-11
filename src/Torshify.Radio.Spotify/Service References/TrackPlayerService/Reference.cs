@@ -16,6 +16,7 @@ namespace Torshify.Radio.Spotify.TrackPlayerService {
     public interface TrackPlayerService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://schemas.torshify/v1/TrackPlayerService/Play", ReplyAction="http://schemas.torshify/v1/TrackPlayerService/PlayResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(Torshify.Origo.Contracts.V1.NotLoggedInFault), Action="http://schemas.torshify/v1/TrackPlayerService/PlayNotLoggedInFaultFault", Name="NotLoggedInFault", Namespace="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1")]
         void Play(string trackId);
     }
     

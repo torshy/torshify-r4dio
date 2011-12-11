@@ -25,6 +25,7 @@
     <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="f3ea0585-d07c-431c-a6cf-d5c791f9d757" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/query/mex" />
     <MetadataFile FileName="v1.xsd" MetadataType="Schema" ID="eff1d3ee-ab77-494c-94c7-754f21932d0b" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/query/mex" />
     <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="70327359-5847-4e33-ab88-5a5392de7420" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/query/mex" />
+    <MetadataFile FileName="Torshify.Origo.Contracts.V1.xsd" MetadataType="Schema" ID="e2a5ef78-2b6e-47c5-b351-352cce0f3762" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/query/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="8e7b042e-fbe8-4007-a9ae-e5cebf7a7c76" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/query/mex" />
     <MetadataFile FileName="Torshify.Origo.Contracts.V1.Query.xsd" MetadataType="Schema" ID="e8400794-df96-4ebc-8677-666e9d880345" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/query/mex" />
   </Metadata>

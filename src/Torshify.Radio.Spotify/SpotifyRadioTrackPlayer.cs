@@ -5,6 +5,7 @@ using System.Threading;
 
 using Torshify.Origo.Contracts.V1;
 using Torshify.Radio.Framework;
+using Torshify.Radio.Spotify.LoginService;
 using Torshify.Radio.Spotify.PlayerControlService;
 using Torshify.Radio.Spotify.TrackPlayerService;
 
@@ -12,10 +13,11 @@ namespace Torshify.Radio.Spotify
 {
     [RadioTrackPlayerMetadata(Name = "Spotify", Icon = "pack://siteoforigin:,,,/Modules/Spotify/Resources/Icons/Spotify_Logo.png")]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class SpotifyRadioTrackPlayer : IRadioTrackPlayer, PlayerControlServiceCallback
+    public class SpotifyRadioTrackPlayer : IRadioTrackPlayer, PlayerControlServiceCallback, LoginServiceCallback
     {
         #region Fields
 
+        private LoginServiceClient _loginClient;
         private PlayerControlServiceClient _controlService;
         private SpotifyRadioTrack _currentTrack;
         private bool _isPaused;
@@ -132,20 +134,24 @@ namespace Torshify.Radio.Spotify
         {
             try
             {
-                _controlService = new PlayerControlServiceClient(new InstanceContext(this));
-                _controlService.Subscribe();
-            }
-            catch (Exception)
-            {
-                _controlService.Abort();
+                _loginClient = new LoginServiceClient(new InstanceContext(this));
+                _loginClient.Subscribe();
 
-                Thread thread = new Thread(() =>
+                if (!_loginClient.IsLoggedIn())
                 {
-                    Thread.Sleep(5000);
-                    Initialize();
-                });
-                thread.IsBackground = true;
-                thread.Start();
+                    if (!string.IsNullOrEmpty(_loginClient.GetRememberedUser()))
+                    {
+                        _loginClient.Relogin();
+                    }
+                }
+                else
+                {
+                    SubscribeToControlEvents();
+                }
+            }
+            catch
+            {
+                _loginClient.Abort();
             }
         }
 
@@ -217,6 +223,24 @@ namespace Torshify.Radio.Spotify
             }
 
             _isPaused = false;
+        }
+
+        void LoginServiceCallback.OnLoggedIn()
+        {
+            SubscribeToControlEvents();
+        }
+
+        void LoginServiceCallback.OnLoginError(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+        void LoginServiceCallback.OnLoggedOut()
+        {
+        }
+
+        void LoginServiceCallback.OnPing()
+        {
         }
 
         void PlayerControlServiceCallback.OnElapsed(double elapsedMs, double totalMs)
@@ -305,6 +329,26 @@ namespace Torshify.Radio.Spotify
             }
         }
 
+        private void SubscribeToControlEvents()
+        {
+            try
+            {
+                _controlService = new PlayerControlServiceClient(new InstanceContext(this));
+                _controlService.Subscribe();
+            }
+            catch (Exception)
+            {
+                _controlService.Abort();
+
+                Thread thread = new Thread(() =>
+                {
+                    Thread.Sleep(5000);
+                    Initialize();
+                });
+                thread.IsBackground = true;
+                thread.Start();
+            }
+        }
         #endregion Methods
     }
 }

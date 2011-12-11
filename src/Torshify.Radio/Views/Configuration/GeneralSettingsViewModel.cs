@@ -33,6 +33,11 @@ namespace Torshify.Radio.Views.Configuration
 
         #region Methods
 
+        public void Initialize(IConfigurationContext context)
+        {
+            
+        }
+
         public void Cancel()
         {
         }

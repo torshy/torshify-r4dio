@@ -24,6 +24,9 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="NotLoggedInFaultFault">
+        <soap12:fault use="literal" name="NotLoggedInFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="TogglePause">
       <soap12:operation soapAction="http://schemas.torshify/v1/PlayerControlService/TogglePause" style="document" />
@@ -33,6 +36,9 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="NotLoggedInFaultFault">
+        <soap12:fault use="literal" name="NotLoggedInFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="SetVolume">
       <soap12:operation soapAction="http://schemas.torshify/v1/PlayerControlService/SetVolume" style="document" />
@@ -42,6 +48,9 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="NotLoggedInFaultFault">
+        <soap12:fault use="literal" name="NotLoggedInFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="GetVolume">
       <soap12:operation soapAction="http://schemas.torshify/v1/PlayerControlService/GetVolume" style="document" />
@@ -51,6 +60,9 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="NotLoggedInFaultFault">
+        <soap12:fault use="literal" name="NotLoggedInFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="Seek">
       <soap12:operation soapAction="http://schemas.torshify/v1/PlayerControlService/Seek" style="document" />
@@ -60,6 +72,9 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="NotLoggedInFaultFault">
+        <soap12:fault use="literal" name="NotLoggedInFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="Subscribe">
       <soap12:operation soapAction="http://schemas.torshify/v1/PlayerControlService/Subscribe" style="document" />
@@ -69,6 +84,9 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="NotLoggedInFaultFault">
+        <soap12:fault use="literal" name="NotLoggedInFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="Unsubscribe">
       <soap12:operation soapAction="http://schemas.torshify/v1/PlayerControlService/Unsubscribe" style="document" />
@@ -78,6 +96,9 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="NotLoggedInFaultFault">
+        <soap12:fault use="literal" name="NotLoggedInFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
     <wsdl:operation name="OnTrackChanged">
       <soap12:operation soapAction="http://schemas.torshify/v1/PlayerControlService/OnTrackChanged" style="document" />

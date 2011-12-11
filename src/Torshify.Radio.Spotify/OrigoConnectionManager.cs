@@ -62,11 +62,7 @@ namespace Torshify.Radio.Spotify
                     if (host != null)
                     {
                         InitializeCommandLineOptions(Environment.GetCommandLineArgs(), host);
-
-                        if (!string.IsNullOrEmpty(host.UserName) && !string.IsNullOrEmpty(host.Password))
-                        {
-                            host.Run();
-                        }
+                        host.Run();
                     }
 
                     _initialized = true;
@@ -84,14 +80,14 @@ namespace Torshify.Radio.Spotify
 
         private void OrigoDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
         {
-            
+
         }
 
         private Assembly OrigoDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
         {
             try
             {
-                Assembly assembly = System.Reflection.Assembly.Load(args.Name);
+                Assembly assembly = Assembly.Load(args.Name);
                 if (assembly != null)
                     return assembly;
             }
@@ -100,16 +96,16 @@ namespace Torshify.Radio.Spotify
                 // ignore load error 
             }
 
-                // *** Try to load by filename - split out the filename of the full assembly name
-                // *** and append the base path of the original assembly (ie. look in the same dir)
-                // *** NOTE: this doesn't account for special search paths but then that never
-                //           worked before either.
-                string[] Parts = args.Name.Split(',');
-                string File = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + Parts[0].Trim() +
-                              ".dll";
+            // *** Try to load by filename - split out the filename of the full assembly name
+            // *** and append the base path of the original assembly (ie. look in the same dir)
+            // *** NOTE: this doesn't account for special search paths but then that never
+            //           worked before either.
+            string[] Parts = args.Name.Split(',');
+            string File = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + Parts[0].Trim() +
+                          ".dll";
 
-                return System.Reflection.Assembly.LoadFrom(File);
-            
+            return System.Reflection.Assembly.LoadFrom(File);
+
         }
 
         private void InitializeCommandLineOptions(string[] args, OrigoBootstrapper bootstrapper)

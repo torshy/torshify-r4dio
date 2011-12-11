@@ -61,6 +61,11 @@ namespace Torshify.Radio.Views.Configuration
 
         void IPartImportsSatisfiedNotification.OnImportsSatisfied()
         {
+            foreach (var configuration in Configurations)
+            {
+                configuration.Value.Initialize(new ConfigurationContext());
+            }
+
             RaisePropertyChanged("Configurations");
         }
 
@@ -102,5 +107,10 @@ namespace Torshify.Radio.Views.Configuration
         }
 
         #endregion Methods
+
+        private class ConfigurationContext : IConfigurationContext
+        {
+            
+        }
     }
 }

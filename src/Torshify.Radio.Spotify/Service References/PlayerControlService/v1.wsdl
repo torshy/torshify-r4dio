@@ -3,6 +3,7 @@
   <wsdl:types>
     <xsd:schema targetNamespace="http://schemas.torshify/v1/Imports">
       <xsd:import namespace="http://schemas.torshify/v1" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
     </xsd:schema>
   </wsdl:types>
@@ -12,11 +13,17 @@
   <wsdl:message name="PlayerControlService_GetStatus_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetStatusResponse" />
   </wsdl:message>
+  <wsdl:message name="PlayerControlService_GetStatus_NotLoggedInFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" name="detail" element="q1:NotLoggedInFault" />
+  </wsdl:message>
   <wsdl:message name="PlayerControlService_TogglePause_InputMessage">
     <wsdl:part name="parameters" element="tns:TogglePause" />
   </wsdl:message>
   <wsdl:message name="PlayerControlService_TogglePause_OutputMessage">
     <wsdl:part name="parameters" element="tns:TogglePauseResponse" />
+  </wsdl:message>
+  <wsdl:message name="PlayerControlService_TogglePause_NotLoggedInFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" name="detail" element="q2:NotLoggedInFault" />
   </wsdl:message>
   <wsdl:message name="PlayerControlService_SetVolume_InputMessage">
     <wsdl:part name="parameters" element="tns:SetVolume" />
@@ -24,11 +31,17 @@
   <wsdl:message name="PlayerControlService_SetVolume_OutputMessage">
     <wsdl:part name="parameters" element="tns:SetVolumeResponse" />
   </wsdl:message>
+  <wsdl:message name="PlayerControlService_SetVolume_NotLoggedInFaultFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" name="detail" element="q3:NotLoggedInFault" />
+  </wsdl:message>
   <wsdl:message name="PlayerControlService_GetVolume_InputMessage">
     <wsdl:part name="parameters" element="tns:GetVolume" />
   </wsdl:message>
   <wsdl:message name="PlayerControlService_GetVolume_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetVolumeResponse" />
+  </wsdl:message>
+  <wsdl:message name="PlayerControlService_GetVolume_NotLoggedInFaultFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" name="detail" element="q4:NotLoggedInFault" />
   </wsdl:message>
   <wsdl:message name="PlayerControlService_Seek_InputMessage">
     <wsdl:part name="parameters" element="tns:Seek" />
@@ -36,17 +49,26 @@
   <wsdl:message name="PlayerControlService_Seek_OutputMessage">
     <wsdl:part name="parameters" element="tns:SeekResponse" />
   </wsdl:message>
+  <wsdl:message name="PlayerControlService_Seek_NotLoggedInFaultFault_FaultMessage">
+    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" name="detail" element="q5:NotLoggedInFault" />
+  </wsdl:message>
   <wsdl:message name="PlayerControlService_Subscribe_InputMessage">
     <wsdl:part name="parameters" element="tns:Subscribe" />
   </wsdl:message>
   <wsdl:message name="PlayerControlService_Subscribe_OutputMessage">
     <wsdl:part name="parameters" element="tns:SubscribeResponse" />
   </wsdl:message>
+  <wsdl:message name="PlayerControlService_Subscribe_NotLoggedInFaultFault_FaultMessage">
+    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" name="detail" element="q6:NotLoggedInFault" />
+  </wsdl:message>
   <wsdl:message name="PlayerControlService_Unsubscribe_InputMessage">
     <wsdl:part name="parameters" element="tns:Unsubscribe" />
   </wsdl:message>
   <wsdl:message name="PlayerControlService_Unsubscribe_OutputMessage">
     <wsdl:part name="parameters" element="tns:UnsubscribeResponse" />
+  </wsdl:message>
+  <wsdl:message name="PlayerControlService_Unsubscribe_NotLoggedInFaultFault_FaultMessage">
+    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" name="detail" element="q7:NotLoggedInFault" />
   </wsdl:message>
   <wsdl:message name="PlayerControlService_OnTrackChanged_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnTrackChanged" />
@@ -70,30 +92,37 @@
     <wsdl:operation name="GetStatus">
       <wsdl:input wsaw:Action="http://schemas.torshify/v1/PlayerControlService/GetStatus" message="tns:PlayerControlService_GetStatus_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.torshify/v1/PlayerControlService/GetStatusResponse" message="tns:PlayerControlService_GetStatus_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.torshify/v1/PlayerControlService/GetStatusNotLoggedInFaultFault" name="NotLoggedInFaultFault" message="tns:PlayerControlService_GetStatus_NotLoggedInFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="TogglePause">
       <wsdl:input wsaw:Action="http://schemas.torshify/v1/PlayerControlService/TogglePause" message="tns:PlayerControlService_TogglePause_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.torshify/v1/PlayerControlService/TogglePauseResponse" message="tns:PlayerControlService_TogglePause_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.torshify/v1/PlayerControlService/TogglePauseNotLoggedInFaultFault" name="NotLoggedInFaultFault" message="tns:PlayerControlService_TogglePause_NotLoggedInFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="SetVolume">
       <wsdl:input wsaw:Action="http://schemas.torshify/v1/PlayerControlService/SetVolume" message="tns:PlayerControlService_SetVolume_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.torshify/v1/PlayerControlService/SetVolumeResponse" message="tns:PlayerControlService_SetVolume_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.torshify/v1/PlayerControlService/SetVolumeNotLoggedInFaultFault" name="NotLoggedInFaultFault" message="tns:PlayerControlService_SetVolume_NotLoggedInFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetVolume">
       <wsdl:input wsaw:Action="http://schemas.torshify/v1/PlayerControlService/GetVolume" message="tns:PlayerControlService_GetVolume_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.torshify/v1/PlayerControlService/GetVolumeResponse" message="tns:PlayerControlService_GetVolume_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.torshify/v1/PlayerControlService/GetVolumeNotLoggedInFaultFault" name="NotLoggedInFaultFault" message="tns:PlayerControlService_GetVolume_NotLoggedInFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="Seek">
       <wsdl:input wsaw:Action="http://schemas.torshify/v1/PlayerControlService/Seek" message="tns:PlayerControlService_Seek_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.torshify/v1/PlayerControlService/SeekResponse" message="tns:PlayerControlService_Seek_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.torshify/v1/PlayerControlService/SeekNotLoggedInFaultFault" name="NotLoggedInFaultFault" message="tns:PlayerControlService_Seek_NotLoggedInFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="Subscribe">
       <wsdl:input wsaw:Action="http://schemas.torshify/v1/PlayerControlService/Subscribe" message="tns:PlayerControlService_Subscribe_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.torshify/v1/PlayerControlService/SubscribeResponse" message="tns:PlayerControlService_Subscribe_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.torshify/v1/PlayerControlService/SubscribeNotLoggedInFaultFault" name="NotLoggedInFaultFault" message="tns:PlayerControlService_Subscribe_NotLoggedInFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="Unsubscribe">
       <wsdl:input wsaw:Action="http://schemas.torshify/v1/PlayerControlService/Unsubscribe" message="tns:PlayerControlService_Unsubscribe_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.torshify/v1/PlayerControlService/UnsubscribeResponse" message="tns:PlayerControlService_Unsubscribe_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.torshify/v1/PlayerControlService/UnsubscribeNotLoggedInFaultFault" name="NotLoggedInFaultFault" message="tns:PlayerControlService_Unsubscribe_NotLoggedInFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="OnTrackChanged">
       <wsdl:output wsaw:Action="http://schemas.torshify/v1/PlayerControlService/OnTrackChanged" message="tns:PlayerControlService_OnTrackChanged_OutputCallbackMessage" />

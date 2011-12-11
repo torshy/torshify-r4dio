@@ -24,6 +24,9 @@
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="NotLoggedInFaultFault">
+        <soap12:fault use="literal" name="NotLoggedInFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="TrackPlayerService">

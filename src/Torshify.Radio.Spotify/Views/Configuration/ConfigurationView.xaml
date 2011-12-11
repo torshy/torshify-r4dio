@@ -4,10 +4,62 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
 
+        <extToolkit:WatermarkTextBox
+            Grid.Row="0"
+            TabIndex="0"
+            Watermark="Username"
+            Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}">
+            <i:Interaction.Behaviors>
+                <Behaviors:KeyboardBehavior
+                    Key="Enter"
+                    Command="{Binding LoginCommand}"
+                    CommandParameter="{Binding ElementName=_passwordBox}" />
+            </i:Interaction.Behaviors>
+        </extToolkit:WatermarkTextBox>
+
+        <PasswordBox
+            Grid.Row="1"
+            TabIndex="1"
+            Name="_passwordBox">
+            <i:Interaction.Behaviors>
+                <Behaviors:KeyboardBehavior
+                    Key="Enter"
+                    Command="{Binding LoginCommand}"
+                    CommandParameter="{Binding ElementName=_passwordBox}" />
+            </i:Interaction.Behaviors>
+        </PasswordBox>
+
+        <DockPanel
+            Grid.Row="2"
+            LastChildFill="True">
+            <CheckBox
+                DockPanel.Dock="Left"
+                Content="Remember me"
+                IsChecked="{Binding RememberMe}" />
+            <Button
+                Content="Sign in"
+                Command="{Binding LoginCommand}"
+                CommandParameter="{Binding ElementName=_passwordBox}"
+                HorizontalAlignment="Right" />
+        </DockPanel>
     </Grid>
 </UserControl>

@@ -60,6 +60,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\Blend\System.Windows.Interactivity.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -79,6 +83,10 @@
       <HintPath>..\..\lib\Torshify\WcfContrib.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\..\lib\WpfToolkitExtended\WPFToolkit.Extended.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
@@ -87,6 +95,11 @@
     <Compile Include="Options.cs" />
     <Compile Include="OrigoBootstrapperWrapper.cs" />
     <Compile Include="OrigoConnectionManager.cs" />
+    <Compile Include="Service References\LoginService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="SpotifyPlaylistRadioStation.cs" />
     <Compile Include="SpotifyRadioTrack.cs" />
     <Compile Include="SpotifyRadioTrackPlayer.cs" />
@@ -123,8 +136,19 @@
     <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.Query.AlbumBrowseResult.datasource" />
     <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.Query.ArtistBrowseResult.datasource" />
     <None Include="Properties\DataSources\Torshify.Origo.Contracts.V1.Query.QueryResult.datasource" />
+    <None Include="Service References\LoginService\service.wsdl" />
+    <None Include="Service References\LoginService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LoginService\v1.wsdl" />
+    <None Include="Service References\LoginService\v1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\PlayerControlService\service.wsdl" />
     <None Include="Service References\PlayerControlService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PlayerControlService\Torshify.Origo.Contracts.V1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\PlayerControlService\v1.wsdl" />
@@ -141,6 +165,9 @@
     <None Include="Service References\QueryService\Torshify.Origo.Contracts.V1.Query.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\QueryService\Torshify.Origo.Contracts.V1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\QueryService\v1.wsdl" />
     <None Include="Service References\QueryService\v1.xsd">
       <SubType>Designer</SubType>
@@ -149,12 +176,16 @@
     <None Include="Service References\TrackPlayerService\service.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\TrackPlayerService\Torshify.Origo.Contracts.V1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\TrackPlayerService\v1.wsdl" />
     <None Include="Service References\TrackPlayerService\v1.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\LoginService\" />
     <WCFMetadataStorage Include="Service References\PlayerControlService\" />
     <WCFMetadataStorage Include="Service References\QueryService\" />
     <WCFMetadataStorage Include="Service References\TrackPlayerService\" />
@@ -207,6 +238,12 @@
     <Content Include="Resources\Icons\Spotify_Logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Service References\LoginService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\LoginService\configuration.svcinfo" />
+    <None Include="Service References\LoginService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\Configuration\ConfigurationView.xaml">

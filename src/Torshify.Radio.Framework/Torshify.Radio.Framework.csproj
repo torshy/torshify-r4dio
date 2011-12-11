@@ -101,6 +101,7 @@
     <Compile Include="IBackdropService.cs" />
     <Compile Include="ICommandBar.cs" />
     <Compile Include="IConfiguration.cs" />
+    <Compile Include="IConfigurationContext.cs" />
     <Compile Include="IConfigurationMetadata.cs" />
     <Compile Include="IRadio.cs" />
     <Compile Include="IRadioStation.cs" />

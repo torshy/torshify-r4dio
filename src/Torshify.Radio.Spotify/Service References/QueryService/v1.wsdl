@@ -3,6 +3,7 @@
   <wsdl:types>
     <xsd:schema targetNamespace="http://schemas.torshify/v1/Imports">
       <xsd:import namespace="http://schemas.torshify/v1" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1.Query" />
@@ -14,11 +15,17 @@
   <wsdl:message name="QueryService_Query_OutputMessage">
     <wsdl:part name="parameters" element="tns:QueryResponse" />
   </wsdl:message>
+  <wsdl:message name="QueryService_Query_NotLoggedInFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" name="detail" element="q1:NotLoggedInFault" />
+  </wsdl:message>
   <wsdl:message name="QueryService_AlbumBrowse_InputMessage">
     <wsdl:part name="parameters" element="tns:AlbumBrowse" />
   </wsdl:message>
   <wsdl:message name="QueryService_AlbumBrowse_OutputMessage">
     <wsdl:part name="parameters" element="tns:AlbumBrowseResponse" />
+  </wsdl:message>
+  <wsdl:message name="QueryService_AlbumBrowse_NotLoggedInFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" name="detail" element="q2:NotLoggedInFault" />
   </wsdl:message>
   <wsdl:message name="QueryService_ArtistBrowse_InputMessage">
     <wsdl:part name="parameters" element="tns:ArtistBrowse" />
@@ -26,28 +33,38 @@
   <wsdl:message name="QueryService_ArtistBrowse_OutputMessage">
     <wsdl:part name="parameters" element="tns:ArtistBrowseResponse" />
   </wsdl:message>
+  <wsdl:message name="QueryService_ArtistBrowse_NotLoggedInFaultFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" name="detail" element="q3:NotLoggedInFault" />
+  </wsdl:message>
   <wsdl:message name="QueryService_GetPlaylist_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPlaylist" />
   </wsdl:message>
   <wsdl:message name="QueryService_GetPlaylist_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetPlaylistResponse" />
   </wsdl:message>
+  <wsdl:message name="QueryService_GetPlaylist_NotLoggedInFaultFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1" name="detail" element="q4:NotLoggedInFault" />
+  </wsdl:message>
   <wsdl:portType name="QueryService">
     <wsdl:operation name="Query">
       <wsdl:input wsaw:Action="http://schemas.torshify/v1/QueryService/Query" message="tns:QueryService_Query_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.torshify/v1/QueryService/QueryResponse" message="tns:QueryService_Query_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.torshify/v1/QueryService/QueryNotLoggedInFaultFault" name="NotLoggedInFaultFault" message="tns:QueryService_Query_NotLoggedInFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="AlbumBrowse">
       <wsdl:input wsaw:Action="http://schemas.torshify/v1/QueryService/AlbumBrowse" message="tns:QueryService_AlbumBrowse_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.torshify/v1/QueryService/AlbumBrowseResponse" message="tns:QueryService_AlbumBrowse_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.torshify/v1/QueryService/AlbumBrowseNotLoggedInFaultFault" name="NotLoggedInFaultFault" message="tns:QueryService_AlbumBrowse_NotLoggedInFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="ArtistBrowse">
       <wsdl:input wsaw:Action="http://schemas.torshify/v1/QueryService/ArtistBrowse" message="tns:QueryService_ArtistBrowse_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.torshify/v1/QueryService/ArtistBrowseResponse" message="tns:QueryService_ArtistBrowse_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.torshify/v1/QueryService/ArtistBrowseNotLoggedInFaultFault" name="NotLoggedInFaultFault" message="tns:QueryService_ArtistBrowse_NotLoggedInFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetPlaylist">
       <wsdl:input wsaw:Action="http://schemas.torshify/v1/QueryService/GetPlaylist" message="tns:QueryService_GetPlaylist_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.torshify/v1/QueryService/GetPlaylistResponse" message="tns:QueryService_GetPlaylist_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://schemas.torshify/v1/QueryService/GetPlaylistNotLoggedInFaultFault" name="NotLoggedInFaultFault" message="tns:QueryService_GetPlaylist_NotLoggedInFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

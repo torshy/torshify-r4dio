@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-
+using System.ServiceModel;
 using Microsoft.Practices.Prism.Logging;
 
 using Torshify.Origo.Contracts.V1.Query;
 using Torshify.Radio.Framework;
+using Torshify.Radio.Spotify.LoginService;
 using Torshify.Radio.Spotify.QueryService;
 
 namespace Torshify.Radio.Spotify
 {
     [RadioTrackSourceMetadata(Name = "Spotify")]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class SpotifyRadioTrackSource : IRadioTrackSource
+    public class SpotifyRadioTrackSource : IRadioTrackSource, LoginServiceCallback
     {
         #region Fields
 
@@ -41,6 +42,11 @@ namespace Torshify.Radio.Spotify
         public IEnumerable<RadioTrackContainer> GetAlbumsByArtist(string artist)
         {
             List<RadioTrackContainer> albums = new List<RadioTrackContainer>();
+
+            if (!IsLoggedIn())
+            {
+                return albums;
+            }
 
             QueryServiceClient query = new QueryServiceClient();
 
@@ -92,6 +98,11 @@ namespace Torshify.Radio.Spotify
         public IEnumerable<RadioTrack> GetTracksByArtist(string artist, int offset, int count)
         {
             IEnumerable<RadioTrack> tracks = new RadioTrack[0];
+           
+            if (!IsLoggedIn())
+            {
+                return tracks;
+            }
 
             QueryServiceClient query = new QueryServiceClient();
 
@@ -114,6 +125,11 @@ namespace Torshify.Radio.Spotify
         {
             IEnumerable<RadioTrack> tracks = new RadioTrack[0];
 
+            if (!IsLoggedIn())
+            {
+                return tracks;
+            }
+
             QueryServiceClient query = new QueryServiceClient();
 
             try
@@ -133,8 +149,46 @@ namespace Torshify.Radio.Spotify
 
         public void Initialize()
         {
+
+        }
+
+        private bool IsLoggedIn()
+        {
+            LoginServiceClient client = new LoginServiceClient(new InstanceContext(this));
+
+            try
+            {
+                bool result = client.IsLoggedIn();
+                client.Close();
+                return result;
+            }
+            catch
+            {
+                client.Abort();
+                return false;
+            }
         }
 
         #endregion Methods
+
+        void LoginServiceCallback.OnLoggedIn()
+        {
+            
+        }
+
+        void LoginServiceCallback.OnLoginError(string message)
+        {
+            
+        }
+
+        void LoginServiceCallback.OnLoggedOut()
+        {
+            
+        }
+
+        void LoginServiceCallback.OnPing()
+        {
+            
+        }
     }
 }

@@ -25,6 +25,7 @@
     <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="280b37c6-f82a-4a3b-bff6-6ebdab6a4874" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
     <MetadataFile FileName="v1.xsd" MetadataType="Schema" ID="e4305a9c-00a6-48a9-8897-d75ddb1b7fb8" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
     <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="a2302947-0279-421c-8c25-6ea1ac832a51" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
+    <MetadataFile FileName="Torshify.Origo.Contracts.V1.xsd" MetadataType="Schema" ID="98a8003d-f57f-4ddd-ab48-fb1d2c022809" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

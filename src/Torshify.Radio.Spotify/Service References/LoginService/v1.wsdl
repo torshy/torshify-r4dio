@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://schemas.torshify/v1" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://schemas.torshify/v1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://schemas.torshify/v1/Imports">
+      <xsd:import namespace="http://schemas.torshify/v1" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="LoginService_Subscribe_InputMessage">
+    <wsdl:part name="parameters" element="tns:Subscribe" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_Subscribe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SubscribeResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_Unsubscribe_InputMessage">
+    <wsdl:part name="parameters" element="tns:Unsubscribe" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_Unsubscribe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UnsubscribeResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_IsLoggedIn_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsLoggedIn" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_IsLoggedIn_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsLoggedInResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_GetRememberedUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRememberedUser" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_GetRememberedUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRememberedUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_Login_InputMessage">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_Login_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_ForgetRememberedUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:ForgetRememberedUser" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_ForgetRememberedUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ForgetRememberedUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_Relogin_InputMessage">
+    <wsdl:part name="parameters" element="tns:Relogin" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_Relogin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReloginResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_OnLoggedIn_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnLoggedIn" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_OnLoginError_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnLoginError" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_OnLoggedOut_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnLoggedOut" />
+  </wsdl:message>
+  <wsdl:message name="LoginService_OnPing_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnPing" />
+  </wsdl:message>
+  <wsdl:portType name="LoginService">
+    <wsdl:operation name="Subscribe">
+      <wsdl:input wsaw:Action="http://schemas.torshify/v1/LoginService/Subscribe" message="tns:LoginService_Subscribe_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/LoginService/SubscribeResponse" message="tns:LoginService_Subscribe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Unsubscribe">
+      <wsdl:input wsaw:Action="http://schemas.torshify/v1/LoginService/Unsubscribe" message="tns:LoginService_Unsubscribe_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/LoginService/UnsubscribeResponse" message="tns:LoginService_Unsubscribe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsLoggedIn">
+      <wsdl:input wsaw:Action="http://schemas.torshify/v1/LoginService/IsLoggedIn" message="tns:LoginService_IsLoggedIn_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/LoginService/IsLoggedInResponse" message="tns:LoginService_IsLoggedIn_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRememberedUser">
+      <wsdl:input wsaw:Action="http://schemas.torshify/v1/LoginService/GetRememberedUser" message="tns:LoginService_GetRememberedUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/LoginService/GetRememberedUserResponse" message="tns:LoginService_GetRememberedUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <wsdl:input wsaw:Action="http://schemas.torshify/v1/LoginService/Login" message="tns:LoginService_Login_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/LoginService/LoginResponse" message="tns:LoginService_Login_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ForgetRememberedUser">
+      <wsdl:input wsaw:Action="http://schemas.torshify/v1/LoginService/ForgetRememberedUser" message="tns:LoginService_ForgetRememberedUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/LoginService/ForgetRememberedUserResponse" message="tns:LoginService_ForgetRememberedUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Relogin">
+      <wsdl:input wsaw:Action="http://schemas.torshify/v1/LoginService/Relogin" message="tns:LoginService_Relogin_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/LoginService/ReloginResponse" message="tns:LoginService_Relogin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnLoggedIn">
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/LoginService/OnLoggedIn" message="tns:LoginService_OnLoggedIn_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnLoginError">
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/LoginService/OnLoginError" message="tns:LoginService_OnLoginError_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnLoggedOut">
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/LoginService/OnLoggedOut" message="tns:LoginService_OnLoggedOut_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnPing">
+      <wsdl:output wsaw:Action="http://schemas.torshify/v1/LoginService/OnPing" message="tns:LoginService_OnPing_OutputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

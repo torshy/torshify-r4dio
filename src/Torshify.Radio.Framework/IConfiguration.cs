@@ -6,6 +6,7 @@ namespace Torshify.Radio.Framework
     {
         FrameworkElement UI { get; }
 
+        void Initialize(IConfigurationContext context);
         void Commit();
         void Cancel();
     }
