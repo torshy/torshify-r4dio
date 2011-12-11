@@ -58,6 +58,7 @@ namespace Torshify.Radio.Framework.Behaviors
             {
                 var eventAggregator = ServiceLocator.Current.TryResolve<IEventAggregator>();
                 ArtistCommandsPayload payload = new ArtistCommandsPayload(ArtistName);
+                payload.CommandBar.AddSeparator(ArtistName);
                 element.ContextMenu = new CommandBarContextMenu {DataContext = payload.CommandBar};
                 eventAggregator.GetEvent<ArtistCommandsEvent>().Publish(payload);
             }

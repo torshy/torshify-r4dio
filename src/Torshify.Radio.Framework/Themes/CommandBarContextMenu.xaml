@@ -8,23 +8,8 @@
     <Converters1:StringEmptyToVisibilityConverter
         x:Key="StringEmptyToVisibilityConverter" />
 
-    <LinearGradientBrush
-        x:Key="MenuBackground"
-        EndPoint="0,1"
-        StartPoint="0,0">
-        <GradientStop
-            Color="#F6F6F6"
-            Offset="0.25" />
-        <GradientStop
-            Color="#EAE8E8"
-            Offset="0.25" />
-        <GradientStop
-            Color="#DCD9D9"
-            Offset="0.8" />
-        <GradientStop
-            Color="White"
-            Offset="1" />
-    </LinearGradientBrush>
+    <Converters1:InstanceToObjectTypeConverter
+        x:Key="InstanceToObjectTypeConverter" />
 
     <!--Style which allows a separator to have text inside-->
     <Style
@@ -80,7 +65,8 @@
     </Style>
 
     <Style
-        TargetType="{x:Type Controls:CommandBarContextMenu}">
+        TargetType="{x:Type Controls:CommandBarContextMenu}"
+        BasedOn="{StaticResource {x:Type ContextMenu}}">
         <Style.Resources>
             <DataTemplate
                 DataType="{x:Type Framework:SeparatorCommandModel}">
@@ -104,9 +90,6 @@
             </DataTemplate>
         </Style.Resources>
         <Setter
-            Property="Background"
-            Value="{StaticResource MenuBackground}" />
-        <Setter
             Property="FontFamily"
             Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}" />
         <Setter
@@ -128,7 +111,8 @@
             Property="ItemContainerStyle">
             <Setter.Value>
                 <Style
-                    TargetType="{x:Type MenuItem}">
+                    TargetType="{x:Type MenuItem}"
+                    BasedOn="{StaticResource {x:Type MenuItem}}">
                     <Setter
                         Property="ToolTip"
                         Value="{Binding Tooltip}" />
@@ -147,22 +131,24 @@
                     <Setter
                         Property="VerticalContentAlignment"
                         Value="Center" />
-                    <!--<Style.Triggers>
-                    <Trigger
-                        Property="Role"
-                        Value="SubmenuHeader">
-                        <Setter
-                            Property="Template"
-                            Value="{StaticResource SubmenuHeader}" />
-                    </Trigger>
-                    <Trigger
-                        Property="Role"
-                        Value="SubmenuItem">
-                        <Setter
-                            Property="Template"
-                            Value="{StaticResource SubmenuItem}" />
-                    </Trigger>
-                </Style.Triggers>-->
+                    <Setter
+                        Property="Header"
+                        Value="{Binding}" />
+                    <Style.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Converter={StaticResource InstanceToObjectTypeConverter}}"
+                            Value="{x:Type Framework:SeparatorCommandModel}">
+                            <Setter
+                                Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Separator
+                                            Style="{StaticResource SeparatorStyleKey}" />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
                 </Style>
             </Setter.Value>
         </Setter>
