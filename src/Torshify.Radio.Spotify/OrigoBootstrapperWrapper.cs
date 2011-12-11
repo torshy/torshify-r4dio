@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Practices.ServiceLocation;
 using Torshify.Origo;
-using Torshify.Origo.Host;
 using Torshify.Origo.Extensions;
 
 namespace Torshify.Radio.Spotify

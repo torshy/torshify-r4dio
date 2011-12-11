@@ -10,7 +10,7 @@ using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Grooveshark
 {
-    [RadioTrackPlayerMetadata(Name = "Grooveshark", Icon = "pack://siteoforigin:,,,/Resources/Icons/Grooveshark_Logo.png")]
+    [RadioTrackPlayerMetadata(Name = "Grooveshark", Icon = "pack://siteoforigin:,,,/Modules/Grooveshark/Resources/Icons/Grooveshark_Logo.png")]
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class GroovesharkRadioTrackPlayer : IRadioTrackPlayer
     {

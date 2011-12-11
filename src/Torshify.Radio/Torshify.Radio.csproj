@@ -357,25 +357,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Torshify.Radio.EchoNest\Torshify.Radio.EchoNest.csproj">
-      <Project>{C408ACB6-B967-4D02-8F0C-A8FA70C43E6D}</Project>
-      <Name>Torshify.Radio.EchoNest</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Torshify.Radio.EightTracks\Torshify.Radio.EightTracks.csproj">
-      <Project>{BEE1C46B-6E37-4C0E-81BF-FFCA01C5ECB1}</Project>
-      <Name>Torshify.Radio.EightTracks</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Torshify.Radio.Framework\Torshify.Radio.Framework.csproj">
       <Project>{A14DD4A9-0888-47D2-8FF1-F3E659ECB6EB}</Project>
       <Name>Torshify.Radio.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Torshify.Radio.Grooveshark\Torshify.Radio.Grooveshark.csproj">
-      <Project>{6B47D9DA-A9F7-424D-8789-961697D543BE}</Project>
-      <Name>Torshify.Radio.Grooveshark</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Torshify.Radio.Spotify\Torshify.Radio.Spotify.csproj">
-      <Project>{7916AD21-D3AA-42D6-BDD2-03ECBC429011}</Project>
-      <Name>Torshify.Radio.Spotify</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

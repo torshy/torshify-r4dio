@@ -7,7 +7,7 @@ using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EightTracks
 {
-    [RadioTrackPlayerMetadata(Name = "8tracks", Icon = "pack://siteoforigin:,,,/Resources/Icons/EightTracks_Logo.jpg")]
+    [RadioTrackPlayerMetadata(Name = "8tracks", Icon = "pack://siteoforigin:,,,/Modules/EightTracks/Resources/Icons/EightTracks_Logo.jpg")]
     public class EightTracksRadioTrackPlayer : MediaPlayerRadioTrackPlayer
     {
         #region Fields

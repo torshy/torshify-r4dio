@@ -28,7 +28,15 @@ namespace Torshify.Radio
             base.ConfigureAggregateCatalog();
 
             AggregateCatalog.Catalogs.Add(new AssemblyCatalog(typeof(RadioBootstrapper).Assembly));
-            AggregateCatalog.Catalogs.Add(new DirectoryCatalog(Environment.CurrentDirectory, "Torshify.Radio*.dll"));
+            AggregateCatalog.Catalogs.Add(new DirectoryCatalog(Environment.CurrentDirectory, "Torshify.Radio*.dll")); 
+
+            Directory.CreateDirectory("Modules");
+            var modules = Directory.EnumerateDirectories(Path.Combine(Environment.CurrentDirectory, "Modules"));
+            foreach (var module in modules)
+            {
+                AggregateCatalog.Catalogs.Add(new DirectoryCatalog(module, "*.dll")); 
+            }
+            
         }
 
         protected override Microsoft.Practices.Prism.Logging.ILoggerFacade CreateLogger()
