@@ -21,7 +21,6 @@ namespace Torshify.Radio.EchoNest.Similar
     {
         #region Fields
 
-        private readonly IRadioStationContext _context;
         private readonly IRadio _radio;
 
         private ObservableCollection<string> _autoCompleteSuggestions;
@@ -33,10 +32,9 @@ namespace Torshify.Radio.EchoNest.Similar
 
         #region Constructors
 
-        public SimilarArtistsRadioStationViewModel(IRadio radio, IRadioStationContext context)
+        public SimilarArtistsRadioStationViewModel(IRadio radio)
         {
             _radio = radio;
-            _context = context;
             _autoCompleteSuggestions = new ObservableCollection<string>();
             _similarArtists = new ObservableCollection<SimilarArtistModel>();
 
@@ -162,9 +160,9 @@ namespace Torshify.Radio.EchoNest.Similar
             var enumerator = new ArtistNameToArtistEnumerator();
             enumerator.Initialize(SimilarArtists.Select(s => s.BucketItem).ToArray(), _radio);
 
-            _context
+            _radio.CurrentContext
                 .SetTrackProvider(enumerator.DoIt)
-                .ContinueWith(t => _context.GoToTracks(), TaskScheduler.FromCurrentSynchronizationContext());
+                .ContinueWith(t => _radio.CurrentContext.GoToTracks(), TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         private void ExecutePlay(SimilarArtistModel artist)
@@ -173,10 +171,10 @@ namespace Torshify.Radio.EchoNest.Similar
             enumerator.NumberOfTracksPerArtist = 200;
             enumerator.Initialize(new[] { artist.BucketItem }, _radio);
 
-            _context
+            _radio.CurrentContext
                 .SetTrackProvider(enumerator.DoIt)
                 .ContinueWith(
-                    t => _context.GoToTracks(),
+                    t => _radio.CurrentContext.GoToTracks(),
                     CancellationToken.None,
                     TaskContinuationOptions.OnlyOnRanToCompletion,
                     TaskScheduler.FromCurrentSynchronizationContext());
