@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 using Grooveshark_Sharp;
 using Grooveshark_Sharp.TinySong;
-
+using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Logging;
-
+using Microsoft.Practices.ServiceLocation;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Grooveshark
@@ -257,8 +257,15 @@ namespace Torshify.Radio.Grooveshark
         {
             Task.Factory.StartNew(() =>
                                       {
-                                          Session = new GroovesharkSession();
-                                          Session.Connect();
+                                          try
+                                          {
+                                              Session = new GroovesharkSession();
+                                              Session.Connect();
+                                          }
+                                          catch (Exception e)
+                                          {
+                                              _logger.Log("Error while connecting to Grooveshark. " + e, Category.Exception, Priority.Medium);
+                                          }
                                       });
         }
 
