@@ -1,0 +1,79 @@
+﻿<UserControl
+    x:Class="Torshify.Radio.Framework.Controls.RangeSlider"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Name="root">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ControlTemplate
+                x:Key="simpleSlider"
+                TargetType="{x:Type Slider}">
+                <Border
+                    SnapsToDevicePixels="true"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="Auto" />
+                            <RowDefinition
+                                Height="Auto"
+                                MinHeight="{TemplateBinding MinHeight}" />
+                            <RowDefinition
+                                Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Rectangle
+                            x:Name="PART_SelectionRange" />
+
+                        <Track
+                            x:Name="PART_Track"
+                            Grid.Row="1">
+                            <Track.Thumb>
+                                <Thumb
+                                    x:Name="Thumb"
+                                    Style="{StaticResource ResourceKey=HorizontalSliderThumbStyle}" />
+                            </Track.Thumb>
+                        </Track>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary
+                    Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/RangeSliderResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid
+        VerticalAlignment="Center"
+        Background="Transparent">
+        <Border
+            BorderBrush="DarkGray"
+            Background="#FFCCCCCC"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch" />
+
+        <Slider
+            x:Name="LowerSlider"
+            VerticalAlignment="Top"
+            IsEnabled="{Binding ElementName=root, Path=IsLowerSliderEnabled, Mode=TwoWay}"
+            Minimum="{Binding ElementName=root, Path=Minimum}"
+            Maximum="{Binding ElementName=root, Path=Maximum}"
+            Value="{Binding ElementName=root, Path=LowerValue, Mode=OneWay}"
+            Template="{StaticResource simpleSlider}"
+            Margin="0,0,10,0"
+            SmallChange="{Binding ElementName=root, Path=SmallChange}"
+            LargeChange="{Binding ElementName=root, Path=LargeChange}" />
+
+        <Slider
+            x:Name="UpperSlider"
+            IsEnabled="{Binding ElementName=root, Path=IsUpperSliderEnabled, Mode=TwoWay}"
+            Minimum="{Binding ElementName=root, Path=Minimum}"
+            Maximum="{Binding ElementName=root, Path=Maximum}"
+            Value="{Binding ElementName=root, Path=UpperValue, Mode=OneWay}"
+            Template="{StaticResource simpleSlider}"
+            Margin="10,0,0,0"
+            SmallChange="{Binding ElementName=root, Path=SmallChange}"
+            LargeChange="{Binding ElementName=root, Path=LargeChange}" />
+    </Grid>
+</UserControl>

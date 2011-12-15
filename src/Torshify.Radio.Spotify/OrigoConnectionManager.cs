@@ -44,6 +44,9 @@ namespace Torshify.Radio.Spotify
             {
                 if (!_initialized)
                 {
+                    Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>");
+                    _initialized = true;
+
                     AppDomainSetup setup = new AppDomainSetup();
                     setup.ApplicationName = "Spotify";
                     setup.ApplicationBase = Environment.CurrentDirectory;
@@ -64,8 +67,6 @@ namespace Torshify.Radio.Spotify
                         InitializeCommandLineOptions(Environment.GetCommandLineArgs(), host);
                         host.Run();
                     }
-
-                    _initialized = true;
                 }
             }
             catch (Exception e)

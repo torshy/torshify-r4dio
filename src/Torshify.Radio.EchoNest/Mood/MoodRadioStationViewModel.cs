@@ -85,7 +85,7 @@ namespace Torshify.Radio.EchoNest.Mood
                     TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        private IEnumerable<TermModel> GetAvailableMoods()
+        public static IEnumerable<TermModel> GetAvailableMoods()
         {
             try
             {

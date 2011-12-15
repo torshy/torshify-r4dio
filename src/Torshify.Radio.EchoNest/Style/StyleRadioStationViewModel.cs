@@ -85,7 +85,7 @@ namespace Torshify.Radio.EchoNest.Style
                     TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        private IEnumerable<TermModel> GetAvailableStyles()
+        public static IEnumerable<TermModel> GetAvailableStyles()
         {
             try
             {

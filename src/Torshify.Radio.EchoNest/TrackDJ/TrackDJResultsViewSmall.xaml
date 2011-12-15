@@ -1,0 +1,91 @@
+﻿<UserControl
+    x:Class="Torshify.Radio.EchoNest.TrackDJ.TrackDJResultsViewSmall"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:StringToUpperConverter
+            x:Key="StringToUpperConverter" />
+    </UserControl.Resources>
+    <ListBox
+        ItemsSource="{Binding Results}"
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        BorderThickness="0">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <DockPanel
+                    Height="50"
+                    LastChildFill="True">
+                    <Button
+                        Width="50"
+                        Name="MixArtButton"
+                        Padding="2"
+                        Background="#FF00C0FF"
+                        BorderThickness="0"
+                        Command="{x:Static Framework:GlobalCommands.PlayCommand}"
+                        CommandParameter="{Binding}">
+                        <Grid>
+                            <Image
+                                RenderOptions.BitmapScalingMode="HighQuality"
+                                Stretch="UniformToFill">
+                                <Image.Source>
+                                    <Binding
+                                        Path="AlbumArt" />
+                                </Image.Source>
+                            </Image>
+                            <Border
+                                Name="PlayImage"
+                                Background="#88000000"
+                                Visibility="Collapsed">
+                                <Image
+                                    RenderOptions.BitmapScalingMode="HighQuality"
+                                    Stretch="UniformToFill"
+                                    Source="pack://application:,,,/Torshify.Radio;component/Resources/SmallIcons/play.png" />
+                            </Border>
+                        </Grid>
+                    </Button>
+                    <StackPanel
+                        Margin="4,0,0,4">
+                        <TextBlock
+                            Text="{Binding Name, Mode=OneWay}"
+                            TextTrimming="CharacterEllipsis"
+                            FontSize="16" />
+                        <TextBlock>
+                            <Hyperlink
+                                Command="{Binding DataContext.GoToArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding Artist}">
+                                <TextBlock
+                                    Text="{Binding Artist, Mode=OneWay, Converter={StaticResource StringToUpperConverter}}"
+                                    TextTrimming="CharacterEllipsis"
+                                    FontWeight="Bold"
+                                    FontSize="12" />
+                            </Hyperlink>
+                            <i:Interaction.Behaviors>
+                                <Behaviors:ArtistCommandsBehavior
+                                    ArtistName="{Binding Artist}" />
+                            </i:Interaction.Behaviors>
+                        </TextBlock>
+                    </StackPanel>
+                </DockPanel>
+                <DataTemplate.Triggers>
+                    <DataTrigger
+                        Binding="{Binding IsMouseOver, ElementName=MixArtButton}"
+                        Value="True">
+                        <Setter
+                            Property="Visibility"
+                            TargetName="PlayImage"
+                            Value="Visible" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
+</UserControl>

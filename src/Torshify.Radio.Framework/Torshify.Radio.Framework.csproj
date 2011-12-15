@@ -64,6 +64,7 @@
     <Compile Include="Commands\AutomaticCompositeCommand.cs" />
     <Compile Include="Commands\CanExecuteChangedCore.cs" />
     <Compile Include="Commands\CompositeCommand.cs" />
+    <Compile Include="Commands\EventToCommand.cs" />
     <Compile Include="Commands\INotifyPropertyChanged\INotifyPropertyChangedExtensions.cs" />
     <Compile Include="Commands\INotifyPropertyChanged\NotifyPropertyChangedBase.cs" />
     <Compile Include="Commands\INotifyPropertyChanged\NotifyPropertyChangedCore.cs" />
@@ -83,6 +84,9 @@
     <Compile Include="Controls\CommandBarContextMenu.cs" />
     <Compile Include="Controls\HeaderedScrollViewer.cs" />
     <Compile Include="Controls\HeaderedTreeView.cs" />
+    <Compile Include="Controls\RangeSlider.xaml.cs">
+      <DependentUpon>RangeSlider.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SizeControlTemplate.cs" />
     <Compile Include="Controls\SizeControlTemplateCollection.cs" />
     <Compile Include="Controls\SizeTemplateControl.cs" />
@@ -124,7 +128,15 @@
     <Compile Include="ViewData.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\RangeSlider.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\CommandBarContextMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\RangeSliderResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -108,8 +108,22 @@ namespace Torshify.Radio.Spotify
 
             try
             {
-                QueryResult result = query.Query(artist, offset, count, 0, 0, 0, 0);
-                tracks = result.Tracks.Select(SpotifyRadioTrackPlayer.ConvertTrack).ToArray();
+                var queryResult = query.Query(artist, 0, 0, 0, 0, 0, 10);
+                var result =
+                    queryResult.Artists.FirstOrDefault(
+                        a => a.Name.Equals(artist, StringComparison.InvariantCultureIgnoreCase));
+
+                if (result == null && queryResult.Artists.Any())
+                {
+                    result = queryResult.Artists.FirstOrDefault();
+                }
+
+                if (result != null)
+                {
+                    var browse = query.ArtistBrowse(result.ID, ArtistBrowsingType.Full);
+                    tracks = browse.Tracks.Skip(offset).Take(count).Select(SpotifyRadioTrackPlayer.ConvertTrack).ToArray();
+                }
+
                 query.Close();
             }
             catch (Exception e)
