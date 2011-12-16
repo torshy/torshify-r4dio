@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:EchoNest="clr-namespace:Torshify.Radio.EchoNest"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -14,116 +15,128 @@
             Maximum="2.0" />
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter" />
+        <Converters:BoolToVisibleOrHidden
+            Collapse="True"
+            Reverse="True"
+            x:Key="BooleanToVisibilityConverterReversed" />
     </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition
-                Height="Auto" />
-        </Grid.RowDefinitions>
-        <ListBox
-            x:Name="MoodList"
-            x:FieldModifier="private"
-            ItemsSource="{Binding AvailableTerms}"
-            SelectionMode="Multiple"
-            BorderThickness="0"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            UseLayoutRounding="True"
-            Foreground="Black">
-            <ListBox.ItemContainerStyle>
-                <Style
-                    TargetType="{x:Type ListBoxItem}"
-                    BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                    <Style.Resources>
-                        <SolidColorBrush
-                            x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                            Color="Transparent" />
-                        <SolidColorBrush
-                            x:Key="{x:Static SystemColors.ControlBrushKey}"
-                            Color="Transparent" />
-                    </Style.Resources>
-                </Style>
-            </ListBox.ItemContainerStyle>
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel
-                        Name="OuterPanel"
-                        LastChildFill="True">
+        <Grid
+            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverterReversed}}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition
+                    Height="Auto" />
+            </Grid.RowDefinitions>
+            <ListBox
+                x:Name="MoodList"
+                x:FieldModifier="private"
+                ItemsSource="{Binding AvailableTerms}"
+                SelectionMode="Multiple"
+                BorderThickness="0"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                UseLayoutRounding="True"
+                Foreground="Black">
+                <ListBox.ItemContainerStyle>
+                    <Style
+                        TargetType="{x:Type ListBoxItem}"
+                        BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                        <Style.Resources>
+                            <SolidColorBrush
+                                x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                Color="Transparent" />
+                            <SolidColorBrush
+                                x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                Color="Transparent" />
+                        </Style.Resources>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
                         <DockPanel
-                            LastChildFill="True"
-                            MinWidth="125">
-                            <Rectangle
-                                Name="BoostRectangle"
-                                DockPanel.Dock="Right"
-                                Width="20"
-                                Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                Fill="{Binding Value, ElementName=BoostSlider, Converter={StaticResource ValueToIntensityBrushConverter}}" />
-                            <TextBlock
-                                Name="TermTextBox"
-                                DockPanel.Dock="Top"
-                                Text="{Binding Name}"
-                                Foreground="Black" />
-                            <Popup
-                                IsOpen="{Binding IsMouseOver, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
-                                AllowsTransparency="True">
-                                <Border
+                            Name="OuterPanel"
+                            LastChildFill="True">
+                            <DockPanel
+                                LastChildFill="True"
+                                MinWidth="125">
+                                <Rectangle
+                                    Name="BoostRectangle"
+                                    DockPanel.Dock="Right"
+                                    Width="20"
                                     Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    Background="WhiteSmoke"
-                                    BorderBrush="Black"
-                                    BorderThickness="1"
-                                    Width="125">
-                                    <Border.Effect>
-                                        <DropShadowEffect />
-                                    </Border.Effect>
-                                    <DockPanel
-                                        LastChildFill="True">
-                                        <TextBlock
-                                            DockPanel.Dock="Bottom"
-                                            FontSize="10"
-                                            Text="The higher the boost factor, the more relevant the term will be."
-                                            Foreground="Black"
-                                            TextWrapping="Wrap" />
-                                        <Slider
-                                            Height="20"
-                                            Name="BoostSlider"
-                                            Minimum="0"
-                                            Maximum="2"
-                                            SmallChange="0.1"
-                                            LargeChange="0.5"
-                                            Value="{Binding Boost}"
-                                            Cursor="Hand" />
-                                    </DockPanel>
-                                </Border>
-                            </Popup>
+                                    Fill="{Binding Value, ElementName=BoostSlider, Converter={StaticResource ValueToIntensityBrushConverter}}" />
+                                <TextBlock
+                                    Name="TermTextBox"
+                                    DockPanel.Dock="Top"
+                                    Text="{Binding Name}"
+                                    Foreground="Black" />
+                                <Popup
+                                    IsOpen="{Binding IsMouseOver, Mode=OneWay, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
+                                    AllowsTransparency="True">
+                                    <Border
+                                        Visibility="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Background="WhiteSmoke"
+                                        BorderBrush="Black"
+                                        BorderThickness="1"
+                                        Width="125">
+                                        <Border.Effect>
+                                            <DropShadowEffect />
+                                        </Border.Effect>
+                                        <DockPanel
+                                            LastChildFill="True">
+                                            <TextBlock
+                                                DockPanel.Dock="Bottom"
+                                                FontSize="10"
+                                                Text="The higher the boost factor, the more relevant the term will be."
+                                                Foreground="Black"
+                                                TextWrapping="Wrap" />
+                                            <Slider
+                                                Height="20"
+                                                Name="BoostSlider"
+                                                Minimum="0"
+                                                Maximum="2"
+                                                SmallChange="0.1"
+                                                LargeChange="0.5"
+                                                Value="{Binding Boost}"
+                                                Cursor="Hand" />
+                                        </DockPanel>
+                                    </Border>
+                                </Popup>
+                            </DockPanel>
                         </DockPanel>
-                    </DockPanel>
-                    <DataTemplate.Triggers>
-                        <DataTrigger
-                            Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
-                            Value="True">
-                            <Setter
-                                Property="Background"
-                                Value="Black"
-                                TargetName="OuterPanel" />
-                            <Setter
-                                Property="Foreground"
-                                Value="White"
-                                TargetName="TermTextBox" />
-                        </DataTrigger>
-                    </DataTemplate.Triggers>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <Button
-            Margin="0,4,0,4"
-            Grid.Row="1"
-            Content="create playlist"
-            Command="{Binding CreatePlaylistCommand}"
-            CommandParameter="{Binding SelectedItems, ElementName=MoodList}" />
+                        <DataTemplate.Triggers>
+                            <DataTrigger
+                                Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}"
+                                Value="True">
+                                <Setter
+                                    Property="Background"
+                                    Value="Black"
+                                    TargetName="OuterPanel" />
+                                <Setter
+                                    Property="Foreground"
+                                    Value="White"
+                                    TargetName="TermTextBox" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button
+                Margin="0,4,0,4"
+                Grid.Row="1"
+                Content="create playlist"
+                Command="{Binding CreatePlaylistCommand}"
+                CommandParameter="{Binding SelectedItems, ElementName=MoodList}" />
+        </Grid>
+        <ProgressBar
+            VerticalAlignment="Bottom"
+            Style="{DynamicResource ProgressBar_LoadingDots}"
+            IsIndeterminate="{Binding IsLoading}"
+            Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

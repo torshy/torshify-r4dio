@@ -22,6 +22,7 @@ namespace Torshify.Radio.EchoNest.Style
         private readonly IRadio _radio;
 
         private IEnumerable<TermModel> _currentTermList;
+        private bool _isLoading;
 
         #endregion Fields
 
@@ -35,6 +36,8 @@ namespace Torshify.Radio.EchoNest.Style
             _radio = radio;
             _context = context;
 
+            IsLoading = true;
+
             var ui = TaskScheduler.FromCurrentSynchronizationContext();
             Task<IEnumerable<TermModel>>.Factory
                 .StartNew(GetAvailableStyles)
@@ -46,6 +49,8 @@ namespace Torshify.Radio.EchoNest.Style
                     {
                         AvailableTerms.Add(termModel);
                     }
+
+                    IsLoading = false;
                 }, ui);
         }
 
@@ -63,6 +68,19 @@ namespace Torshify.Radio.EchoNest.Style
         {
             get;
             private set;
+        }
+
+        public bool IsLoading
+        {
+            get
+            {
+                return _isLoading;
+            }
+            private set
+            {
+                _isLoading = value;
+                RaisePropertyChanged("IsLoading");
+            }
         }
 
         #endregion Properties
