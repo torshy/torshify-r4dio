@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,7 +13,12 @@ namespace Torshify.Radio.EchoNest.TrackDJ
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class TrackDJSetupView : UserControl
     {
+        #region Fields
+
+        private RectLatLng _currentViewArea;
         private GMapControl _map;
+
+        #endregion Fields
 
         #region Constructors
 
@@ -20,28 +26,10 @@ namespace Torshify.Radio.EchoNest.TrackDJ
         {
             InitializeComponent();
 
+            _currentViewArea = new RectLatLng();
+
             Loaded += SetupViewLoaded;
             Unloaded += SetupViewUnloaded;
-            
-        }
-
-        private void SetupViewUnloaded(object sender, RoutedEventArgs e)
-        {
-            _map = null;
-            MapDecorator.Child = null;
-        }
-
-        private void SetupViewLoaded(object sender, RoutedEventArgs e)
-        {
-            _map = new GMapControl();
-            _map.MapProvider = GMapProviders.OviMap;
-            _map.MaxZoom = 24;
-            _map.Zoom = 1;
-
-            Model.GetViewArea = () => _map.ViewArea;
-            Model.GetSelectedArea = () => _map.SelectedArea;
-
-            MapDecorator.Child = _map;
         }
 
         #endregion Constructors
@@ -63,5 +51,56 @@ namespace Torshify.Radio.EchoNest.TrackDJ
         }
 
         #endregion Properties
+
+        #region Methods
+
+        private void MapOnOnMapZoomChanged()
+        {
+            _currentViewArea = _map.ViewArea;
+        }
+
+        private void MapOnOnPositionChanged(PointLatLng point)
+        {
+            _currentViewArea = _map.ViewArea;
+        }
+
+        private void SetupViewLoaded(object sender, RoutedEventArgs e)
+        {
+            _map = new GMapControl();
+            _map.MapProvider = GMapProviders.OviMap;
+            _map.MaxZoom = 24;
+            _map.Zoom = 1;
+            _map.OnPositionChanged += MapOnOnPositionChanged;
+            _map.OnMapZoomChanged += MapOnOnMapZoomChanged;
+
+            if (!_currentViewArea.IsEmpty)
+            {
+                _map.SetZoomToFitRect(_currentViewArea);
+            }
+
+            Model.GetViewArea = () => _currentViewArea;
+            Model.GetSelectedArea = () =>
+                                        {
+                                            if (_map != null)
+                                            {
+                                                return _map.SelectedArea;
+                                            }
+
+                                            return new RectLatLng();
+                                        };
+
+            MapDecorator.Child = _map;
+        }
+
+        private void SetupViewUnloaded(object sender, RoutedEventArgs e)
+        {
+            _map.OnMapZoomChanged -= MapOnOnMapZoomChanged;
+            _map.OnPositionChanged -= MapOnOnPositionChanged;
+            _map = null;
+
+            MapDecorator.Child = null;
+        }
+
+        #endregion Methods
     }
 }

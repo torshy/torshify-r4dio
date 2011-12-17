@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
+using System.Net.Mime;
 using System.Threading.Tasks;
-
+using System.Windows;
 using EchoNest;
+using EchoNest.Artist;
 using EchoNest.Song;
 
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
-using Torshify.Radio.Framework.Common;
 using System.Linq;
+using Search = EchoNest.Song.Search;
 
 namespace Torshify.Radio.EchoNest.TrackDJ
 {
@@ -88,57 +91,93 @@ namespace Torshify.Radio.EchoNest.TrackDJ
 
         private void StartSearch(TrackDJSetupViewModel setup)
         {
-            var ui = TaskScheduler.FromCurrentSynchronizationContext();
+            _tracks.Clear();
             Task.Factory.StartNew(() =>
             {
                 List<RadioTrack> allTracks = new List<RadioTrack>();
 
                 IsLoading = true;
-                using (EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
+
+                try
                 {
-                    var arg = setup.CreateSearchArgument();
-                    var result = session.Query<Search>().Execute(arg);
-
-                    if (result != null && result.Status.Code == ResponseCode.Success)
+                    using (EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
                     {
-                        var artists = result.Songs.GroupBy(s => s.ArtistName);
+                        var arg = setup.CreateSearchArgument();
+                        arg.Bucket = SongBucket.ArtistLocation;
 
-                        foreach (var artist in artists)
+                        var result = session.Query<Search>().Execute(arg);
+
+                        if (result == null)
                         {
-                            var tracks = _radio.GetTracksByArtist(artist.Key, 0, 100);
-
-                            foreach (var songBucketItem in artist)
-                            {
-                                var track = tracks.FirstOrDefault(
-                                    t =>
-                                    t.Name.Equals(songBucketItem.Title, StringComparison.InvariantCultureIgnoreCase));
-
-                                if (track != null)
-                                {
-                                    allTracks.Add(track);
-                                }
-                            }
+                            result = session.Query<Search>().Execute(arg);
                         }
-                        foreach (var song in result.Songs)
+
+                        if (result != null && result.Status.Code == ResponseCode.Success)
                         {
-                            var tracks = _radio.GetTracksByName(song.ArtistName + " " + song.Title, 0, 1);
-                            allTracks.AddRange(tracks);
+                            var artists = result.Songs.GroupBy(s => s.ArtistName);
+
+                            Parallel.ForEach(artists, artist =>
+                            {
+                                var tracks = _radio.GetTracksByArtist(artist.Key, 0, 100);
+
+                                foreach (var songBucketItem in artist)
+                                {
+                                    var track = tracks.FirstOrDefault(
+                                        t =>
+                                        t.Name.Equals(songBucketItem.Title,
+                                                    StringComparison.
+                                                        InvariantCultureIgnoreCase));
+
+                                    if (track != null)
+                                    {
+                                        track.ExtraData.Terms = null;
+
+                                        Task
+                                            .Factory
+                                            .StartNew(FindArtistInformation,
+                                                    Tuple.Create(track, songBucketItem));
+
+                                        allTracks.Add(track);
+                                        Application.Current.Dispatcher.BeginInvoke(
+                                            new Action<RadioTrack>(_tracks.Add), track);
+                                    }
+                                }
+                            });
                         }
                     }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                 }
 
                 IsLoading = false;
                 return allTracks;
-            })
-            .ContinueWith(t =>
-            {
-                _tracks.Clear();
+            });
+        }
 
-                foreach (var radioTrack in t.Result)
+        private void FindArtistInformation(object obj)
+        {
+            Tuple<RadioTrack, SongBucketItem> tuple = (Tuple<RadioTrack, SongBucketItem>)obj;
+            RadioTrack radioTrack = tuple.Item1;
+            SongBucketItem songItem = tuple.Item2;
+            
+            try
+            {
+                using (EchoNestSession session = new EchoNestSession(EchoNestConstants.ApiKey))
                 {
-                    _tracks.Add(radioTrack);
+                    var response = session.Query<Profile>().Execute(new IdSpace(songItem.ArtistID), ArtistBucket.Terms);
+
+                    if (response != null && response.Status.Code == ResponseCode.Success)
+                    {
+                        radioTrack.ExtraData.Terms = response.Artist.Terms.Take(3);
+                    }
                 }
-            }, ui);
+            }
+            catch(Exception ex)
+            {
+                
+            }
         }
 
         #endregion Methods
