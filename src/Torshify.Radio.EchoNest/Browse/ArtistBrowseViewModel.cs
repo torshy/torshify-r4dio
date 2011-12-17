@@ -173,13 +173,26 @@ namespace Torshify.Radio.EchoNest.Browse
             var track = parameter as RadioTrack;
             if (track != null)
             {
+                List<RadioTrack> tracks = new List<RadioTrack>();
+
+                bool foundTrack = false;
                 foreach (var album in CurrentArtist.Albums)
                 {
                     if (album.Tracks.Contains(track))
                     {
                         var remaining = album.Tracks.SkipWhile(t => t != track).ToArray();
-                        _radio.CurrentContext.SetTrackProvider(() => remaining);
+                        tracks.AddRange(remaining);
+                        foundTrack = true;
                     }
+                    else if (foundTrack)
+                    {
+                        tracks.AddRange(album.Tracks);
+                    }
+                }
+
+                if (tracks.Count > 0)
+                {
+                    _radio.CurrentContext.SetTrackProvider(() => tracks);
                 }
             }
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.ServiceModel;
+
 using Microsoft.Practices.Prism.Logging;
 
 using Torshify.Origo.Contracts.V1.Query;
@@ -65,7 +66,7 @@ namespace Torshify.Radio.Spotify
                 if (result != null)
                 {
                     var browse = query.ArtistBrowse(result.ID, ArtistBrowsingType.Full);
-                    var albumGroups = browse.Tracks.GroupBy(t => t.Album.ID);
+                    var albumGroups = browse.Tracks.Where(t => t.IsAvailable).GroupBy(t => t.Album.ID);
 
                     foreach (var albumGroup in albumGroups)
                     {
@@ -98,7 +99,7 @@ namespace Torshify.Radio.Spotify
         public IEnumerable<RadioTrack> GetTracksByArtist(string artist, int offset, int count)
         {
             IEnumerable<RadioTrack> tracks = new RadioTrack[0];
-           
+
             if (!IsLoggedIn())
             {
                 return tracks;
@@ -121,7 +122,11 @@ namespace Torshify.Radio.Spotify
                 if (result != null)
                 {
                     var browse = query.ArtistBrowse(result.ID, ArtistBrowsingType.Full);
-                    tracks = browse.Tracks.Skip(offset).Take(count).Select(SpotifyRadioTrackPlayer.ConvertTrack).ToArray();
+                    tracks = browse.Tracks
+                        .Where(t => t.IsAvailable)
+                        .Skip(offset)
+                        .Take(count)
+                        .Select(SpotifyRadioTrackPlayer.ConvertTrack).ToArray();
                 }
 
                 query.Close();
@@ -149,7 +154,11 @@ namespace Torshify.Radio.Spotify
             try
             {
                 QueryResult result = query.Query(name, offset, count, 0, 0, 0, 0);
-                tracks = result.Tracks.Select(SpotifyRadioTrackPlayer.ConvertTrack).ToArray();
+                tracks = result.Tracks
+                    .Where(t => t.IsAvailable)
+                    .Select(SpotifyRadioTrackPlayer.ConvertTrack)
+                    .ToArray();
+
                 query.Close();
             }
             catch (Exception e)
@@ -163,7 +172,22 @@ namespace Torshify.Radio.Spotify
 
         public void Initialize()
         {
+        }
 
+        void LoginServiceCallback.OnLoggedIn()
+        {
+        }
+
+        void LoginServiceCallback.OnLoggedOut()
+        {
+        }
+
+        void LoginServiceCallback.OnLoginError(string message)
+        {
+        }
+
+        void LoginServiceCallback.OnPing()
+        {
         }
 
         private bool IsLoggedIn()
@@ -184,25 +208,5 @@ namespace Torshify.Radio.Spotify
         }
 
         #endregion Methods
-
-        void LoginServiceCallback.OnLoggedIn()
-        {
-            
-        }
-
-        void LoginServiceCallback.OnLoginError(string message)
-        {
-            
-        }
-
-        void LoginServiceCallback.OnLoggedOut()
-        {
-            
-        }
-
-        void LoginServiceCallback.OnPing()
-        {
-            
-        }
     }
 }
