@@ -34,7 +34,7 @@ namespace Torshify.Radio
             var modules = Directory.EnumerateDirectories(Path.Combine(Environment.CurrentDirectory, "Modules"));
             foreach (var module in modules)
             {
-                AggregateCatalog.Catalogs.Add(new DirectoryCatalog(module, "*.dll")); 
+                AggregateCatalog.Catalogs.Add(new DirectoryCatalog(module, "Torshify.Radio*.dll")); 
             }
             
         }
