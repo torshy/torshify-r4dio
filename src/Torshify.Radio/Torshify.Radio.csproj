@@ -40,6 +40,9 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\r4dio_app.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Torshify.Radio.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
@@ -55,6 +58,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Windows.Controls.Input.Toolkit, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\WpfToolkit\System.Windows.Controls.Input.Toolkit.dll</HintPath>
     </Reference>
@@ -80,10 +84,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    </Page>
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
@@ -165,6 +169,7 @@
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Converters\UriToImageSourceConverter.cs" />
     <Compile Include="Services\InactivityNotificatorService.cs" />
+    <Compile Include="SingleInstance.cs" />
     <Compile Include="Views\Configuration\ConfigurationView.xaml.cs">
       <DependentUpon>ConfigurationView.xaml</DependentUpon>
     </Compile>
