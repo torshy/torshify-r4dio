@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using Torshify.Origo;
 using Torshify.Origo.Host;
 
@@ -44,44 +45,35 @@ namespace Torshify.Radio.Spotify
             {
                 if (!_initialized)
                 {
-                    Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>");
                     _initialized = true;
 
-                    AppDomainSetup setup = new AppDomainSetup();
-                    setup.ApplicationName = "Spotify";
-                    setup.ApplicationBase = Environment.CurrentDirectory;
-                    setup.PrivateBinPath = Path.Combine("Modules", "Spotify");
-                    setup.PrivateBinPathProbe = "true";
+                    Task.Factory.StartNew(() =>
+                                          {
+                                              AppDomainSetup setup = new AppDomainSetup();
+                                              setup.ApplicationName = "Spotify";
+                                              setup.ApplicationBase = Environment.CurrentDirectory;
+                                              setup.PrivateBinPath = Path.Combine("Modules", "Spotify");
+                                              setup.PrivateBinPathProbe = "true";
 
-                    AppDomain origoDomain = AppDomain.CreateDomain("OrigoDomain", null, setup);
-                    origoDomain.UnhandledException += OrigoDomainOnUnhandledException;
-                    AppDomain.CurrentDomain.AssemblyResolve += OrigoDomainOnAssemblyResolve;
-                    AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
-                    OrigoBootstrapper host = origoDomain.CreateInstanceAndUnwrap(
-                        typeof(OrigoBootstrapper).Assembly.FullName,
-                        "Torshify.Origo.OrigoBootstrapper") as OrigoBootstrapper;
-                    AppDomain.CurrentDomain.AssemblyResolve -= OrigoDomainOnAssemblyResolve;
+                                              AppDomain origoDomain = AppDomain.CreateDomain("OrigoDomain", null, setup);
+                                              AppDomain.CurrentDomain.AssemblyResolve += OrigoDomainOnAssemblyResolve;
+                                              OrigoBootstrapper host = origoDomain.CreateInstanceAndUnwrap(
+                                                  typeof (OrigoBootstrapper).Assembly.FullName,
+                                                  "Torshify.Origo.OrigoBootstrapper") as OrigoBootstrapper;
+                                              AppDomain.CurrentDomain.AssemblyResolve -= OrigoDomainOnAssemblyResolve;
 
-                    if (host != null)
-                    {
-                        InitializeCommandLineOptions(Environment.GetCommandLineArgs(), host);
-                        host.Run();
-                    }
+                                              if (host != null)
+                                              {
+                                                  InitializeCommandLineOptions(Environment.GetCommandLineArgs(), host);
+                                                  host.Run();
+                                              }
+                                          });
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-        }
-
-        private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
-        {
-        }
-
-        private void OrigoDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs unhandledExceptionEventArgs)
-        {
-
         }
 
         private Assembly OrigoDomainOnAssemblyResolve(object sender, ResolveEventArgs args)

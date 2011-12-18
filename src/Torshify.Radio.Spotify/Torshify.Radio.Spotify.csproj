@@ -93,7 +93,6 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Options.cs" />
-    <Compile Include="OrigoBootstrapperWrapper.cs" />
     <Compile Include="OrigoConnectionManager.cs" />
     <Compile Include="Service References\LoginService\Reference.cs">
       <AutoGen>True</AutoGen>
