@@ -125,6 +125,7 @@
     <Compile Include="RadioTrackContainer.cs" />
     <Compile Include="TrackEventArgs.cs" />
     <Compile Include="TrackProgressEventArgs.cs" />
+    <Compile Include="TrackProvider.cs" />
     <Compile Include="ViewData.cs" />
   </ItemGroup>
   <ItemGroup>

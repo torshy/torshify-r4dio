@@ -151,23 +151,20 @@ namespace Torshify.Radio.EchoNest.Browse
             var artist = parameter as ArtistModel;
             if (artist != null)
             {
-                _radio.CurrentContext.SetTrackProvider(() =>
+                List<RadioTrack> tracks = new List<RadioTrack>();
+
+                foreach (var album in artist.Albums)
                 {
-                    List<RadioTrack> tracks = new List<RadioTrack>();
+                    tracks.AddRange(album.Tracks);
+                }
 
-                    foreach (var album in artist.Albums)
-                    {
-                        tracks.AddRange(album.Tracks);
-                    }
-
-                    return tracks;
-                });
+                _radio.CurrentContext.SetTrackProvider(new TrackProvider(() => tracks));
             }
 
             var container = parameter as RadioTrackContainer;
             if (container != null)
             {
-                _radio.CurrentContext.SetTrackProvider(() => container.Tracks);
+                _radio.CurrentContext.SetTrackProvider(new TrackProvider(() => container.Tracks));
             }
 
             var track = parameter as RadioTrack;
@@ -192,7 +189,7 @@ namespace Torshify.Radio.EchoNest.Browse
 
                 if (tracks.Count > 0)
                 {
-                    _radio.CurrentContext.SetTrackProvider(() => tracks);
+                    _radio.CurrentContext.SetTrackProvider(new TrackProvider(() => tracks));
                 }
             }
         }

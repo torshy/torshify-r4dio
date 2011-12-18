@@ -22,7 +22,7 @@ namespace Torshify.Radio.EchoNest.TopHot
             var trackEnumerator = new TopHotttEnumerator(context);
             context.SetView(new ViewData { Header = "Top hot", IsEnabled = false });
             context
-                .SetTrackProvider(trackEnumerator.DoIt)
+                .SetTrackProvider(new TrackProvider(trackEnumerator.DoIt))
                 .ContinueWith(
                     t => context.GoToTracks(),
                     CancellationToken.None,

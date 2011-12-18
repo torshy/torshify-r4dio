@@ -21,6 +21,8 @@ namespace Torshify.Radio
 
         #endregion Constructors
 
+        #region Properties
+
         public IRadio Radio
         {
             get
@@ -28,5 +30,7 @@ namespace Torshify.Radio
                 return _radio;
             }
         }
+
+        #endregion Properties
     }
 }

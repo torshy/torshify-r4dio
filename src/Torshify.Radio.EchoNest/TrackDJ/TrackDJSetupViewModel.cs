@@ -444,7 +444,7 @@ namespace Torshify.Radio.EchoNest.TrackDJ
         {
             TrackDJSongEnumerator enumerator = new TrackDJSongEnumerator();
             enumerator.Initialize(CreateSearchArgument(), _radio);
-            _radio.CurrentContext.SetTrackProvider(enumerator.DoIt);
+            _radio.CurrentContext.SetTrackProvider(new TrackProvider(enumerator.DoIt));
         }
 
         private void ExecuteFindTracks()

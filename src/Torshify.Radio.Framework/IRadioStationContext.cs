@@ -9,8 +9,13 @@ namespace Torshify.Radio.Framework
         IRadio Radio { get; }
 
         Task SetTrackProvider(Func<IEnumerable<RadioTrack>> getNextBatchProvider);
+        
+        Task SetTrackProvider(TrackProvider trackProvider);
+        
         void SetView(ViewData viewData);
+        
         void GoToTracks();
+        
         void GoToStations();
     }
 }

@@ -161,7 +161,7 @@ namespace Torshify.Radio.EchoNest.Similar
             enumerator.Initialize(SimilarArtists.Select(s => s.BucketItem).ToArray(), _radio);
 
             _radio.CurrentContext
-                .SetTrackProvider(enumerator.DoIt)
+                .SetTrackProvider(new TrackProvider(enumerator.DoIt))
                 .ContinueWith(t => _radio.CurrentContext.GoToTracks(), TaskScheduler.FromCurrentSynchronizationContext());
         }
 
@@ -172,7 +172,7 @@ namespace Torshify.Radio.EchoNest.Similar
             enumerator.Initialize(new[] { artist.BucketItem }, _radio);
 
             _radio.CurrentContext
-                .SetTrackProvider(enumerator.DoIt)
+                .SetTrackProvider(new TrackProvider(enumerator.DoIt))
                 .ContinueWith(
                     t => _radio.CurrentContext.GoToTracks(),
                     CancellationToken.None,

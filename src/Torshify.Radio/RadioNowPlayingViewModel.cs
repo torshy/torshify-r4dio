@@ -11,6 +11,7 @@ using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
+using Torshify.Radio.Framework.Commands;
 
 namespace Torshify.Radio
 {
@@ -22,8 +23,9 @@ namespace Torshify.Radio
         private readonly IRadio _radio;
         private readonly IRegionManager _regionManager;
 
-        private Func<IEnumerable<RadioTrack>> _getNextBatchProvider;
+        private TrackProvider _currentTrackProvider;
         private bool _getNextBatchProviderIsComplete;
+        private ManualCommand _nextTrackCommand;
         private ConcurrentQueue<RadioTrack> _playQueue;
         private TaskScheduler _uiTaskScheduler;
 
@@ -39,6 +41,9 @@ namespace Torshify.Radio
             _radio.TrackComplete += OnTrackComplete;
             _playQueue = new ConcurrentQueue<RadioTrack>();
             _uiTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+            _nextTrackCommand = new ManualCommand(ExecuteMoveToNext, CanExecuteMoveToNext);
+
+            GlobalCommands.NextCommand.RegisterCommand(_nextTrackCommand);
         }
 
         #endregion Constructors
@@ -142,7 +147,7 @@ namespace Torshify.Radio
 
             if (!success && _playQueue.IsEmpty)
             {
-                var result = _getNextBatchProvider();
+                var result = _currentTrackProvider.BatchProvider();
 
                 if (result.Count() == 0)
                 {
@@ -157,6 +162,8 @@ namespace Torshify.Radio
 
             PeekToNext();
             RaisePropertyChanged("CurrentTrack", "HasTracks");
+
+            _nextTrackCommand.NotifyCanExecuteChanged();
         }
 
         public void PeekToNext(bool getNextBatchIfNoMoreTracks = true)
@@ -182,13 +189,18 @@ namespace Torshify.Radio
 
         public Task SetTrackProvider(Func<IEnumerable<RadioTrack>> getNextBatchProvider)
         {
-            _getNextBatchProvider = getNextBatchProvider;
+            return SetTrackProvider(new TrackProvider(getNextBatchProvider, false));
+        }
+
+        public Task SetTrackProvider(TrackProvider trackProvider)
+        {
+            _currentTrackProvider = trackProvider;
             _getNextBatchProviderIsComplete = false;
 
             var cts = new CancellationTokenSource();
             ShowLoadingView(cts);
             return Task.Factory
-                .StartNew(getNextBatchProvider, cts.Token)
+                .StartNew(_currentTrackProvider.BatchProvider, cts.Token)
                 .ContinueWith(t =>
                 {
                     if (cts.Token.IsCancellationRequested)
@@ -217,6 +229,8 @@ namespace Torshify.Radio
                     {
                         MoveToNext(cts.Token);
                     }
+
+                    _nextTrackCommand.NotifyCanExecuteChanged();
 
                 }, cts.Token, TaskContinuationOptions.None, _uiTaskScheduler);
         }
@@ -280,11 +294,27 @@ namespace Torshify.Radio
             }
         }
 
+        private bool CanExecuteMoveToNext()
+        {
+            return 
+                _currentTrackProvider != null && 
+                _currentTrackProvider.CanSkipTracks && 
+                _getNextBatchProviderIsComplete == false &&
+                NextTrack != null;
+        }
+
+        private void ExecuteMoveToNext()
+        {
+            Task.Factory.StartNew(() => MoveToNext(CancellationToken.None));
+        }
+
         private void GetNextBatch()
         {
-            if (_getNextBatchProvider != null && !_getNextBatchProviderIsComplete)
+            if (_currentTrackProvider != null && 
+                _currentTrackProvider.BatchProvider != null 
+                && !_getNextBatchProviderIsComplete)
             {
-                var result = _getNextBatchProvider();
+                var result = _currentTrackProvider.BatchProvider();
 
                 if (result.Count() == 0)
                 {

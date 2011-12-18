@@ -95,7 +95,7 @@ namespace Torshify.Radio.EchoNest.Mood
             termEnumerator.Initialize(_currentMoodList, _radio);
 
             _context
-                .SetTrackProvider(termEnumerator.DoIt)
+                .SetTrackProvider(new TrackProvider(termEnumerator.DoIt))
                 .ContinueWith(
                     t => _context.GoToTracks(),
                     CancellationToken.None,
