@@ -50,6 +50,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AppConstants.cs" />
     <Compile Include="Behaviors\ArtistCommandsBehavior.cs" />
     <Compile Include="Behaviors\DataGridRowActionBehavior.cs" />
     <Compile Include="Behaviors\IgnoreMouseWheelBehavior.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Controls\SizeTemplateControl.cs" />
     <Compile Include="Controls\UIHelpers.cs" />
     <Compile Include="Converters\BoolToVisibleOrHidden.cs" />
+    <Compile Include="Converters\CountToFontSizeConverter.cs" />
     <Compile Include="Converters\InstanceToObjectTypeConverter.cs" />
     <Compile Include="Converters\NegateValueConverter.cs" />
     <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />

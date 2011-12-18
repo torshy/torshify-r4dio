@@ -1,5 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
+
+using Microsoft.Isam.Esent.Collections.Generic;
+
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Style
@@ -9,10 +13,21 @@ namespace Torshify.Radio.EchoNest.Style
     {
         #region Fields
 
-        private IRadio _radio;
+        public static PersistentDictionary<string, int> StyleCloudData;
+
         private IRadioStationContext _context;
+        private IRadio _radio;
 
         #endregion Fields
+
+        #region Constructors
+
+        static StyleRadioStation()
+        {
+            StyleCloudData = new PersistentDictionary<string, int>(Path.Combine(AppConstants.AppDataFolder, "Data", "StyleCloud"));
+        }
+
+        #endregion Constructors
 
         #region Methods
 
@@ -31,7 +46,7 @@ namespace Torshify.Radio.EchoNest.Style
             _context = context;
             _context.SetView(new ViewData
                                  {
-                                     Header = "Styles", 
+                                     Header = "Styles",
                                      View = new Lazy<UIElement>(() => new StyleRadioStationView
                                                                 {
                                                                     DataContext = new StyleRadioStationViewModel(_radio, context)

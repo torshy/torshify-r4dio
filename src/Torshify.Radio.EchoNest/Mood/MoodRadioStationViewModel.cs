@@ -47,6 +47,11 @@ namespace Torshify.Radio.EchoNest.Mood
 
                     foreach (var termModel in t.Result)
                     {
+                        if (MoodRadioStation.MoodCloudData.ContainsKey(termModel.Name))
+                        {
+                            termModel.Count = MoodRadioStation.MoodCloudData[termModel.Name];
+                        }
+
                         AvailableTerms.Add(termModel);
                     }
 
@@ -90,6 +95,21 @@ namespace Torshify.Radio.EchoNest.Mood
         private void ExecuteCreatePlaylist(IEnumerable moods)
         {
             _currentMoodList = moods.Cast<TermModel>();
+
+            foreach (var termModel in _currentMoodList)
+            {
+                if (MoodRadioStation.MoodCloudData.ContainsKey(termModel.Name))
+                {
+                    termModel.Count = termModel.Count + 1;
+                    MoodRadioStation.MoodCloudData[termModel.Name] = termModel.Count;
+                }
+                else
+                {
+                    MoodRadioStation.MoodCloudData[termModel.Name] = 1;
+                }
+            }
+
+            MoodRadioStation.MoodCloudData.Flush();
 
             var termEnumerator = new MoodsToArtistEnumerator();
             termEnumerator.Initialize(_currentMoodList, _radio);

@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Torshify.Radio
+namespace Torshify.Radio.Framework
 {
     public class AppConstants
     {

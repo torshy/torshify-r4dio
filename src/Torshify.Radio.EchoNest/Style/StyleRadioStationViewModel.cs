@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using EchoNest;
 using EchoNest.Artist;
+using Microsoft.Isam.Esent.Collections.Generic;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.ViewModel;
 using Torshify.Radio.Framework;
@@ -35,7 +37,7 @@ namespace Torshify.Radio.EchoNest.Style
 
             _radio = radio;
             _context = context;
-
+            
             IsLoading = true;
 
             var ui = TaskScheduler.FromCurrentSynchronizationContext();
@@ -47,6 +49,11 @@ namespace Torshify.Radio.EchoNest.Style
 
                     foreach (var termModel in t.Result)
                     {
+                        if (StyleRadioStation.StyleCloudData.ContainsKey(termModel.Name))
+                        {
+                            termModel.Count = StyleRadioStation.StyleCloudData[termModel.Name];
+                        }
+
                         AvailableTerms.Add(termModel);
                     }
 
@@ -90,6 +97,21 @@ namespace Torshify.Radio.EchoNest.Style
         private void ExecuteCreatePlaylist(IEnumerable moods)
         {
             _currentTermList = moods.Cast<TermModel>();
+
+            foreach (var termModel in _currentTermList)
+            {
+                if (StyleRadioStation.StyleCloudData.ContainsKey(termModel.Name))
+                {
+                    termModel.Count = termModel.Count + 1;
+                    StyleRadioStation.StyleCloudData[termModel.Name] = termModel.Count;
+                }
+                else
+                {
+                    StyleRadioStation.StyleCloudData[termModel.Name] = 1;
+                }
+            }
+
+            StyleRadioStation.StyleCloudData.Flush();
 
             var termEnumerator = new StylesToArtistEnumerator();
             termEnumerator.Initialize(_currentTermList, _radio);

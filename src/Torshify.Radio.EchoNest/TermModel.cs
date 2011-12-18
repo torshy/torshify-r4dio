@@ -4,33 +4,60 @@ namespace Torshify.Radio.EchoNest
 {
     public class TermModel : NotificationObject
     {
+        #region Fields
+
+        private int _count;
+
+        #endregion Fields
+
+        #region Constructors
+
         public TermModel()
         {
             Boost = 1.0;
         }
 
-        public string Name
+        #endregion Constructors
+
+        #region Properties
+
+        public bool Ban
         {
-            get; 
+            get;
             set;
         }
 
         public double Boost
         {
-            get; 
+            get;
+            set;
+        }
+
+        public int Count
+        {
+            get
+            {
+                return _count;
+            }
+            set
+            {
+                _count = value;
+                RaisePropertyChanged("Count");
+            }
+        }
+
+        public string Name
+        {
+            get;
             set;
         }
 
         public bool Require
         {
-            get; 
+            get;
             set;
         }
 
-        public bool Ban
-        {
-            get; 
-            set;
-        }
+        #endregion Properties
     }
 }

@@ -38,6 +38,12 @@
     <Reference Include="EchoNest-Sharp">
       <HintPath>..\..\lib\EchoNestSharp\EchoNest-Sharp.dll</HintPath>
     </Reference>
+    <Reference Include="Esent.Collections">
+      <HintPath>..\..\packages\ManagedEsent.1.6\lib\net20\Esent.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Esent.Interop">
+      <HintPath>..\..\packages\ManagedEsent.1.6\lib\net20\Esent.Interop.dll</HintPath>
+    </Reference>
     <Reference Include="GMap.NET.Core">
       <HintPath>..\..\lib\GMapNET\GMap.NET.Core.dll</HintPath>
     </Reference>
@@ -198,6 +204,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
