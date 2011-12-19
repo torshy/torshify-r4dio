@@ -309,6 +309,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <SplashScreen Include="..\..\resources\SplashScreen.png">
+      <Link>SplashScreen.png</Link>
+    </SplashScreen>
     <Content Include="Resources\LargeIcons\MB_0015_voicemaill.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
