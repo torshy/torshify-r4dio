@@ -111,11 +111,8 @@ namespace Torshify.Radio.EchoNest.Mood
 
             MoodRadioStation.MoodCloudData.Flush();
 
-            var termEnumerator = new MoodsToArtistEnumerator();
-            termEnumerator.Initialize(_currentMoodList, _radio);
-
             _context
-                .SetTrackProvider(new TrackProvider(termEnumerator.DoIt))
+                .SetTrackProvider(new CustomTrackProvider(_currentMoodList.ToArray(), _radio))
                 .ContinueWith(
                     t => _context.GoToTracks(),
                     CancellationToken.None,
@@ -148,5 +145,27 @@ namespace Torshify.Radio.EchoNest.Mood
         }
 
         #endregion Methods
+
+        public class CustomTrackProvider : TrackProvider
+        {
+            #region Fields
+
+            private MoodsToArtistEnumerator _enumerator;
+
+            #endregion Fields
+
+            #region Constructors
+
+            public CustomTrackProvider(IEnumerable<TermModel> terms, IRadio radio)
+            {
+                _enumerator = new MoodsToArtistEnumerator();
+                _enumerator.Initialize(terms, radio);
+
+                BatchProvider = _enumerator.DoIt;
+            }
+
+            #endregion Constructors
+        }
+
     }
 }

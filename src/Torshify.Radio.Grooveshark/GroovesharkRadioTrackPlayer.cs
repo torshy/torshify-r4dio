@@ -7,6 +7,7 @@ using Grooveshark_Sharp;
 using Microsoft.Practices.Prism.Logging;
 
 using Torshify.Radio.Framework;
+using System.Linq;
 
 namespace Torshify.Radio.Grooveshark
 {
@@ -138,13 +139,22 @@ namespace Torshify.Radio.Grooveshark
                         _trackPlayer.Stop();
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     _log.Log("While disposing old trackplayer: " + e.Message, Category.Warn, Priority.Medium);
                 }
 
                 try
                 {
+                    GroovesharkStreamingResult firstStreamingKey = key.FirstOrDefault();
+
+                    double trackDurationMilliseconds;
+                    if (firstStreamingKey != null && double.TryParse(firstStreamingKey.USecs, out trackDurationMilliseconds))
+                    {
+                        trackDurationMilliseconds = trackDurationMilliseconds / 1000;
+                        currentTrack.TotalDuration = TimeSpan.FromMilliseconds(trackDurationMilliseconds);
+                    }
+
                     HttpWebResponse response = (HttpWebResponse)webRequest.GetResponse();
 
                     Action<RadioTrack> trackComplete = OnTrackComplete;
@@ -188,9 +198,9 @@ namespace Torshify.Radio.Grooveshark
         public void Stop()
         {
             if (_trackPlayer != null)
-               {
-               _trackPlayer.Stop();
-               }
+            {
+                _trackPlayer.Stop();
+            }
         }
 
         protected virtual void OnTrackComplete(RadioTrack currentTrack)

@@ -7,11 +7,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using EchoNest;
 using EchoNest.Artist;
+
 using Microsoft.Isam.Esent.Collections.Generic;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.ViewModel;
+
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Style
@@ -37,7 +40,7 @@ namespace Torshify.Radio.EchoNest.Style
 
             _radio = radio;
             _context = context;
-            
+
             IsLoading = true;
 
             var ui = TaskScheduler.FromCurrentSynchronizationContext();
@@ -94,37 +97,6 @@ namespace Torshify.Radio.EchoNest.Style
 
         #region Methods
 
-        private void ExecuteCreatePlaylist(IEnumerable moods)
-        {
-            _currentTermList = moods.Cast<TermModel>();
-
-            foreach (var termModel in _currentTermList)
-            {
-                if (StyleRadioStation.StyleCloudData.ContainsKey(termModel.Name))
-                {
-                    termModel.Count = termModel.Count + 1;
-                    StyleRadioStation.StyleCloudData[termModel.Name] = termModel.Count;
-                }
-                else
-                {
-                    StyleRadioStation.StyleCloudData[termModel.Name] = 1;
-                }
-            }
-
-            StyleRadioStation.StyleCloudData.Flush();
-
-            var termEnumerator = new StylesToArtistEnumerator();
-            termEnumerator.Initialize(_currentTermList, _radio);
-
-            _context
-                .SetTrackProvider(new TrackProvider(termEnumerator.DoIt))
-                .ContinueWith(
-                    t => _context.GoToTracks(),
-                    CancellationToken.None,
-                    TaskContinuationOptions.OnlyOnRanToCompletion,
-                    TaskScheduler.FromCurrentSynchronizationContext());
-        }
-
         public static IEnumerable<TermModel> GetAvailableStyles()
         {
             try
@@ -149,6 +121,59 @@ namespace Torshify.Radio.EchoNest.Style
             return new TermModel[0];
         }
 
+        private void ExecuteCreatePlaylist(IEnumerable moods)
+        {
+            _currentTermList = moods.Cast<TermModel>();
+
+            foreach (var termModel in _currentTermList)
+            {
+                if (StyleRadioStation.StyleCloudData.ContainsKey(termModel.Name))
+                {
+                    termModel.Count = termModel.Count + 1;
+                    StyleRadioStation.StyleCloudData[termModel.Name] = termModel.Count;
+                }
+                else
+                {
+                    StyleRadioStation.StyleCloudData[termModel.Name] = 1;
+                }
+            }
+
+            StyleRadioStation.StyleCloudData.Flush();
+
+            _context
+                .SetTrackProvider(new CustomTrackProvider(_currentTermList.ToArray(), _radio))
+                .ContinueWith(
+                    t => _context.GoToTracks(),
+                    CancellationToken.None,
+                    TaskContinuationOptions.OnlyOnRanToCompletion,
+                    TaskScheduler.FromCurrentSynchronizationContext());
+        }
+
         #endregion Methods
+
+        #region Nested Types
+
+        public class CustomTrackProvider : TrackProvider
+        {
+            #region Fields
+
+            private StylesToArtistEnumerator _enumerator;
+
+            #endregion Fields
+
+            #region Constructors
+
+            public CustomTrackProvider(IEnumerable<TermModel> terms, IRadio radio)
+            {
+                _enumerator = new StylesToArtistEnumerator();
+                _enumerator.Initialize(terms, radio);
+
+                BatchProvider = _enumerator.DoIt;
+            }
+
+            #endregion Constructors
+        }
+
+        #endregion Nested Types
     }
 }

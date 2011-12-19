@@ -388,11 +388,11 @@ namespace Torshify.Radio
 
         IEnumerable<RadioTrackContainer> IRadioTrackSource.GetAlbumsByArtist(string artist)
         {
-            ConcurrentBag<RadioTrackContainer> bag = new ConcurrentBag<RadioTrackContainer>();
+            List<RadioTrackContainer> bag = new List<RadioTrackContainer>();
 
             if (_trackSources != null)
             {
-                Parallel.ForEach(_trackSources, trackSource =>
+                foreach (var trackSource in _trackSources)
                 {
                     try
                     {
@@ -409,7 +409,7 @@ namespace Torshify.Radio
                     {
                         _logger.Log(e.Message, Category.Exception, Priority.Medium);
                     }
-                });
+                }
             }
 
             return bag.OrderBy(x => _random.Next()).ToArray();
@@ -417,11 +417,11 @@ namespace Torshify.Radio
 
         IEnumerable<RadioTrack> IRadioTrackSource.GetTracksByArtist(string artist, int offset, int count)
         {
-            ConcurrentBag<RadioTrack> bag = new ConcurrentBag<RadioTrack>();
+            List<RadioTrack> bag = new List<RadioTrack>();
 
             if (_trackSources != null)
             {
-                Parallel.ForEach(_trackSources, trackSource =>
+                foreach (var trackSource in _trackSources)
                 {
                     try
                     {
@@ -438,7 +438,7 @@ namespace Torshify.Radio
                     {
                         _logger.Log(e.ToString(), Category.Exception, Priority.Medium);
                     }
-                });
+                }
             }
 
             return bag.OrderBy(x => _random.Next()).ToArray();
@@ -446,11 +446,11 @@ namespace Torshify.Radio
 
         IEnumerable<RadioTrack> IRadioTrackSource.GetTracksByName(string name, int offset, int count)
         {
-            ConcurrentBag<RadioTrack> bag = new ConcurrentBag<RadioTrack>();
+            List<RadioTrack> bag = new List<RadioTrack>();
 
             if (_trackSources != null)
             {
-                Parallel.ForEach(_trackSources, trackSource =>
+                foreach (var trackSource in _trackSources)
                 {
                     try
                     {
@@ -467,7 +467,7 @@ namespace Torshify.Radio
                     {
                         _logger.Log(e.Message, Category.Exception, Priority.Medium);
                     }
-                });
+                }
             }
 
             return bag.OrderBy(x => _random.Next()).ToArray();

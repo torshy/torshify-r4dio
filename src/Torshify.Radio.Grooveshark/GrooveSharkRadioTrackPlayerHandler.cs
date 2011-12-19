@@ -244,77 +244,94 @@ namespace Torshify.Radio.Grooveshark
                 {
                     _playbackState = StreamingPlaybackState.Buffering;
 
-                    var readFullyStream = new ReadFullyStream(responseStream);
-                    do
+                    using (var readFullyStream = new ReadFullyStream(responseStream))
                     {
-                        if (_bufferedWaveProvider != null && _bufferedWaveProvider.BufferLength - _bufferedWaveProvider.BufferedBytes < _bufferedWaveProvider.WaveFormat.AverageBytesPerSecond / 4)
+                        do
                         {
-                            Thread.Sleep(500);
-                        }
-                        else
-                        {
-                            Mp3Frame frame = null;
-                            try
+                            if (_bufferedWaveProvider != null &&
+                                _bufferedWaveProvider.BufferLength - _bufferedWaveProvider.BufferedBytes <
+                                _bufferedWaveProvider.WaveFormat.AverageBytesPerSecond/4)
                             {
-                                frame = Mp3Frame.LoadFromStream(readFullyStream);
+                                Thread.Sleep(500);
+                            }
+                            else
+                            {
+                                Mp3Frame frame;
 
-                                if (frame == null)
-                                {
-                                    _fullyDownloaded = true;
-                                    break;
-                                }
-                            }
-                            catch (EndOfStreamException e)
-                            {
-                                _log.Log(e.Message, Category.Warn, Priority.Medium);
-                                _fullyDownloaded = true;
-                                // reached the end of the MP3 file / stream
-                                break;
-                            }
-                            catch (WebException e)
-                            {
-                                _log.Log(e.Message, Category.Warn, Priority.Medium);
-                                // probably we have aborted download from the GUI thread
-                                break;
-                            }
-                            catch (Exception e)
-                            {
-                                _log.Log(e.Message, Category.Exception, Priority.High);
-                                break;
-                            }
-
-                            if (decompressor == null)
-                            {
-                                WaveFormat waveFormat = new Mp3WaveFormat(44100, frame.ChannelMode == ChannelMode.Mono ? 1 : 2, frame.FrameLength, frame.BitRate);
-                                decompressor = new AcmMp3FrameDecompressor(waveFormat);
-                                _bufferedWaveProvider = new BufferedWaveProvider(decompressor.OutputFormat);
-                                _bufferedWaveProvider.BufferLength = (int)response.ContentLength;
-                            }
-
-                            if (_bufferedWaveProvider != null)
-                            {
                                 try
                                 {
-                                    int decompressed = decompressor.DecompressFrame(frame, buffer, 0);
-                                    _bufferedWaveProvider.AddSamples(buffer, 0, decompressed);
+                                    frame = Mp3Frame.LoadFromStream(readFullyStream);
+
+                                    if (frame == null)
+                                    {
+                                        _fullyDownloaded = true;
+                                        break;
+                                    }
+                                }
+                                catch (EndOfStreamException e)
+                                {
+                                    _log.Log(e.Message, Category.Warn, Priority.Medium);
+                                    _fullyDownloaded = true;
+                                    // reached the end of the MP3 file / stream
+                                    break;
+                                }
+                                catch (WebException e)
+                                {
+                                    _log.Log(e.Message, Category.Warn, Priority.Medium);
+                                    // probably we have aborted download from the GUI thread
+                                    break;
                                 }
                                 catch (Exception e)
                                 {
-                                    _fullyDownloaded = true;
-                                    _log.Log("Error decompressing frame: " + e.Message, Category.Exception, Priority.Medium);
+                                    _log.Log(e.Message, Category.Exception, Priority.High);
                                     break;
                                 }
+
+                                if (decompressor == null)
+                                {
+                                    WaveFormat waveFormat = new Mp3WaveFormat(44100,
+                                                                              frame.ChannelMode == ChannelMode.Mono
+                                                                                  ? 1
+                                                                                  : 2, frame.FrameLength, frame.BitRate);
+                                    decompressor = new AcmMp3FrameDecompressor(waveFormat);
+                                    _bufferedWaveProvider = new BufferedWaveProvider(decompressor.OutputFormat);
+
+                                    if (_track.TotalDuration != TimeSpan.Zero)
+                                    {
+                                        _bufferedWaveProvider.BufferDuration = _track.TotalDuration;
+                                    }
+                                    else
+                                    {
+                                        _bufferedWaveProvider.BufferDuration = TimeSpan.FromSeconds(45);
+                                    }
+                                }
+
+                                if (_bufferedWaveProvider != null)
+                                {
+                                    try
+                                    {
+                                        int decompressed = decompressor.DecompressFrame(frame, buffer, 0);
+                                        _bufferedWaveProvider.AddSamples(buffer, 0, decompressed);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        _fullyDownloaded = true;
+                                        _log.Log("Error decompressing frame: " + e.Message, Category.Exception,
+                                                 Priority.Medium);
+                                        break;
+                                    }
+                                }
                             }
+
+                        } while (_playbackState != StreamingPlaybackState.Stopped);
+
+                        // was doing this in a finally block, but for some reason
+                        // we are hanging on response stream .Dispose so never get there
+                        if (decompressor != null)
+                        {
+                            decompressor.Dispose();
+                            decompressor = null;
                         }
-
-                    } while (_playbackState != StreamingPlaybackState.Stopped);
-
-                    // was doing this in a finally block, but for some reason
-                    // we are hanging on response stream .Dispose so never get there
-                    if (decompressor != null)
-                    {
-                        decompressor.Dispose();
-                        decompressor = null;
                     }
                 }
             }
