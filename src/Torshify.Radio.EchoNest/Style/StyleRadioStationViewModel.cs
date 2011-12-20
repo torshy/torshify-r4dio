@@ -167,6 +167,7 @@ namespace Torshify.Radio.EchoNest.Style
                 _enumerator.Initialize(terms, radio);
 
                 BatchProvider = _enumerator.DoIt;
+                CanSkipTracks = true;
             }
 
             #endregion Constructors
