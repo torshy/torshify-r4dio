@@ -98,6 +98,11 @@ namespace Torshify.Radio.EightTracks
 
             MixToImageConverter imageUrlConverter = new MixToImageConverter();
 
+            if (string.IsNullOrEmpty(_currentPlayResponse.Set.Track.Url))
+            {
+                return GetTrackFactory();
+            }
+
             return new RadioTrack[]
                        {
                            new EightTracksRadioTrack
