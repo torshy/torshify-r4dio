@@ -53,6 +53,36 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AppConstants.cs" />
+    <Compile Include="Controls\MetroWindow.cs" />
+    <Compile Include="Controls\Standard\ComGuids.cs" />
+    <Compile Include="Controls\Standard\CornerRadiusAnimation.cs" />
+    <Compile Include="Controls\Standard\CornerRadiusAnimationBase.cs" />
+    <Compile Include="Controls\Standard\Debug.cs" />
+    <Compile Include="Controls\Standard\DoubleUtil.cs" />
+    <Compile Include="Controls\Standard\DpiHelper.cs" />
+    <Compile Include="Controls\Standard\Enumerable2.cs" />
+    <Compile Include="Controls\Standard\ErrorCodes.cs" />
+    <Compile Include="Controls\Standard\FileWalker.cs" />
+    <Compile Include="Controls\Standard\GlassHelper.cs" />
+    <Compile Include="Controls\Standard\MergeableCollection.cs" />
+    <Compile Include="Controls\Standard\MessageWindow.cs" />
+    <Compile Include="Controls\Standard\MshtmlProvider.cs" />
+    <Compile Include="Controls\Standard\NativeMethods.cs" />
+    <Compile Include="Controls\Standard\NotifyingList.cs" />
+    <Compile Include="Controls\Standard\ShellProvider.cs" />
+    <Compile Include="Controls\Standard\SmallString.cs" />
+    <Compile Include="Controls\Standard\SmallUri.cs" />
+    <Compile Include="Controls\Standard\SplashScreen.cs" />
+    <Compile Include="Controls\Standard\StreamHelper.cs" />
+    <Compile Include="Controls\Standard\Utilities.cs" />
+    <Compile Include="Controls\Standard\UTVerify.cs" />
+    <Compile Include="Controls\Standard\Verify.cs" />
+    <Compile Include="Controls\Standard\WicProvider.cs" />
+    <Compile Include="Controls\Standard\WindowExtensions.cs" />
+    <Compile Include="Controls\SystemCommands.cs" />
+    <Compile Include="Controls\SystemParameters2.cs" />
+    <Compile Include="Controls\WindowChrome.cs" />
+    <Compile Include="Controls\WindowChromeWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -75,6 +105,16 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\MetroWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

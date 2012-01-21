@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.Composition;
-using System.Windows;
+
+using Torshify.Radio.Framework.Controls;
 
 namespace Torshify.Radio
 {
     [Export(typeof(Shell))]
-    public partial class Shell : Window
+    public partial class Shell : MetroWindow
     {
         public Shell()
         {
