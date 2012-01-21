@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Radio.Framework", "src\Torshify.Radio.Framework\Torshify.Radio.Framework.csproj", "{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Radio.Database", "src\Torshify.Radio.Database\Torshify.Radio.Database.csproj", "{48F5630B-CCC9-47B0-BF10-845364C4350C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,16 @@ Global
 		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Release|x86.ActiveCfg = Release|Any CPU
+		{48F5630B-CCC9-47B0-BF10-845364C4350C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48F5630B-CCC9-47B0-BF10-845364C4350C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48F5630B-CCC9-47B0-BF10-845364C4350C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{48F5630B-CCC9-47B0-BF10-845364C4350C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{48F5630B-CCC9-47B0-BF10-845364C4350C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{48F5630B-CCC9-47B0-BF10-845364C4350C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48F5630B-CCC9-47B0-BF10-845364C4350C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48F5630B-CCC9-47B0-BF10-845364C4350C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{48F5630B-CCC9-47B0-BF10-845364C4350C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{48F5630B-CCC9-47B0-BF10-845364C4350C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
