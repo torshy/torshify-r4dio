@@ -1,0 +1,104 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework"
+    xmlns:System="clr-namespace:System;assembly=mscorlib">
+
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.AccentBrushKey}"
+        Color="#FF1BA1E2" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.BackgroundBrushKey}"
+        Color="#FF000000" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.ForegroundBrushKey}"
+        Color="#FFFFFFFF" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.ContrastBackgroundKey}"
+        Color="#FFFFFFFF" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.ContrastForegroundKey}"
+        Color="#FF000000" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.DisabledBrushKey}"
+        Color="#66FFFFFF" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.TextCaretBrushKey}"
+        Color="#FF000000" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.TextBoxBrushKey}"
+        Color="#BFFFFFFF" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.TextBoxForegroundBrushKey}"
+        Color="#FF000000" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.TextBoxEditSelectionBrushKey}"
+        Color="#FFFFFFFF" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.TextBoxEditReadOnlyBrushKey}"
+        Color="#77000000" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.TextBoxEditBorderBrushKey}"
+        Color="#FFFFFFFF" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.TextBoxEditBackgroundBrushKey}"
+        Color="#FFFFFFFF" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.SubtleBrushKey}"
+        Color="#99FFFFFF" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.RadioCheckBoxBrushKey}"
+        Color="#BFFFFFFF" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.RadioCheckBoxCheckBrushKey}"
+        Color="#FF000000" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.RadioCheckBoxCheckDisabledBrushKey}"
+        Color="#66000000" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.RadioCheckBoxDisabledBrushKey}"
+        Color="#66FFFFFF" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.RadioCheckBoxPressedBorderBrushKey}"
+        Color="#FFFFFFFF" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.RadioCheckBoxPressedBrushKey}"
+        Color="#FFFFFFFF" />
+    
+    <!-- Font names -->
+    <FontFamily
+        x:Key="{x:Static Framework:AppTheme.FontFamilyNormal}">Segoe UI</FontFamily>
+    <FontFamily
+        x:Key="{x:Static Framework:AppTheme.FontFamilyLight}">Segoe UI Light</FontFamily>
+    <FontFamily
+        x:Key="{x:Static Framework:AppTheme.FontFamilySemiLight}">Segoe UI SemiLight</FontFamily>
+    <FontFamily
+        x:Key="{x:Static Framework:AppTheme.FontFamilySemiBold}">Segoe UI Semibold</FontFamily>
+
+    <!-- Font sizes -->
+    <!--14pt-->
+    <System:Double
+        x:Key="{x:Static Framework:AppTheme.FontSizeSmall}">18.667</System:Double>
+    <!--15pt-->
+    <System:Double
+        x:Key="{x:Static Framework:AppTheme.FontSizeNormal}">20</System:Double>
+    <!--17pt-->
+    <System:Double
+        x:Key="{x:Static Framework:AppTheme.FontSizeMedium}">22.667</System:Double>
+    <!--19pt-->
+    <System:Double
+        x:Key="{x:Static Framework:AppTheme.FontSizeMediumLarge}">25.333</System:Double>
+    <!--24pt-->
+    <System:Double
+        x:Key="{x:Static Framework:AppTheme.FontSizeLarge}">32</System:Double>
+    <!--32pt-->
+    <System:Double
+        x:Key="{x:Static Framework:AppTheme.FontSizeExtraLarge}">42.667</System:Double>
+    <!--54pt-->
+    <System:Double
+        x:Key="{x:Static Framework:AppTheme.FontSizeExtraExtraLarge}">72</System:Double>
+    <!--140pt-->
+    <System:Double
+        x:Key="{x:Static Framework:AppTheme.FontSizeHuge}">186.667</System:Double>
+
+</ResourceDictionary>

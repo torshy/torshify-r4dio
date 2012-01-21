@@ -3,11 +3,13 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
+    xmlns:Regions="clr-namespace:Microsoft.Practices.Prism.Regions;assembly=Microsoft.Practices.Prism"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     Title="r4dio"
-    Height="350"
-    Width="525"
+    Height="600"
+    Width="800"
     Icon="Resources\r4dio_app.ico">
-    <Grid>
-
-    </Grid>
+    <ContentControl
+        Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainRegion}">
+    </ContentControl>
 </Controls:MetroWindow>

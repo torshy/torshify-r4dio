@@ -55,7 +55,9 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AppTheme.cs" />
     <Compile Include="AppConstants.cs" />
+    <Compile Include="AppRegions.cs" />
     <Compile Include="Commands\AutomaticCommand%28of T%29.cs" />
     <Compile Include="Commands\AutomaticCommand.cs" />
     <Compile Include="Commands\AutomaticCompositeCommand.cs" />
@@ -149,6 +151,10 @@
     <Page Include="Themes\MetroWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ThemeResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
