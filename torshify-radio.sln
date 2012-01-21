@@ -1,7 +1,46 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Radio", "src\Torshify.Radio\Torshify.Radio.csproj", "{7A0972DC-ABDC-4A8E-9B5A-0999B1D5FE5F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E627CDDC-BF7D-4F0E-9D4E-0588005A9C7B}"
+	ProjectSection(SolutionItems) = preProject
+		src\GlobalAssemblyInfo.cs = src\GlobalAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Radio.Framework", "src\Torshify.Radio.Framework\Torshify.Radio.Framework.csproj", "{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A0972DC-ABDC-4A8E-9B5A-0999B1D5FE5F}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{7A0972DC-ABDC-4A8E-9B5A-0999B1D5FE5F}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{7A0972DC-ABDC-4A8E-9B5A-0999B1D5FE5F}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{7A0972DC-ABDC-4A8E-9B5A-0999B1D5FE5F}.Debug|x86.ActiveCfg = Debug|x86
+		{7A0972DC-ABDC-4A8E-9B5A-0999B1D5FE5F}.Debug|x86.Build.0 = Debug|x86
+		{7A0972DC-ABDC-4A8E-9B5A-0999B1D5FE5F}.Release|Any CPU.ActiveCfg = Release|x86
+		{7A0972DC-ABDC-4A8E-9B5A-0999B1D5FE5F}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{7A0972DC-ABDC-4A8E-9B5A-0999B1D5FE5F}.Release|Mixed Platforms.Build.0 = Release|x86
+		{7A0972DC-ABDC-4A8E-9B5A-0999B1D5FE5F}.Release|x86.ActiveCfg = Release|x86
+		{7A0972DC-ABDC-4A8E-9B5A-0999B1D5FE5F}.Release|x86.Build.0 = Release|x86
+		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
