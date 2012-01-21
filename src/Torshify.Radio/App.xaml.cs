@@ -21,8 +21,10 @@ namespace Torshify.Radio
         {
             if (SingleInstance<App>.InitializeAsFirstInstance(ApplicationID))
             {
+#if !DEBUG
                 SplashScreen splash = new SplashScreen("resources\\splashScreen.png");
                 splash.Show(true, true);
+#endif
 
                 var application = new App();
 

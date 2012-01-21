@@ -4,7 +4,7 @@ using System.Dynamic;
 
 namespace Torshify.Radio.Framework
 {
-    public class Track : INotifyPropertyChanged
+    public abstract class Track : INotifyPropertyChanged
     {
         #region Fields
 
@@ -92,6 +92,8 @@ namespace Torshify.Radio.Framework
         #endregion Properties
 
         #region Methods
+
+        public abstract TrackLink ToLink();
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
