@@ -1,6 +1,6 @@
 namespace Torshify.Radio.Core.Models
 {
-    public class ShellSetting
+    public class ShellSettings
     {
         #region Properties
 
@@ -12,6 +12,18 @@ namespace Torshify.Radio.Core.Models
         public double WindowWidth
         {
             get; set;
+        }
+
+        public double WindowLeft
+        {
+            get; 
+            set;
+        }
+
+        public double WindowTop
+        {
+            get; 
+            set;
         }
 
         #endregion Properties

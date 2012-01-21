@@ -76,28 +76,20 @@
         x:Key="{x:Static Framework:AppTheme.FontFamilySemiBold}">Segoe UI Semibold</FontFamily>
 
     <!-- Font sizes -->
-    <!--14pt-->
     <System:Double
         x:Key="{x:Static Framework:AppTheme.FontSizeSmall}">18.667</System:Double>
-    <!--15pt-->
     <System:Double
         x:Key="{x:Static Framework:AppTheme.FontSizeNormal}">20</System:Double>
-    <!--17pt-->
     <System:Double
         x:Key="{x:Static Framework:AppTheme.FontSizeMedium}">22.667</System:Double>
-    <!--19pt-->
     <System:Double
         x:Key="{x:Static Framework:AppTheme.FontSizeMediumLarge}">25.333</System:Double>
-    <!--24pt-->
     <System:Double
         x:Key="{x:Static Framework:AppTheme.FontSizeLarge}">32</System:Double>
-    <!--32pt-->
     <System:Double
         x:Key="{x:Static Framework:AppTheme.FontSizeExtraLarge}">42.667</System:Double>
-    <!--54pt-->
     <System:Double
         x:Key="{x:Static Framework:AppTheme.FontSizeExtraExtraLarge}">72</System:Double>
-    <!--140pt-->
     <System:Double
         x:Key="{x:Static Framework:AppTheme.FontSizeHuge}">186.667</System:Double>
 
