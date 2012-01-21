@@ -9,7 +9,6 @@ using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core
 {
-    [Export(typeof(IStartable))]
     public class ShellSettingsHandler : IStartable
     {
         #region Properties
