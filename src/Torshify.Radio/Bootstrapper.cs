@@ -52,7 +52,6 @@ namespace Torshify.Radio
             base.InitializeShell();
 
             Application.Current.MainWindow = (Shell)Shell;
-            Application.Current.MainWindow.Show();
         }
 
         private void InitializeLogging()

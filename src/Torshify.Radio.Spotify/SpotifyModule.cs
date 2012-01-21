@@ -25,7 +25,6 @@ namespace Torshify.Radio.Spotify
 
         public void Initialize()
         {
-
         }
 
         #endregion Methods
