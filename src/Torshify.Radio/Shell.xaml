@@ -8,8 +8,11 @@
     Title="r4dio"
     Height="600"
     Width="800"
+    MinHeight="400"
+    MinWidth="350"
     Icon="Resources\r4dio_app.ico">
     <ContentControl
+        Margin="8,12,8,8"
         Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainRegion}">
     </ContentControl>
 </Controls:MetroWindow>

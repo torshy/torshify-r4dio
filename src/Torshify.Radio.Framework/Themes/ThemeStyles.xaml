@@ -1,0 +1,192 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework"
+    xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended">
+
+    <Style
+        TargetType="{x:Type TextBox}">
+        <Setter
+            Property="Foreground"
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxForegroundBrushKey}}" />
+        <Setter
+            Property="Background"
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
+        <Setter
+            Property="BorderBrush"
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
+        <Setter
+            Property="SelectionBrush"
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditSelectionBrushKey}}" />
+        <Setter
+            Property="CaretBrush"
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextCaretBrushKey}}" />
+        <Setter
+            Property="BorderThickness"
+            Value="1" />
+        <Setter
+            Property="Padding"
+            Value="1" />
+        <Setter
+            Property="AllowDrop"
+            Value="True" />
+        <Setter
+            Property="FocusVisualStyle"
+            Value="{x:Null}" />
+        <Setter
+            Property="ScrollViewer.PanningMode"
+            Value="VerticalFirst" />
+        <Setter
+            Property="Stylus.IsFlicksEnabled"
+            Value="False" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type TextBox}">
+                    <Border
+                        x:Name="Bd"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Background="{TemplateBinding Background}"
+                        SnapsToDevicePixels="True">
+                        <ScrollViewer
+                            x:Name="PART_ContentHost"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger
+                            Property="IsFocused"
+                            Value="True">
+                            <Setter
+                                Property="Background"
+                                TargetName="Bd"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditBackgroundBrushKey}}" />
+                            <Setter
+                                Property="BorderBrush"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditBorderBrushKey}}" />
+                        </Trigger>
+                        <Trigger
+                            Property="IsReadOnly"
+                            Value="True">
+                            <Setter
+                                Property="Background"
+                                TargetName="Bd"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger
+                Property="IsReadOnly"
+                Value="True">
+                <Setter
+                    Property="Foreground"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditReadOnlyBrushKey}}" />
+                <Setter
+                    Property="BorderBrush"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
+            </Trigger>
+            <Trigger
+                Property="IsEnabled"
+                Value="False">
+                <Setter
+                    Property="BorderBrush"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.DisabledBrushKey}}" />
+                <Setter
+                    Property="Foreground"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.DisabledBrushKey}}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <DataTemplate
+        x:Key="DefaultWatermarkTemplate">
+        <ContentControl
+            Margin="2,0,2,0"
+            Content="{Binding}"
+            Foreground="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditReadOnlyBrushKey}}"
+            Focusable="False" />
+    </DataTemplate>
+
+    <Style
+        TargetType="{x:Type extToolkit:WatermarkTextBox}"
+        BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter
+            Property="WatermarkTemplate"
+            Value="{StaticResource DefaultWatermarkTemplate}" />
+        <Setter
+            Property="HorizontalContentAlignment"
+            Value="Stretch" />
+        <Setter
+            Property="VerticalContentAlignment"
+            Value="Stretch" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type extToolkit:WatermarkTextBox}">
+                    <Grid>
+                        <Border
+                            x:Name="Bd"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}"
+                            SnapsToDevicePixels="True">
+                            <ScrollViewer
+                                x:Name="PART_ContentHost"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                        <ContentPresenter
+                            x:Name="PART_WatermarkHost"
+                            Content="{TemplateBinding Watermark}"
+                            ContentTemplate="{TemplateBinding WatermarkTemplate}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            IsHitTestVisible="False"
+                            Margin="{TemplateBinding Padding}"
+                            Visibility="Collapsed" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition
+                                    Property="IsFocused"
+                                    Value="False" />
+                                <Condition
+                                    Property="Text"
+                                    Value="" />
+                            </MultiTrigger.Conditions>
+                            <Setter
+                                Property="Visibility"
+                                TargetName="PART_WatermarkHost"
+                                Value="Visible" />
+                        </MultiTrigger>
+                        <Trigger
+                            Property="IsFocused"
+                            Value="True">
+                            <Setter
+                                Property="Background"
+                                TargetName="Bd"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditBackgroundBrushKey}}" />
+                            <Setter
+                                Property="BorderBrush"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditBorderBrushKey}}" />
+                        </Trigger>
+                        <Trigger
+                            Property="IsReadOnly"
+                            Value="True">
+                            <Setter
+                                Property="Background"
+                                TargetName="Bd"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>

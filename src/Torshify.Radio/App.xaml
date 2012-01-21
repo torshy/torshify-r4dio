@@ -7,6 +7,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary
                     Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/ThemeResources.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/ThemeStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

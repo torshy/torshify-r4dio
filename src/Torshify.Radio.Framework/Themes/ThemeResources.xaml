@@ -33,7 +33,7 @@
         Color="#FF000000" />
     <SolidColorBrush
         x:Key="{x:Static Framework:AppTheme.TextBoxEditSelectionBrushKey}"
-        Color="#FFFFFFFF" />
+        Color="#FF1BA1E2" />
     <SolidColorBrush
         x:Key="{x:Static Framework:AppTheme.TextBoxEditReadOnlyBrushKey}"
         Color="#77000000" />
@@ -77,20 +77,20 @@
 
     <!-- Font sizes -->
     <System:Double
-        x:Key="{x:Static Framework:AppTheme.FontSizeSmall}">18.667</System:Double>
+        x:Key="{x:Static Framework:AppTheme.FontSizeSmall}">12</System:Double>
     <System:Double
-        x:Key="{x:Static Framework:AppTheme.FontSizeNormal}">20</System:Double>
+        x:Key="{x:Static Framework:AppTheme.FontSizeNormal}">14</System:Double>
     <System:Double
-        x:Key="{x:Static Framework:AppTheme.FontSizeMedium}">22.667</System:Double>
+        x:Key="{x:Static Framework:AppTheme.FontSizeMedium}">16</System:Double>
     <System:Double
-        x:Key="{x:Static Framework:AppTheme.FontSizeMediumLarge}">25.333</System:Double>
+        x:Key="{x:Static Framework:AppTheme.FontSizeMediumLarge}">18</System:Double>
     <System:Double
-        x:Key="{x:Static Framework:AppTheme.FontSizeLarge}">32</System:Double>
+        x:Key="{x:Static Framework:AppTheme.FontSizeLarge}">22</System:Double>
     <System:Double
-        x:Key="{x:Static Framework:AppTheme.FontSizeExtraLarge}">42.667</System:Double>
+        x:Key="{x:Static Framework:AppTheme.FontSizeExtraLarge}">26</System:Double>
     <System:Double
-        x:Key="{x:Static Framework:AppTheme.FontSizeExtraExtraLarge}">72</System:Double>
+        x:Key="{x:Static Framework:AppTheme.FontSizeExtraExtraLarge}">30</System:Double>
     <System:Double
-        x:Key="{x:Static Framework:AppTheme.FontSizeHuge}">186.667</System:Double>
+        x:Key="{x:Static Framework:AppTheme.FontSizeHuge}">46</System:Double>
 
 </ResourceDictionary>
