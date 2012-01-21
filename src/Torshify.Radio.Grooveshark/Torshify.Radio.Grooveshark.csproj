@@ -75,6 +75,13 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Torshify.Radio.Framework\Torshify.Radio.Framework.csproj">
+      <Project>{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}</Project>
+      <Name>Torshify.Radio.Framework</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
