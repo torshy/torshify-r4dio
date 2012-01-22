@@ -288,10 +288,10 @@
     <Style
         TargetType="{x:Type ToggleButton}"
         BasedOn="{StaticResource {x:Type ButtonBase}}" />
-    
+
     <Geometry
         x:Key="DownArrowGeometry">M 0 0 L 3.5 4 L 7 0 Z</Geometry>
-    
+
     <Style
         x:Key="ComboBoxReadonlyToggleButton"
         TargetType="{x:Type ToggleButton}"
@@ -433,6 +433,7 @@
                 Grid.ColumnSpan="2" />
             <TextBox
                 x:Name="PART_EditableTextBox"
+                Foreground="{TemplateBinding Foreground}"
                 HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                 IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}"
                 Margin="{TemplateBinding Padding}"
@@ -447,13 +448,6 @@
                 Style="{StaticResource ComboBoxReadonlyToggleButton}" />
         </Grid>
         <ControlTemplate.Triggers>
-            <Trigger
-                Property="IsKeyboardFocusWithin"
-                Value="true">
-                <Setter
-                    Property="Foreground"
-                    Value="Black" />
-            </Trigger>
             <Trigger
                 Property="HasItems"
                 Value="false">
@@ -494,7 +488,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    
+
     <Style
         TargetType="{x:Type ComboBox}">
         <Setter
@@ -562,7 +556,7 @@
                                     x:Name="DropDownBorder"
                                     BorderBrush="{DynamicResource {x:Static Framework:AppTheme.ContrastBackgroundKey}}"
                                     BorderThickness="1"
-                                    Background="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}">
+                                    Background="{DynamicResource {x:Static Framework:AppTheme.ContrastBackgroundKey}}">
                                     <ScrollViewer
                                         x:Name="DropDownScrollViewer">
                                         <Grid
@@ -639,15 +633,16 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
+
             <Trigger
                 Property="IsEditable"
                 Value="True">
                 <Setter
                     Property="BorderBrush"
-                    Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditBorderBrushKey}}" />
+                    Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
                 <Setter
                     Property="Background"
-                    Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditBackgroundBrushKey}}" />
+                    Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
                 <Setter
                     Property="Foreground"
                     Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxForegroundBrushKey}}" />
@@ -660,6 +655,19 @@
                 <Setter
                     Property="Template"
                     Value="{StaticResource ComboBoxEditableTemplate}" />
+            </Trigger>
+            <Trigger
+                Property="IsKeyboardFocusWithin"
+                Value="True">
+                <Setter
+                    Property="Background"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditBackgroundBrushKey}}" />
+                <Setter
+                    Property="BorderBrush"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditBorderBrushKey}}" />
+                <Setter
+                    Property="Foreground"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxForegroundBrushKey}}" />
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
