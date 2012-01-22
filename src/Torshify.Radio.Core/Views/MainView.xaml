@@ -23,14 +23,62 @@
                 Orientation="Horizontal"
                 Controls:WindowChrome.IsHitTestVisibleInChrome="True">
                 <Button
-                    Content="B"
-                    Width="20" 
-                    Command="{Binding NavigateBackCommand}" />
+                    Width="20"
+                    Command="{Binding NavigateBackCommand}"
+                    Padding="0"
+                    BorderThickness="0">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <Image
+                                Name="Img"
+                                ToolTip="Go back"
+                                ToolTipService.ShowOnDisabled="True"
+                                Source="pack://siteoforigin:,,,/Resources/Icons/back.png" />
+                            <DataTemplate.Triggers>
+                                <Trigger
+                                    Property="IsEnabled"
+                                    Value="False">
+                                    <Setter
+                                        Property="Opacity"
+                                        Value="0.5" />
+                                    <Setter
+                                        Property="ToolTip"
+                                        Value="You can't go back from where you are right now"
+                                        TargetName="Img" />
+                                </Trigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
                 <Button
-                    Content="F"
                     Width="20"
                     Margin="2,0,0,0"
-                    Command="{Binding NavigateForwardCommand}" />
+                    Command="{Binding NavigateForwardCommand}"
+                    Padding="0"
+                    BorderThickness="0">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <Image
+                                Name="Img"
+                                ToolTip="Go forward"
+                                ToolTipService.ShowOnDisabled="True"
+                                Source="pack://siteoforigin:,,,/Resources/Icons/next.png" />
+                            <DataTemplate.Triggers>
+                                <Trigger
+                                    Property="IsEnabled"
+                                    Value="False">
+                                    <Setter
+                                        Property="Opacity"
+                                        Value="0.5" />
+                                    <Setter
+                                        Property="ToolTip"
+                                        Value="You can't go forward from where you are right now"
+                                        TargetName="Img" />
+                                </Trigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
                 <extToolkit:WatermarkTextBox
                     Watermark="Search"
                     Margin="8,0,0,0"
@@ -40,13 +88,13 @@
                     Margin="4,0,0,0"
                     SelectedIndex="0">
                     <TextBlock
-                        Text="By Name" />
+                        Text="By name" />
                     <TextBlock
-                        Text="By Style" />
+                        Text="By style" />
                     <TextBlock
-                        Text="By Mood" />
+                        Text="By mood" />
                     <TextBlock
-                        Text="By Similar" />
+                        Text="By similar" />
                 </ComboBox>
             </StackPanel>
         </StackPanel>
