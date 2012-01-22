@@ -9,6 +9,9 @@
     xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
     xmlns:Regions="clr-namespace:Microsoft.Practices.Prism.Regions;assembly=Microsoft.Practices.Prism"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
+    Engine:LocalizeDictionary.DesignCulture="en-US"
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -31,7 +34,7 @@
                         <DataTemplate>
                             <Image
                                 Name="Img"
-                                ToolTip="Go back"
+                                ToolTip="{lex:LocText Key=Button_Back_ToolTip, Dict=Strings, Assembly=Torshify.Radio.Core}"
                                 ToolTipService.ShowOnDisabled="True"
                                 Source="pack://siteoforigin:,,,/Resources/Icons/back.png" />
                             <DataTemplate.Triggers>
@@ -43,7 +46,7 @@
                                         Value="0.5" />
                                     <Setter
                                         Property="ToolTip"
-                                        Value="You can't go back from where you are right now"
+                                        Value="{lex:LocText Key=Button_Back_Unable_ToolTip, Dict=Strings, Assembly=Torshify.Radio.Core}"
                                         TargetName="Img" />
                                 </Trigger>
                             </DataTemplate.Triggers>
@@ -60,7 +63,7 @@
                         <DataTemplate>
                             <Image
                                 Name="Img"
-                                ToolTip="Go forward"
+                                ToolTip="{lex:LocText Key=Button_Forward_ToolTip, Dict=Strings, Assembly=Torshify.Radio.Core}"
                                 ToolTipService.ShowOnDisabled="True"
                                 Source="pack://siteoforigin:,,,/Resources/Icons/next.png" />
                             <DataTemplate.Triggers>
@@ -72,7 +75,7 @@
                                         Value="0.5" />
                                     <Setter
                                         Property="ToolTip"
-                                        Value="You can't go forward from where you are right now"
+                                        Value="{lex:LocText Key=Button_Forward_Unable_ToolTip, Dict=Strings, Assembly=Torshify.Radio.Core}"
                                         TargetName="Img" />
                                 </Trigger>
                             </DataTemplate.Triggers>

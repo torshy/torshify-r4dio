@@ -1,0 +1,1616 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WPFLocalizeExtension</name>
+    </assembly>
+    <members>
+        <member name="T:WPFLocalizeExtension.Engine.LocalizedObjectOperation">
+            <summary>
+            Implements the LocalizedObjectOperation.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizedObjectOperation.GetErrorMessage(System.Int32)">
+            <summary>
+            Gets the error message.
+            </summary>
+            <param name="errorNo">The error no.</param>
+            <returns>The resolved string or a default error string.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizedObjectOperation.GetGuiString(System.String)">
+            <summary>
+            Gets the GUI string.
+            </summary>
+            <param name="key">The resource identifier.</param>
+            <returns>The resolved string or a default error string.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizedObjectOperation.GetGuiString(System.String,System.Globalization.CultureInfo)">
+            <summary>
+            Gets the GUI string.
+            </summary>
+            <param name="key">The resource identifier.</param>
+            <param name="language">The language.</param>
+            <returns>The resolved string or a default error string.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizedObjectOperation.GetHelpString(System.String)">
+            <summary>
+            Gets the help string.
+            </summary>
+            <param name="key">The resource identifier.</param>
+            <returns>The resolved string or a default error string.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizedObjectOperation.GetMaintenanceString(System.String)">
+            <summary>
+            Gets the maintenance string.
+            </summary>
+            <param name="key">The resource identifier.</param>
+            <returns>The resolved string or a default error string.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizedObjectOperation.GetUpdateAgentString(System.String)">
+            <summary>
+            Gets the update agent string.
+            </summary>
+            <param name="key">The resource identifier.</param>
+            <returns>The resolved string or a default error string.</returns>
+        </member>
+        <member name="T:WPFLocalizeExtension.Extensions.LocThicknessExtension">
+            <summary>
+            <c>BaseLocalizeExtension</c> for Thickness values
+            </summary>
+        </member>
+        <member name="T:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1">
+            <summary>
+            Implements the BaseLocalizeExtension.
+            Represents a LocalizationExtension which provides a localized object of a .resx dictionary.
+            </summary>
+            <typeparam name="TValue">The type of the provided value.</typeparam>
+            <remarks>
+            If a content between two tags in xaml is set, this has the higher priority and will overwrite the settled properties
+            </remarks>
+        </member>
+        <member name="F:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.targetObjects">
+            <summary>
+            Holds the collection of assigned dependency objects as WeakReferences
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.assembly">
+            <summary>
+            Holds the name of the Assembly where the .resx is located
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.currentValue">
+            <summary>
+            The current value
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.dict">
+            <summary>
+            Holds the Name of the .resx dictionary.
+            If it's null, "Resources" will get returned
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.key">
+            <summary>
+            Holds the Key to a .resx object
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.#ctor">
+            <summary>
+            Initializes a new instance of the BaseLocalizeExtension class.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the BaseLocalizeExtension class.
+            </summary>
+            <param name="key">Three types are supported:
+            Direct: passed key = key;
+            Dict/Key pair: this have to be separated like ResXDictionaryName:ResourceKey
+            Assembly/Dict/Key pair: this have to be separated like ResXDictionaryName:ResourceKey</param>
+            <remarks>
+            This constructor register the <see cref="T:System.EventHandler"/><c>OnCultureChanged</c> on <c>LocalizeDictionary</c>
+            to get an acknowledge of changing the culture
+            </remarks>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Provides the Value for the first Binding
+            </summary>
+            <param name="serviceProvider">The <see cref="T:System.Windows.Markup.IProvideValueTarget"/> provided from the <see cref="T:System.Windows.Markup.MarkupExtension"/></param>
+            <returns>
+            The found item from the .resx directory or null if not found
+            </returns>
+            <remarks>
+            This method register the <see cref="T:System.EventHandler"/><c>OnCultureChanged</c> on <c>LocalizeDictionary</c>
+            to get an acknowledge of changing the culture, if the passed <see cref="P:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.TargetObjects"/> type of <see cref="T:System.Windows.DependencyObject"/>.
+            !PROOF: On every single <see cref="T:System.Windows.Controls.UserControl"/>, Window, and Page,
+            there is a new SharedDP reference, and so there is every time a new <c>BaseLocalizeExtension</c>!
+            Because of this, we don't need to notify every single DependencyObjects to update their value (for GC).
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">
+            thrown if <paramref name="serviceProvider"/> is not type of <see cref="T:System.Windows.Markup.IProvideValueTarget"/>
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.ResolveLocalizedValue(`0@)">
+            <summary>
+            Resolves the localized value of the current Assembly, Dict, Key pair.
+            </summary>
+            <param name="resolvedValue">The resolved value.</param>
+            <returns>
+            True if the resolve was success, otherwise false.
+            </returns>
+            <exception>
+            If the Assembly, Dict, Key pair was not found.
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.ResolveLocalizedValue(`0@,System.Globalization.CultureInfo)">
+            <summary>
+            Resolves the localized value of the current Assembly, Dict, Key pair.
+            </summary>
+            <param name="resolvedValue">The resolved value.</param>
+            <param name="targetCulture">The target culture.</param>
+            <returns>
+            True if the resolve was success, otherwise false.
+            </returns>
+            <exception>
+            If the Assembly, Dict, Key pair was not found.
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.SetBinding(System.Windows.DependencyObject,System.Object)">
+            <summary>
+            Sets a binding between a <see cref="T:System.Windows.DependencyObject"/> with its <see cref="T:System.Windows.DependencyProperty"/>
+            or <see cref="T:System.Reflection.PropertyInfo"/> and the <c>BaseLocalizeExtension</c>.
+            </summary>
+            <param name="targetObject">The target dependency object</param>
+            <param name="targetProperty">The target dependency property</param>
+            <returns>
+            TRUE if the binding was setup successfully, otherwise FALSE (Binding already exists).
+            </returns>
+            <exception cref="T:System.ArgumentException">
+            If the <paramref name="targetProperty"/> is
+            not a <see cref="T:System.Windows.DependencyProperty"/> or <see cref="T:System.Reflection.PropertyInfo"/>.
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.ToString">
+            <summary>
+            Returns the Key that identifies a resource (Assembly:Dictionary:Key)
+            </summary>
+            <returns>Format: Assembly:Dictionary:Key</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.System#Windows#IWeakEventListener#ReceiveWeakEvent(System.Type,System.Object,System.EventArgs)">
+            <summary>
+            This method will be called through the interface, passed to the
+            <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/>.<see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager"/> to get notified on culture changed
+            </summary>
+            <param name="managerType">The manager Type.</param>
+            <param name="sender">The sender.</param>
+            <param name="e">The event argument.</param>
+            <returns>
+            true if the listener handled the event. It is considered an error by the <see cref="T:System.Windows.WeakEventManager"/> handling in WPF to register a listener for an event that the listener does not handle. Regardless, the method should return false if it receives an event that it does not recognize or handle.
+            </returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.IsTypeOf(System.Type,System.Type)">
+            <summary>
+            Determines whether if the <paramref name="checkType"/> is the <paramref name="targetType"/>.
+            </summary>
+            <param name="checkType">Type of the check.</param>
+            <param name="targetType">Type of the target.</param>
+            <returns>
+            <c>true</c> if the <paramref name="checkType"/> is type of the <paramref name="targetType"/>; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.FormatOutput(System.Object)">
+            <summary>
+            This method is used to modify the passed object into the target format
+            </summary>
+            <param name="input">The object that will be modified</param>
+            <returns>Returns the modified object</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.CanProvideValue(System.Type)">
+            <summary>
+            Determines whether this instance can provide a value for the specified resource type.
+            </summary>
+            <param name="resourceType">Type of the resource.</param>
+            <returns><c>true</c> if instance can provide a value for the specified resource type; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.GetForcedCultureOrDefault">
+            <summary>
+            If Culture property defines a valid <see cref="T:System.Globalization.CultureInfo"/>, a <see cref="T:System.Globalization.CultureInfo"/> instance will get
+            created and returned, otherwise <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/>.Culture will get returned.
+            </summary>
+            <returns>The <see cref="T:System.Globalization.CultureInfo"/></returns>
+            <exception cref="T:System.ArgumentException">
+            thrown if the parameter Culture don't defines a valid <see cref="T:System.Globalization.CultureInfo"/>
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.HandleNewValue">
+            <summary>
+            This method gets the new value for the target property and call <see cref="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.SetNewValue(System.Object)"/>.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.SetNewValue(System.Object)">
+            <summary>
+            Set the Value of the <see cref="T:System.Windows.DependencyProperty"/> to the passed Value
+            </summary>
+            <param name="newValue">The new Value</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.RaiseNotifyPropertyChanged(System.String)">
+            <summary>
+            Raises the notify property changed.
+            </summary>
+            <param name="propertyName">Name of the property.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.SetTargetValue(System.Windows.DependencyObject,System.Object,System.Object)">
+            <summary>
+            Sets the target value.
+            </summary>
+            <param name="targetObject">The target object.</param>
+            <param name="targetProperty">The target property.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.SetTargetValue(System.Windows.DependencyObject,System.Windows.DependencyProperty,System.Object)">
+            <summary>
+            Sets the target value.
+            </summary>
+            <param name="targetObject">The target object.</param>
+            <param name="targetProperty">The target property.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.SetTargetValue(System.Windows.DependencyObject,System.Reflection.PropertyInfo,System.Object)">
+            <summary>
+            Sets the target value.
+            </summary>
+            <param name="targetObject">The target object.</param>
+            <param name="targetProperty">The target property.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="E:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.PropertyChanged">
+            <summary>
+            Occurs when a property value changes.
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.Assembly">
+            <summary>
+            Gets or sets the name of the Assembly where the .resx is located.
+            If it's null, the executing assembly (where this LocalizeEngine is located at) will get returned
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.CurrentValue">
+            <summary>
+            Gets the current value.
+            This property has only a value, if the <c>BaseLocalizeExtension</c> is binded to a target.
+            </summary>
+            <value>The current value.</value>
+        </member>
+        <member name="P:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.DesignValue">
+            <summary>
+            Gets or sets the design value.
+            </summary>
+            <value>The design value.</value>
+        </member>
+        <member name="P:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.Dict">
+            <summary>
+            Gets or sets the Name of the .resx dictionary.
+            If it's null, "Resources" will get returned
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.ForceCulture">
+            <summary>
+            Gets or sets the culture to force a fixed localized object
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.Key">
+            <summary>
+            Gets or sets the Key to a .resx object
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.InitializeValue">
+            <summary>
+            Gets or sets the initialize value.
+            This is ONLY used to support the localize extension in blend!
+            </summary>
+            <value>The initialize value.</value>
+        </member>
+        <member name="P:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.ResourceIdentifierKey">
+            <summary>
+            Gets or sets the Key that identifies a resource (Assembly:Dictionary:Key)
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.BaseExtensions.BaseLocalizeExtension`1.TargetObjects">
+            <summary>
+            Gets the collection of <see cref="T:System.Windows.DependencyObject"/> as WeakReferences and the target property.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocThicknessExtension.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocThicknessExtension"/> class.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocThicknessExtension.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocThicknessExtension"/> class.
+            </summary>
+            <param name="key">The resource identifier.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocThicknessExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Provides the Value for the first Binding as Thickness
+            </summary>
+            <param name="serviceProvider">
+            The <see cref="T:System.Windows.Markup.IProvideValueTarget"/> provided from the <see cref="T:System.Windows.Markup.MarkupExtension"/>
+            </param>
+            <returns>The found item from the .resx directory or null if not found</returns>
+            <exception cref="T:System.InvalidOperationException">
+            thrown if <paramref name="serviceProvider"/> is not type of <see cref="T:System.Windows.Markup.IProvideValueTarget"/>
+            </exception>
+            <exception cref="T:System.NotSupportedException">
+            thrown if the found object is not type of Thickness
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocThicknessExtension.CanProvideValue(System.Type)">
+            <summary>
+            Determines whether this instance can provide a value for the specified resource type.
+            </summary>
+            <param name="resourceType">Type of the resource.</param>
+            <returns><c>true</c> if instance can provide a value for the specified resource type; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocThicknessExtension.HandleNewValue">
+            <summary>
+            see <c>BaseLocalizeExtension</c>
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocThicknessExtension.FormatOutput(System.Object)">
+            <summary>
+            This method is used to modify the passed object into the target format
+            </summary>
+            <param name="input">The object that will be modified</param>
+            <returns>Returns the modified object</returns>
+        </member>
+        <member name="T:WPFLocalizeExtension.Extensions.LocFlowDirectionExtension">
+            <summary>
+            <c>BaseLocalizeExtension</c> for <see cref="T:System.Windows.FlowDirection"/> values
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocFlowDirectionExtension.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocFlowDirectionExtension"/> class.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocFlowDirectionExtension.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocFlowDirectionExtension"/> class.
+            </summary>
+            <param name="key">The resource identifier.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocFlowDirectionExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Provides the Value for the first Binding as <see cref="T:WPFLocalizeExtension.Extensions.LocFlowDirectionExtension"/>
+            </summary>
+            <param name="serviceProvider">
+            The <see cref="T:System.Windows.Markup.IProvideValueTarget"/> provided from the <see cref="T:System.Windows.Markup.MarkupExtension"/>
+            </param>
+            <returns>The found item from the .resx directory or LeftToRight if not found</returns>
+            <exception cref="T:System.InvalidOperationException">
+            thrown if <paramref name="serviceProvider"/> is not type of <see cref="T:System.Windows.Markup.IProvideValueTarget"/>
+            </exception>
+            <exception cref="T:System.NotSupportedException">
+            thrown if the found object is not type of <see cref="T:System.Windows.FlowDirection"/>
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocFlowDirectionExtension.CanProvideValue(System.Type)">
+            <summary>
+            Determines whether this instance can provide a value for the specified resource type.
+            </summary>
+            <param name="resourceType">Type of the resource.</param>
+            <returns><c>true</c> if instance can provide a value for the specified resource type; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocFlowDirectionExtension.HandleNewValue">
+            <summary>
+            see <c>BaseLocalizeExtension</c>
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocFlowDirectionExtension.FormatOutput(System.Object)">
+            <summary>
+            This method is used to modify the passed object into the target format
+            </summary>
+            <param name="input">The object that will be modified</param>
+            <returns>Returns the modified object</returns>
+        </member>
+        <member name="T:WPFLocalizeExtension.Extensions.LocBrushExtension">
+            <summary>
+            <c>BaseLocalizeExtension</c> for brush objects as string (uses <see cref="T:System.ComponentModel.TypeConverter"/>)
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocBrushExtension.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocBrushExtension"/> class.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocBrushExtension.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocBrushExtension"/> class.
+            </summary>
+            <param name="key">The resource identifier.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocBrushExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Provides the Value for the first Binding as <see cref="T:System.Windows.Media.Brush"/>
+            </summary>
+            <param name="serviceProvider">
+            The <see cref="T:System.Windows.Markup.IProvideValueTarget"/> provided from the <see cref="T:System.Windows.Markup.MarkupExtension"/>
+            </param>
+            <returns>The found item from the .resx directory or null if not found</returns>
+            <exception cref="T:System.InvalidOperationException">
+            thrown if <paramref name="serviceProvider"/> is not type of <see cref="T:System.Windows.Markup.IProvideValueTarget"/>
+            </exception>
+            <exception cref="T:System.NotSupportedException">
+            thrown if the found object is not type of <see cref="T:System.String"/>
+            </exception>
+            <exception cref="T:System.NotSupportedException">
+            The found resource-string cannot be converted into the appropriate object.
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocBrushExtension.CanProvideValue(System.Type)">
+            <summary>
+            Determines whether this instance can provide a value for the specified resource type.
+            </summary>
+            <param name="resourceType">Type of the resource.</param>
+            <returns><c>true</c> if instance can provide a value for the specified resource type; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocBrushExtension.HandleNewValue">
+            <summary>
+            see <c>BaseLocalizeExtension</c>
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocBrushExtension.FormatOutput(System.Object)">
+            <summary>
+            This method is used to modify the passed object into the target format
+            </summary>
+            <param name="input">The object that will be modified</param>
+            <returns>Returns the modified object</returns>
+        </member>
+        <member name="T:WPFLocalizeExtension.Extensions.LocTextUpperExtension">
+            <summary>
+            <c>BaseLocalizeExtension</c> for string objects.
+            This strings will be converted to upper case.
+            </summary>
+        </member>
+        <member name="T:WPFLocalizeExtension.Extensions.LocTextExtension">
+            <summary>
+            <c>BaseLocalizeExtension</c> for string objects.
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Extensions.LocTextExtension.prefix">
+            <summary>
+            Holds the local prefix value
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Extensions.LocTextExtension.suffix">
+            <summary>
+            Holds the local suffix value
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Extensions.LocTextExtension.formatSegments">
+            <summary>
+            Holds the local format segment array
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextExtension.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocTextExtension"/> class.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextExtension.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocTextExtension"/> class.
+            </summary>
+            <param name="key">The resource identifier.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Provides the Value for the first Binding as <see cref="T:System.String"/>
+            </summary>
+            <param name="serviceProvider">
+            The <see cref="T:System.Windows.Markup.IProvideValueTarget"/> provided from the <see cref="T:System.Windows.Markup.MarkupExtension"/>
+            </param>
+            <returns>The found item from the .resx directory or null if not found</returns>
+            <exception cref="T:System.InvalidOperationException">
+            thrown if <paramref name="serviceProvider"/> is not type of <see cref="T:System.Windows.Markup.IProvideValueTarget"/>
+            </exception>
+            <exception cref="T:System.NotSupportedException">
+            thrown if the found object is not type of <see cref="T:System.String"/>
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextExtension.CanProvideValue(System.Type)">
+            <summary>
+            Determines whether this instance can provide a value for the specified resource type.
+            </summary>
+            <param name="resourceType">Type of the resource.</param>
+            <returns><c>true</c> if instance can provide a value for the specified resource type; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextExtension.FormatText(System.String)">
+            <summary>
+            This method formats the localized text.
+            If the passed target text is null, string.empty will be returned.
+            </summary>
+            <param name="target">The text to format.</param>
+            <returns>Returns the formated text or string.empty, if the target text was null.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextExtension.HandleNewValue">
+            <summary>
+            see <c>BaseLocalizeExtension</c>
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextExtension.FormatOutput(System.Object)">
+            <summary>
+            This method returns the finished formatted text
+            </summary>
+            <param name="input">If the passed string not null, it will be used, otherwise a fresh localized text will be loaded.</param>
+            <returns>Returns the finished formatted text in format [PREFIX]LocalizedText[SUFFIX]</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextExtension.InitializeLocText">
+            <summary>
+            Initializes the <see cref="T:WPFLocalizeExtension.Extensions.LocTextExtension"/> extension.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextExtension.GetAppendText(WPFLocalizeExtension.Extensions.LocTextExtension.TextAppendType)">
+            <summary>
+            Returns the prefix or suffix text, depending on the supplied <see cref="T:WPFLocalizeExtension.Extensions.LocTextExtension.TextAppendType"/>.
+            If the prefix or suffix is null, it will be returned a string.empty.
+            </summary>
+            <param name="at">The <see cref="T:WPFLocalizeExtension.Extensions.LocTextExtension.TextAppendType"/> defines the format of the return value</param>
+            <returns>Returns the formated prefix or suffix</returns>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.LocTextExtension.Prefix">
+            <summary>
+            Gets or sets a prefix for the localized text
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.LocTextExtension.Suffix">
+            <summary>
+            Gets or sets a suffix for the localized text
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.LocTextExtension.FormatSegment1">
+            <summary>
+            Gets or sets the format segment 1.
+            This will be used to replace format place holders from the localized text.
+            <see cref="T:WPFLocalizeExtension.Extensions.LocTextLowerExtension"/> and <see cref="T:WPFLocalizeExtension.Extensions.LocTextUpperExtension"/> will format this segment.
+            </summary>
+            <value>The format segment 1.</value>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.LocTextExtension.FormatSegment2">
+            <summary>
+            Gets or sets the format segment 2.
+            This will be used to replace format place holders from the localized text.
+            <see cref="T:WPFLocalizeExtension.Extensions.LocTextUpperExtension"/> and <see cref="T:WPFLocalizeExtension.Extensions.LocTextLowerExtension"/> will format this segment.
+            </summary>
+            <value>The format segment 2.</value>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.LocTextExtension.FormatSegment3">
+            <summary>
+            Gets or sets the format segment 3.
+            This will be used to replace format place holders from the localized text.
+            <see cref="T:WPFLocalizeExtension.Extensions.LocTextUpperExtension"/> and <see cref="T:WPFLocalizeExtension.Extensions.LocTextLowerExtension"/> will format this segment.
+            </summary>
+            <value>The format segment 3.</value>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.LocTextExtension.FormatSegment4">
+            <summary>
+            Gets or sets the format segment 4.
+            This will be used to replace format place holders from the localized text.
+            <see cref="T:WPFLocalizeExtension.Extensions.LocTextUpperExtension"/> and <see cref="T:WPFLocalizeExtension.Extensions.LocTextLowerExtension"/> will format this segment.
+            </summary>
+            <value>The format segment 4.</value>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.LocTextExtension.FormatSegment5">
+            <summary>
+            Gets or sets the format segment 5.
+            This will be used to replace format place holders from the localized text.
+            <see cref="T:WPFLocalizeExtension.Extensions.LocTextUpperExtension"/> and <see cref="T:WPFLocalizeExtension.Extensions.LocTextLowerExtension"/> will format this segment.
+            </summary>
+            <value>The format segment 5.</value>
+        </member>
+        <member name="T:WPFLocalizeExtension.Extensions.LocTextExtension.TextAppendType">
+            <summary>
+            This enumeration is used to determine the type 
+            of the return value of <see cref="M:WPFLocalizeExtension.Extensions.LocTextExtension.GetAppendText(WPFLocalizeExtension.Extensions.LocTextExtension.TextAppendType)"/>
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Extensions.LocTextExtension.TextAppendType.Prefix">
+            <summary>
+            The return value is used as prefix
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Extensions.LocTextExtension.TextAppendType.Suffix">
+            <summary>
+            The return value is used as suffix
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextUpperExtension.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocTextUpperExtension"/> class.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextUpperExtension.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocTextUpperExtension"/> class.
+            </summary>
+            <param name="key">The resource identifier.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextUpperExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Provides the Value for the first Binding as <see cref="T:System.String"/>
+            </summary>
+            <param name="serviceProvider">
+            The <see cref="T:System.Windows.Markup.IProvideValueTarget"/> provided from the <see cref="T:System.Windows.Markup.MarkupExtension"/>
+            </param>
+            <returns>The found item from the .resx directory or null if not found</returns>
+            <exception cref="T:System.InvalidOperationException">
+            thrown if <paramref name="serviceProvider"/> is not type of <see cref="T:System.Windows.Markup.IProvideValueTarget"/>
+            </exception>
+            <exception cref="T:System.NotSupportedException">
+            thrown if the found object is not type of <see cref="T:System.String"/>
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextUpperExtension.FormatText(System.String)">
+            <summary>
+            This method formats the localized text.
+            If the passed target text is null, string.empty will be returned.
+            </summary>
+            <param name="target">The text to format.</param>
+            <returns>
+            Returns the formated text or string.empty, if the target text was null.
+            </returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextUpperExtension.HandleNewValue">
+            <summary>
+            see <c>BaseLocalizeExtension</c>
+            </summary>
+        </member>
+        <member name="T:WPFLocalizeExtension.Engine.ObjectDependencyManager">
+            <summary>
+            This class ensures, that a specific object lives as long a associated object is alive.
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.ObjectDependencyManager.internalList">
+            <summary>
+            This member holds the list of all <see cref="T:System.WeakReference"/>s and their appropriate objects.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.ObjectDependencyManager.#cctor">
+            <summary>
+            Initializes static members of the <see cref="T:WPFLocalizeExtension.Engine.ObjectDependencyManager"/> class. 
+            Static Constructor. Creates a new instance of 
+            Dictionary(object, <see cref="T:System.WeakReference"/>) and set it to the <see cref="F:WPFLocalizeExtension.Engine.ObjectDependencyManager.internalList"/>.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.ObjectDependencyManager.AddObjectDependency(System.WeakReference,System.Object)">
+            <summary>
+            This method adds a new object dependency
+            </summary>
+            <param name="weakRefDp">The <see cref="T:System.WeakReference"/>, which ensures the live cycle of <paramref name="objToHold"/></param>
+            <param name="objToHold">The object, which should stay alive as long <paramref name="weakRefDp"/> is alive</param>
+            <returns>
+            true, if the binding was successfully, otherwise false
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            The <paramref name="objToHold"/> cannot be null
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            <paramref name="objToHold"/> cannot be type of <see cref="T:System.WeakReference"/>
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+            The <see cref="T:System.WeakReference"/>.Target cannot be the same as <paramref name="objToHold"/>
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.ObjectDependencyManager.CleanUp">
+            <summary>
+            This method cleans up all independent (!<see cref="T:System.WeakReference"/>.IsAlive) objects.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.ObjectDependencyManager.CleanUp(System.Object)">
+            <summary>
+            This method cleans up all independent (!<see cref="T:System.WeakReference"/>.IsAlive) objects or a single object.
+            </summary>
+            <param name="objToRemove">
+            If defined, the associated object dependency will be removed instead of a full CleanUp
+            </param>
+        </member>
+        <member name="T:WPFLocalizeExtension.Engine.OddsFormatType">
+            <summary>
+            Defines the Format of the odds output.
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.OddsFormatType.EU">
+            <summary>
+            Format "1.23"
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.OddsFormatType.UK">
+            <summary>
+            Format "1/2"
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.OddsFormatType.US">
+            <summary>
+            Format "-200"
+            </summary>
+        </member>
+        <member name="T:WPFLocalizeExtension.Engine.OddsFormatManager">
+            <summary>
+            Represents the odds format manager
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.OddsFormatManager.DesignOddsFormatProperty">
+            <summary>
+            <see cref="T:System.Windows.DependencyProperty"/> DesignOddsFormat to set the <see cref="P:WPFLocalizeExtension.Engine.OddsFormatManager.OddsFormatType"/>.
+            Only supported at DesignTime.
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.OddsFormatManager.SyncRoot">
+            <summary>
+            Holds a SyncRoot to be thread safe
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.OddsFormatManager.instance">
+            <summary>
+            Holds the instance of singleton
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.OddsFormatManager.oddsFormatType">
+            <summary>
+            Holds the current chosen <see cref="P:WPFLocalizeExtension.Engine.OddsFormatManager.OddsFormatType"/>.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:WPFLocalizeExtension.Engine.OddsFormatManager"/> class from being created. 
+            Static Constructor
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.GetDesignOddsFormat(System.Windows.DependencyObject)">
+            <summary>
+            Getter of <see cref="T:System.Windows.DependencyProperty"/> DesignOddsFormat.
+            Only supported at DesignTime.
+            If its in Runtime, the current <see cref="P:WPFLocalizeExtension.Engine.OddsFormatManager.OddsFormatType"/> will be returned.
+            </summary>
+            <param name="obj">The dependency object to get the odds format type from.</param>
+            <returns>The design odds format at design time or the current odds format at runtime.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.SetDesignOddsFormat(System.Windows.DependencyObject,WPFLocalizeExtension.Engine.OddsFormatType)">
+            <summary>
+            Setter of <see cref="T:System.Windows.DependencyProperty"/> DesignOddsFormat.
+            Only supported at DesignTime.
+            </summary>
+            <param name="obj">The dependency object to set the odds format to.</param>
+            <param name="value">The odds format.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.AddEventListener(System.Windows.IWeakEventListener)">
+            <summary>
+            Attach an WeakEventListener to the <see cref="T:WPFLocalizeExtension.Engine.OddsFormatManager"/>
+            </summary>
+            <param name="listener">The listener to attach</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.GetIsInDesignMode">
+            <summary>
+            Gets the status of the design mode
+            </summary>
+            <returns>TRUE if in design mode, else FALSE</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.RemoveEventListener(System.Windows.IWeakEventListener)">
+            <summary>
+            Detach an WeakEventListener to the <see cref="T:WPFLocalizeExtension.Engine.OddsFormatManager"/>
+            </summary>
+            <param name="listener">The listener to detach</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.SetOddsFormatFromDependencyProperty(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            Callback function. Used to set the <see cref="T:WPFLocalizeExtension.Engine.OddsFormatManager"/>.<see cref="P:WPFLocalizeExtension.Engine.OddsFormatManager.OddsFormatType"/> if set in Xaml.
+            Only supported at DesignTime.
+            </summary>
+            <param name="obj">The dependency object to set the odds format to.</param>
+            <param name="args">The <see cref="T:System.Windows.DependencyPropertyChangedEventArgs"/> instance 
+            containing the event data.</param>
+        </member>
+        <member name="E:WPFLocalizeExtension.Engine.OddsFormatManager.OnOddsFormatChanged">
+            <summary>
+            Get raised if the <see cref="T:WPFLocalizeExtension.Engine.OddsFormatManager"/>.<see cref="P:WPFLocalizeExtension.Engine.OddsFormatManager.OddsFormatType"/> is changed.
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Engine.OddsFormatManager.DefaultOddsFormatType">
+            <summary>
+            Gets the default <see cref="P:WPFLocalizeExtension.Engine.OddsFormatManager.OddsFormatType"/> to initialize the 
+            <see cref="T:WPFLocalizeExtension.Engine.OddsFormatManager"/>.<see cref="P:WPFLocalizeExtension.Engine.OddsFormatManager.OddsFormatType"/>.
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Engine.OddsFormatManager.Instance">
+            <summary>
+            Gets the <see cref="T:WPFLocalizeExtension.Engine.OddsFormatManager"/> singleton.
+            If the underlying instance is null, a instance will be created.
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Engine.OddsFormatManager.OddsFormatType">
+            <summary>
+            Gets or sets the OddsFormatType for localization.
+            On set, <see cref="E:WPFLocalizeExtension.Engine.OddsFormatManager.OnOddsFormatChanged"/> is raised.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            You have to set <see cref="T:WPFLocalizeExtension.Engine.OddsFormatManager"/>.<see cref="P:WPFLocalizeExtension.Engine.OddsFormatManager.OddsFormatType"/> first or 
+            wait until System.Windows.Application.Current.MainWindow is created.
+            Otherwise you will get an Exception.</exception>
+            <exception cref="T:System.ArgumentNullException">thrown if OddsFormatType is not defined</exception>
+        </member>
+        <member name="T:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager">
+            <summary>
+            This in line class is used to handle weak events to avoid memory leaks
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager.isListening">
+            <summary>
+            Indicates, if the current instance is listening on the source event
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager.listeners">
+            <summary>
+            Holds the inner list of listeners
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager"/> class from being created. 
+            Creates a new instance of WeakOddsFormatChangedEventManager
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager.AddListener(System.Windows.IWeakEventListener)">
+            <summary>
+            Adds an listener to the inner list of listeners
+            </summary>
+            <param name="listener">The listener to add</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager.RemoveListener(System.Windows.IWeakEventListener)">
+            <summary>
+            Removes an listener from the inner list of listeners
+            </summary>
+            <param name="listener">The listener to remove</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager.StartListening(System.Object)">
+            <summary>
+            This method starts the listening process by attaching on the source event
+            </summary>
+            <param name="source">The source.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager.StopListening(System.Object)">
+            <summary>
+            This method stops the listening process by detaching on the source event
+            </summary>
+            <param name="source">The source to stop listening on.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager.Instance_OnCultureChanged">
+            <summary>
+            This method is called if the <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/>.OnCultureChanged
+            is called and the listening process is enabled
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager.Instance_OnOddsFormatChanged">
+            <summary>
+            This method is called if the <see cref="T:WPFLocalizeExtension.Engine.OddsFormatManager"/>.OnOddsFormatChanged
+            is called and the listening process is enabled
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager.StartStopListening">
+            <summary>
+            This method starts and stops the listening process by attaching/detaching on the source event
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager.CurrentManager">
+            <summary>
+            Gets the singleton instance of <see cref="T:WPFLocalizeExtension.Engine.OddsFormatManager.WeakOddsFormatChangedEventManager"/>
+            </summary>
+        </member>
+        <member name="T:WPFLocalizeExtension.Extensions.LocImageExtension">
+            <summary>
+            <c>BaseLocalizeExtension</c> for image objects
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocImageExtension.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocImageExtension"/> class.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocImageExtension.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocImageExtension"/> class.
+            </summary>
+            <param name="key">The resource identifier.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocImageExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Provides the Value for the first Binding as <see cref="T:System.Windows.Media.Imaging.BitmapSource"/>
+            </summary>
+            <param name="serviceProvider">
+            The <see cref="T:System.Windows.Markup.IProvideValueTarget"/> provided from the <see cref="T:System.Windows.Markup.MarkupExtension"/>
+            </param>
+            <returns>The found item from the .resx directory or null if not found</returns>
+            <exception cref="T:System.InvalidOperationException">
+            thrown if <paramref name="serviceProvider"/> is not type of <see cref="T:System.Windows.Markup.IProvideValueTarget"/>
+            </exception>
+            <exception cref="T:System.NotSupportedException">
+            thrown if the found object is not type of <see cref="T:System.Drawing.Bitmap"/>
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocImageExtension.CanProvideValue(System.Type)">
+            <summary>
+            Determines whether this instance can provide a value for the specified resource type.
+            </summary>
+            <param name="resourceType">Type of the resource.</param>
+            <returns><c>true</c> if instance can provide a value for the specified resource type; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocImageExtension.HandleNewValue">
+            <summary>
+            see <c>BaseLocalizeExtension</c>
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocImageExtension.FormatOutput(System.Object)">
+            <summary>
+            Creates a <see cref="T:System.Windows.Media.Imaging.BitmapSource"/> from a <see cref="T:System.Drawing.Bitmap"/>.
+            This extension does NOT support a DesignValue.
+            </summary>
+            <param name="input">The <see cref="T:System.Drawing.Bitmap"/> to convert</param>
+            <returns>The converted <see cref="T:System.Windows.Media.Imaging.BitmapSource"/></returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocImageExtension.DeleteObject(System.IntPtr)">
+            <summary>
+            Frees memory of a pointer.
+            </summary>
+            <param name="o">Object to remove from memory.</param>
+            <returns>0 if the removing was success, otherwise another number.</returns>
+        </member>
+        <member name="T:WPFLocalizeExtension.Extensions.LocDoubleExtension">
+            <summary>
+            <c>BaseLocalizeExtension</c> for double values
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocDoubleExtension.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocDoubleExtension"/> class.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocDoubleExtension.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocDoubleExtension"/> class.
+            </summary>
+            <param name="key">The resource identifier.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocDoubleExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Provides the Value for the first Binding as double
+            </summary>
+            <param name="serviceProvider">
+            The <see cref="T:System.Windows.Markup.IProvideValueTarget"/> provided from the <see cref="T:System.Windows.Markup.MarkupExtension"/>
+            </param>
+            <returns>The found item from the .resx directory or null if not found</returns>
+            <exception cref="T:System.InvalidOperationException">
+            thrown if <paramref name="serviceProvider"/> is not type of <see cref="T:System.Windows.Markup.IProvideValueTarget"/>
+            </exception>
+            <exception cref="T:System.NotSupportedException">
+            thrown if the found object is not type of double
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocDoubleExtension.CanProvideValue(System.Type)">
+            <summary>
+            Determines whether this instance can provide a value for the specified resource type.
+            </summary>
+            <param name="resourceType">Type of the resource.</param>
+            <returns><c>true</c> if instance can provide a value for the specified resource type; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocDoubleExtension.HandleNewValue">
+            <summary>
+            see <c>BaseLocalizeExtension</c>
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocDoubleExtension.FormatOutput(System.Object)">
+            <summary>
+            This method is used to modify the passed object into the target format
+            </summary>
+            <param name="input">The object that will be modified</param>
+            <returns>Returns the modified object</returns>
+        </member>
+        <member name="T:WPFLocalizeExtension.Extensions.LocTextLowerExtension">
+            <summary>
+            <c>BaseLocalizeExtension</c> for string objects.
+            This strings will be converted to lower case.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextLowerExtension.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocTextLowerExtension"/> class.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextLowerExtension.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.LocTextLowerExtension"/> class.
+            </summary>
+            <param name="key">The resource identifier.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextLowerExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Provides the Value for the first Binding as <see cref="T:System.String"/>
+            </summary>
+            <param name="serviceProvider">
+            The <see cref="T:System.Windows.Markup.IProvideValueTarget"/> provided from the <see cref="T:System.Windows.Markup.MarkupExtension"/>
+            </param>
+            <returns>The found item from the .resx directory or null if not found</returns>
+            <exception cref="T:System.InvalidOperationException">
+            thrown if <paramref name="serviceProvider"/> is not type of <see cref="T:System.Windows.Markup.IProvideValueTarget"/>
+            </exception>
+            <exception cref="T:System.NotSupportedException">
+            thrown if the found object is not type of <see cref="T:System.String"/>
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextLowerExtension.FormatText(System.String)">
+            <summary>
+            This method formats the localized text.
+            If the passed target text is null, string.empty will be returned.
+            </summary>
+            <param name="target">The text to format.</param>
+            <returns>
+            Returns the formated text or string.empty, if the target text was null.
+            </returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.LocTextLowerExtension.HandleNewValue">
+            <summary>
+            see <c>BaseLocalizeExtension</c>
+            </summary>
+        </member>
+        <member name="T:WPFLocalizeExtension.Engine.LocalizeDictionary">
+            <summary>
+            Represents the culture interface for localization
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.LocalizeDictionary.ResourcesName">
+            <summary>
+            Holds the default <see cref="T:System.Windows.ResourceDictionary"/> name
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.LocalizeDictionary.ResourceManagerName">
+            <summary>
+            Holds the name of the Resource Manager.
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.LocalizeDictionary.ResourceFileExtension">
+            <summary>
+            Holds the extension of the resource files.
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.LocalizeDictionary.ResourceBindingFlags">
+            <summary>
+            Holds the binding flags for the reflection to find the resource files.
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.LocalizeDictionary.DesignCultureProperty">
+            <summary>
+            <see cref="T:System.Windows.DependencyProperty"/> DesignCulture to set the Culture.
+            Only supported at DesignTime.
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.LocalizeDictionary.SyncRoot">
+            <summary>
+            Holds a SyncRoot to be thread safe
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.LocalizeDictionary.instance">
+            <summary>
+            Holds the instance of singleton
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.LocalizeDictionary.culture">
+            <summary>
+            Holds the current chosen <see cref="T:System.Globalization.CultureInfo"/>
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/> class from being created.
+            Static Constructor
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.GetDesignCulture(System.Windows.DependencyObject)">
+            <summary>
+            Getter of <see cref="T:System.Windows.DependencyProperty"/> Culture.
+            Only supported at DesignTime.
+            If its in Runtime, <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/>.Culture will be returned.
+            </summary>
+            <param name="obj">The dependency object to get the design culture from.</param>
+            <returns>The design culture at design time or the current culture at runtime.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.ParseKey(System.String,System.String@,System.String@,System.String@)">
+            <summary>
+            Parses a key ([[Assembly:]Dict:]Key and return the parts of it.
+            </summary>
+            <param name="inKey">The key to parse.</param>
+            <param name="outAssembly">The found or default assembly.</param>
+            <param name="outDict">The found or default dictionary.</param>
+            <param name="outKey">The found or default key.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.SetDesignCulture(System.Windows.DependencyObject,System.String)">
+            <summary>
+            Setter of <see cref="T:System.Windows.DependencyProperty"/> Culture.
+            Only supported at DesignTime.
+            </summary>
+            <param name="obj">The dependency object to set the culture to.</param>
+            <param name="value">The odds format.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.AddEventListener(System.Windows.IWeakEventListener)">
+            <summary>
+            Attach an WeakEventListener to the <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/>
+            </summary>
+            <param name="listener">The listener to attach</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.GetAssemblyName(System.Reflection.Assembly)">
+            <summary>
+            Returns the <see cref="T:System.Reflection.AssemblyName"/> of the passed assembly instance
+            </summary>
+            <param name="assembly">The Assembly where to get the name from</param>
+            <returns>The Assembly name</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.GetIsInDesignMode">
+            <summary>
+            Gets the status of the design mode
+            </summary>
+            <returns>TRUE if in design mode, else FALSE</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.GetLocalizedObject``1(System.String,System.String,System.String,System.Globalization.CultureInfo)">
+            <summary>
+            Returns an object from the passed dictionary with the given name.
+            If a wrong <typeparamref name="TType"/> is passed, no exception will get thrown (return obj as <typeparamref name="TType"/>).
+            </summary>
+            <typeparam name="TType">Type of result type. Have to be a class.</typeparam>
+            <param name="resourceAssembly">The Assembly where the Resource is located at</param>
+            <param name="resourceDictionary">Name of the resource directory</param>
+            <param name="resourceKey">The key for the resource</param>
+            <param name="cultureToUse">The culture to use.</param>
+            <returns>
+            The found object or NULL if not found or wrong <typeparamref name="TType"/> is given
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="resourceDictionary"/> is null
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            <paramref name="resourceDictionary"/> is empty
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+            <paramref name="resourceKey"/> is null
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            <paramref name="resourceKey"/> is empty
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            Ambiguous resource name {<paramref name="resourceDictionary"/>}
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            No resource with name '{<paramref name="resourceDictionary"/>}' found
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.RemoveEventListener(System.Windows.IWeakEventListener)">
+            <summary>
+            Detach an WeakEventListener to the <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/>
+            </summary>
+            <param name="listener">The listener to detach</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.ResourceKeyExists(System.String,System.String,System.String)">
+            <summary>
+            Looks up the ResourceManagers for the searched <paramref name="resourceKey"/> 
+            in the <paramref name="resourceDictionary"/> in the <paramref name="resourceAssembly"/>
+            with an Invariant Culture.
+            </summary>
+            <param name="resourceAssembly">The resource assembly (e.g.: <c>BaseLocalizeExtension</c>). NULL = Name of the executing assembly</param>
+            <param name="resourceDictionary">The dictionary to look up (e.g.: ResHelp, Resources, ...). NULL = Name of the default resource file (Resources)</param>
+            <param name="resourceKey">The key of the searched entry (e.g.: <c>btnHelp</c>, Cancel, ...). NULL = Exception</param>
+            <returns>
+            TRUE if the searched one is found, otherwise FALSE
+            </returns>
+            <exception cref="T:System.InvalidOperationException">
+            If the ResourceManagers cannot be looked up
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            If the searched <see cref="T:System.Resources.ResourceManager"/> wasn't found (only in runtime)
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            If the <paramref name="resourceKey"/> is null or empty
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.ResourceKeyExists(System.String,System.String,System.String,System.Globalization.CultureInfo)">
+            <summary>
+            Looks up the ResourceManagers for the searched <paramref name="resourceKey"/>
+            in the <paramref name="resourceDictionary"/> in the <paramref name="resourceAssembly"/>
+            with the passed culture. If the searched one does not exists with the passed culture, is will searched
+            until the invariant culture is used.
+            </summary>
+            <param name="resourceAssembly">The resource assembly (e.g.: <c>BaseLocalizeExtension</c>). NULL = Name of the executing assembly</param>
+            <param name="resourceDictionary">The dictionary to look up (e.g.: ResHelp, Resources, ...). NULL = Name of the default resource file (Resources)</param>
+            <param name="resourceKey">The key of the searched entry (e.g.: <c>btnHelp</c>, Cancel, ...). NULL = Exception</param>
+            <param name="cultureToUse">The culture to use.</param>
+            <returns>
+            TRUE if the searched one is found, otherwise FALSE
+            </returns>
+            <exception cref="T:System.InvalidOperationException">
+            If the ResourceManagers cannot be looked up
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            If the searched <see cref="T:System.Resources.ResourceManager"/> wasn't found (only in runtime)
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            If the <paramref name="resourceKey"/> is null or empty
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.SetCultureFromDependencyProperty(System.Windows.DependencyObject,System.Windows.DependencyPropertyChangedEventArgs)">
+            <summary>
+            Callback function. Used to set the <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/>.Culture if set in Xaml.
+            Only supported at DesignTime.
+            </summary>
+            <param name="obj">The dependency object.</param>
+            <param name="args">The event argument.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.GetResourceManager(System.String,System.String,System.String)">
+            <summary>
+            Looks up in the cached <see cref="T:System.Resources.ResourceManager"/> list for the searched <see cref="T:System.Resources.ResourceManager"/>.
+            </summary>
+            <param name="resourceAssembly">The resource assembly (e.g.: <c>BaseLocalizeExtension</c>). NULL = Name of the executing assembly</param>
+            <param name="resourceDictionary">The dictionary to look up (e.g.: ResHelp, Resources, ...). NULL = Name of the default resource file (Resources)</param>
+            <param name="resourceKey">The key of the searched entry (e.g.: <c>btnHelp</c>, Cancel, ...). NULL = Exception</param>
+            <returns>
+            The found <see cref="T:System.Resources.ResourceManager"/>
+            </returns>
+            <exception cref="T:System.InvalidOperationException">
+            If the ResourceManagers cannot be looked up
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            If the searched <see cref="T:System.Resources.ResourceManager"/> wasn't found
+            </exception>
+            <exception cref="T:System.ArgumentException">
+            If the <paramref name="resourceKey"/> is null or empty
+            </exception>
+        </member>
+        <member name="E:WPFLocalizeExtension.Engine.LocalizeDictionary.OnCultureChanged">
+            <summary>
+            Get raised if the <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/>.Culture is changed.
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Engine.LocalizeDictionary.DefaultCultureInfo">
+            <summary>
+            Gets the default <see cref="T:System.Globalization.CultureInfo"/> to initialize the <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/>.<see cref="T:System.Globalization.CultureInfo"/>
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Engine.LocalizeDictionary.Instance">
+            <summary>
+            Gets the <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/> singleton.
+            If the underlying instance is null, a instance will be created.
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Engine.LocalizeDictionary.Culture">
+            <summary>
+            Gets or sets the <see cref="T:System.Globalization.CultureInfo"/> for localization.
+            On set, <see cref="E:WPFLocalizeExtension.Engine.LocalizeDictionary.OnCultureChanged"/> is raised.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            You have to set <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/>.Culture first or 
+            wait until System.Windows.Application.Current.MainWindow is created.
+            Otherwise you will get an Exception.</exception>
+            <exception cref="T:System.ArgumentNullException">thrown if Culture will be set to null</exception>
+        </member>
+        <member name="P:WPFLocalizeExtension.Engine.LocalizeDictionary.ResourceManagerList">
+            <summary>
+            Gets the used ResourceManagers with their corresponding <c>namespaces</c>.
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Engine.LocalizeDictionary.SpecificCulture">
+            <summary>
+            Gets the specific <see cref="T:System.Globalization.CultureInfo"/> of the current culture.
+            This can be used for format manners.
+            If the Culture is an invariant <see cref="T:System.Globalization.CultureInfo"/>, 
+            SpecificCulture will also return an invariant <see cref="T:System.Globalization.CultureInfo"/>.
+            </summary>
+        </member>
+        <member name="T:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager">
+            <summary>
+            This in line class is used to handle weak events to avoid memory leaks
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager.isListening">
+            <summary>
+            Indicates, if the current instance is listening on the source event
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager.listeners">
+            <summary>
+            Holds the inner list of listeners
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager"/> class from being created. 
+            Creates a new instance of WeakCultureChangedEventManager
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager.AddListener(System.Windows.IWeakEventListener)">
+            <summary>
+            Adds an listener to the inner list of listeners
+            </summary>
+            <param name="listener">The listener to add</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager.RemoveListener(System.Windows.IWeakEventListener)">
+            <summary>
+            Removes an listener from the inner list of listeners
+            </summary>
+            <param name="listener">The listener to remove</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager.StartListening(System.Object)">
+            <summary>
+            This method starts the listening process by attaching on the source event
+            </summary>
+            <param name="source">The source.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager.StopListening(System.Object)">
+            <summary>
+            This method stops the listening process by detaching on the source event
+            </summary>
+            <param name="source">The source to stop listening on.</param>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager.Instance_OnCultureChanged">
+            <summary>
+            This method is called if the <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/>.OnCultureChanged
+            is called and the listening process is enabled
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager.StartStopListening">
+            <summary>
+            This method starts and stops the listening process by attaching/detaching on the source event
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager.CurrentManager">
+            <summary>
+            Gets the singleton instance of <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager"/>
+            </summary>
+        </member>
+        <member name="T:WPFLocalizeExtension.Extensions.OddsFormatExtension">
+            <summary>
+            Represents a OddsFormatExtension which provides a formated decimal odds value.
+            </summary>
+            <remarks>
+            If a content between two tags in Xaml is set, this has the higher priority and will overwrite the settled properties
+            </remarks>
+        </member>
+        <member name="F:WPFLocalizeExtension.Extensions.OddsFormatExtension.oddsFormatLookupTableUk">
+            <summary>
+            Holds the Dictionary of the Lookup Table.
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Extensions.OddsFormatExtension.displayValue">
+            <summary>
+            Holds the value to display
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Extensions.OddsFormatExtension.targetObjects">
+            <summary>
+            Holds the collection of assigned dependency objects as WeakReferences
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.#ctor(System.Decimal)">
+            <summary>
+            Initializes a new instance of the <see cref="T:WPFLocalizeExtension.Extensions.OddsFormatExtension"/> class.
+            Initialize the <c>BaseLocalizeExtension"</c>.
+            </summary>
+            <param name="displayValue">
+            The display Value.
+            </param>
+            <remarks>
+            This constructor register the <see cref="T:System.EventHandler"/><c>OnCultureChanged</c> on <c>LocalizeDictionary</c>
+            to get an acknowledge of changing the culture.
+            </remarks>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:WPFLocalizeExtension.Extensions.OddsFormatExtension"/> class from being created. 
+            Initialize the <c>BaseLocalizeExtension</c>.
+            </summary>
+        </member>
+        <member name="F:WPFLocalizeExtension.Extensions.OddsFormatExtension.cutTrailingDecimals">
+            <summary>
+            Holds a value indicating whether to cut trailing decimals.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.GetLocalizedOddsString(System.Decimal)">
+            <summary>
+            Converts a decimal odds into a localized odds string in the current <see cref="T:WPFLocalizeExtension.Engine.OddsFormatType"/>.
+            </summary>
+            <param name="sourceOdds">The source odds.</param>
+            <returns>The ready to use odds string.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.GetLocalizedOddsString(System.Decimal,System.Boolean)">
+            <summary>
+            Converts a decimal odds into a localized odds string in the current <see cref="T:WPFLocalizeExtension.Engine.OddsFormatType"/>.
+            </summary>
+            <param name="sourceOdds">The source odds.</param>
+            <param name="cutTrailingDecimals">if set to <c>true</c> the tailing decimals will be cutted (decimal mode).</param>
+            <returns>The ready to use odds string.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.GetLocalizedOddsString(System.Decimal,WPFLocalizeExtension.Engine.OddsFormatType)">
+            <summary>
+            Converts a decimal odds into a localized odds string in the defined <see cref="T:WPFLocalizeExtension.Engine.OddsFormatType"/>.
+            </summary>
+            <param name="sourceOdds">The source odds.</param>
+            <param name="oddsType">Type of the odds.</param>
+            <returns>The ready to use odds string.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.GetLocalizedOddsString(System.Decimal,WPFLocalizeExtension.Engine.OddsFormatType,System.Boolean)">
+            <summary>
+            Converts a decimal odds into a localized odds string in the defined <see cref="T:WPFLocalizeExtension.Engine.OddsFormatType"/>.
+            </summary>
+            <param name="sourceOdds">The source odds.</param>
+            <param name="oddsType">Type of the odds.</param>
+            <param name="cutTrailingDecimals">if set to <c>true</c> the tailing decimals will be cutted (decimal mode).</param>
+            <returns>The ready to use odds string.</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.GetLocalizedOddsString(System.Decimal,WPFLocalizeExtension.Engine.OddsFormatType,System.Globalization.CultureInfo,System.Boolean)">
+            <summary>
+            Converts a decimal odds into a localized odds string in the defined <see cref="T:WPFLocalizeExtension.Engine.OddsFormatType"/>.
+            </summary>
+            <param name="sourceOdds">The source odds.</param>
+            <param name="oddsType">Type of the odds.</param>
+            <param name="specificCulture">The specific culture.</param>
+            <param name="cutTrailingDecimals">if set to <c>true</c> the tailing decimals will be cutted (decimal mode).</param>
+            <returns>The ready to use odds string.</returns>
+            <remarks>
+            The specific Culture has to be a "xx-xx" culture to support the value.<see cref="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.ToString"/> method.
+            </remarks>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Provides the Value for the first Binding
+            </summary>
+            <remarks>
+            This method register the <see cref="T:System.EventHandler"/><c>OnCultureChanged</c> on <c>LocalizeDictionary</c>
+            to get an acknowledge of changing the culture, if the passed <see cref="P:WPFLocalizeExtension.Extensions.OddsFormatExtension.TargetObjects"/> type of <see cref="T:System.Windows.DependencyObject"/>.
+            !PROOF: On every single <see cref="T:System.Windows.Controls.UserControl"/>, Window, and Page, 
+            there is a new SparedDP reference, and so there is every time a new <c>BaseLocalizeExtension</c>!
+            Because of this, we don't need to notify every single DependencyObjects to update their value (for GC).
+            </remarks>
+            <param name="serviceProvider">
+            The <see cref="T:System.Windows.Markup.IProvideValueTarget"/> provided from the <see cref="T:System.Windows.Markup.MarkupExtension"/>.
+            </param>
+            <returns>
+            The found item from the .resx directory or null if not found.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">
+            thrown if <paramref name="serviceProvider"/> is not type of <see cref="T:System.Windows.Markup.IProvideValueTarget"/>.
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.SetBinding(System.Windows.DependencyObject,System.Windows.DependencyProperty)">
+            <summary>
+            Sets a binding between a <see cref="T:System.Windows.DependencyObject"/> with its
+            <see cref="T:System.Windows.DependencyProperty"/> and this <c>BaseLocalizeExtension</c>.
+            </summary>
+            <param name="targetObject">The target dependency object</param>
+            <param name="targetProperty">The target dependency property</param>
+            <returns>
+            TRUE if the binding was setup successfully, otherwise FALSE (Binding already exists).
+            </returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.ToString">
+            <summary>
+            Returns the Key that identifies a resource (Assembly:Dictionary:Key)
+            </summary>
+            <returns>
+            Format: Assembly:Dictionary:Key
+            </returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.System#Windows#IWeakEventListener#ReceiveWeakEvent(System.Type,System.Object,System.EventArgs)">
+            <summary>
+            This method will be called through the interface, passed to the
+            <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary.WeakCultureChangedEventManager"/> to get notified on culture changed
+            </summary>
+            <param name="managerType">
+            The manager Type.
+            </param>
+            <param name="sender">
+            The sender.
+            </param>
+            <param name="e">
+            The event argument.
+            </param>
+            <returns>
+            true if the listener handled the event. It is considered an error by the 
+            <see cref="T:System.Windows.WeakEventManager"/> handling in WPF to register a 
+            listener for an event that the listener does not handle. Regardless, 
+            the method should return false if it receives an event that it does not recognize or handle.
+            </returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.GetUKOddsFormatLookupTable">
+            <summary>
+            Gets the UK odds format lookup table.
+            </summary>
+            <returns>Returns a Lookup Table</returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.TryGetUKOddsLookupValue(System.Decimal,System.String@)">
+            <summary>
+            Tries the get UK odds lookup value.
+            </summary>
+            <param name="valToCheck">
+            The value to check.
+            </param>
+            <param name="retVal">
+            The return value. NULL if nothing was found.
+            </param>
+            <returns>
+            TRUE if the value was found, otherwise FALSE.
+            </returns>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.GetForcedOddsFormatOrDefault">
+            <summary>
+            If Culture property defines a valid <see cref="T:System.Globalization.CultureInfo"/>, a <see cref="T:System.Globalization.CultureInfo"/> instance will get
+            created and returned, otherwise <see cref="T:WPFLocalizeExtension.Engine.LocalizeDictionary"/>.Culture will get returned.
+            </summary>
+            <returns>
+            The <see cref="T:System.Globalization.CultureInfo"/>.
+            </returns>
+            <exception cref="T:System.ArgumentException">
+            thrown if the parameter Culture don't defines a valid <see cref="T:System.Globalization.CultureInfo"/>.
+            </exception>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.HandleNewValue">
+            <summary>
+            This method gets the new value for the target property and call <see cref="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.SetNewValue(System.Object)"/>.
+            </summary>
+        </member>
+        <member name="M:WPFLocalizeExtension.Extensions.OddsFormatExtension.SetNewValue(System.Object)">
+            <summary>
+            Set the Value of the <see cref="T:System.Windows.DependencyProperty"/> to the passed Value.
+            </summary>
+            <param name="newValue">
+            The new Value
+            </param>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.OddsFormatExtension.OddsFormatLookupTableUk">
+            <summary>
+            Gets the UK odds format lookup table.
+            </summary>
+            <value>The UK odds format lookup table.</value>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.OddsFormatExtension.DisplayValue">
+            <summary>
+            Gets or sets the display value.
+            </summary>
+            <value>The display value.</value>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.OddsFormatExtension.CutTrailingDecimals">
+            <summary>
+            Gets or sets a value indicating whether to cut trailing decimals.
+            </summary>
+            <value>
+            <c>true</c> if to cut trailing decimals; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.OddsFormatExtension.InitializeValue">
+            <summary>
+            Gets or sets the initialize value.
+            This is ONLY used to support the localize extension in blend!
+            </summary>
+            <value>The initialize value.</value>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.OddsFormatExtension.ForceOddsFormatType">
+            <summary>
+            Gets or sets the <see cref="T:WPFLocalizeExtension.Engine.OddsFormatType"/> to force a fixed output
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.OddsFormatExtension.TargetObjects">
+            <summary>
+            Gets the collection of <see cref="T:System.Windows.DependencyObject"/> as WeakReferences which contains the <see cref="P:WPFLocalizeExtension.Extensions.OddsFormatExtension.TargetProperty"/>.
+            </summary>
+        </member>
+        <member name="P:WPFLocalizeExtension.Extensions.OddsFormatExtension.TargetProperty">
+            <summary>
+            Gets the <see cref="T:System.Windows.DependencyProperty"/> which should get the localized content.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-
+using System.Globalization;
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
@@ -9,6 +9,7 @@ using Torshify.Radio.Core.Views;
 using Torshify.Radio.Core.Views.NowPlaying;
 using Torshify.Radio.Core.Views.Stations;
 using Torshify.Radio.Framework;
+using WPFLocalizeExtension.Engine;
 
 namespace Torshify.Radio.Core
 {
@@ -41,6 +42,9 @@ namespace Torshify.Radio.Core
             {
                 startable.Start();
             }
+
+            // TODO : Load locale from db
+            LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo("en-US");
 
             RegionManager.RegisterViewWithRegion(AppRegions.MainRegion, typeof (MainView));
             RegionManager.RegisterViewWithRegion(AppRegions.MainRegion, typeof(NowPlayingView));

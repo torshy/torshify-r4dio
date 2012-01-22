@@ -52,12 +52,17 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Blend\System.Windows.Interactivity.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WPFLocalizeExtension">
+      <HintPath>..\..\packages\WpfLocalizeExtension.1.0.2\lib\WPFLocalizeExtension.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="WPFToolkit.Extended">
       <HintPath>..\..\packages\Extended.Wpf.Toolkit.1.5.0\lib\net40\WPFToolkit.Extended.dll</HintPath>
       <Private>False</Private>
@@ -90,6 +95,11 @@
     <Compile Include="Services\InactivityNotificatorService.cs" />
     <Compile Include="Services\TileService.cs" />
     <Compile Include="ShellSettingsHandler.cs" />
+    <Compile Include="Properties\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -102,10 +112,17 @@
       <DependentUpon>StationsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Stations\StationsViewModel.cs" />
+    <EmbeddedResource Include="Properties\Strings.no.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Strings.en-US.resx" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
