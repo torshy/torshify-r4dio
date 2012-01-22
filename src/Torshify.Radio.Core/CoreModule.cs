@@ -6,6 +6,7 @@ using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
 
 using Torshify.Radio.Core.Views;
+using Torshify.Radio.Core.Views.Stations;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core
@@ -41,6 +42,7 @@ namespace Torshify.Radio.Core
             }
 
             RegionManager.RegisterViewWithRegion(AppRegions.MainRegion, typeof (MainView));
+            RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof (StationsView));
         }
 
         #endregion Methods

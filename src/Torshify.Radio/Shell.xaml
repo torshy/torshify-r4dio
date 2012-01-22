@@ -10,7 +10,10 @@
     Width="800"
     MinHeight="400"
     MinWidth="350"
-    Icon="Resources\r4dio_app.ico">
+    Icon="Resources\r4dio_app.ico"
+    TextElement.FontFamily="Segoe UI"
+    TextElement.FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeNormal}}"
+    TextOptions.TextFormattingMode="Display">
     <ContentControl
         Margin="8,12,8,8"
         Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainRegion}">

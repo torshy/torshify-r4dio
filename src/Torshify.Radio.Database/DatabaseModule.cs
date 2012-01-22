@@ -26,6 +26,10 @@ namespace Torshify.Radio.Database
         {
             _documentStore = new EmbeddableDocumentStore();
             _documentStore.DataDirectory = Path.Combine(AppConstants.AppDataFolder, "Database");
+
+#if DEBUG
+            _documentStore.UseEmbeddedHttpServer = true;
+#endif
         }
 
         #endregion Constructors

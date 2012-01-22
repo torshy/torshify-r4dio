@@ -10,6 +10,10 @@ namespace Torshify.Radio.Framework
 
         IEnumerable<TrackContainer> GetAlbumsByArtist(string artist);
 
+        bool SupportsLink(TrackLink trackLink);
+
+        Track FromLink(TrackLink trackLink);
+
         #endregion Methods
     }
 }

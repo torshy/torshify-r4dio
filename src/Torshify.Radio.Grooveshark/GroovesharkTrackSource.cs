@@ -18,5 +18,24 @@ namespace Torshify.Radio.Grooveshark
         {
             return new TrackContainer[0];
         }
+
+        public bool SupportsLink(TrackLink trackLink)
+        {
+            return trackLink.TrackSource == "grooveshark";
+        }
+
+        public Track FromLink(TrackLink trackLink)
+        {
+            string songIdAsString = trackLink["SongID"];
+
+            int songId;
+
+            if (int.TryParse(songIdAsString, out songId))
+            {
+                return new GroovesharkTrack(songId);
+            }
+
+            return null;
+        }
     }
 }

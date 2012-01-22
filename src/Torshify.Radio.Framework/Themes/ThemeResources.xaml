@@ -3,7 +3,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework"
     xmlns:System="clr-namespace:System;assembly=mscorlib">
-
+    <SolidColorBrush
+        x:Key="{x:Static SystemColors.HighlightBrushKey}"
+        Color="#FF1BA1E2" />
     <SolidColorBrush
         x:Key="{x:Static Framework:AppTheme.AccentBrushKey}"
         Color="#FF1BA1E2" />

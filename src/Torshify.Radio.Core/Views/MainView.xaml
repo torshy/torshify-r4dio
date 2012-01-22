@@ -7,17 +7,19 @@
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     xmlns:Resources="clr-namespace:Torshify.Radio.Core.Resources"
     xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+    xmlns:Regions="clr-namespace:Microsoft.Practices.Prism.Regions;assembly=Microsoft.Practices.Prism"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <DockPanel>
-        <StackPanel>
+        <StackPanel
+            DockPanel.Dock="Top">
             <Resources:R4dioIcon
                 Margin="0,-8,0,4"
                 HorizontalAlignment="Left"
                 Height="20" />
             <StackPanel
-                DockPanel.Dock="Top"
                 Orientation="Horizontal"
                 Controls:WindowChrome.IsHitTestVisibleInChrome="True">
                 <Button
@@ -27,27 +29,41 @@
                     Content="F"
                     Width="20"
                     Margin="2,0,0,0" />
-                <ComboBox
-                    SelectedIndex="0"
-                    Margin="8,0,0,0">
-                    <TextBlock
-                        Text="Search" />
-                    <TextBlock
-                        Text="Style" />
-                    <TextBlock
-                        Text="Mood" />
-                    <TextBlock
-                        Text="Similar" />
-                </ComboBox>
                 <extToolkit:WatermarkTextBox
                     Watermark="Search for stuff"
-                    Margin="2,0,0,0"
+                    Margin="8,0,0,0"
                     Width="175">
                 </extToolkit:WatermarkTextBox>
+                <ComboBox
+                    Margin="4,0,0,0"
+                    SelectedIndex="0">
+                    <TextBlock
+                        Text="By Name" />
+                    <TextBlock
+                        Text="By Style" />
+                    <TextBlock
+                        Text="By Mood" />
+                    <TextBlock
+                        Text="By Similar" />
+                </ComboBox>
+                <ComboBox
+                    Margin="4,0,0,0"
+                    IsEditable="True"
+                    SelectedIndex="0">
+                    <TextBlock
+                        Text="By Name" />
+                    <TextBlock
+                        Text="By Style" />
+                    <TextBlock
+                        Text="By Mood" />
+                    <TextBlock
+                        Text="By Similar" />
+                </ComboBox>
             </StackPanel>
         </StackPanel>
-        <Grid>
-
-        </Grid>
+        <ContentControl
+            Margin="0,8,0,0"
+            FocusVisualStyle="{x:Null}"
+            Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.ViewRegion}" />
     </DockPanel>
 </UserControl>
