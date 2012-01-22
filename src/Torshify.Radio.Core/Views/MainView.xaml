@@ -24,11 +24,13 @@
                 Controls:WindowChrome.IsHitTestVisibleInChrome="True">
                 <Button
                     Content="B"
-                    Width="20" />
+                    Width="20" 
+                    Command="{Binding NavigateBackCommand}" />
                 <Button
                     Content="F"
                     Width="20"
-                    Margin="2,0,0,0" />
+                    Margin="2,0,0,0"
+                    Command="{Binding NavigateForwardCommand}" />
                 <extToolkit:WatermarkTextBox
                     Watermark="Search for stuff"
                     Margin="8,0,0,0"
