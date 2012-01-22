@@ -5,7 +5,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
-    mc:Ignorable="d"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
@@ -14,7 +15,7 @@
             TargetType="{x:Type Button}">
             <Setter
                 Property="Background"
-                Value="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
+                Value="Transparent" />
             <Setter
                 Property="Foreground"
                 Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
@@ -60,15 +61,25 @@
                         Command="{Binding DataContext.NavigateToTileCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                         CommandParameter="{Binding}">
                         <Grid>
-                            <Image
-                                RenderOptions.BitmapScalingMode="HighQuality"
-                                Source="{Binding Data.BackgroundImage}" />
-                            <TextBlock
-                                Text="{Binding Data.Title}"
-                                TextWrapping="Wrap"
-                                VerticalAlignment="Bottom"
-                                HorizontalAlignment="Left"
-                                Margin="4" />
+                            <Border
+                                Background="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}">
+                                <i:Interaction.Behaviors>
+                                    <Behaviors:TiltBehavior
+                                        TiltFactor="10"
+                                        KeepDragging="False" />
+                                </i:Interaction.Behaviors>
+                                <Grid>
+                                    <Image
+                                        RenderOptions.BitmapScalingMode="HighQuality"
+                                        Source="{Binding Data.BackgroundImage}" />
+                                    <TextBlock
+                                        Text="{Binding Data.Title}"
+                                        TextWrapping="Wrap"
+                                        VerticalAlignment="Bottom"
+                                        HorizontalAlignment="Left"
+                                        Margin="4" />
+                                </Grid>
+                            </Border>
                         </Grid>
                     </Button>
                     <DataTemplate.Triggers>
