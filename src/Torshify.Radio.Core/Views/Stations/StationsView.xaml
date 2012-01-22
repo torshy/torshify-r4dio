@@ -8,6 +8,22 @@
     d:DesignHeight="300"
     d:DesignWidth="300">
     <Grid>
-
+        <ItemsControl
+            ItemsSource="{Binding TileService.Tiles}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel
+                        Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button
+                        Content="{Binding Data.Title}"
+                        Command="{Binding DataContext.NavigateToTileCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                        CommandParameter="{Binding}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </UserControl>

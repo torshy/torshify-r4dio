@@ -2,14 +2,13 @@
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
-namespace Torshify.Radio.Core.Views.Stations
+namespace Torshify.Radio.Spotify.Views
 {
-    [Export(typeof(StationViewModel))]
-    public class StationViewModel : NotificationObject, INavigationAware
+    [Export(typeof(MainStationViewModel))]
+    public class MainStationViewModel : NotificationObject, INavigationAware
     {
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
-            
         }
 
         bool INavigationAware.IsNavigationTarget(NavigationContext navigationContext)
@@ -19,7 +18,6 @@ namespace Torshify.Radio.Core.Views.Stations
 
         void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
-            
         }
     }
 }

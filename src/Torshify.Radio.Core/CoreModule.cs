@@ -45,7 +45,7 @@ namespace Torshify.Radio.Core
             RegionManager.RegisterViewWithRegion(AppRegions.MainRegion, typeof (MainView));
             RegionManager.RegisterViewWithRegion(AppRegions.MainRegion, typeof(NowPlayingView));
             RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof (StationsView));
-
+            
             RegionManager.RequestNavigate(AppRegions.MainRegion, typeof(MainView).FullName);
             RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(StationsView).FullName);
         }
