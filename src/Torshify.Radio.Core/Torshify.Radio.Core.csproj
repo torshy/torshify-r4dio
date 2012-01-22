@@ -83,6 +83,7 @@
     <Compile Include="Resources\R4dioIcon.xaml.cs">
       <DependentUpon>R4dioIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\InactivityNotificatorService.cs" />
     <Compile Include="Services\TileService.cs" />
     <Compile Include="ShellSettingsHandler.cs" />
     <Compile Include="Views\MainView.xaml.cs">
