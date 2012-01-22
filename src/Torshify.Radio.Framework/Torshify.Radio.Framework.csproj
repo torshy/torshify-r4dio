@@ -140,6 +140,8 @@
     <Compile Include="Converters\StringToUpperConverter.cs" />
     <Compile Include="Events\ApplicationInactivityEvent.cs" />
     <Compile Include="Events\SystemInactivityEvent.cs" />
+    <Compile Include="HeaderInfo.cs" />
+    <Compile Include="IHeaderInfoProvider.cs" />
     <Compile Include="IRadio.cs" />
     <Compile Include="IRadioStation.cs" />
     <Compile Include="ITileService.cs" />
