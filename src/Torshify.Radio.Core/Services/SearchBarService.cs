@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel.Composition;
+using System.Linq;
+
+using Microsoft.Practices.Prism;
+using Microsoft.Practices.Prism.ViewModel;
+
+using Torshify.Radio.Framework;
+
+namespace Torshify.Radio.Core.Services
+{
+    [Export(typeof(ISearchBarService))]
+    [PartCreationPolicy(CreationPolicy.Shared)]
+    public class SearchBarService : NotificationObject, ISearchBarService
+    {
+        #region Fields
+
+        private ObservableCollection<SearchBar> _bars;
+        private SearchBar _current;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public SearchBarService()
+        {
+            _bars = new ObservableCollection<SearchBar>();
+        }
+
+        #endregion Constructors
+
+        #region Properties
+
+        public SearchBar Current
+        {
+            get { return _current; }
+            set
+            {
+                if (_current != value)
+                {
+                    _current = value;
+                    RaisePropertyChanged("Current");
+                }
+            }
+        }
+
+        public IEnumerable<SearchBar> SearchBars
+        {
+            get { return _bars; }
+        }
+
+        #endregion Properties
+
+        #region Methods
+
+        public void Add<T>(SearchBarData searchBarData, params Tuple<string, string>[] parameters)
+        {
+            UriQuery query = new UriQuery();
+
+            if (parameters != null)
+            {
+                foreach (var parameter in parameters)
+                {
+                    query.Add(parameter.Item1, parameter.Item2);
+                }
+            }
+
+            Uri navigationUri = new Uri(typeof(T).FullName + query, UriKind.RelativeOrAbsolute);
+            _bars.Add(new SearchBar(navigationUri, searchBarData));
+
+            if (_bars.Count == 1 && Current == null)
+            {
+                Current = _bars.FirstOrDefault();
+            }
+        }
+
+        #endregion Methods
+    }
+}

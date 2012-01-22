@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.Composition;
+using System.Linq;
 
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
@@ -30,6 +31,13 @@ namespace Torshify.Radio.EightTracks.Views
             private set;
         }
 
+        [Import]
+        public ISearchBarService SearchBarService
+        {
+            get;
+            set;
+        }
+
         #endregion Properties
 
         #region Methods
@@ -40,6 +48,12 @@ namespace Torshify.Radio.EightTracks.Views
 
         public void OnTuneIn(NavigationContext context)
         {
+            // TODO : Add a helper method to do this much easier
+            if (!SearchBarService.Current.NavigationUri.OriginalString.StartsWith(typeof(MainStationView).FullName))
+            {
+                SearchBarService.Current = SearchBarService.SearchBars.FirstOrDefault(
+                    s => s.NavigationUri.OriginalString.StartsWith(typeof (MainStationView).FullName));
+            }
         }
 
         #endregion Methods

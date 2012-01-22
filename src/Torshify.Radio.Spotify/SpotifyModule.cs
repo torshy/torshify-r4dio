@@ -35,24 +35,24 @@ namespace Torshify.Radio.Spotify
 
         public void Initialize()
         {
-            TileService.Create<MainStationView>(new TileData
+            TileService.Add<MainStationView>(new TileData
                                                {
                                                    Title = "Spotify"
                                                },
                                                Tuple.Create("Argument1", "Value1"));
 
-            TileService.Create<MainStationView>(new TileData
+            TileService.Add<MainStationView>(new TileData
                                                {
                                                    Title = "Spotify 2",
                                                },
                                                Tuple.Create("Argument1", "Value1"));
 
-            TileService.Create<MainStationView>(new TileData
+            TileService.Add<MainStationView>(new TileData
                                                 {
                                                     Title = "Main Spotify View",
                                                 });
 
-            TileService.Create<MainStationView>(new TileData
+            TileService.Add<MainStationView>(new TileData
                                                {
                                                    Title = "Spotify 4"
                                                });

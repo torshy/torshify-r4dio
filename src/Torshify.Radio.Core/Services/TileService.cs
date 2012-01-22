@@ -47,7 +47,7 @@ namespace Torshify.Radio.Core.Services
 
         #region Methods
 
-        public void Create<T>(TileData tileData, params Tuple<string, string>[] parameters)
+        public void Add<T>(TileData tileData, params Tuple<string, string>[] parameters)
         {
             IRegion viewRegion = _regionManager.Regions[AppRegions.ViewRegion];
 

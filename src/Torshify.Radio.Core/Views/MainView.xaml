@@ -12,6 +12,8 @@
     xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
     Engine:LocalizeDictionary.DesignCulture="en-US"
     xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -83,21 +85,22 @@
                     </Button.ContentTemplate>
                 </Button>
                 <extToolkit:WatermarkTextBox
-                    Watermark="{lex:LocText Key=Search, Dict=Strings, Assembly=Torshify.Radio.Core}"
+                    x:Name="InputBox"
+                    Watermark="{Binding SearchBarService.Current.Data.WatermarkText}"
                     Margin="8,0,0,0"
                     Width="175">
+                    <i:Interaction.Behaviors>
+                        <Behaviors:KeyboardBehavior
+                            Key="Enter"
+                            Command="{Binding SearchCommand}"
+                            CommandParameter="{Binding Text, ElementName=InputBox}" />
+                    </i:Interaction.Behaviors>
                 </extToolkit:WatermarkTextBox>
                 <ComboBox
                     Margin="4,0,0,0"
-                    SelectedIndex="0">
-                    <TextBlock
-                        Text="By name" />
-                    <TextBlock
-                        Text="By style" />
-                    <TextBlock
-                        Text="By mood" />
-                    <TextBlock
-                        Text="By similar" />
+                    ItemsSource="{Binding SearchBarService.SearchBars}"
+                    SelectedItem="{Binding SearchBarService.Current}"
+                    DisplayMemberPath="Data.Category">
                 </ComboBox>
             </StackPanel>
         </StackPanel>

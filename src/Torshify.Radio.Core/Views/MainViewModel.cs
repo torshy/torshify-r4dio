@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.Composition;
-
+using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 
@@ -16,18 +17,12 @@ namespace Torshify.Radio.Core.Views
         {
             NavigateBackCommand = new AutomaticCommand(ExecuteNavigateBack, CanExecuteNavigateBack);
             NavigateForwardCommand = new AutomaticCommand(ExecuteNavigateForward, CanExecuteNavigateForward);
+            SearchCommand = new AutomaticCommand<string>(ExecuteSearch, CanExecuteSearch);
         }
 
         #endregion Constructors
 
         #region Properties
-
-        [Import]
-        public IRegionManager RegionManager
-        {
-            get; 
-            set;
-        }
 
         public AutomaticCommand NavigateBackCommand
         {
@@ -37,6 +32,26 @@ namespace Torshify.Radio.Core.Views
         public AutomaticCommand NavigateForwardCommand
         {
             get; private set;
+        }
+
+        [Import]
+        public IRegionManager RegionManager
+        {
+            get;
+            set;
+        }
+
+        [Import]
+        public ISearchBarService SearchBarService
+        {
+            get;
+            set;
+        }
+
+        public AutomaticCommand<string> SearchCommand
+        {
+            get;
+            private set;
         }
 
         #endregion Properties
@@ -66,6 +81,11 @@ namespace Torshify.Radio.Core.Views
             return RegionManager.Regions[AppRegions.ViewRegion].NavigationService.Journal.CanGoForward;
         }
 
+        private bool CanExecuteSearch(string phrase)
+        {
+            return !string.IsNullOrEmpty(phrase);
+        }
+
         private void ExecuteNavigateBack()
         {
             RegionManager.Regions[AppRegions.ViewRegion].NavigationService.Journal.GoBack();
@@ -74,6 +94,11 @@ namespace Torshify.Radio.Core.Views
         private void ExecuteNavigateForward()
         {
             RegionManager.Regions[AppRegions.ViewRegion].NavigationService.Journal.GoForward();
+        }
+
+        private void ExecuteSearch(string phrase)
+        {
+            RegionManager.RequestNavigate(AppRegions.ViewRegion, SearchBarService.Current.NavigationUri);
         }
 
         #endregion Methods
