@@ -95,5 +95,14 @@ namespace Torshify.Radio.Core.Properties {
                 return ResourceManager.GetString("Button_Forward_Unable_ToolTip", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Search.
+        /// </summary>
+        internal static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
     }
 }

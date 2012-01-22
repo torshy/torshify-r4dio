@@ -83,7 +83,7 @@
                     </Button.ContentTemplate>
                 </Button>
                 <extToolkit:WatermarkTextBox
-                    Watermark="Search"
+                    Watermark="{lex:LocText Key=Search, Dict=Strings, Assembly=Torshify.Radio.Core}"
                     Margin="8,0,0,0"
                     Width="175">
                 </extToolkit:WatermarkTextBox>
