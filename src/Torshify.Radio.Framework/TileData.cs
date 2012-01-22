@@ -12,6 +12,7 @@ namespace Torshify.Radio.Framework
         private Uri _backgroundImage;
         private string _backTitle;
         private string _title;
+        private bool _isLarge;
 
         #endregion Fields
 
@@ -78,6 +79,19 @@ namespace Torshify.Radio.Framework
                 {
                     _title = value;
                     RaisePropertyChanged("Title");
+                }
+            }
+        }
+
+        public bool IsLarge
+        {
+            get { return _isLarge; }
+            set
+            {
+                if (_isLarge != value)
+                {
+                    _isLarge = value;
+                    RaisePropertyChanged("IsLarge");
                 }
             }
         }

@@ -16,8 +16,7 @@ namespace Torshify.Radio.Framework
 
         #region Methods
 
-        void Create<T>(TileData tileData, params Tuple<string, string>[] parameters)
-            where T : IRadioStation;
+        void Create<T>(TileData tileData, params Tuple<string, string>[] parameters);
 
         #endregion Methods
     }

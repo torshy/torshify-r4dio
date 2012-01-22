@@ -4,24 +4,83 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style
+            x:Key="NoChromeButtonStyle"
+            TargetType="{x:Type Button}">
+            <Setter
+                Property="Background"
+                Value="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
+            <Setter
+                Property="Foreground"
+                Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+            <Setter
+                Property="Template">
+                <Setter.Value>
+                    <ControlTemplate
+                        TargetType="{x:Type Button}">
+                        <Border
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter
+                Property="RenderTransformOrigin"
+                Value="0.5,0.5" />
+            <Setter
+                Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <ItemsControl
             ItemsSource="{Binding TileService.Tiles}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel
-                        Orientation="Vertical" />
+                        ItemHeight="128" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Button
-                        Content="{Binding Data.Title}"
+                        Name="Btn"
+                        Margin="0,0,4,4"
+                        Width="128"
+                        Style="{StaticResource NoChromeButtonStyle}"
                         Command="{Binding DataContext.NavigateToTileCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                        CommandParameter="{Binding}" />
+                        CommandParameter="{Binding}">
+                        <Grid>
+                            <Image
+                                RenderOptions.BitmapScalingMode="HighQuality"
+                                Source="{Binding Data.BackgroundImage}" />
+                            <TextBlock
+                                Text="{Binding Data.Title}"
+                                TextWrapping="Wrap"
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Left"
+                                Margin="4" />
+                        </Grid>
+                    </Button>
+                    <DataTemplate.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Data.IsLarge}"
+                            Value="True">
+                            <Setter
+                                Property="Width"
+                                Value="260"
+                                TargetName="Btn" />
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

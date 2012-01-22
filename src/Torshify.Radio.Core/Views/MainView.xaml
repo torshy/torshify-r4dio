@@ -32,25 +32,12 @@
                     Margin="2,0,0,0"
                     Command="{Binding NavigateForwardCommand}" />
                 <extToolkit:WatermarkTextBox
-                    Watermark="Search for stuff"
+                    Watermark="Search"
                     Margin="8,0,0,0"
                     Width="175">
                 </extToolkit:WatermarkTextBox>
                 <ComboBox
                     Margin="4,0,0,0"
-                    SelectedIndex="0">
-                    <TextBlock
-                        Text="By Name" />
-                    <TextBlock
-                        Text="By Style" />
-                    <TextBlock
-                        Text="By Mood" />
-                    <TextBlock
-                        Text="By Similar" />
-                </ComboBox>
-                <ComboBox
-                    Margin="4,0,0,0"
-                    IsEditable="True"
                     SelectedIndex="0">
                     <TextBlock
                         Text="By Name" />

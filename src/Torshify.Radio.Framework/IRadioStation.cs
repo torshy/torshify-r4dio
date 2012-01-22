@@ -1,8 +1,10 @@
-﻿namespace Torshify.Radio.Framework
+﻿using Microsoft.Practices.Prism.Regions;
+
+namespace Torshify.Radio.Framework
 {
     public interface IRadioStation
     {
-        void OnTuneIn();
-        void OnTuneAway();
+        void OnTuneIn(NavigationContext context);
+        void OnTuneAway(NavigationContext context);
     }
 }

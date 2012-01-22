@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using System.Linq;
-
+using System.Windows;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -53,16 +53,17 @@ namespace Torshify.Radio.Core.Views.Stations
 
         void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
-            if (_navigationService != null)
-            {
-                _navigationService.Region.NavigationService.Navigated -= NavigationServiceOnNavigated;
-                _navigationService.Region.NavigationService.Navigating -= NavigationServiceOnNavigating;
-                _navigationService = null;
-            }
+
         }
 
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
+            if (_navigationService != null)
+            {
+                _navigationService.Region.NavigationService.Navigated -= NavigationServiceOnNavigated;
+                _navigationService.Region.NavigationService.Navigating -= NavigationServiceOnNavigating;
+            }
+
             _navigationService = navigationContext.NavigationService;
             _navigationService.Region.NavigationService.Navigated += NavigationServiceOnNavigated;
             _navigationService.Region.NavigationService.Navigating += NavigationServiceOnNavigating;
@@ -80,21 +81,41 @@ namespace Torshify.Radio.Core.Views.Stations
 
         private void NavigationServiceOnNavigated(object sender, RegionNavigationEventArgs e)
         {
-            var activeStation = e.NavigationContext.NavigationService.Region.ActiveViews.FirstOrDefault() as IRadioStation;
+            var active = e.NavigationContext.NavigationService.Region.ActiveViews.FirstOrDefault() as FrameworkElement;
 
-            if (activeStation != null)
+            if (active != null)
             {
-                activeStation.OnTuneIn();
+                IRadioStation radioStation = active as IRadioStation;
+
+                if (radioStation == null)
+                {
+                    radioStation = active.DataContext as IRadioStation;
+                }
+
+                if (radioStation != null)
+                {
+                    radioStation.OnTuneIn(e.NavigationContext);
+                }
             }
         }
 
         private void NavigationServiceOnNavigating(object sender, RegionNavigationEventArgs e)
         {
-            var activeStation = e.NavigationContext.NavigationService.Region.ActiveViews.FirstOrDefault() as IRadioStation;
+            var active = e.NavigationContext.NavigationService.Region.ActiveViews.FirstOrDefault() as FrameworkElement;
 
-            if (activeStation != null)
+            if (active != null)
             {
-                activeStation.OnTuneAway();
+                IRadioStation radioStation = active as IRadioStation;
+
+                if (radioStation == null)
+                {
+                    radioStation = active.DataContext as IRadioStation;
+                }
+
+                if (radioStation != null)
+                {
+                    radioStation.OnTuneAway(e.NavigationContext);
+                }
             }
         }
 

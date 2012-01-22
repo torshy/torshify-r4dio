@@ -97,10 +97,6 @@
       <DependentUpon>StationsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Stations\StationsViewModel.cs" />
-    <Compile Include="Views\Stations\StationView.xaml.cs">
-      <DependentUpon>StationView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Stations\StationViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -125,10 +121,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Stations\StationsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Stations\StationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

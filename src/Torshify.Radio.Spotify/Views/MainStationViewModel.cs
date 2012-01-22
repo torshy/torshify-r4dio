@@ -1,23 +1,25 @@
 ﻿using System.ComponentModel.Composition;
+
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+
+using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Spotify.Views
 {
     [Export(typeof(MainStationViewModel))]
-    public class MainStationViewModel : NotificationObject, INavigationAware
+    public class MainStationViewModel : NotificationObject, IRadioStation
     {
-        void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
+        #region Methods
+
+        public void OnTuneAway(NavigationContext context)
         {
         }
 
-        bool INavigationAware.IsNavigationTarget(NavigationContext navigationContext)
+        public void OnTuneIn(NavigationContext context)
         {
-            return true;
         }
 
-        void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
-        {
-        }
+        #endregion Methods
     }
 }
