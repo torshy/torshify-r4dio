@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A0C0F497-0781-4DC0-8395-E3C856B54F27}</ProjectGuid>
+    <ProjectGuid>{626798B2-7C68-41D5-818F-F1B7FDD4D786}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Torshify.Radio.Grooveshark</RootNamespace>
-    <AssemblyName>Torshify.Radio.Grooveshark</AssemblyName>
+    <RootNamespace>Torshify.Radio.EightTracks</RootNamespace>
+    <AssemblyName>Torshify.Radio.EightTracks</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -21,7 +21,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Torshify.Radio\bin\Debug\Modules\Grooveshark\</OutputPath>
+    <OutputPath>..\Torshify.Radio\bin\Debug\Modules\8tracks\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -29,7 +29,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Torshify.Radio\bin\Release\Modules\Grooveshark\</OutputPath>
+    <OutputPath>..\Torshify.Radio\bin\Release\Modules\8tracks\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -62,9 +62,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="GroovesharkModule.cs" />
-    <Compile Include="GroovesharkTrackSource.cs" />
-    <Compile Include="GroovesharkTrack.cs" />
+    <Compile Include="EightTracksModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
