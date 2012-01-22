@@ -87,6 +87,10 @@
       <DependentUpon>MainTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\MainTabViewModel.cs" />
+    <Compile Include="Views\Tabs\TagsTabView.xaml.cs">
+      <DependentUpon>TagsTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\TagsTabViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -110,6 +114,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\MainTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\TagsTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

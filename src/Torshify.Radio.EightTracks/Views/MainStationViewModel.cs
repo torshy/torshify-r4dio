@@ -17,6 +17,7 @@ namespace Torshify.Radio.EightTracks.Views
         {
             RegionManager = new RegionManager();
             RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(MainTabView));
+            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(TagsTabView));
         }
 
         #endregion Constructors
