@@ -2,25 +2,14 @@
 
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
+using Torshify.Radio.Framework;
 
-using Raven.Client;
 
 namespace Torshify.Radio.Spotify
 {
-    [ModuleExport(typeof(SpotifyModule), DependsOnModuleNames = new[] { "Database" })]
+    [ModuleExport(typeof(SpotifyModule), DependsOnModuleNames = new[] { "Core" })]
     public class SpotifyModule : IModule
     {
-        #region Properties
-
-        [Import]
-        public IDocumentStore DocumentStore
-        {
-            get;
-            set;
-        }
-
-        #endregion Properties
-
         #region Methods
 
         public void Initialize()
@@ -29,5 +18,24 @@ namespace Torshify.Radio.Spotify
         }
 
         #endregion Methods
+    }
+
+    [RadioStationMetadata(Name = "Spotify")]
+    public class SpotifyStation : IRadioStation
+    {
+        [Import]
+        public IRadio Radio
+        {
+            get; 
+            set;
+        }
+
+        public void OnTuneIn()
+        {
+        }
+
+        public void OnTuneAway()
+        {
+        }
     }
 }

@@ -3,18 +3,18 @@ using System.Windows.Controls;
 
 namespace Torshify.Radio.Core.Views.Stations
 {
-    [Export(typeof(StationsView))]
-    public partial class StationsView : UserControl
+    [Export(typeof(StationView))]
+    public partial class StationView : UserControl
     {
-        public StationsView()
+        public StationView()
         {
             InitializeComponent();
         }
 
         [Import]
-        public StationsViewModel Model
+        public StationViewModel Model
         {
-            get { return DataContext as StationsViewModel; }
+            get { return DataContext as StationViewModel; }
             set { DataContext = value; }
         }
     }

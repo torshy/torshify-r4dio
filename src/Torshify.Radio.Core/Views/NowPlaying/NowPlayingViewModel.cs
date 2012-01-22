@@ -2,10 +2,10 @@
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
-namespace Torshify.Radio.Core.Views
+namespace Torshify.Radio.Core.Views.NowPlaying
 {
-    [Export(typeof(MainViewModel))]
-    public class MainViewModel : NotificationObject, INavigationAware
+    [Export(typeof(NowPlayingViewModel))]
+    public class NowPlayingViewModel : NotificationObject, INavigationAware
     {
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {

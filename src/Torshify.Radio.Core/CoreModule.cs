@@ -6,12 +6,13 @@ using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
 
 using Torshify.Radio.Core.Views;
+using Torshify.Radio.Core.Views.NowPlaying;
 using Torshify.Radio.Core.Views.Stations;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core
 {
-    [ModuleExport(typeof(CoreModule), DependsOnModuleNames = new[] { "Database" })]
+    [ModuleExport("Core", typeof(CoreModule), DependsOnModuleNames = new[] { "Database" })]
     public class CoreModule : IModule
     {
         #region Properties
@@ -42,7 +43,11 @@ namespace Torshify.Radio.Core
             }
 
             RegionManager.RegisterViewWithRegion(AppRegions.MainRegion, typeof (MainView));
+            RegionManager.RegisterViewWithRegion(AppRegions.MainRegion, typeof(NowPlayingView));
             RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof (StationsView));
+
+            RegionManager.RequestNavigate(AppRegions.MainRegion, typeof(MainView).FullName);
+            RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(StationsView).FullName);
         }
 
         #endregion Methods

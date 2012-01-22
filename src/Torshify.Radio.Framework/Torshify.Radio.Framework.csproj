@@ -128,11 +128,15 @@
     <Compile Include="Converters\NegateValueConverter.cs" />
     <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToUpperConverter.cs" />
+    <Compile Include="IRadio.cs" />
+    <Compile Include="IRadioStation.cs" />
+    <Compile Include="IRadioStationMetadata.cs" />
     <Compile Include="ITrackPlayerMetadata.cs" />
     <Compile Include="ITrackPlayer.cs" />
     <Compile Include="ITrackSourceMetadata.cs" />
     <Compile Include="ITrackSource.cs" />
     <Compile Include="IStartable.cs" />
+    <Compile Include="ITrackStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
