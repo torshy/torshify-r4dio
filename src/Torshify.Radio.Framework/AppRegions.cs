@@ -4,5 +4,6 @@
     {
         public const string MainRegion = "MainRegion";
         public const string ViewRegion = "ViewRegion";
+        public const string BottomRegion = "BottomRegion";
     }
 }

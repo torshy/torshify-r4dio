@@ -6,6 +6,7 @@ using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
 
 using Torshify.Radio.Core.Views;
+using Torshify.Radio.Core.Views.Controls;
 using Torshify.Radio.Core.Views.NowPlaying;
 using Torshify.Radio.Core.Views.Stations;
 using Torshify.Radio.Framework;
@@ -48,6 +49,7 @@ namespace Torshify.Radio.Core
 
             RegionManager.RegisterViewWithRegion(AppRegions.MainRegion, typeof (MainView));
             RegionManager.RegisterViewWithRegion(AppRegions.MainRegion, typeof(NowPlayingView));
+            RegionManager.RegisterViewWithRegion(AppRegions.BottomRegion, typeof(ControlsView));
             RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof (StationsView));
             
             RegionManager.RequestNavigate(AppRegions.MainRegion, typeof(MainView).FullName);

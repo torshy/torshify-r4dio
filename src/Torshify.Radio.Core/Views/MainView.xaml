@@ -13,7 +13,6 @@
     xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
-    xmlns:input="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -106,9 +105,15 @@
                 </ComboBox>
             </StackPanel>
         </StackPanel>
-        <ContentControl
-            Margin="0,8,0,0"
-            FocusVisualStyle="{x:Null}"
-            Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.ViewRegion}" />
+        <DockPanel>
+            <ContentControl
+                DockPanel.Dock="Bottom"
+                FocusVisualStyle="{x:Null}"
+                Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.BottomRegion}" />
+            <ContentControl
+                Margin="0,8,0,8"
+                FocusVisualStyle="{x:Null}"
+                Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.ViewRegion}" />
+        </DockPanel>
     </DockPanel>
 </UserControl>
