@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
-
+using System.Linq;
+using EightTracks;
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 
@@ -12,19 +14,25 @@ namespace Torshify.Radio.EightTracks
     [ModuleExport(typeof(EightTracksModule), DependsOnModuleNames = new[] { "Core" })]
     public class EightTracksModule : IModule
     {
+        #region Fields
+
+        internal const string ApiKey = "63b5cb8daf03ec1df8f1c25fec5479b612739a29";
+
+        #endregion Fields
+
         #region Properties
 
         [Import]
-        public ITileService TileService
+        public ISearchBarService SearchBarService
         {
             get;
             set;
         }
 
         [Import]
-        public ISearchBarService SearchBarService
+        public ITileService TileService
         {
-            get; 
+            get;
             set;
         }
 
@@ -42,16 +50,27 @@ namespace Torshify.Radio.EightTracks
             SearchBarService.Add<MainStationView>(new SearchBarData
                                                  {
                                                      Category = "8tracks by tag",
-                                                     WatermarkText = "Search for mixes by tag"
+                                                     WatermarkText = "Search for mixes by tag",
+                                                     AutoCompleteProvider = GetMixesByTag
                                                  },
                                                  Tuple.Create("Type", "Tag"));
 
             SearchBarService.Add<MainStationView>(new SearchBarData
                                                   {
                                                       Category = "8tracks by artist",
-                                                      WatermarkText = "Search for mixes by artist"
+                                                      WatermarkText = "Search for mixes by artist",
+                                                      AutoCompleteProvider = GetMixesByTag
                                                   },
                                                   Tuple.Create("Type", "Artist"));
+        }
+
+        private IEnumerable<string> GetMixesByTag(string tag)
+        {
+            using (var session = new EightTracksSession(ApiKey))
+            {
+                TagsResponse response = session.Query<Tags>().Execute(1, tag);
+                return response.Tags.Select(t => t.Name);
+            }
         }
 
         #endregion Methods

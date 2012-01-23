@@ -5,6 +5,12 @@ namespace Torshify.Radio.Framework
 {
     public interface ISearchBarService
     {
+        #region Events
+
+        event EventHandler CurrentChanged;
+
+        #endregion Events
+
         #region Properties
 
         SearchBar Current

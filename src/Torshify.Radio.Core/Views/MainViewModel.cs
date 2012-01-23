@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.Composition;
-using Microsoft.Practices.Prism;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel.Composition;
+using System.Threading.Tasks;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -11,10 +14,18 @@ namespace Torshify.Radio.Core.Views
     [Export(typeof(MainViewModel))]
     public class MainViewModel : NotificationObject, INavigationAware
     {
+        #region Fields
+
+        private ObservableCollection<string> _autoCompleteList;
+
+        #endregion Fields
+
         #region Constructors
 
         public MainViewModel()
         {
+            _autoCompleteList = new ObservableCollection<string>();
+
             NavigateBackCommand = new AutomaticCommand(ExecuteNavigateBack, CanExecuteNavigateBack);
             NavigateForwardCommand = new AutomaticCommand(ExecuteNavigateForward, CanExecuteNavigateForward);
             SearchCommand = new AutomaticCommand<string>(ExecuteSearch, CanExecuteSearch);
@@ -24,14 +35,24 @@ namespace Torshify.Radio.Core.Views
 
         #region Properties
 
+        public IEnumerable<string> AutoCompleteList
+        {
+            get
+            {
+                return _autoCompleteList;
+            }
+        }
+
         public AutomaticCommand NavigateBackCommand
         {
-            get; private set;
+            get;
+            private set;
         }
 
         public AutomaticCommand NavigateForwardCommand
         {
-            get; private set;
+            get;
+            private set;
         }
 
         [Import]
@@ -65,10 +86,41 @@ namespace Torshify.Radio.Core.Views
 
         void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
+            SearchBarService.CurrentChanged -= SearchBarServiceOnCurrentChanged;
         }
 
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
+            SearchBarService.CurrentChanged += SearchBarServiceOnCurrentChanged;
+        }
+
+        public void UpdateAutoCompleteList(string text)
+        {
+            var ui = TaskScheduler.FromCurrentSynchronizationContext();
+            Task<IEnumerable<string>>
+                .Factory
+                .StartNew(() =>
+                {
+                    try
+                    {
+                        return SearchBarService.Current.Data.AutoCompleteProvider(text);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+
+                    return new string[0];
+                })
+                .ContinueWith(t =>
+                {
+                    _autoCompleteList.Clear();
+
+                    foreach (var phrase in t.Result)
+                    {
+                        _autoCompleteList.Add(phrase);
+                    }
+                }, ui);
         }
 
         private bool CanExecuteNavigateBack()
@@ -99,6 +151,10 @@ namespace Torshify.Radio.Core.Views
         private void ExecuteSearch(string phrase)
         {
             RegionManager.RequestNavigate(AppRegions.ViewRegion, SearchBarService.Current.NavigationUri);
+        }
+
+        private void SearchBarServiceOnCurrentChanged(object sender, EventArgs eventArgs)
+        {
         }
 
         #endregion Methods

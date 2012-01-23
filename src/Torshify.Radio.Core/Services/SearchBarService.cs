@@ -31,6 +31,12 @@ namespace Torshify.Radio.Core.Services
 
         #endregion Constructors
 
+        #region Events
+
+        public event EventHandler CurrentChanged;
+
+        #endregion Events
+
         #region Properties
 
         public SearchBar Current
@@ -42,6 +48,7 @@ namespace Torshify.Radio.Core.Services
                 {
                     _current = value;
                     RaisePropertyChanged("Current");
+                    OnCurrentChanged();
                 }
             }
         }
@@ -73,6 +80,16 @@ namespace Torshify.Radio.Core.Services
             if (_bars.Count == 1 && Current == null)
             {
                 Current = _bars.FirstOrDefault();
+            }
+        }
+
+        protected void OnCurrentChanged()
+        {
+            var handler = CurrentChanged;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
             }
         }
 

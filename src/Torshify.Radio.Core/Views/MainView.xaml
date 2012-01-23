@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     xmlns:Resources="clr-namespace:Torshify.Radio.Core.Resources"
-    xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
     xmlns:Regions="clr-namespace:Microsoft.Practices.Prism.Regions;assembly=Microsoft.Practices.Prism"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
@@ -14,6 +13,7 @@
     xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    xmlns:input="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -84,18 +84,20 @@
                         </DataTemplate>
                     </Button.ContentTemplate>
                 </Button>
-                <extToolkit:WatermarkTextBox
+                <!--Watermark="{Binding SearchBarService.Current.Data.WatermarkText}"-->
+                <input:AutoCompleteBox
                     x:Name="InputBox"
-                    Watermark="{Binding SearchBarService.Current.Data.WatermarkText}"
                     Margin="8,0,0,0"
-                    Width="175">
+                    Width="175"
+                    ItemsSource="{Binding AutoCompleteList}"
+                    TextChanged="AutoCompleteTextChanged">
                     <i:Interaction.Behaviors>
                         <Behaviors:KeyboardBehavior
                             Key="Enter"
                             Command="{Binding SearchCommand}"
                             CommandParameter="{Binding Text, ElementName=InputBox}" />
                     </i:Interaction.Behaviors>
-                </extToolkit:WatermarkTextBox>
+                    </input:AutoCompleteBox>
                 <ComboBox
                     Margin="4,0,0,0"
                     ItemsSource="{Binding SearchBarService.SearchBars}"

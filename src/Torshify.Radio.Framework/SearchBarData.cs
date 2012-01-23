@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.Practices.Prism.ViewModel;
+
 using WPFLocalizeExtension.Extensions;
 
 namespace Torshify.Radio.Framework
@@ -12,7 +16,23 @@ namespace Torshify.Radio.Framework
 
         #endregion Fields
 
+        #region Constructors
+
+        public SearchBarData()
+        {
+            AutoCompleteProvider = phrase => new string[0];
+            ResourceAssembly = Assembly.GetCallingAssembly().FullName;
+        }
+
+        #endregion Constructors
+
         #region Properties
+
+        public Func<string, IEnumerable<string>> AutoCompleteProvider
+        {
+            get;
+            set;
+        }
 
         public string Category
         {
@@ -28,7 +48,7 @@ namespace Torshify.Radio.Framework
                 }
                 catch
                 {
-                    
+
                 }
 
                 return _category;
@@ -37,6 +57,12 @@ namespace Torshify.Radio.Framework
             {
                 _category = value;
             }
+        }
+
+        public string ResourceAssembly
+        {
+            get;
+            set;
         }
 
         public string WatermarkText
@@ -53,7 +79,7 @@ namespace Torshify.Radio.Framework
                 }
                 catch
                 {
-                    
+
                 }
 
                 return _watermarkText;
@@ -62,12 +88,6 @@ namespace Torshify.Radio.Framework
             {
                 _watermarkText = value;
             }
-        }
-
-        public string ResourceAssembly
-        {
-            get; 
-            set;
         }
 
         #endregion Properties
