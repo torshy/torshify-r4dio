@@ -105,6 +105,7 @@
     <Compile Include="Commands\WeakReference.cs" />
     <Compile Include="Common\DoubleUtilities.cs" />
     <Compile Include="Common\ObjectExtensions.cs" />
+    <Compile Include="Controls\MetroProgressBar.cs" />
     <Compile Include="Controls\MetroWindow.cs" />
     <Compile Include="Controls\Planerator.cs" />
     <Compile Include="Controls\SearchTextBox.cs" />
@@ -209,6 +210,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\MetroProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\MetroWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -108,7 +108,11 @@
                                 CommandParameter="{Binding Text, ElementName=InputBox}" />
                         </i:Interaction.Behaviors>
                     </Controls:SearchTextBox>
+                    <Controls:MetroProgressBar
+                        VerticalAlignment="Bottom"
+                        IsIndeterminate="True" />
                 </Grid>
+
                 <!--<TextBlock
                     Margin="12,0,0,0"
                     Text="//"

@@ -4,5 +4,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary
             Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/MetroWindow.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/MetroProgressBar.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
