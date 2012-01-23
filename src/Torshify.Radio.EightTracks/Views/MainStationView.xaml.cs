@@ -6,11 +6,12 @@ using Microsoft.Practices.Prism.Regions;
 namespace Torshify.Radio.EightTracks.Views
 {
     [Export(typeof(MainStationView))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class MainStationView : UserControl
     {
         #region Fields
 
-        public const string TabViewRegion = "TabViewRegion";
+        public const string TabViewRegion = "EightTracksRegion";
 
         #endregion Fields
 

@@ -7,6 +7,7 @@ using Torshify.Radio.Framework;
 namespace Torshify.Radio.EightTracks.Views.Tabs
 {
     [Export(typeof(TagsTabViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class TagsTabViewModel : NotificationObject, IHeaderInfoProvider<HeaderInfo>
     {
         #region Constructors

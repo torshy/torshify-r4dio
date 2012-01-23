@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Linq;
 
 using Microsoft.Practices.Prism.Regions;
@@ -10,20 +11,24 @@ using Torshify.Radio.Framework;
 namespace Torshify.Radio.EightTracks.Views
 {
     [Export(typeof(MainStationViewModel))]
-    public class MainStationViewModel : NotificationObject, IRadioStation
+    [PartCreationPolicy(CreationPolicy.NonShared)]
+    public class MainStationViewModel : NotificationObject, IRadioStation, IRegionMemberLifetime
     {
         #region Constructors
 
         public MainStationViewModel()
         {
             RegionManager = new RegionManager();
-            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(MainTabView));
-            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(TagsTabView));
         }
 
         #endregion Constructors
 
         #region Properties
+
+        public bool KeepAlive
+        {
+            get { return false; }
+        }
 
         public IRegionManager RegionManager
         {
@@ -60,6 +65,12 @@ namespace Torshify.Radio.EightTracks.Views
                 RegionManager.RequestNavigate(
                     MainStationView.TabViewRegion,
                     typeof(MainTabView).FullName + context.Parameters);
+            }
+            else
+            {
+                RegionManager.RequestNavigate(
+                    MainStationView.TabViewRegion,
+                    typeof (MainTabView).FullName);
             }
         }
 

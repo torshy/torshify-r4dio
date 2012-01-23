@@ -5,8 +5,9 @@ using System.Linq;
 using EightTracks;
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
-
+using Microsoft.Practices.Prism.Regions;
 using Torshify.Radio.EightTracks.Views;
+using Torshify.Radio.EightTracks.Views.Tabs;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EightTracks
@@ -36,12 +37,22 @@ namespace Torshify.Radio.EightTracks
             set;
         }
 
+        [Import]
+        public IRegionManager RegionManager
+        {
+            get; 
+            set;
+        }
+
         #endregion Properties
 
         #region Methods
 
         public void Initialize()
         {
+            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(MainTabView));
+            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(TagsTabView));
+
             TileService.Add<MainStationView>(new TileData
                                                 {
                                                     Title = "8tracks"

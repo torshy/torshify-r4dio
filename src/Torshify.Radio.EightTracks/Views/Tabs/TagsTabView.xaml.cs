@@ -4,6 +4,7 @@ using System.Windows.Controls;
 namespace Torshify.Radio.EightTracks.Views.Tabs
 {
     [Export(typeof(TagsTabView))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class TagsTabView : UserControl
     {
         public TagsTabView()

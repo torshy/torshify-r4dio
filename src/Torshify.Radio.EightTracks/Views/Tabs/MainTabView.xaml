@@ -8,6 +8,8 @@
     d:DesignHeight="300"
     d:DesignWidth="300">
     <Grid>
-
+        <ListBox
+            ItemsSource="{Binding Mixes}" 
+            DisplayMemberPath="Name" />
     </Grid>
 </UserControl>
