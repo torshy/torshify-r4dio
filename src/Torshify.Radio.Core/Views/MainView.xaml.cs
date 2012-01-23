@@ -53,6 +53,14 @@ namespace Torshify.Radio.Core.Views
             Model.UpdateAutoCompleteList(InputBox.Text);
         }
 
+        private void SearchTextBoxSearch(object sender, RoutedEventArgs e)
+        {
+            if (Model.SearchCommand.CanExecute(InputBox.Text))
+            {
+                Model.SearchCommand.Execute(InputBox.Text);
+            }
+        }
+
         #endregion Methods
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -16,6 +17,7 @@ namespace Torshify.Radio.Framework.Controls
 
     #endregion Enumerations
 
+    [TemplatePart(Name = "PART_SearchIconButton", Type = typeof(ButtonBase))]
     [TemplatePart(Name = "PART_SearchIconBorder", Type = typeof(Border))]
     public class SearchTextBox : WatermarkAutoCompleteBox
     {
@@ -125,12 +127,26 @@ namespace Torshify.Radio.Framework.Controls
         {
             base.OnApplyTemplate();
 
-            Border iconBorder = GetTemplateChild("PART_SearchIconBorder") as Border;
+            ButtonBase iconButton = Template.FindName("PART_SearchIconButton", this) as ButtonBase;
+            if (iconButton != null)
+            {
+                iconButton.Click += IconButtonOnClick;
+            }
+
+            Border iconBorder = Template.FindName("PART_SearchIconBorder", this) as Border;
             if (iconBorder != null) 
             {
                 iconBorder.MouseLeftButtonDown += IconBorderMouseLeftButtonDown;
                 iconBorder.MouseLeftButtonUp += IconBorderMouseLeftButtonUp;
                 iconBorder.MouseLeave += IconBorderMouseLeave;
+            }
+        }
+
+        private void IconButtonOnClick(object sender, RoutedEventArgs routedEventArgs)
+        {
+            if (HasText)
+            {
+                RaiseSearchEvent();
             }
         }
 

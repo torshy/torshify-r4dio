@@ -89,7 +89,8 @@
                     Width="175"
                     Watermark="{Binding SearchBarService.Current.Data.WatermarkText}"
                     ItemsSource="{Binding AutoCompleteList}"
-                    TextChanged="AutoCompleteTextChanged">
+                    TextChanged="AutoCompleteTextChanged"
+                    Search="SearchTextBoxSearch">
                     <i:Interaction.Behaviors>
                         <Behaviors:KeyboardBehavior
                             Key="Enter"
@@ -103,7 +104,20 @@
                     SelectedItem="{Binding SearchBarService.Current}"
                     DisplayMemberPath="Data.Category">
                 </ComboBox>
+                <!--<TextBlock
+                    Margin="12,0,0,0"
+                    Text="//"
+                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMediumLarge}}"
+                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}" 
+                    Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                <TextBlock
+                    Margin="4,0,0,0"
+                    Text="8tracks"
+                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMediumLarge}}"
+                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                    Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />-->
             </StackPanel>
+            
         </StackPanel>
         <DockPanel>
             <ContentControl

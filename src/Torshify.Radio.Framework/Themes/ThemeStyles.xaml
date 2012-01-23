@@ -4,7 +4,8 @@
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework"
     xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
     xmlns:input="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
-    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls">
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls"
+    xmlns:Icons="clr-namespace:Torshify.Radio.Framework.Resources.Icons">
 
     <Style
         TargetType="{x:Type TextBox}">
@@ -485,8 +486,95 @@
     </Style>
 
     <Style
+        x:Key="SearchTextBoxStyle"
+        TargetType="{x:Type TextBox}"
+        BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type TextBox}">
+                    <Border
+                        x:Name="Bd"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Background="{TemplateBinding Background}"
+                        SnapsToDevicePixels="True">
+                        <DockPanel>
+                            <Decorator
+                                DockPanel.Dock="Right"
+                                Width="24" />
+                            <ScrollViewer
+                                x:Name="PART_ContentHost"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger
+                            Property="IsFocused"
+                            Value="True">
+                            <Setter
+                                Property="Background"
+                                TargetName="Bd"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditBackgroundBrushKey}}" />
+                            <Setter
+                                Property="BorderBrush"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditBorderBrushKey}}" />
+                        </Trigger>
+                        <Trigger
+                            Property="IsReadOnly"
+                            Value="True">
+                            <Setter
+                                Property="Background"
+                                TargetName="Bd"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
+                        </Trigger>
+                        <Trigger
+                            Property="IsEnabled"
+                            Value="False">
+                            <Setter
+                                Property="Background"
+                                TargetName="Bd"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger
+                Property="IsReadOnly"
+                Value="True">
+                <Setter
+                    Property="Foreground"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditReadOnlyBrushKey}}" />
+                <Setter
+                    Property="BorderBrush"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
+            </Trigger>
+            <Trigger
+                Property="IsEnabled"
+                Value="False">
+                <Setter
+                    Property="BorderBrush"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.DisabledBrushKey}}" />
+                <Setter
+                    Property="Foreground"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.DisabledBrushKey}}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <Style
         TargetType="{x:Type Controls:SearchTextBox}"
         BasedOn="{StaticResource {x:Type Controls:WatermarkAutoCompleteBox}}">
+        <Setter
+            Property="TextBoxStyle"
+            Value="{StaticResource SearchTextBoxStyle}" />
+        <Setter
+            Property="SearchMode"
+            Value="Delayed" />
         <Setter
             Property="Template">
             <Setter.Value>
@@ -504,6 +592,20 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             Foreground="{TemplateBinding Foreground}"
                             Margin="0" />
+                        <Button
+                            Name="PART_SearchIconButton"
+                            Height="24"
+                            HorizontalAlignment="Right"
+                            BorderThickness="0"
+                            Padding="0">
+                            <Viewbox>
+                                <Icons:Search
+                                    x:Name="SearchIcon"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    Background="Transparent"
+                                    Cursor="Hand" />
+                            </Viewbox>
+                        </Button>
                         <ContentPresenter
                             x:Name="PART_WatermarkHost"
                             Content="{TemplateBinding Watermark}"
@@ -616,6 +718,14 @@
                                     Value="" />
                             </MultiTrigger.Conditions>
                             <Setter
+                                Property="Foreground"
+                                TargetName="SearchIcon"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditReadOnlyBrushKey}}" />
+                            <Setter
+                                Property="IsEnabled"
+                                TargetName="PART_SearchIconButton"
+                                Value="False" />
+                            <Setter
                                 Property="Visibility"
                                 TargetName="PART_WatermarkHost"
                                 Value="Visible" />
@@ -625,7 +735,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style
         TargetType="{x:Type ButtonBase}">
         <Setter
@@ -1366,7 +1476,7 @@
                                 Value="1" />
                             <Setter
                                 Property="Foreground"
-                                Value="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
+                                Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
                         </Trigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
@@ -1379,7 +1489,7 @@
                             </MultiTrigger.Conditions>
                             <Setter
                                 Property="Foreground"
-                                Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+                                Value="{DynamicResource {x:Static Framework:AppTheme.ContrastBackgroundKey}}" />
                         </MultiTrigger>
                         <Trigger
                             Property="TabStripPlacement"
@@ -1485,5 +1595,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
 </ResourceDictionary>
