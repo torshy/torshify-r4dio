@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
+
+using Microsoft.Practices.Prism;
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -69,6 +72,13 @@ namespace Torshify.Radio.Core.Views
             set;
         }
 
+        [Import]
+        public ILoggerFacade Logger
+        {
+            get; 
+            set;
+        }
+
         public AutomaticCommand<string> SearchCommand
         {
             get;
@@ -86,12 +96,10 @@ namespace Torshify.Radio.Core.Views
 
         void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
-            SearchBarService.CurrentChanged -= SearchBarServiceOnCurrentChanged;
         }
 
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
-            SearchBarService.CurrentChanged += SearchBarServiceOnCurrentChanged;
         }
 
         public void UpdateAutoCompleteList(string text)
@@ -107,7 +115,7 @@ namespace Torshify.Radio.Core.Views
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        Logger.Log(e.Message, Category.Exception, Priority.Medium);
                     }
 
                     return new string[0];
@@ -150,11 +158,16 @@ namespace Torshify.Radio.Core.Views
 
         private void ExecuteSearch(string phrase)
         {
-            RegionManager.RequestNavigate(AppRegions.ViewRegion, SearchBarService.Current.NavigationUri);
-        }
+            var searchBar = SearchBarService.Current;
 
-        private void SearchBarServiceOnCurrentChanged(object sender, EventArgs eventArgs)
-        {
+            if (searchBar != null)
+            {
+                UriQuery query = new UriQuery(searchBar.Parameters.ToString());
+                query.Add(SearchBar.ValueParameter, phrase);
+                query.Add(SearchBar.IsFromSearchBarParameter, "true");
+
+                RegionManager.RequestNavigate(AppRegions.ViewRegion, searchBar.NavigationUri.ToString() + query);
+            }
         }
 
         #endregion Methods

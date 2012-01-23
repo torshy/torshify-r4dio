@@ -74,8 +74,8 @@ namespace Torshify.Radio.Core.Services
                 }
             }
 
-            Uri navigationUri = new Uri(typeof(T).FullName + query, UriKind.RelativeOrAbsolute);
-            _bars.Add(new SearchBar(navigationUri, searchBarData));
+            Uri navigationUri = new Uri(typeof(T).FullName, UriKind.RelativeOrAbsolute);
+            _bars.Add(new SearchBar(navigationUri, query, searchBarData));
 
             if (_bars.Count == 1 && Current == null)
             {

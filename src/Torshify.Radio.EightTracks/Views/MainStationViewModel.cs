@@ -52,7 +52,14 @@ namespace Torshify.Radio.EightTracks.Views
             if (!SearchBarService.Current.NavigationUri.OriginalString.StartsWith(typeof(MainStationView).FullName))
             {
                 SearchBarService.Current = SearchBarService.SearchBars.FirstOrDefault(
-                    s => s.NavigationUri.OriginalString.StartsWith(typeof (MainStationView).FullName));
+                    s => s.NavigationUri.OriginalString.StartsWith(typeof(MainStationView).FullName));
+            }
+
+            if (!string.IsNullOrEmpty(context.Parameters[SearchBar.IsFromSearchBarParameter]))
+            {
+                RegionManager.RequestNavigate(
+                    MainStationView.TabViewRegion,
+                    typeof(MainTabView).FullName + context.Parameters);
             }
         }
 
