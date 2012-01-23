@@ -84,11 +84,11 @@
                         </DataTemplate>
                     </Button.ContentTemplate>
                 </Button>
-                <!--Watermark="{Binding SearchBarService.Current.Data.WatermarkText}"-->
-                <input:AutoCompleteBox
+                <Controls:SearchTextBox
                     x:Name="InputBox"
                     Margin="8,0,0,0"
                     Width="175"
+                    Watermark="{Binding SearchBarService.Current.Data.WatermarkText}"
                     ItemsSource="{Binding AutoCompleteList}"
                     TextChanged="AutoCompleteTextChanged">
                     <i:Interaction.Behaviors>
@@ -97,7 +97,7 @@
                             Command="{Binding SearchCommand}"
                             CommandParameter="{Binding Text, ElementName=InputBox}" />
                     </i:Interaction.Behaviors>
-                    </input:AutoCompleteBox>
+                </Controls:SearchTextBox>
                 <ComboBox
                     Margin="4,0,0,0"
                     ItemsSource="{Binding SearchBarService.SearchBars}"

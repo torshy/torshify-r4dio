@@ -107,6 +107,7 @@
     <Compile Include="Common\ObjectExtensions.cs" />
     <Compile Include="Controls\MetroWindow.cs" />
     <Compile Include="Controls\Planerator.cs" />
+    <Compile Include="Controls\SearchTextBox.cs" />
     <Compile Include="Controls\SizeControlTemplate.cs" />
     <Compile Include="Controls\SizeControlTemplateCollection.cs" />
     <Compile Include="Controls\SizeTemplateControl.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Controls\SystemCommands.cs" />
     <Compile Include="Controls\SystemParameters2.cs" />
     <Compile Include="Controls\UIHelpers.cs" />
+    <Compile Include="Controls\WatermarkAutoCompleteBox.cs" />
     <Compile Include="Controls\WindowChrome.cs" />
     <Compile Include="Controls\WindowChromeWorker.cs" />
     <Compile Include="Converters\BoolToVisibleOrHidden.cs" />

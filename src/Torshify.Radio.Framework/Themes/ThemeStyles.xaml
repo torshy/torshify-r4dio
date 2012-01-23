@@ -3,8 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework"
     xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:input="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit">
+    xmlns:input="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls">
 
     <Style
         TargetType="{x:Type TextBox}">
@@ -200,7 +200,7 @@
     </Style>
 
     <Style
-        TargetType="input:AutoCompleteBox">
+        TargetType="{x:Type input:AutoCompleteBox}">
         <Setter
             Property="IsTabStop"
             Value="False" />
@@ -211,14 +211,14 @@
             Property="BorderThickness"
             Value="1" />
         <Setter
-            Property="BorderBrush"
-            Value="Black" />
+            Property="Foreground"
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxForegroundBrushKey}}" />
         <Setter
             Property="Background"
-            Value="#FFFFFFFF" />
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
         <Setter
-            Property="Foreground"
-            Value="#FF000000" />
+            Property="BorderBrush"
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
         <Setter
             Property="MinWidth"
             Value="45" />
@@ -229,7 +229,7 @@
             Property="Template">
             <Setter.Value>
                 <ControlTemplate
-                    TargetType="input:AutoCompleteBox">
+                    TargetType="{x:Type input:AutoCompleteBox}">
                     <Grid
                         Opacity="{TemplateBinding Opacity}">
                         <TextBox
@@ -334,6 +334,293 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                     </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type Controls:WatermarkAutoCompleteBox}"
+        BasedOn="{StaticResource {x:Type input:AutoCompleteBox}}">
+        <Setter
+            Property="WatermarkTemplate"
+            Value="{StaticResource DefaultWatermarkTemplate}" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type Controls:WatermarkAutoCompleteBox}">
+                    <Grid
+                        Opacity="{TemplateBinding Opacity}">
+                        <TextBox
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            IsTabStop="True"
+                            x:Name="Text"
+                            Style="{TemplateBinding TextBoxStyle}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Foreground="{TemplateBinding Foreground}"
+                            Margin="0" />
+                        <ContentPresenter
+                            x:Name="PART_WatermarkHost"
+                            Content="{TemplateBinding Watermark}"
+                            ContentTemplate="{TemplateBinding WatermarkTemplate}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            IsHitTestVisible="False"
+                            Margin="{TemplateBinding Padding}"
+                            Visibility="Collapsed" />
+                        <Popup
+                            x:Name="Popup">
+                            <Grid
+                                Opacity="{TemplateBinding Opacity}"
+                                Background="{TemplateBinding Background}">
+                                <Border
+                                    x:Name="PopupBorder"
+                                    HorizontalAlignment="Stretch"
+                                    Opacity="0"
+                                    BorderThickness="0">
+                                    <Border.RenderTransform>
+                                        <TranslateTransform
+                                            X="1"
+                                            Y="1" />
+                                    </Border.RenderTransform>
+                                    <Border.Background>
+                                        <SolidColorBrush
+                                            Color="#11000000" />
+                                    </Border.Background>
+                                    <Border
+                                        HorizontalAlignment="Stretch"
+                                        Opacity="1.0"
+                                        Padding="0"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        CornerRadius="0">
+                                        <Border.RenderTransform>
+                                            <TransformGroup>
+                                                <TranslateTransform
+                                                    X="-1"
+                                                    Y="-1" />
+                                            </TransformGroup>
+                                        </Border.RenderTransform>
+                                        <Border.Background>
+                                            <LinearGradientBrush
+                                                EndPoint="0.5,1"
+                                                StartPoint="0.5,0">
+                                                <GradientStop
+                                                    Color="#FFDDDDDD"
+                                                    Offset="0" />
+                                                <GradientStop
+                                                    Color="#AADDDDDD"
+                                                    Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <ListBox
+                                            x:Name="Selector"
+                                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                            ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
+                                            Background="{TemplateBinding Background}"
+                                            Foreground="{TemplateBinding Foreground}"
+                                            BorderThickness="0"
+                                            ItemTemplate="{TemplateBinding ItemTemplate}" />
+                                    </Border>
+                                </Border>
+                            </Grid>
+                        </Popup>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup
+                                x:Name="PopupStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition
+                                        GeneratedDuration="0:0:0.1"
+                                        To="PopupOpened" />
+                                    <VisualTransition
+                                        GeneratedDuration="0:0:0.2"
+                                        To="PopupClosed" />
+                                </VisualStateGroup.Transitions>
+                                <VisualState
+                                    x:Name="PopupOpened">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="PopupBorder"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1.0"
+                                            Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState
+                                    x:Name="PopupClosed">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="PopupBorder"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition
+                                    Property="IsFocused"
+                                    Value="False" />
+                                <Condition
+                                    Property="Text"
+                                    Value="" />
+                            </MultiTrigger.Conditions>
+                            <Setter
+                                Property="Visibility"
+                                TargetName="PART_WatermarkHost"
+                                Value="Visible" />
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type Controls:SearchTextBox}"
+        BasedOn="{StaticResource {x:Type Controls:WatermarkAutoCompleteBox}}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type Controls:SearchTextBox}">
+                    <Grid
+                        Opacity="{TemplateBinding Opacity}">
+                        <TextBox
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            IsTabStop="True"
+                            x:Name="Text"
+                            Style="{TemplateBinding TextBoxStyle}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Foreground="{TemplateBinding Foreground}"
+                            Margin="0" />
+                        <ContentPresenter
+                            x:Name="PART_WatermarkHost"
+                            Content="{TemplateBinding Watermark}"
+                            ContentTemplate="{TemplateBinding WatermarkTemplate}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            IsHitTestVisible="False"
+                            Margin="{TemplateBinding Padding}"
+                            Visibility="Collapsed" />
+                        <Popup
+                            x:Name="Popup">
+                            <Grid
+                                Opacity="{TemplateBinding Opacity}"
+                                Background="{TemplateBinding Background}">
+                                <Border
+                                    x:Name="PopupBorder"
+                                    HorizontalAlignment="Stretch"
+                                    Opacity="0"
+                                    BorderThickness="0">
+                                    <Border.RenderTransform>
+                                        <TranslateTransform
+                                            X="1"
+                                            Y="1" />
+                                    </Border.RenderTransform>
+                                    <Border.Background>
+                                        <SolidColorBrush
+                                            Color="#11000000" />
+                                    </Border.Background>
+                                    <Border
+                                        HorizontalAlignment="Stretch"
+                                        Opacity="1.0"
+                                        Padding="0"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        CornerRadius="0">
+                                        <Border.RenderTransform>
+                                            <TransformGroup>
+                                                <TranslateTransform
+                                                    X="-1"
+                                                    Y="-1" />
+                                            </TransformGroup>
+                                        </Border.RenderTransform>
+                                        <Border.Background>
+                                            <LinearGradientBrush
+                                                EndPoint="0.5,1"
+                                                StartPoint="0.5,0">
+                                                <GradientStop
+                                                    Color="#FFDDDDDD"
+                                                    Offset="0" />
+                                                <GradientStop
+                                                    Color="#AADDDDDD"
+                                                    Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <ListBox
+                                            x:Name="Selector"
+                                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                            ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                            ItemContainerStyle="{TemplateBinding ItemContainerStyle}"
+                                            Background="{TemplateBinding Background}"
+                                            Foreground="{TemplateBinding Foreground}"
+                                            BorderThickness="0"
+                                            ItemTemplate="{TemplateBinding ItemTemplate}" />
+                                    </Border>
+                                </Border>
+                            </Grid>
+                        </Popup>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup
+                                x:Name="PopupStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition
+                                        GeneratedDuration="0:0:0.1"
+                                        To="PopupOpened" />
+                                    <VisualTransition
+                                        GeneratedDuration="0:0:0.2"
+                                        To="PopupClosed" />
+                                </VisualStateGroup.Transitions>
+                                <VisualState
+                                    x:Name="PopupOpened">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="PopupBorder"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1.0"
+                                            Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState
+                                    x:Name="PopupClosed">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="PopupBorder"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition
+                                    Property="IsFocused"
+                                    Value="False" />
+                                <Condition
+                                    Property="Text"
+                                    Value="" />
+                            </MultiTrigger.Conditions>
+                            <Setter
+                                Property="Visibility"
+                                TargetName="PART_WatermarkHost"
+                                Value="Visible" />
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
