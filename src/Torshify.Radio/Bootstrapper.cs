@@ -3,7 +3,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.Globalization;
 using System.IO;
 using System.Windows;
-using WPFLocalizeExtension.Engine;
+
 using log4net;
 using log4net.Appender;
 using log4net.Core;

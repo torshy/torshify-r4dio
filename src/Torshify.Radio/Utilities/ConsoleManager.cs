@@ -11,7 +11,7 @@ namespace Torshify.Radio.Utilities
     {
         #region Fields
 
-        private const string Kernel32_DllName = "kernel32.dll";
+        private const string Kernel32DllName = "kernel32.dll";
 
         #endregion Fields
 
@@ -31,13 +31,11 @@ namespace Torshify.Radio.Utilities
         /// </summary>
         public static void Hide()
         {
-            //#if DEBUG
             if (HasConsole)
             {
                 SetOutAndErrorNull();
                 FreeConsole();
             }
-            //#endif
         }
 
         /// <summary>
@@ -45,13 +43,11 @@ namespace Torshify.Radio.Utilities
         /// </summary>
         public static void Show()
         {
-            //#if DEBUG
             if (!HasConsole)
             {
                 AllocConsole();
                 InvalidateOutAndError();
             }
-            //#endif
         }
 
         public static void Toggle()
@@ -66,43 +62,42 @@ namespace Torshify.Radio.Utilities
             }
         }
 
-        [DllImport(Kernel32_DllName)]
+        [DllImport(Kernel32DllName)]
         private static extern bool AllocConsole();
 
-        [DllImport(Kernel32_DllName)]
+        [DllImport(Kernel32DllName)]
         private static extern bool FreeConsole();
 
-        [DllImport(Kernel32_DllName)]
-        private static extern int GetConsoleOutputCP();
-
-        [DllImport(Kernel32_DllName)]
+        [DllImport(Kernel32DllName)]
         private static extern IntPtr GetConsoleWindow();
 
-        static void InvalidateOutAndError()
+        private static void InvalidateOutAndError()
         {
-            Type type = typeof(System.Console);
+            Type type = typeof(Console);
 
-            System.Reflection.FieldInfo _out = type.GetField("_out",
+            System.Reflection.FieldInfo @out = type.GetField(
+                "_out",
                 System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
 
-            System.Reflection.FieldInfo _error = type.GetField("_error",
+            System.Reflection.FieldInfo error = type.GetField(
+                "_error",
                 System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
 
-            System.Reflection.MethodInfo _InitializeStdOutError = type.GetMethod("InitializeStdOutError",
+            System.Reflection.MethodInfo initializeStdOutError = type.GetMethod(
+                "InitializeStdOutError",
                 System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
 
-            Debug.Assert(_out != null);
-            Debug.Assert(_error != null);
+            Debug.Assert(@out != null, "out can't be null");
+            Debug.Assert(error != null, "error can't be null");
+            Debug.Assert(initializeStdOutError != null, "stdout can't be null");
 
-            Debug.Assert(_InitializeStdOutError != null);
+            @out.SetValue(null, null);
+            error.SetValue(null, null);
 
-            _out.SetValue(null, null);
-            _error.SetValue(null, null);
-
-            _InitializeStdOutError.Invoke(null, new object[] { true });
+            initializeStdOutError.Invoke(null, new object[] { true });
         }
 
-        static void SetOutAndErrorNull()
+        private static void SetOutAndErrorNull()
         {
             Console.SetOut(TextWriter.Null);
             Console.SetError(TextWriter.Null);
