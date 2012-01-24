@@ -17,6 +17,12 @@
                     <Setter
                         Property="Header"
                         Value="{Binding Model.HeaderInfo.Title}" />
+                    <Setter
+                        Property="IsSelected"
+                        Value="{Binding Model.HeaderInfo.IsSelected}" />
+                    <Setter
+                        Property="ToolTip"
+                        Value="{Binding Model.HeaderInfo.ToolTip}" />
                 </Style>
             </TabControl.ItemContainerStyle>
         </TabControl>
