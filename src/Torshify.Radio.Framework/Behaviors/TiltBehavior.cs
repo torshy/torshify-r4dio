@@ -14,9 +14,9 @@ namespace Torshify.Radio.Framework.Behaviors
     {
         #region Fields
 
-        public static readonly DependencyProperty KeepDraggingProperty = 
+        public static readonly DependencyProperty KeepDraggingProperty =
             DependencyProperty.Register("KeepDragging", typeof(bool), typeof(TiltBehavior), new PropertyMetadata(true));
-        public static readonly DependencyProperty TiltFactorProperty = 
+        public static readonly DependencyProperty TiltFactorProperty =
             DependencyProperty.Register("TiltFactor", typeof(Int32), typeof(TiltBehavior), new PropertyMetadata(20));
 
         private FrameworkElement _attachedElement;
@@ -39,7 +39,8 @@ namespace Torshify.Radio.Framework.Behaviors
 
         public Planerator RotatorParent
         {
-            get; set;
+            get;
+            set;
         }
 
         public Int32 TiltFactor
@@ -134,7 +135,6 @@ namespace Torshify.Radio.Framework.Behaviors
 
                 if (Mouse.LeftButton == MouseButtonState.Pressed)
                 {
-
                     if (!_isPressed)
                     {
                         _current = Mouse.GetPosition(RotatorParent.Child);

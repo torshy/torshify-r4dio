@@ -8,7 +8,7 @@ using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-
+using Torshify.Radio.Core.Services;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 
@@ -29,6 +29,7 @@ namespace Torshify.Radio.Core.Views
         {
             _autoCompleteList = new ObservableCollection<string>();
 
+            SearchBarLoadingIndicatorService = new LoadingIndicatorService();
             NavigateBackCommand = new AutomaticCommand(ExecuteNavigateBack, CanExecuteNavigateBack);
             NavigateForwardCommand = new AutomaticCommand(ExecuteNavigateForward, CanExecuteNavigateForward);
             SearchCommand = new AutomaticCommand<string>(ExecuteSearch, CanExecuteSearch);
@@ -56,6 +57,19 @@ namespace Torshify.Radio.Core.Views
         {
             get;
             private set;
+        }
+
+        public ILoadingIndicatorService SearchBarLoadingIndicatorService
+        {
+            get; 
+            set;
+        }
+
+        [Import]
+        public ILoadingIndicatorService LoadingIndicatorService
+        {
+            get; 
+            set;
         }
 
         [Import]
@@ -111,7 +125,10 @@ namespace Torshify.Radio.Core.Views
                 {
                     try
                     {
-                        return SearchBarService.Current.Data.AutoCompleteProvider(text);
+                        using (SearchBarLoadingIndicatorService.EnterLoadingBlock())
+                        {
+                            return SearchBarService.Current.Data.AutoCompleteProvider(text);
+                        }
                     }
                     catch (Exception e)
                     {

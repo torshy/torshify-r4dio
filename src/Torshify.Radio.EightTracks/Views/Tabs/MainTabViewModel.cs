@@ -45,6 +45,13 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             get { return _mixes; }
         }
 
+        [Import]
+        public ILoadingIndicatorService LoadingIndicatorService
+        {
+            get; 
+            set;
+        }
+
         #endregion Properties
 
         #region Methods
@@ -77,17 +84,20 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             var ui = TaskScheduler.FromCurrentSynchronizationContext();
             Task.Factory.StartNew(() =>
             {
-                using (var session = new EightTracksSession(EightTracksModule.ApiKey))
+                using (LoadingIndicatorService.EnterLoadingBlock())
                 {
-                    if (type == "Tag")
+                    using (var session = new EightTracksSession(EightTracksModule.ApiKey))
                     {
-                        var response = session.Query<Mixes>().GetMix(tag: text);
-                        return response.Mixes;
-                    }
-                    else
-                    {
-                        var response = session.Query<Mixes>().GetMix(filter: text);
-                        return response.Mixes;
+                        if (type == "Tag")
+                        {
+                            var response = session.Query<Mixes>().GetMix(tag: text);
+                            return response.Mixes;
+                        }
+                        else
+                        {
+                            var response = session.Query<Mixes>().GetMix(filter: text);
+                            return response.Mixes;
+                        }
                     }
                 }
             })
@@ -106,10 +116,13 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             var ui = TaskScheduler.FromCurrentSynchronizationContext();
             Task.Factory.StartNew(() =>
             {
-                using (var session = new EightTracksSession(EightTracksModule.ApiKey))
+                using (LoadingIndicatorService.EnterLoadingBlock())
                 {
-                    var response = session.Query<Mixes>().GetMix();
-                    return response.Mixes;
+                    using (var session = new EightTracksSession(EightTracksModule.ApiKey))
+                    {
+                        var response = session.Query<Mixes>().GetMix();
+                        return response.Mixes;
+                    }
                 }
             })
             .ContinueWith(t =>

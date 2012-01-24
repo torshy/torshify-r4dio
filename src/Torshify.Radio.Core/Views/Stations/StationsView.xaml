@@ -56,7 +56,7 @@
                 <DataTemplate>
                     <Button
                         Name="Btn"
-                        Margin="0,0,4,4"
+                        Margin="0,0,6,6"
                         Width="128"
                         Style="{StaticResource NoChromeButtonStyle}"
                         Command="{Binding DataContext.NavigateToTileCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
