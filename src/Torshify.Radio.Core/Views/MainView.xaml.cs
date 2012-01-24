@@ -23,7 +23,7 @@ namespace Torshify.Radio.Core.Views
 
             _deferredAutoCompleteTimer = new DispatcherTimer();
             _deferredAutoCompleteTimer.Tick += OnDeferredAutoCompleteTick;
-            _deferredAutoCompleteTimer.Interval = TimeSpan.FromMilliseconds(300);
+            _deferredAutoCompleteTimer.Interval = TimeSpan.FromMilliseconds(750);
         }
 
         #endregion Constructors
