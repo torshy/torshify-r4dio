@@ -10,18 +10,15 @@
     d:DesignHeight="300"
     d:DesignWidth="300">
     <Grid>
-        <Viewbox
+        <Controls:CircleButton
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
+            Controls:WindowChrome.IsHitTestVisibleInChrome="True"
+            Margin="12,-20,0,0"
             Height="60"
             Width="60"
-            Margin="12,-20,0,0"
-            Controls:WindowChrome.IsHitTestVisibleInChrome="True">
-            <Controls:CircleButton
-                Height="60"
-                Width="60">
-                <NowPlaying:BackArrow />
-            </Controls:CircleButton>
-        </Viewbox>
+            Command="{Binding NavigateBackCommand}">
+            <NowPlaying:BackArrow />
+        </Controls:CircleButton>
     </Grid>
 </UserControl>

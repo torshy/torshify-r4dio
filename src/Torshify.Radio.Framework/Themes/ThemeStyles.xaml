@@ -846,16 +846,20 @@
             <Setter.Value>
                 <ControlTemplate
                     TargetType="{x:Type Controls:CircleButton}">
-                    <Grid>
-                        <Ellipse
-                            Name="Circle"
-                            Fill="{TemplateBinding Background}"
-                            Stroke="{TemplateBinding BorderBrush}"
-                            StrokeThickness="3" />
-                        <ContentPresenter
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                    </Grid>
+                    <Viewbox>
+                        <Grid
+                            Height="{Binding ActualHeight, RelativeSource={RelativeSource TemplatedParent}}"
+                            Width="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
+                            <Ellipse
+                                Name="Circle"
+                                Fill="{TemplateBinding Background}"
+                                Stroke="{TemplateBinding BorderBrush}"
+                                StrokeThickness="4" />
+                            <ContentPresenter
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Grid>
+                    </Viewbox>
                     <ControlTemplate.Triggers>
                         <Trigger
                             Property="IsMouseOver"
