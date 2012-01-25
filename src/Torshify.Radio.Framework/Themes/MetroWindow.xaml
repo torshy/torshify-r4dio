@@ -90,7 +90,7 @@
             <Setter.Value>
                 <Controls:WindowChrome
                     ResizeBorderThickness="6"
-                    CaptionHeight="25"
+                    CaptionHeight="50"
                     CornerRadius="0"
                     GlassFrameThickness="-1" />
             </Setter.Value>

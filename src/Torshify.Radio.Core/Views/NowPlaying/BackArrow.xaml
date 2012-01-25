@@ -1,0 +1,31 @@
+﻿<Viewbox
+    x:Class="Torshify.Radio.Core.Views.NowPlaying.BackArrow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    Width="30">
+    <Canvas
+        Width="46.8594"
+        Height="35.75">
+        <Rectangle
+            Width="34.6363"
+            Height="7.1474"
+            Canvas.Left="12.2232"
+            Canvas.Top="14.2951"
+            Stretch="Fill"
+            Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+        <Path
+            Width="28.4611"
+            Height="35.7376"
+            Canvas.Left="-9.53674e-007"
+            Canvas.Top="3.8147e-006"
+            Stretch="Fill"
+            Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+            Data="F1 M 13.615,21.4425L 28.4611,35.7376L 18.6736,35.7376L 0.198587,17.9483L -9.53674e-007,17.7571L 0.198587,17.5659L 18.4417,3.8147e-006L 28.4611,3.8147e-006L 13.615,14.2951L 13.615,21.4425 Z " />
+    </Canvas>
+</Viewbox>

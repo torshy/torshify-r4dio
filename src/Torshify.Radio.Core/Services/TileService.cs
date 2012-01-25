@@ -49,11 +49,23 @@ namespace Torshify.Radio.Core.Services
 
         public void Add<T>(TileData tileData, params Tuple<string, string>[] parameters)
         {
-            IRegion viewRegion = _regionManager.Regions[AppRegions.ViewRegion];
+            Add<T>(tileData, AppRegions.ViewRegion, parameters);
+        }
 
-            if (!viewRegion.Views.Any(v => v.GetType() == typeof(T)))
+        public void Add<T>(TileData tileData, string regionName, params Tuple<string, string>[] parameters)
+        {
+            if (_regionManager.Regions.ContainsRegionWithName(regionName))
             {
-                _regionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof(T));
+                IRegion viewRegion = _regionManager.Regions[regionName];
+
+                if (!viewRegion.Views.Any(v => v.GetType() == typeof(T)))
+                {
+                    _regionManager.RegisterViewWithRegion(regionName, typeof(T));
+                }
+            }
+            else
+            {
+                _regionManager.RegisterViewWithRegion(regionName, typeof(T));
             }
 
             UriQuery query = new UriQuery();
@@ -67,7 +79,7 @@ namespace Torshify.Radio.Core.Services
             }
 
             Uri navigationUri = new Uri(typeof(T).FullName + query, UriKind.RelativeOrAbsolute);
-            _tiles.Add(new Tile(navigationUri, tileData));
+            _tiles.Add(new Tile(navigationUri, tileData, regionName));
         }
 
         #endregion Methods

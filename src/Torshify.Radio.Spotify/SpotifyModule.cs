@@ -37,7 +37,7 @@ namespace Torshify.Radio.Spotify
         {
             TileService.Add<MainStationView>(new TileData
                                                {
-                                                   Title = "Spotify"
+                                                   Title = "Spotify",
                                                },
                                                Tuple.Create("Argument1", "Value1"));
 

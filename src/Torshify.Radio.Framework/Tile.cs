@@ -6,10 +6,11 @@ namespace Torshify.Radio.Framework
     {
         #region Constructors
 
-        public Tile(Uri navigationUri, TileData data)
+        public Tile(Uri navigationUri, TileData data, string targetRegionName)
         {
             NavigationUri = navigationUri;
             Data = data;
+            TargetRegionName = targetRegionName;
         }
 
         #endregion Constructors
@@ -22,6 +23,11 @@ namespace Torshify.Radio.Framework
         }
 
         public Uri NavigationUri
+        {
+            get; private set;
+        }
+
+        public string TargetRegionName
         {
             get; private set;
         }

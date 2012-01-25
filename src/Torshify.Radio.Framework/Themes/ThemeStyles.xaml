@@ -827,6 +827,61 @@
         TargetType="{x:Type ToggleButton}"
         BasedOn="{StaticResource {x:Type ButtonBase}}" />
 
+    <Style
+        TargetType="{x:Type Controls:CircleButton}">
+        <Setter
+            Property="BorderBrush"
+            Value="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+        <Setter
+            Property="Background"
+            Value="Transparent" />
+        <Setter
+            Property="VerticalContentAlignment"
+            Value="Stretch" />
+        <Setter
+            Property="HorizontalContentAlignment"
+            Value="Stretch" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type Controls:CircleButton}">
+                    <Grid>
+                        <Ellipse
+                            Name="Circle"
+                            Fill="{TemplateBinding Background}"
+                            Stroke="{TemplateBinding BorderBrush}"
+                            StrokeThickness="3" />
+                        <ContentPresenter
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger
+                            Property="IsMouseOver"
+                            Value="True">
+                            <Setter
+                                Property="BorderBrush"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+                        </Trigger>
+                        <Trigger
+                            Property="IsPressed"
+                            Value="True">
+                            <Setter
+                                Property="Effect"
+                                TargetName="Circle">
+                                <Setter.Value>
+                                    <BlurEffect
+                                        Radius="4" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Geometry
         x:Key="DownArrowGeometry">M 0 0 L 3.5 4 L 7 0 Z</Geometry>
 
@@ -1347,7 +1402,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style
         TargetType="{x:Type TabControl}">
         <Setter

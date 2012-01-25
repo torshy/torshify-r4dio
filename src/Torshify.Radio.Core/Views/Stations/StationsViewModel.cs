@@ -53,7 +53,6 @@ namespace Torshify.Radio.Core.Views.Stations
 
         void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
-
         }
 
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
@@ -76,7 +75,12 @@ namespace Torshify.Radio.Core.Views.Stations
 
         private void ExecuteNavigateToTile(Tile tile)
         {
-            _navigationService.RequestNavigate(tile.NavigationUri);
+            var regionManager = _navigationService.Region.RegionManager;
+            
+            if (regionManager.Regions.ContainsRegionWithName(tile.TargetRegionName))
+            {
+                regionManager.RequestNavigate(tile.TargetRegionName, tile.NavigationUri);
+            }
         }
 
         private void NavigationServiceOnNavigated(object sender, RegionNavigationEventArgs e)

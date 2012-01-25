@@ -105,6 +105,7 @@
     <Compile Include="Commands\WeakReference.cs" />
     <Compile Include="Common\DoubleUtilities.cs" />
     <Compile Include="Common\ObjectExtensions.cs" />
+    <Compile Include="Controls\CircleButton.cs" />
     <Compile Include="Controls\MetroProgressBar.cs" />
     <Compile Include="Controls\MetroWindow.cs" />
     <Compile Include="Controls\Planerator.cs" />
