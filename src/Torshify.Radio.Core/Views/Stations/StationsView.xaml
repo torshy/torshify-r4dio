@@ -7,6 +7,7 @@
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:WpfShaderEffects="clr-namespace:WpfShaderEffects;assembly=WpfShaderEffects"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -73,7 +74,9 @@
                                 <Grid>
                                     <Image
                                         RenderOptions.BitmapScalingMode="HighQuality"
-                                        Source="{Binding Data.BackgroundImage}" />
+                                        Source="{Binding Data.BackgroundImage}"
+                                        Stretch="UniformToFill">
+                                    </Image>
                                     <TextBlock
                                         Text="{Binding Data.Title}"
                                         TextWrapping="Wrap"

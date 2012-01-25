@@ -78,6 +78,9 @@
     <Reference Include="WPFLocalizeExtension">
       <HintPath>..\..\packages\WpfLocalizeExtension.1.0.2\lib\WPFLocalizeExtension.dll</HintPath>
     </Reference>
+    <Reference Include="WpfShaderEffects">
+      <HintPath>..\..\lib\WpfShaderEffects\WpfShaderEffects.dll</HintPath>
+    </Reference>
     <Reference Include="WPFToolkit.Extended">
       <HintPath>..\..\packages\Extended.Wpf.Toolkit.1.5.0\lib\net40\WPFToolkit.Extended.dll</HintPath>
     </Reference>
