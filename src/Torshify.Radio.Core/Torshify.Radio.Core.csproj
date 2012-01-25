@@ -103,7 +103,7 @@
     <Compile Include="Services\LoadingIndicatorService.cs" />
     <Compile Include="Services\SearchBarService.cs" />
     <Compile Include="Services\TileService.cs" />
-    <Compile Include="ShellSettingsHandler.cs" />
+    <Compile Include="Startables\ShellSettingsHandler.cs" />
     <Compile Include="Properties\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -119,6 +119,13 @@
       <DependentUpon>ControlsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\ControlsViewModel.cs" />
+    <Compile Include="Views\FirstTime\FirstTimeUseView.xaml.cs">
+      <DependentUpon>FirstTimeUseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FirstTime\FirstTimeUseViewModel.cs" />
+    <Compile Include="Views\FirstTime\LastWizardPage.xaml.cs">
+      <DependentUpon>LastWizardPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -160,6 +167,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\FirstTime\FirstTimeUseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FirstTime\LastWizardPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -184,6 +199,7 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

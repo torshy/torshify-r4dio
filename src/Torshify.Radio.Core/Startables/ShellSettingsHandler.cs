@@ -4,10 +4,11 @@ using System.Linq;
 using System.Windows;
 
 using Raven.Client;
+
 using Torshify.Radio.Core.Models;
 using Torshify.Radio.Framework;
 
-namespace Torshify.Radio.Core
+namespace Torshify.Radio.Core.Startables
 {
     public class ShellSettingsHandler : IStartable
     {

@@ -10,7 +10,8 @@ namespace Torshify.Radio.Core.Views.NowPlaying
 {
     [Export(typeof(NowPlayingViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class NowPlayingViewModel : NotificationObject, INavigationAware, IRegionMemberLifetime
+    [RegionMemberLifetime(KeepAlive = false)]
+    public class NowPlayingViewModel : NotificationObject, INavigationAware
     {
         #region Fields
 
@@ -28,11 +29,6 @@ namespace Torshify.Radio.Core.Views.NowPlaying
         #endregion Constructors
 
         #region Properties
-
-        bool IRegionMemberLifetime.KeepAlive
-        {
-            get { return false; }
-        }
 
         public ICommand NavigateBackCommand
         {

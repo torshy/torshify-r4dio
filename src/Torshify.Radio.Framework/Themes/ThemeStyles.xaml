@@ -5,8 +5,13 @@
     xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
     xmlns:input="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls"
-    xmlns:Icons="clr-namespace:Torshify.Radio.Framework.Resources.Icons">
+    xmlns:Icons="clr-namespace:Torshify.Radio.Framework.Resources.Icons"
+    xmlns:coreConverters="clr-namespace:Microsoft.Windows.Controls.Core.Converters;assembly=WPFToolkit.Extended"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters">
 
+    <Converters:StringToUpperConverter
+        x:Key="StringToUpperConverter" />
+    
     <Style
         TargetType="{x:Type TextBox}">
         <Setter
@@ -1755,6 +1760,359 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <coreConverters:WizardPageButtonVisibilityConverter
+        x:Key="WizardPageButtonVisibilityConverter" />
+
+    <Style
+        TargetType="{x:Type extToolkit:Wizard}">
+        <Setter
+            Property="Background"
+            Value="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}" />
+        <Setter
+            Property="BorderBrush"
+            Value="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}" />
+        <Setter
+            Property="Foreground"
+            Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+        <Setter
+            Property="BorderThickness"
+            Value="1" />
+        <Setter
+            Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <Grid />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type extToolkit:Wizard}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid
+                            Background="{TemplateBinding Background}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition
+                                    Height="*" />
+                                <RowDefinition
+                                    Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <ContentPresenter
+                                Content="{Binding CurrentPage, RelativeSource={RelativeSource TemplatedParent}}" />
+
+                            <Border
+                                Grid.Row="1"
+                                Background="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}"
+                                BorderBrush="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}"
+                                BorderThickness="0,1,0,0"
+                                Padding="7">
+                                <StackPanel
+                                    Background="{TemplateBinding Background}">
+                                    <Grid
+                                        Margin="{TemplateBinding Padding}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition
+                                                Width="Auto" />
+                                            <ColumnDefinition
+                                                Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Button
+                                            Name="PART_HelpButton"
+                                            Grid.Column="0"
+                                            MinWidth="75"
+                                            Command="extToolkit:WizardCommands.Help"
+                                            Content="{TemplateBinding HelpButtonContent}">
+                                            <Button.Visibility>
+                                                <MultiBinding
+                                                    Converter="{StaticResource WizardPageButtonVisibilityConverter}">
+                                                    <Binding
+                                                        RelativeSource="{RelativeSource TemplatedParent}"
+                                                        Path="HelpButtonVisibility" />
+                                                    <Binding
+                                                        RelativeSource="{RelativeSource TemplatedParent}"
+                                                        Path="CurrentPage.HelpButtonVisibility" />
+                                                </MultiBinding>
+                                            </Button.Visibility>
+                                        </Button>
+                                        <StackPanel
+                                            Grid.Column="1"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Right">
+                                            <Button
+                                                Name="PART_CancelButton"
+                                                Margin="0,0,7,0"
+                                                MinWidth="75"
+                                                Command="extToolkit:WizardCommands.Cancel"
+                                                Content="{TemplateBinding CancelButtonContent}">
+                                                <Button.Visibility>
+                                                    <MultiBinding
+                                                        Converter="{StaticResource WizardPageButtonVisibilityConverter}">
+                                                        <Binding
+                                                            RelativeSource="{RelativeSource TemplatedParent}"
+                                                            Path="CancelButtonVisibility" />
+                                                        <Binding
+                                                            RelativeSource="{RelativeSource TemplatedParent}"
+                                                            Path="CurrentPage.CancelButtonVisibility" />
+                                                    </MultiBinding>
+                                                </Button.Visibility>
+                                            </Button>
+                                            <Button
+                                                Name="PART_BackButton"
+                                                MinWidth="75"
+                                                Command="extToolkit:WizardCommands.PreviousPage"
+                                                Content="{TemplateBinding BackButtonContent}">
+                                                <Button.Visibility>
+                                                    <MultiBinding
+                                                        Converter="{StaticResource WizardPageButtonVisibilityConverter}">
+                                                        <Binding
+                                                            RelativeSource="{RelativeSource TemplatedParent}"
+                                                            Path="BackButtonVisibility" />
+                                                        <Binding
+                                                            RelativeSource="{RelativeSource TemplatedParent}"
+                                                            Path="CurrentPage.BackButtonVisibility" />
+                                                    </MultiBinding>
+                                                </Button.Visibility>
+                                            </Button>
+                                            <Button
+                                                Name="PART_NextButton"
+                                                Margin="2,0,0,0"
+                                                MinWidth="75"
+                                                Command="extToolkit:WizardCommands.NextPage"
+                                                Content="{TemplateBinding NextButtonContent}">
+                                                <Button.Visibility>
+                                                    <MultiBinding
+                                                        Converter="{StaticResource WizardPageButtonVisibilityConverter}">
+                                                        <Binding
+                                                            RelativeSource="{RelativeSource TemplatedParent}"
+                                                            Path="NextButtonVisibility" />
+                                                        <Binding
+                                                            RelativeSource="{RelativeSource TemplatedParent}"
+                                                            Path="CurrentPage.NextButtonVisibility" />
+                                                    </MultiBinding>
+                                                </Button.Visibility>
+                                            </Button>
+                                            <Button
+                                                Name="PART_FinishButton"
+                                                Margin="7,0,0,0"
+                                                MinWidth="75"
+                                                Command="extToolkit:WizardCommands.Finish"
+                                                Content="{TemplateBinding FinishButtonContent}">
+                                                <Button.Visibility>
+                                                    <MultiBinding
+                                                        Converter="{StaticResource WizardPageButtonVisibilityConverter}">
+                                                        <Binding
+                                                            RelativeSource="{RelativeSource TemplatedParent}"
+                                                            Path="FinishButtonVisibility" />
+                                                        <Binding
+                                                            RelativeSource="{RelativeSource TemplatedParent}"
+                                                            Path="CurrentPage.FinishButtonVisibility" />
+                                                    </MultiBinding>
+                                                </Button.Visibility>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate
+        x:Key="BlankWizardPageTemplate"
+        TargetType="{x:Type extToolkit:WizardPage}">
+        <Border
+            SnapsToDevicePixels="true"
+            Background="{TemplateBinding Background}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            BorderBrush="{TemplateBinding BorderBrush}">
+            <Grid
+                Background="{TemplateBinding Background}">
+                <ContentPresenter
+                    Margin="14"
+                    Content="{TemplateBinding Content}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                    ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+            </Grid>
+        </Border>
+    </ControlTemplate>
+
+    <ControlTemplate
+        x:Key="ExteriorWizardPageTemplate"
+        TargetType="{x:Type extToolkit:WizardPage}">
+        <Grid
+            Background="{TemplateBinding Background}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="*" />
+            </Grid.ColumnDefinitions>
+            <Border
+                SnapsToDevicePixels="true"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                BorderBrush="{TemplateBinding BorderBrush}">
+                <Grid
+                    Grid.Column="0"
+                    Background="{TemplateBinding ExteriorPanelBackground}"
+                    MinWidth="{Binding ExteriorPanelMinWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=extToolkit:Wizard}}">
+                    <ContentControl
+                        Content="{TemplateBinding ExteriorPanelContent}" />
+                </Grid>
+            </Border>
+            <Grid
+                Column="1"
+                Margin="14">
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
+                    <RowDefinition
+                        Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Grid.Row="0"
+                    TextWrapping="Wrap"
+                    Margin="0,0,0,14"
+                    FontSize="16"
+                    FontWeight="Bold"
+                    Text="{TemplateBinding Title}" />
+                <TextBlock
+                    Grid.Row="1"
+                    TextWrapping="Wrap"
+                    Margin="0,0,0,14"
+                    Text="{TemplateBinding Description}" />
+                <ContentPresenter
+                    Grid.Row="2"
+                    Content="{TemplateBinding Content}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                    ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+            </Grid>
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate
+        x:Key="InteriorWizardPageTemplate"
+        TargetType="{x:Type extToolkit:WizardPage}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid
+                Background="{TemplateBinding HeaderBackground}"
+                MinHeight="56">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition
+                        Width="*" />
+                    <ColumnDefinition
+                        Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock
+                        Margin="16,9,0,1"
+                        TextWrapping="Wrap"
+                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                        FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
+                        Text="{TemplateBinding Title}" />
+                    <TextBlock
+                        Margin="32,0,0,3"
+                        TextWrapping="Wrap"
+                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                        Text="{Binding Description, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource StringToUpperConverter}}" />
+                </StackPanel>
+                <Image
+                    Grid.Column="1"
+                    Margin="4"
+                    Source="{TemplateBinding HeaderImage}"
+                    Stretch="None"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+            </Grid>
+
+            <Border
+                Grid.Row="1"
+                SnapsToDevicePixels="true"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                BorderBrush="{TemplateBinding BorderBrush}">
+                <Grid
+                    Background="{TemplateBinding Background}">
+                    <ContentPresenter
+                        Margin="14"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" />
+                </Grid>
+            </Border>
+        </Grid>
+    </ControlTemplate>
+
+    <Style
+        TargetType="{x:Type extToolkit:WizardPage}">
+        <Style.Triggers>
+            <Trigger
+                Property="PageType"
+                Value="Blank">
+                <Setter
+                    Property="Background"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}" />
+                <Setter
+                    Property="BorderThickness"
+                    Value="0" />
+                <Setter
+                    Property="Template"
+                    Value="{StaticResource BlankWizardPageTemplate}" />
+            </Trigger>
+            <Trigger
+                Property="PageType"
+                Value="Exterior">
+                <Setter
+                    Property="Background"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}" />
+                <Setter
+                    Property="BorderThickness"
+                    Value="0" />
+                <Setter
+                    Property="ExteriorPanelBackground"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}" />
+                <Setter
+                    Property="Template"
+                    Value="{StaticResource ExteriorWizardPageTemplate}" />
+            </Trigger>
+            <Trigger
+                Property="PageType"
+                Value="Interior">
+                <Setter
+                    Property="Background"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}" />
+                <Setter
+                    Property="BorderBrush"
+                    Value="{x:Static SystemColors.ActiveBorderBrush}" />
+                <Setter
+                    Property="BorderThickness"
+                    Value="0,1,0,0" />
+                <Setter
+                    Property="HeaderBackground"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}" />
+                <Setter
+                    Property="Template"
+                    Value="{StaticResource InteriorWizardPageTemplate}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>

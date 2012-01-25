@@ -1,14 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Globalization;
+using System.Linq;
 
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
 
+using Raven.Client;
+
+using Torshify.Radio.Core.Models;
 using Torshify.Radio.Core.Views;
 using Torshify.Radio.Core.Views.Controls;
-using Torshify.Radio.Core.Views.NowPlaying;
+using Torshify.Radio.Core.Views.FirstTime;
 using Torshify.Radio.Core.Views.Stations;
 using Torshify.Radio.Framework;
 
@@ -20,6 +24,13 @@ namespace Torshify.Radio.Core
     public class CoreModule : IModule
     {
         #region Properties
+
+        [Import]
+        public IDocumentStore DocumentStore
+        {
+            get;
+            set;
+        }
 
         [Import]
         public IRegionManager RegionManager
@@ -41,20 +52,38 @@ namespace Torshify.Radio.Core
 
         public void Initialize()
         {
+            // TODO : Load locale from db
+            LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo("en-US");
+
+            bool displayWizard = true;
+            using(var session = DocumentStore.OpenSession())
+            {
+                var settings = session.Query<ShellSettings>().FirstOrDefault();
+
+                if (settings != null)
+                {
+                    displayWizard = !settings.FirstTimeWizardRun;
+                }
+            }
+
+            RegionManager.RegisterViewWithRegion(AppRegions.MainRegion, typeof(MainView));
+            RegionManager.RegisterViewWithRegion(AppRegions.BottomRegion, typeof(ControlsView));
+            RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof(StationsView));
+
+            if (displayWizard)
+            {
+                RegionManager.RequestNavigate(AppRegions.MainRegion, typeof(FirstTimeUseView).FullName);
+            }
+            else
+            {
+                RegionManager.RequestNavigate(AppRegions.MainRegion, typeof (MainView).FullName);
+                RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof (StationsView).FullName);
+            }
+
             foreach (var startable in Startables)
             {
                 startable.Start();
             }
-
-            // TODO : Load locale from db
-            LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo("en-US");
-
-            RegionManager.RegisterViewWithRegion(AppRegions.MainRegion, typeof (MainView));
-            RegionManager.RegisterViewWithRegion(AppRegions.BottomRegion, typeof(ControlsView));
-            RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof (StationsView));
-
-            RegionManager.RequestNavigate(AppRegions.MainRegion, typeof(MainView).FullName);
-            RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(StationsView).FullName);
         }
 
         #endregion Methods

@@ -26,6 +26,12 @@ namespace Torshify.Radio.Core.Models
             set;
         }
 
+        public bool FirstTimeWizardRun
+        {
+            get; 
+            set;
+        }
+
         #endregion Properties
     }
 }
