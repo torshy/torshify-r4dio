@@ -230,6 +230,7 @@
     <Content Include="Resources\Icons\video.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\Tiles\MB_0009_listen.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Icons\back.png">

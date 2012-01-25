@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{46506DA1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Radio.EightTracks", "src\Torshify.Radio.EightTracks\Torshify.Radio.EightTracks.csproj", "{626798B2-7C68-41D5-818F-F1B7FDD4D786}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Torshify.Radio.EchoNest", "src\Torshify.Radio.EchoNest\Torshify.Radio.EchoNest.csproj", "{94A98A32-375C-4296-AC76-CE8987252CD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,6 +116,16 @@ Global
 		{626798B2-7C68-41D5-818F-F1B7FDD4D786}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{626798B2-7C68-41D5-818F-F1B7FDD4D786}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{626798B2-7C68-41D5-818F-F1B7FDD4D786}.Release|x86.ActiveCfg = Release|Any CPU
+		{94A98A32-375C-4296-AC76-CE8987252CD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94A98A32-375C-4296-AC76-CE8987252CD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94A98A32-375C-4296-AC76-CE8987252CD3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{94A98A32-375C-4296-AC76-CE8987252CD3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{94A98A32-375C-4296-AC76-CE8987252CD3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{94A98A32-375C-4296-AC76-CE8987252CD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94A98A32-375C-4296-AC76-CE8987252CD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94A98A32-375C-4296-AC76-CE8987252CD3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{94A98A32-375C-4296-AC76-CE8987252CD3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{94A98A32-375C-4296-AC76-CE8987252CD3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
