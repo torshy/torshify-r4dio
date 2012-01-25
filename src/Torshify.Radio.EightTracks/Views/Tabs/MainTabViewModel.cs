@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
@@ -121,7 +120,7 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                 {
                     using (var session = new EightTracksSession(EightTracksModule.ApiKey))
                     {
-                        var response = session.Query<Mixes>().GetMix();
+                        var response = session.Query<Mixes>().GetMix(sorting:global::EightTracks.Mixes.Sort.Random);
                         return response.Mixes;
                     }
                 }

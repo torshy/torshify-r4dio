@@ -1,4 +1,5 @@
 using System;
+
 using Microsoft.Practices.Prism.ViewModel;
 
 namespace Torshify.Radio.Framework
@@ -11,10 +12,19 @@ namespace Torshify.Radio.Framework
         private object _backContent;
         private Uri _backgroundImage;
         private string _backTitle;
-        private string _title;
         private bool _isLarge;
+        private string _title;
 
         #endregion Fields
+
+        #region Constructors
+
+        public TileData()
+        {
+            BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0019_profiles.png");
+        }
+
+        #endregion Constructors
 
         #region Properties
 
@@ -70,19 +80,6 @@ namespace Torshify.Radio.Framework
             }
         }
 
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                if (_title != value)
-                {
-                    _title = value;
-                    RaisePropertyChanged("Title");
-                }
-            }
-        }
-
         public bool IsLarge
         {
             get { return _isLarge; }
@@ -92,6 +89,19 @@ namespace Torshify.Radio.Framework
                 {
                     _isLarge = value;
                     RaisePropertyChanged("IsLarge");
+                }
+            }
+        }
+
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                if (_title != value)
+                {
+                    _title = value;
+                    RaisePropertyChanged("Title");
                 }
             }
         }

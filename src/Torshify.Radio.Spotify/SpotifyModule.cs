@@ -38,45 +38,53 @@ namespace Torshify.Radio.Spotify
             TileService.Add<MainStationView>(new TileData
             {
                 Title = "Spotify",
+                BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0003_Favs1.png")
             },
             Tuple.Create("Argument1", "Value1"));
 
             TileService.Add<MainStationView>(new TileData
             {
                 Title = "Spotify 2",
+                BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0009_listen.png")
             },
             Tuple.Create("Argument1", "Value1"));
 
             TileService.Add<MainStationView>(new TileData
             {
                 Title = "Main Spotify View",
+                BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0014_msg3.png")
             });
 
             TileService.Add<MainStationView>(new TileData
             {
-                Title = "Spotify 4"
+                Title = "Spotify 4",
+                BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0015_voicemaill.png")
             });
 
             TileService.Add<MainStationView>(new TileData
             {
                 Title = "Spotify",
+                BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0019_profiles.png")
             },
             Tuple.Create("Argument1", "Value1"));
 
             TileService.Add<MainStationView>(new TileData
             {
                 Title = "Spotify 2",
+                BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0029_programs.png")
             },
             Tuple.Create("Argument1", "Value1"));
 
             TileService.Add<MainStationView>(new TileData
             {
                 Title = "Main Spotify View",
+                BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_9999_8tracks.png")
             });
 
             TileService.Add<MainStationView>(new TileData
             {
-                Title = "Spotify 4"
+                Title = "Spotify 4",
+                BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MS_0000s_0031_net3.png")
             });
         }
 

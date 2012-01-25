@@ -79,10 +79,20 @@
       <DependentUpon>MainStationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainStationViewModel.cs" />
+    <Compile Include="Views\Tabs\HotMixListView.cs" />
+    <Compile Include="Views\Tabs\HotMixListViewModel.cs" />
     <Compile Include="Views\Tabs\MainTabView.xaml.cs">
       <DependentUpon>MainTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\MainTabViewModel.cs" />
+    <Compile Include="Views\Tabs\MixListView.xaml.cs">
+      <DependentUpon>MixListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\MixListViewModel.cs" />
+    <Compile Include="Views\Tabs\PopularMixListView.cs" />
+    <Compile Include="Views\Tabs\PopularMixListViewModel.cs" />
+    <Compile Include="Views\Tabs\RecentMixListView.cs" />
+    <Compile Include="Views\Tabs\RecentMixListViewModel.cs" />
     <Compile Include="Views\Tabs\TagsTabView.xaml.cs">
       <DependentUpon>TagsTabView.xaml</DependentUpon>
     </Compile>
@@ -110,6 +120,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tabs\MainTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\MixListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
