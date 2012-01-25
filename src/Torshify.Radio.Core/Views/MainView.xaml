@@ -20,7 +20,7 @@
     <UserControl.Resources>
         <Converters:BoolToVisibleOrHidden
             x:Key="BoolToHiddenConverter"
-            Collapse="False" />
+            Collapse="True" />
     </UserControl.Resources>
     <DockPanel>
         <StackPanel
@@ -117,7 +117,6 @@
                         Visibility="{Binding SearchBarLoadingIndicatorService.IsLoading, Converter={StaticResource BoolToHiddenConverter}}"
                         IsIndeterminate="{Binding SearchBarLoadingIndicatorService.IsLoading}" />
                 </Grid>
-
                 <!--<TextBlock
                     Margin="12,0,0,0"
                     Text="//"
@@ -137,11 +136,14 @@
             <DockPanel
                 DockPanel.Dock="Bottom"
                 Margin="0,0,0,2">
-                <Controls:MetroProgressBar
+                <Decorator
+                    Height="4"
                     DockPanel.Dock="Top"
-                    VerticalAlignment="Bottom"
-                    Visibility="{Binding LoadingIndicatorService.IsLoading, Converter={StaticResource BoolToHiddenConverter}}"
-                    IsIndeterminate="{Binding LoadingIndicatorService.IsLoading}" />
+                    VerticalAlignment="Bottom">
+                    <Controls:MetroProgressBar
+                        Visibility="{Binding LoadingIndicatorService.IsLoading, Converter={StaticResource BoolToHiddenConverter}}"
+                        IsIndeterminate="{Binding LoadingIndicatorService.IsLoading}" />
+                </Decorator>
                 <ContentControl
                     FocusVisualStyle="{x:Null}"
                     Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.BottomRegion}" />
