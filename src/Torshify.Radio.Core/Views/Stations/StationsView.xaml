@@ -43,7 +43,8 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid>
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Disabled">
         <ItemsControl
             ItemsSource="{Binding TileService.Tiles}">
             <ItemsControl.ItemsPanel>
@@ -96,5 +97,5 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

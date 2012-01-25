@@ -36,26 +36,48 @@ namespace Torshify.Radio.Spotify
         public void Initialize()
         {
             TileService.Add<MainStationView>(new TileData
-                                               {
-                                                   Title = "Spotify",
-                                               },
-                                               Tuple.Create("Argument1", "Value1"));
+            {
+                Title = "Spotify",
+            },
+            Tuple.Create("Argument1", "Value1"));
 
             TileService.Add<MainStationView>(new TileData
-                                               {
-                                                   Title = "Spotify 2",
-                                               },
-                                               Tuple.Create("Argument1", "Value1"));
+            {
+                Title = "Spotify 2",
+            },
+            Tuple.Create("Argument1", "Value1"));
 
             TileService.Add<MainStationView>(new TileData
-                                                {
-                                                    Title = "Main Spotify View",
-                                                });
+            {
+                Title = "Main Spotify View",
+            });
 
             TileService.Add<MainStationView>(new TileData
-                                               {
-                                                   Title = "Spotify 4"
-                                               });
+            {
+                Title = "Spotify 4"
+            });
+
+            TileService.Add<MainStationView>(new TileData
+            {
+                Title = "Spotify",
+            },
+            Tuple.Create("Argument1", "Value1"));
+
+            TileService.Add<MainStationView>(new TileData
+            {
+                Title = "Spotify 2",
+            },
+            Tuple.Create("Argument1", "Value1"));
+
+            TileService.Add<MainStationView>(new TileData
+            {
+                Title = "Main Spotify View",
+            });
+
+            TileService.Add<MainStationView>(new TileData
+            {
+                Title = "Spotify 4"
+            });
         }
 
         #endregion Methods
