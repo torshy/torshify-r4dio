@@ -1,5 +1,6 @@
 using System.ComponentModel.Composition;
 using System.Linq;
+using EightTracks;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EightTracks.Views.Tabs
@@ -19,7 +20,7 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                                              {
                                                  if (!Mixes.Any() && isSelected)
                                                  {
-                                                     SearchForMixes(global::EightTracks.Mixes.Sort.Popular);
+                                                     SearchForMixes(SortType);
                                                  }
                                              }
                       };
@@ -28,6 +29,11 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
         public override HeaderInfo HeaderInfo
         {
             get { return _header; }
+        }
+
+        protected override Mixes.Sort SortType
+        {
+            get { return global::EightTracks.Mixes.Sort.Popular; }
         }
     }
 }

@@ -17,89 +17,113 @@
             x:Key="MixToImageConverter" />
         <Converters:DateDifferenceConverter
             x:Key="DateDifferenceConverter" />
+        <Converters:ListContainsItemToBoolConverter
+            x:Key="ListContainsItemToBoolConverter" />
         <Geometry
             x:Key="RightArrow">M0,0 L1,0.5 0,1Z</Geometry>
         <Geometry
             x:Key="HeartGeometry">M0.049953445,0.16803508 C0.04578678,-0.12358551 0.30811449,-0.24162239 0.5,0 0.66666667,-0.24802004 0.97286929,-0.14054061 0.97081673,0.15110447 0.96036811,0.49482904 0.75783142,0.75800598 0.5,1 0.23674121,0.73954824 0.062453446,0.5273969 0.049953445,0.16803508 z</Geometry>
     </UserControl.Resources>
-    <ScrollViewer
-        HorizontalScrollBarVisibility="Disabled">
-        <ItemsControl
-            ItemsSource="{Binding Mixes}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
+    <ItemsControl
+        ItemsSource="{Binding Mixes}"
+        VirtualizingStackPanel.IsVirtualizing="True">
+        <ItemsControl.Template>
+            <ControlTemplate>
+                <ScrollViewer
+                    CanContentScroll="False">
+                    <VirtualizingStackPanel
+                        IsItemsHost="True" />
+                </ScrollViewer>
+            </ControlTemplate>
+        </ItemsControl.Template>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <StackPanel
+                    Margin="12">
                     <StackPanel
-                        Margin="12">
-                        <StackPanel
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Right">
-                            <Path
-                                Data="{StaticResource RightArrow}"
-                                Width="10"
-                                Height="8"
-                                Stretch="Fill"
-                                Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
-                                Margin="0,0,4,0"
-                                ToolTip="{lex:LocText Key=Number_Liked, Dict=Strings, Assembly=Torshify.Radio.EightTracks}" />
-                            <TextBlock
-                                Text="{Binding LikesCount}" />
-                            <Path
-                                Data="{StaticResource HeartGeometry}"
-                                Width="10"
-                                Height="8"
-                                Stretch="Fill"
-                                Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
-                                Margin="8,0,4,0"
-                                ToolTip="{lex:LocText Key=Number_Played, Dict=Strings, Assembly=Torshify.Radio.EightTracks}" />
-                            <TextBlock
-                                Text="{Binding PlaysCount}" />
-                            <TextBlock
-                                Margin="8,0,0,0"
-                                Text="{Binding FirstPublishedAt, Converter={StaticResource DateDifferenceConverter}}"
-                                ToolTip="{lex:LocText Key=TimeSincePublished, Dict=Strings, Assembly=Torshify.Radio.EightTracks}" />
-                        </StackPanel>
-                        <DockPanel>
-                            <Image
-                                Height="128"
-                                Width="128"
-                                DockPanel.Dock="Left"
-                                Stretch="UniformToFill"
-                                Source="{Binding Converter={StaticResource MixToImageConverter}}" />
-                            <StackPanel
-                                Margin="4">
-                                <TextBlock
-                                    Text="{Binding Name}"
-                                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
-                                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
-                                <DockPanel>
-                                    <ItemsControl
-                                        DockPanel.Dock="Bottom"
-                                        ItemsSource="{Binding TagListCacheAsArray}"
-                                        Margin="0,8,0,0">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <WrapPanel />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <ToggleButton
-                                                    Margin="0,0,2,0"
-                                                    Content="{Binding}" />
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                    <TextBlock
-                                        Margin="0,4,0,0"
-                                        Text="{Binding Description}"
-                                        TextWrapping="Wrap"
-                                        TextTrimming="CharacterEllipsis" />
-                                </DockPanel>
-                            </StackPanel>
-                        </DockPanel>
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                        <Path
+                            Data="{StaticResource RightArrow}"
+                            Width="10"
+                            Height="8"
+                            Stretch="Fill"
+                            Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                            Margin="8,0,4,0"
+                            ToolTip="{lex:LocText Key=Number_Played, Dict=Strings, Assembly=Torshify.Radio.EightTracks}" />
+                        <TextBlock
+                            Text="{Binding PlaysCount}" />
+                        <Path
+                            Data="{StaticResource HeartGeometry}"
+                            Width="10"
+                            Height="8"
+                            Stretch="Fill"
+                            Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                            Margin="8,0,4,0"
+                            ToolTip="{lex:LocText Key=Number_Liked, Dict=Strings, Assembly=Torshify.Radio.EightTracks}" />
+                        <TextBlock
+                            Text="{Binding LikesCount}" />
+                        <TextBlock
+                            Margin="8,0,0,0"
+                            Text="{Binding FirstPublishedAt, Converter={StaticResource DateDifferenceConverter}}"
+                            ToolTip="{lex:LocText Key=TimeSincePublished, Dict=Strings, Assembly=Torshify.Radio.EightTracks}" />
                     </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>
+                    <DockPanel>
+                        <Image
+                            Height="128"
+                            Width="128"
+                            DockPanel.Dock="Left"
+                            Stretch="UniformToFill"
+                            Source="{Binding Converter={StaticResource MixToImageConverter}}" />
+                        <StackPanel
+                            Margin="4">
+                            <TextBlock
+                                Text="{Binding Name}"
+                                FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                                FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
+                            <DockPanel>
+                                <ItemsControl
+                                    DockPanel.Dock="Bottom"
+                                    ItemsSource="{Binding TagListCacheAsArray}"
+                                    Margin="0,8,0,0">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <ToggleButton
+                                                Margin="0,0,2,0"
+                                                Content="{Binding}"
+                                                Command="{Binding DataContext.ToggleTagFilterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, AncestorLevel=2}}"
+                                                CommandParameter="{Binding}">
+                                                <ToggleButton.IsChecked>
+                                                    <MultiBinding
+                                                        Mode="OneWay"
+                                                        Converter="{StaticResource ListContainsItemToBoolConverter}">
+                                                        <Binding
+                                                            Path="DataContext.TagFilterList"
+                                                            RelativeSource="{RelativeSource AncestorType={x:Type ItemsControl}, AncestorLevel=2}"
+                                                            Mode="OneWay" />
+                                                        <Binding
+                                                            Mode="OneWay" />
+                                                    </MultiBinding>
+                                                </ToggleButton.IsChecked>
+                                            </ToggleButton>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <TextBlock
+                                    Margin="0,4,0,0"
+                                    Text="{Binding Description}"
+                                    TextWrapping="Wrap"
+                                    TextTrimming="CharacterEllipsis" />
+                            </DockPanel>
+                        </StackPanel>
+                    </DockPanel>
+                </StackPanel>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
 </UserControl>

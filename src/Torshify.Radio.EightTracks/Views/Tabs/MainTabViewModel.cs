@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Threading.Tasks;
 
 using EightTracks;
 
 using Microsoft.Practices.Prism.Regions;
-using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
 
@@ -14,11 +13,11 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
 {
     [Export(typeof(MainTabViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class MainTabViewModel : NotificationObject, IHeaderInfoProvider<HeaderInfo>, INavigationAware
+    public class MainTabViewModel : MixListViewModel, INavigationAware
     {
         #region Fields
 
-        private ObservableCollection<Mix> _mixes;
+        private HeaderInfo _headerInfo;
 
         #endregion Fields
 
@@ -26,7 +25,7 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
 
         public MainTabViewModel()
         {
-            HeaderInfo = new HeaderInfo { Title = "Mixes" };
+            _headerInfo = new HeaderInfo { Title = "Mixes" };
             _mixes = new ObservableCollection<Mix>();
         }
 
@@ -34,22 +33,14 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
 
         #region Properties
 
-        public HeaderInfo HeaderInfo
+        public override HeaderInfo HeaderInfo
         {
-            get;
-            private set;
+            get { return _headerInfo; }
         }
 
-        public IEnumerable<Mix> Mixes
+        protected override Mixes.Sort SortType
         {
-            get { return _mixes; }
-        }
-
-        [Import]
-        public ILoadingIndicatorService LoadingIndicatorService
-        {
-            get; 
-            set;
+            get { return global::EightTracks.Mixes.Sort.Random; }
         }
 
         #endregion Properties
@@ -120,13 +111,19 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                 {
                     using (var session = new EightTracksSession(EightTracksModule.ApiKey))
                     {
-                        var response = session.Query<Mixes>().GetMix(sorting:global::EightTracks.Mixes.Sort.Random);
+                        var response = session.Query<Mixes>().GetMix(sorting: global::EightTracks.Mixes.Sort.Random, resultsPerPage: 25);
                         return response.Mixes;
                     }
                 }
             })
             .ContinueWith(t =>
             {
+                if (!t.Result.Any())
+                {
+                    ToastService.Show("No results found");
+                    return;
+                }
+
                 _mixes.Clear();
 
                 foreach (var mix in t.Result)

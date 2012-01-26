@@ -106,6 +106,7 @@
     <Compile Include="Services\LoadingIndicatorService.cs" />
     <Compile Include="Services\SearchBarService.cs" />
     <Compile Include="Services\TileService.cs" />
+    <Compile Include="Services\ToastService.cs" />
     <Compile Include="Startables\ShellSettingsHandler.cs" />
     <Compile Include="Properties\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
