@@ -3,7 +3,7 @@ using System.ComponentModel.Composition.Hosting;
 using System.Globalization;
 using System.IO;
 using System.Windows;
-
+using System.Windows.Media.Animation;
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -45,6 +45,10 @@ namespace Torshify.Radio
 
         protected override DependencyObject CreateShell()
         {
+            Timeline
+                .DesiredFrameRateProperty
+                .OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = 20 });
+
             return Container.GetExportedValue<Shell>();
         }
 
@@ -100,11 +104,11 @@ namespace Torshify.Radio
                     Level = Level.Info
                 });
             consoleAppender.Layout = new PatternLayout("%date{dd MM HH:mm} %-5level - %message%newline");
-            #if DEBUG
+#if DEBUG
             consoleAppender.Threshold = Level.All;
-            #else
+#else
             consoleAppender.Threshold = Level.Info;
-            #endif
+#endif
             consoleAppender.ActivateOptions();
 
             Logger root;

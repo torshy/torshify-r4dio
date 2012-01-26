@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Media.Effects;
 
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -12,6 +13,7 @@ namespace Torshify.Radio.Framework
         private object _backContent;
         private Uri _backgroundImage;
         private string _backTitle;
+        private Effect _effect;
         private bool _isLarge;
         private string _title;
 
@@ -76,6 +78,19 @@ namespace Torshify.Radio.Framework
                 {
                     _backTitle = value;
                     RaisePropertyChanged("BackTitle");
+                }
+            }
+        }
+
+        public Effect Effect
+        {
+            get { return _effect; }
+            set
+            {
+                if (_effect != value)
+                {
+                    _effect = value;
+                    RaisePropertyChanged("Effect");
                 }
             }
         }

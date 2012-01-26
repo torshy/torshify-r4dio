@@ -2167,6 +2167,9 @@
             Property="BorderBrush"
             Value="{DynamicResource {x:Static Framework:AppTheme.DisabledBrushKey}}" />
         <Setter
+            Property="BorderThickness"
+            Value="0" />
+        <Setter
             Property="Template">
             <Setter.Value>
                 <ControlTemplate
@@ -2175,7 +2178,7 @@
                         CornerRadius="0"
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="1" />
+                        BorderThickness="{TemplateBinding BorderThickness}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

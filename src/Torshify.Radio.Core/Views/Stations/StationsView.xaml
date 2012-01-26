@@ -72,11 +72,15 @@
                                         KeepDragging="False" />
                                 </i:Interaction.Behaviors>
                                 <Grid>
-                                    <Image
-                                        RenderOptions.BitmapScalingMode="HighQuality"
-                                        Source="{Binding Data.BackgroundImage}"
-                                        Stretch="UniformToFill">
-                                    </Image>
+                                    <Border
+                                        Effect="{Binding Data.Effect}"
+                                        Background="Transparent">
+                                        <Image
+                                            RenderOptions.BitmapScalingMode="HighQuality"
+                                            Stretch="UniformToFill"
+                                            Source="{Binding Data.BackgroundImage}">
+                                        </Image>
+                                    </Border>
                                     <TextBlock
                                         Text="{Binding Data.Title}"
                                         TextWrapping="Wrap"
