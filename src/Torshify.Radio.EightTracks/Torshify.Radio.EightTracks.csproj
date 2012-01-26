@@ -56,11 +56,20 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFLocalizeExtension">
+      <HintPath>..\..\packages\WpfLocalizeExtension.1.0.2\lib\WPFLocalizeExtension.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Collections\AsyncVirtualizingCollection.cs" />
+    <Compile Include="Collections\IItemsProvider.cs" />
+    <Compile Include="Collections\VirtualizingCollection.cs" />
+    <Compile Include="Converters\DateDifferenceConverter.cs" />
+    <Compile Include="Converters\MixToImageConverter.cs" />
     <Compile Include="EightTracksModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -75,15 +84,18 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Properties\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainStationView.xaml.cs">
       <DependentUpon>MainStationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainStationViewModel.cs" />
     <Compile Include="Views\Tabs\HotMixListView.cs" />
     <Compile Include="Views\Tabs\HotMixListViewModel.cs" />
-    <Compile Include="Views\Tabs\MainTabView.xaml.cs">
-      <DependentUpon>MainTabView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Views\Tabs\MainTabView.cs" />
     <Compile Include="Views\Tabs\MainTabViewModel.cs" />
     <Compile Include="Views\Tabs\MixListView.xaml.cs">
       <DependentUpon>MixListView.xaml</DependentUpon>
@@ -97,9 +109,14 @@
       <DependentUpon>TagsTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\TagsTabViewModel.cs" />
+    <EmbeddedResource Include="Properties\Strings.en.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -116,10 +133,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\MainStationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Tabs\MainTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

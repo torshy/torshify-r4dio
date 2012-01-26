@@ -18,7 +18,7 @@ namespace Torshify.Radio.Framework
 
         #region Constructors
 
-        public Track()
+        protected Track()
         {
             ExtraData = new ExpandoObject();
         }
