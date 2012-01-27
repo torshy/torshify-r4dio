@@ -69,16 +69,22 @@
                             ToolTip="{lex:LocText Key=TimeSincePublished, Dict=Strings, Assembly=Torshify.Radio.EightTracks}" />
                     </StackPanel>
                     <DockPanel>
-                        <Image
+                        <Button
+                            DockPanel.Dock="Left"
+                            Command="{Binding DataContext.PlayMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                            CommandParameter="{Binding}"
                             Height="128"
                             Width="128"
-                            DockPanel.Dock="Left"
-                            Stretch="UniformToFill"
-                            Source="{Binding Converter={StaticResource MixToImageConverter}}" />
+                            BorderThickness="0">
+                            <Image
+                                Stretch="UniformToFill"
+                                Source="{Binding Converter={StaticResource MixToImageConverter}}" />
+                        </Button>
                         <StackPanel
                             Margin="4">
                             <TextBlock
                                 Text="{Binding Name}"
+                                TextTrimming="CharacterEllipsis"
                                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
                                 FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
                             <DockPanel>
@@ -94,7 +100,7 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <ToggleButton
-                                                Margin="0,0,2,0"
+                                                Margin="0,0,2,2"
                                                 Content="{Binding}"
                                                 Command="{Binding DataContext.ToggleTagFilterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, AncestorLevel=2}}"
                                                 CommandParameter="{Binding}">

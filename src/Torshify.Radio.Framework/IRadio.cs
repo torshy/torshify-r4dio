@@ -15,7 +15,23 @@ namespace Torshify.Radio.Framework
             get;
         }
 
+        Track CurrentTrack
+        {
+            get;
+        }
+
+        Track UpcomingTrack
+        {
+            get;
+        }
+
+        IEnumerable<ITrackStream> TrackStreams
+        {
+            get;
+        }
+
         void PlayTrackStream(ITrackStream trackStream);
+
         void QueueTrackStream(ITrackStream trackStream);
     }
 }

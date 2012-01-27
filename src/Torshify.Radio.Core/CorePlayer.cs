@@ -214,6 +214,14 @@ namespace Torshify.Radio.Core
             }
         }
 
+        public void Initialize()
+        {
+            foreach (var trackPlayer in TrackPlayers)
+            {
+                trackPlayer.Value.Initialize();
+            }
+        }
+
         private void PlayerBufferingProgressChanged(object sender, TrackBufferingEventArgs e)
         {
             var handler = BufferingProgressChanged;

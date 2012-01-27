@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -11,18 +12,65 @@ namespace Torshify.Radio.Core
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class CoreRadio : IRadio
     {
+        #region Fields
+
+        private readonly ConcurrentQueue<ITrackStream> _trackStreamQueue;
+
+        private CorePlayer _corePlayer;
+        private ITrackStream _currentTrackStream;
+        private ConcurrentQueue<Track> _trackQueue;
+
+        #endregion Fields
+
+        #region Constructors
+
+        [ImportingConstructor]
+        public CoreRadio(CorePlayer corePlayer)
+        {
+            _trackStreamQueue = new ConcurrentQueue<ITrackStream>();
+            _trackQueue = new ConcurrentQueue<Track>();
+            _corePlayer = corePlayer;
+            _corePlayer.Volume = 0.2;
+            _corePlayer.TrackComplete += OnTrackComplete;
+            _corePlayer.Initialize();
+        }
+
+        #endregion Constructors
+
         #region Properties
+
+        public Track CurrentTrack
+        {
+            get;
+            private set;
+        }
+
+        public Track UpcomingTrack
+        {
+            get;
+            private set;
+        }
+
+        public IEnumerable<ITrackStream> TrackStreams
+        {
+            get
+            {
+                return _trackStreamQueue;
+            }
+        }
 
         [ImportMany]
         public IEnumerable<Lazy<ITrackPlayer, ITrackPlayerMetadata>> TrackPlayers
         {
-            get; set;
+            get;
+            set;
         }
 
         [ImportMany]
         public IEnumerable<Lazy<ITrackSource, ITrackSourceMetadata>> TrackSources
         {
-            get; set;
+            get;
+            set;
         }
 
         #endregion Properties
@@ -67,15 +115,74 @@ namespace Torshify.Radio.Core
 
         public void PlayTrackStream(ITrackStream trackStream)
         {
+            _currentTrackStream = trackStream;
+            _trackQueue = new ConcurrentQueue<Track>();
+            GetNextBatch();
+            MoveToNextTrack();
+            PeekToNextTrack();
         }
 
         public void QueueTrackStream(ITrackStream trackStream)
         {
+            _trackStreamQueue.Enqueue(trackStream);
         }
 
         public bool SupportsLink(TrackLink trackLink)
         {
             return TrackSources.Any(s => s.Value.SupportsLink(trackLink));
+        }
+
+        private void GetNextBatch()
+        {
+            if (_currentTrackStream.MoveNext())
+            {
+                var tracks = _currentTrackStream.Current;
+
+                foreach (var track in tracks)
+                {
+                    _trackQueue.Enqueue(track);
+                }
+            }
+        }
+
+        private void PeekToNextTrack()
+        {
+            Track upcomingTrack;
+            if (_trackQueue.TryPeek(out upcomingTrack))
+            {
+                UpcomingTrack = upcomingTrack;
+            }
+            else
+            {
+                UpcomingTrack = null;
+            }
+        }
+
+        private void MoveToNextTrack()
+        {
+            Track firstTrack;
+            if (_trackQueue.TryDequeue(out firstTrack))
+            {
+                _corePlayer.Load(firstTrack);
+                _corePlayer.Play();
+
+                CurrentTrack = firstTrack;
+            }
+            else
+            {
+                CurrentTrack = null;
+            }
+        }
+
+        private void OnTrackComplete(object sender, TrackEventArgs e)
+        {
+            if (_trackQueue.IsEmpty)
+            {
+                GetNextBatch();
+            }
+
+            MoveToNextTrack();
+            PeekToNextTrack();
         }
 
         #endregion Methods

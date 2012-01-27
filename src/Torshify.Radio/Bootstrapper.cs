@@ -47,7 +47,7 @@ namespace Torshify.Radio
         {
             Timeline
                 .DesiredFrameRateProperty
-                .OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = 20 });
+                .OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = 30 });
 
             return Container.GetExportedValue<Shell>();
         }

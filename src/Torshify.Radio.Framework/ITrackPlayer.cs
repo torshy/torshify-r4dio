@@ -70,6 +70,8 @@ namespace Torshify.Radio.Framework
 
         void Pause();
 
+        void Initialize();
+
         #endregion Methods
     }
 }

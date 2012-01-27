@@ -9,7 +9,6 @@ using System.Timers;
 using EightTracks;
 
 using Microsoft.Practices.Prism.ViewModel;
-
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 
@@ -37,6 +36,8 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             _deferredSearchTimer = new Timer(750);
             _deferredSearchTimer.Elapsed += OnDeferredSearchTimerTick;
             ToggleTagFilterCommand = new StaticCommand<string>(ExecuteToggleTagFilter);
+            PlayMixCommand = new StaticCommand<Mix>(ExecutePlayMix);
+            QueueMixCommand = new StaticCommand<Mix>(ExecuteQueueMix);
         }
 
         #endregion Constructors
@@ -58,6 +59,25 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
         public IEnumerable<Mix> Mixes
         {
             get { return _mixes; }
+        }
+
+        public StaticCommand<Mix> PlayMixCommand
+        {
+            get;
+            private set;
+        }
+
+        public StaticCommand<Mix> QueueMixCommand
+        {
+            get;
+            private set;
+        }
+
+        [Import]
+        public IRadio Radio
+        {
+            get;
+            set;
         }
 
         public IEnumerable<string> TagFilterList
@@ -115,6 +135,15 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                     _mixes.Add(mix);
                 }
             }, _ui);
+        }
+
+        private void ExecutePlayMix(Mix mix)
+        {
+            Radio.PlayTrackStream(new EightTracksMixTrackStream(mix));
+        }
+
+        private void ExecuteQueueMix(Mix mix)
+        {
         }
 
         private void ExecuteToggleTagFilter(string tagFilter)

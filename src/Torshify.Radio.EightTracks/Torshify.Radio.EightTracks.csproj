@@ -69,6 +69,8 @@
     <Compile Include="Converters\ListContainsItemToBoolConverter.cs" />
     <Compile Include="Converters\MixToImageConverter.cs" />
     <Compile Include="EightTracksModule.cs" />
+    <Compile Include="EightTracksTrack.cs" />
+    <Compile Include="EightTracksTrackPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -91,6 +93,7 @@
       <DependentUpon>MainStationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainStationViewModel.cs" />
+    <Compile Include="EightTracksMixTrackStream.cs" />
     <Compile Include="Views\Tabs\HotMixListView.cs" />
     <Compile Include="Views\Tabs\HotMixListViewModel.cs" />
     <Compile Include="Views\Tabs\MainTabView.cs" />
