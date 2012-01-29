@@ -2418,9 +2418,12 @@
                 <ControlTemplate
                     TargetType="{x:Type RepeatButton}">
                     <Border
-                        Background="{TemplateBinding Background}"
-                        VerticalAlignment="Stretch"
-                        Height="4" />
+                        Background="Transparent"
+                        VerticalAlignment="Stretch">
+                        <Rectangle
+                            Fill="{TemplateBinding Background}"
+                            Height="4" />
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
