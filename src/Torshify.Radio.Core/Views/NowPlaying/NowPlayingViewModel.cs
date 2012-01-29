@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Windows.Input;
 
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
+using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 
 namespace Torshify.Radio.Core.Views.NowPlaying
@@ -15,14 +17,19 @@ namespace Torshify.Radio.Core.Views.NowPlaying
     {
         #region Fields
 
+        private readonly IRadio _radio;
+
         private IRegionNavigationService _navigationService;
 
         #endregion Fields
 
         #region Constructors
 
-        public NowPlayingViewModel()
+        [ImportingConstructor]
+        public NowPlayingViewModel(IRadio radio)
         {
+            _radio = radio;
+
             NavigateBackCommand = new AutomaticCommand(ExecuteNavigateBack, CanExecuteNavigateBack);
         }
 
@@ -33,6 +40,11 @@ namespace Torshify.Radio.Core.Views.NowPlaying
         public ICommand NavigateBackCommand
         {
             get; private set;
+        }
+
+        public IRadio Radio
+        {
+            get { return _radio; }
         }
 
         #endregion Properties
@@ -46,11 +58,24 @@ namespace Torshify.Radio.Core.Views.NowPlaying
 
         void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
+            _radio.CurrentTrackChanged -= RadioOnCurrentTrackChanged;
+            _radio.UpcomingTrackChanged -= RadioOnUpcomingTrackChanged;
         }
 
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
             _navigationService = navigationContext.NavigationService;
+
+            _radio.CurrentTrackChanged += RadioOnCurrentTrackChanged;
+            _radio.UpcomingTrackChanged += RadioOnUpcomingTrackChanged;
+        }
+
+        private void RadioOnUpcomingTrackChanged(object sender, EventArgs eventArgs)
+        {
+        }
+
+        private void RadioOnCurrentTrackChanged(object sender, EventArgs eventArgs)
+        {
         }
 
         private bool CanExecuteNavigateBack()

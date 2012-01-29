@@ -33,7 +33,7 @@ namespace Torshify.Radio.Spotify.Views
         {
             IEnumerable<Track> tracks = Radio.GetTracksByName("NOFX").OrderBy(t => t.TotalDuration).Take(2);
 
-            Radio.QueueTrackStream(new TrackSource(tracks));
+            Radio.PlayTrackStream(new TrackSource(tracks));
         }
 
         #endregion Methods

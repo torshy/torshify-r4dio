@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.ServiceModel;
 using System.Threading;
-
+using System.Threading.Tasks;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Spotify.LoginService;
 using Torshify.Radio.Spotify.PlayerControlService;
@@ -146,27 +146,32 @@ namespace Torshify.Radio.Spotify
 
         public void Initialize()
         {
-            try
-            {
-                _loginClient = new LoginServiceClient(new InstanceContext(this));
-                _loginClient.Subscribe();
+            Task.Factory.StartNew(() =>
+                                  {
+                                      try
+                                      {
+                                          _loginClient = new LoginServiceClient(new InstanceContext(this));
+                                          _loginClient.Subscribe();
 
-                if (!_loginClient.IsLoggedIn())
-                {
-                    if (!string.IsNullOrEmpty(_loginClient.GetRememberedUser()))
-                    {
-                        _loginClient.Relogin();
-                    }
-                }
-                else
-                {
-                    SubscribeToControlEvents();
-                }
-            }
-            catch
-            {
-                _loginClient.Abort();
-            }
+                                          if (!_loginClient.IsLoggedIn())
+                                          {
+                                              if (!string.IsNullOrEmpty(_loginClient.GetRememberedUser()))
+                                              {
+                                                  _loginClient.Relogin();
+                                              }
+                                          }
+                                          else
+                                          {
+                                              SubscribeToControlEvents();
+                                          }
+                                      }
+                                      catch
+                                      {
+                                          _loginClient.Abort();
+                                          Thread.Sleep(2000);
+                                          Initialize();
+                                      }
+                                  });
         }
 
         public void Load(Track track)

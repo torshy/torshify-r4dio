@@ -2396,5 +2396,214 @@
             Property="OverridesDefaultStyle"
             Value="True" />
     </Style>
-    
+
+    <Style
+        x:Key="SliderButtonStyle"
+        TargetType="{x:Type RepeatButton}">
+        <Setter
+            Property="SnapsToDevicePixels"
+            Value="true" />
+        <Setter
+            Property="OverridesDefaultStyle"
+            Value="true" />
+        <Setter
+            Property="IsTabStop"
+            Value="false" />
+        <Setter
+            Property="Focusable"
+            Value="false" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type RepeatButton}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        VerticalAlignment="Stretch"
+                        Height="4" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="SliderThumbStyle"
+        TargetType="{x:Type Thumb}">
+        <Setter
+            Property="SnapsToDevicePixels"
+            Value="true" />
+        <Setter
+            Property="OverridesDefaultStyle"
+            Value="true" />
+        <Setter
+            Property="Height"
+            Value="4" />
+        <Setter
+            Property="Width"
+            Value="8" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type Thumb}">
+                    <Border
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="0,0,1,0"
+                        Background="{TemplateBinding Background}">
+                        <Border.RenderTransform>
+                            <TranslateTransform
+                                X="0" />
+                        </Border.RenderTransform>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Template when the orientation of the Slider is Horizontal.-->
+    <ControlTemplate
+        x:Key="HorizontalSlider"
+        TargetType="{x:Type Slider}">
+        <Grid
+            Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="Auto"
+                    MinHeight="{TemplateBinding MinHeight}" />
+                <RowDefinition
+                    Height="Auto" />
+            </Grid.RowDefinitions>
+            <TickBar
+                x:Name="TopTick"
+                SnapsToDevicePixels="True"
+                Placement="Top"
+                Height="4"
+                Visibility="Collapsed"
+                Fill="Red">
+            </TickBar>
+            <Border
+                x:Name="TrackBackground"
+                CornerRadius="0"
+                Margin="8,0,0,0"
+                Height="4"
+                Grid.Row="1"
+                BorderThickness="0"
+                Background="{DynamicResource {x:Static Framework:AppTheme.ContrastBackgroundKey}}" />
+            <Track
+                Grid.Row="1"
+                x:Name="PART_Track">
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton
+                        Style="{StaticResource SliderButtonStyle}"
+                        Command="Slider.DecreaseLarge"
+                        Background="Transparent" />
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb
+                        x:Name="thumb"
+                        Style="{StaticResource SliderThumbStyle}"
+                        BorderBrush="{DynamicResource {x:Static Framework:AppTheme.ContrastForegroundKey}}"
+                        Background="Transparent" />
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton
+                        x:Name="repeatButton"
+                        Style="{StaticResource SliderButtonStyle}"
+                        Command="Slider.IncreaseLarge"
+                        Background="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditReadOnlyBrushKey}}" />
+                </Track.IncreaseRepeatButton>
+            </Track>
+            <TickBar
+                x:Name="BottomTick"
+                SnapsToDevicePixels="True"
+                Grid.Row="2"
+                Fill="{TemplateBinding Foreground}"
+                Placement="Bottom"
+                Height="4"
+                Visibility="Collapsed" />
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger
+                Property="IsMouseOver"
+                Value="True">
+                <Setter
+                    Property="Height"
+                    TargetName="thumb"
+                    Value="12" />
+                <Setter
+                    Property="Background"
+                    TargetName="thumb"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.ContrastBackgroundKey}}" />
+            </Trigger>
+            <Trigger
+                Property="TickPlacement"
+                Value="TopLeft">
+                <Setter
+                    TargetName="TopTick"
+                    Property="Visibility"
+                    Value="Visible" />
+            </Trigger>
+            <Trigger
+                Property="TickPlacement"
+                Value="BottomRight">
+                <Setter
+                    TargetName="BottomTick"
+                    Property="Visibility"
+                    Value="Visible" />
+            </Trigger>
+            <Trigger
+                Property="TickPlacement"
+                Value="Both">
+                <Setter
+                    TargetName="TopTick"
+                    Property="Visibility"
+                    Value="Visible" />
+                <Setter
+                    TargetName="BottomTick"
+                    Property="Visibility"
+                    Value="Visible" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style
+        TargetType="{x:Type Slider}">
+        <Setter
+            Property="SnapsToDevicePixels"
+            Value="true" />
+        <Setter
+            Property="OverridesDefaultStyle"
+            Value="true" />
+        <Style.Triggers>
+            <Trigger
+                Property="Orientation"
+                Value="Horizontal">
+                <Setter
+                    Property="MinWidth"
+                    Value="104" />
+                <Setter
+                    Property="MinHeight"
+                    Value="21" />
+                <Setter
+                    Property="Template"
+                    Value="{StaticResource HorizontalSlider}" />
+            </Trigger>
+            <!--<Trigger
+                Property="Orientation"
+                Value="Vertical">
+                <Setter
+                    Property="MinWidth"
+                    Value="21" />
+                <Setter
+                    Property="MinHeight"
+                    Value="104" />
+                <Setter
+                    Property="Template"
+                    Value="{StaticResource VerticalSlider}" />
+            </Trigger>-->
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

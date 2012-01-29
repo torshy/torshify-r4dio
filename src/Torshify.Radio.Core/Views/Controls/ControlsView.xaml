@@ -5,74 +5,85 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300"
     Height="60"
     Background="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}">
     <UserControl.Resources>
-        <Geometry
-            x:Key="PlayGeometry">
-            M0,0 L1,0.5 0,1Z
-        </Geometry>
-        <Geometry
-            x:Key="PauseGeometry">
-            M0.2,0 L0.2,1 0.4,1 0.4,0 M0.6,0 L0.6,1 0.8,1 0.8,0Z
-        </Geometry>
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <DockPanel>
-        <StackPanel
+        <!--Visibility="{Binding HasTracks, Converter={StaticResource BooleanToVisibilityConverter}}">-->
+        <DockPanel
             DockPanel.Dock="Right"
-            Orientation="Horizontal">
-            <Button
-                Name="Btn"
-                BorderThickness="0"
-                Content="{Binding}"
-                Width="60">
-                <Button.ContentTemplate>
-                    <DataTemplate>
-                        <Path
-                            Height="25"
-                            Width="25"
-                            Name="PlayIcon"
-                            Data="{StaticResource PlayGeometry}"
-                            Fill="{Binding Foreground, ElementName=Btn}"
-                            Stretch="Fill" 
-                            Margin="10"/>
-                        <DataTemplate.Triggers>
-                            <DataTrigger
-                                Binding="{Binding IsPlaying}"
-                                Value="False">
-                                <Setter
-                                    Property="Data"
-                                    TargetName="PlayIcon"
-                                    Value="{StaticResource PauseGeometry}" />
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </Button.ContentTemplate>
-            </Button>
-            <Button
-                BorderThickness="0">
-                <Button.ContentTemplate>
-                    <DataTemplate>
-                        <Image
-                            Name="img"
-                            Source="pack://siteoforigin:,,,/Resources/Icons/ff.png" />
-                        <DataTemplate.Triggers>
-                            <DataTrigger
-                                Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
-                                Value="False">
-                                <Setter
-                                    Property="Opacity"
-                                    Value="0.5"
-                                    TargetName="img" />
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </Button.ContentTemplate>
-            </Button>
-        </StackPanel>
+            Margin="0,0,12,0">
+            <DockPanel
+                DockPanel.Dock="Bottom">
+                <Image
+                    DockPanel.Dock="Left"
+                    Name="img"
+                    Source="pack://siteoforigin:,,,/Resources/Icons/volume.png" 
+                    MaxHeight="24"/>
+                <Slider
+                    Margin="0,2,0,2" />
+            </DockPanel>
+            <StackPanel
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <Button
+                    BorderThickness="0">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <Image
+                                Name="img"
+                                Source="pack://siteoforigin:,,,/Resources/Icons/pause.png" />
+                            <DataTemplate.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsPlaying}"
+                                    Value="True">
+                                    <Setter
+                                        Property="Source"
+                                        Value="pack://siteoforigin:,,,/Resources/Icons/play.png"
+                                        TargetName="img" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                                    Value="False">
+                                    <Setter
+                                        Property="Opacity"
+                                        Value="0.5"
+                                        TargetName="img" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+                <Button
+                    BorderThickness="0"
+                    Command="{Binding NextTrackCommand}">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <Image
+                                Name="img"
+                                Source="pack://siteoforigin:,,,/Resources/Icons/ff.png" />
+                            <DataTemplate.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                                    Value="False">
+                                    <Setter
+                                        Property="Opacity"
+                                        Value="0.5"
+                                        TargetName="img" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+            </StackPanel>
+        </DockPanel>
         <DockPanel>
 
         </DockPanel>

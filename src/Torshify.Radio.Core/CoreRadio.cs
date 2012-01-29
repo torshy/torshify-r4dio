@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.Practices.Prism.ViewModel;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core
 {
     [Export(typeof(IRadio))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class CoreRadio : IRadio
+    public class CoreRadio : NotificationObject, IRadio
     {
         #region Fields
 
@@ -20,6 +20,7 @@ namespace Torshify.Radio.Core
 
         private CorePlayer _corePlayer;
         private Track _currentTrack;
+        private ITrackStream _currentTrackStream;
         private ConcurrentQueue<Track> _trackQueue;
         private Track _upcomingTrack;
 
@@ -45,6 +46,8 @@ namespace Torshify.Radio.Core
 
         public event EventHandler CurrentTrackChanged;
 
+        public event EventHandler CurrentTrackStreamChanged;
+
         public event EventHandler UpcomingTrackChanged;
 
         #endregion Events
@@ -56,8 +59,12 @@ namespace Torshify.Radio.Core
             get { return _currentTrack; }
             private set
             {
-                _currentTrack = value;
-                OnCurrentTrackChanged();
+                if (_currentTrack != value)
+                {
+                    _currentTrack = value;
+                    OnCurrentTrackChanged();
+                    RaisePropertyChanged("CurrentTrack");
+                }
             }
         }
 
@@ -66,8 +73,12 @@ namespace Torshify.Radio.Core
             get { return _upcomingTrack; }
             private set
             {
-                _upcomingTrack = value;
-                OnUpcomingTrackChanged();
+                if (_upcomingTrack != value)
+                {
+                    _upcomingTrack = value;
+                    OnUpcomingTrackChanged();
+                    RaisePropertyChanged("UpcomingTrack");
+                }
             }
         }
 
@@ -94,8 +105,16 @@ namespace Torshify.Radio.Core
 
         public ITrackStream CurrentTrackStream
         {
-            get;
-            set;
+            get { return _currentTrackStream; }
+            set
+            {
+                if (_currentTrackStream != value)
+                {
+                    _currentTrackStream = value;
+                    OnCurrentTrackStreamChanged();
+                    RaisePropertyChanged("CurrentTrackStream", "CanGoToNextTrack");
+                }
+            }
         }
 
         [ImportMany]
@@ -203,7 +222,7 @@ namespace Torshify.Radio.Core
 
         private void GetNextBatch()
         {
-            if (CurrentTrackStream.MoveNext())
+            if (CurrentTrackStream != null && CurrentTrackStream.MoveNext())
             {
                 var tracks = CurrentTrackStream.Current;
 
@@ -267,16 +286,21 @@ namespace Torshify.Radio.Core
             PeekToNextTrack();
         }
 
-        private Lazy<ITrackPlayer, ITrackPlayerMetadata> GetPlayerForTrack(Track track)
+        private void OnCurrentTrackStreamChanged()
         {
-            return TrackPlayers.FirstOrDefault(p => p.Value.CanPlay(track));
+            var handler = CurrentTrackStreamChanged;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
         }
 
         private void OnCurrentTrackChanged()
         {
             var handler = CurrentTrackChanged;
 
-            if(handler != null)
+            if (handler != null)
             {
                 handler(this, EventArgs.Empty);
             }

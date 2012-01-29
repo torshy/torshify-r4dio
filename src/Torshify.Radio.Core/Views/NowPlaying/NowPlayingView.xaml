@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     xmlns:NowPlaying="clr-namespace:Torshify.Radio.Core.Views.NowPlaying"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -20,5 +21,23 @@
             Command="{Binding NavigateBackCommand}">
             <NowPlaying:BackArrow />
         </Controls:CircleButton>
+
+        <StackPanel
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center">
+            <Slider
+                Width="250"
+                Orientation="Horizontal" 
+                Margin="0,0,0,40"/>
+            <Slider
+                Height="250"
+                Orientation="Vertical" />
+        </StackPanel>
+
+        <!--<TextBlock
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Text="{Binding Radio.CurrentTrack.Name}"
+            Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />-->
     </Grid>
 </UserControl>

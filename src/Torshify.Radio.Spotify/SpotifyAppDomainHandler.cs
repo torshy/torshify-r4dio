@@ -13,6 +13,7 @@ namespace Torshify.Radio.Spotify
         private static readonly SpotifyAppDomainHandler _instance = new SpotifyAppDomainHandler();
 
         private AppDomain _appDomain;
+        private object _lock = new object();
 
         #endregion Fields
 
@@ -49,13 +50,19 @@ namespace Torshify.Radio.Spotify
             {
                 Task.Factory.StartNew(() =>
                                       {
-                                          try
+                                          lock (_lock)
                                           {
-                                              StartOrigo();
-                                          }
-                                          catch (Exception ex)
-                                          {
-                                              Console.WriteLine(ex.Message);
+                                              try
+                                              {
+                                                  if (!IsLoaded)
+                                                  {
+                                                      StartOrigo();
+                                                  }
+                                              }
+                                              catch (Exception ex)
+                                              {
+                                                  Console.WriteLine(ex.Message);
+                                              }
                                           }
                                       });
             }
@@ -74,7 +81,9 @@ namespace Torshify.Radio.Spotify
         {
             AssemblyName name = new AssemblyName(assemblyName);
             if (name.Name.EndsWith(".resources") && name.CultureInfo.Name.Length > 0)
+            {
                 return true;
+            }
 
             return false;
         }

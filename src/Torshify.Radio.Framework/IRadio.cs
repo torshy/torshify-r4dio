@@ -5,6 +5,8 @@ namespace Torshify.Radio.Framework
 {
     public interface IRadio : ITrackSource
     {
+        event EventHandler CurrentTrackStreamChanged;
+
         event EventHandler CurrentTrackChanged;
 
         event EventHandler UpcomingTrackChanged;
@@ -15,6 +17,11 @@ namespace Torshify.Radio.Framework
         }
 
         IEnumerable<Lazy<ITrackPlayer, ITrackPlayerMetadata>> TrackPlayers
+        {
+            get;
+        }
+
+        ITrackStream CurrentTrackStream
         {
             get;
         }
