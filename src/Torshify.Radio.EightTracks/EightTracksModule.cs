@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+
 using EightTracks;
+
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
+
 using Torshify.Radio.EightTracks.Views;
 using Torshify.Radio.EightTracks.Views.Tabs;
 using Torshify.Radio.Framework;
@@ -24,6 +28,13 @@ namespace Torshify.Radio.EightTracks
         #region Properties
 
         [Import]
+        public ILoggerFacade Logger
+        {
+            get;
+            set;
+        }
+
+        [Import]
         public ISearchBarService SearchBarService
         {
             get;
@@ -40,7 +51,7 @@ namespace Torshify.Radio.EightTracks
         [Import]
         public IRegionManager RegionManager
         {
-            get; 
+            get;
             set;
         }
 
@@ -80,10 +91,17 @@ namespace Torshify.Radio.EightTracks
 
         private IEnumerable<string> GetMixesByTag(string tag)
         {
-            using (var session = new EightTracksSession(ApiKey))
+            try
             {
-                TagsResponse response = session.Query<Tags>().Execute(1, tag);
-                return response.Tags.Select(t => t.Name);
+                using (var session = new EightTracksSession(ApiKey))
+                {
+                    TagsResponse response = session.Query<Tags>().Execute(1, tag);
+                    return response.Tags.Select(t => t.Name);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Log("Error while getting 8tracks mixes. " + e.Message, Category.Exception, Priority.Medium);
             }
         }
 

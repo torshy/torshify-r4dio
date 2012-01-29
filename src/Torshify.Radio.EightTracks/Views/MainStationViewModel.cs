@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.Linq;
 
 using Microsoft.Practices.Prism.Regions;
@@ -49,15 +48,18 @@ namespace Torshify.Radio.EightTracks.Views
 
         public void OnTuneAway(NavigationContext context)
         {
+            
         }
 
         public void OnTuneIn(NavigationContext context)
         {
             // TODO : Add a helper method to do this much easier
-            if (!SearchBarService.Current.NavigationUri.OriginalString.StartsWith(typeof(MainStationView).FullName))
+            string main8tracksView = typeof (MainStationView).FullName;
+
+            if (!SearchBarService.Current.NavigationUri.OriginalString.StartsWith(main8tracksView))
             {
                 SearchBarService.Current = SearchBarService.SearchBars.FirstOrDefault(
-                    s => s.NavigationUri.OriginalString.StartsWith(typeof(MainStationView).FullName));
+                    s => s.NavigationUri.OriginalString.StartsWith(main8tracksView));
             }
 
             if (!string.IsNullOrEmpty(context.Parameters[SearchBar.IsFromSearchBarParameter]))

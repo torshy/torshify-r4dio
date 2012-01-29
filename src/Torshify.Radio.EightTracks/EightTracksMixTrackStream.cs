@@ -61,11 +61,6 @@ namespace Torshify.Radio.EightTracks
             }
         }
 
-        public IRadioStation Station
-        {
-            get { throw new NotImplementedException(); }
-        }
-
         object IEnumerator.Current
         {
             get { return Current; }
@@ -101,9 +96,18 @@ namespace Torshify.Radio.EightTracks
 
                 if (_currentPlayResponse.Set == null || _currentPlayResponse.Set.AtEnd)
                 {
-                    var nextMixResponse = session.Query<Mixes>().GetNextMix(_playToken.PlayToken, _currentMix.ID);
-                    _currentMix = nextMixResponse.NextMix;
-                    _currentPlayResponse = session.Query<Play>().Execute(_playToken.PlayToken, _currentMix.ID);
+                    if (_currentMix != null)
+                    {
+                        var nextMixResponse = session.Query<Mixes>().GetNextMix(_playToken.PlayToken, _currentMix.ID);
+                        _currentMix = nextMixResponse.NextMix;
+
+                        if (_currentMix != null)
+                        {
+                            _currentPlayResponse = session.Query<Play>().Execute(_playToken.PlayToken, _currentMix.ID);
+                        }
+                    }
+
+                    // TODO : Add user-notification and logging if there is any errors
                 }
 
                 if (_currentPlayResponse.Set == null)

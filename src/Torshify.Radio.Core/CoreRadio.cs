@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core
@@ -17,6 +17,7 @@ namespace Torshify.Radio.Core
         private readonly ConcurrentQueue<ITrackStream> _trackStreamQueue;
 
         private CorePlayer _corePlayer;
+        private readonly ILoadingIndicatorService _loadingIndicatorService;
         private ITrackStream _currentTrackStream;
         private ConcurrentQueue<Track> _trackQueue;
 
@@ -25,11 +26,12 @@ namespace Torshify.Radio.Core
         #region Constructors
 
         [ImportingConstructor]
-        public CoreRadio(CorePlayer corePlayer)
+        public CoreRadio(CorePlayer corePlayer, ILoadingIndicatorService loadingIndicatorService)
         {
             _trackStreamQueue = new ConcurrentQueue<ITrackStream>();
             _trackQueue = new ConcurrentQueue<Track>();
             _corePlayer = corePlayer;
+            _loadingIndicatorService = loadingIndicatorService;
             _corePlayer.Volume = 0.2;
             _corePlayer.TrackComplete += OnTrackComplete;
             _corePlayer.Initialize();
@@ -115,11 +117,16 @@ namespace Torshify.Radio.Core
 
         public void PlayTrackStream(ITrackStream trackStream)
         {
-            _currentTrackStream = trackStream;
-            _trackQueue = new ConcurrentQueue<Track>();
-            GetNextBatch();
-            MoveToNextTrack();
-            PeekToNextTrack();
+            Task.Factory.StartNew(() =>
+                                  {
+                                      _loadingIndicatorService.Push();
+                                      _currentTrackStream = trackStream;
+                                      _trackQueue = new ConcurrentQueue<Track>();
+                                      GetNextBatch();
+                                      MoveToNextTrack();
+                                      PeekToNextTrack();
+                                      _loadingIndicatorService.Pop();
+                                  });
         }
 
         public void QueueTrackStream(ITrackStream trackStream)

@@ -2,6 +2,7 @@ using System;
 using System.Timers;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EightTracks
@@ -46,7 +47,12 @@ namespace Torshify.Radio.EightTracks
         {
             get
             {
-                return Player.IsBuffering;
+                if (Player.CheckAccess())
+                {
+                    return Player.IsBuffering;
+                }
+
+                return (bool) Player.Dispatcher.Invoke(new Func<bool>(() => Player.IsBuffering));
             }
         }
 
@@ -56,7 +62,7 @@ namespace Torshify.Radio.EightTracks
             {
                 return _isPlaying;
             }
-            set
+            private set
             {
                 _isPlaying = value;
                 OnIsPlayingChanged();
@@ -65,25 +71,25 @@ namespace Torshify.Radio.EightTracks
 
         public bool IsMuted
         {
-            get { return (bool)Application.Current.Dispatcher.Invoke(new Func<bool>(() => Player.IsMuted)); }
-            set { Application.Current.Dispatcher.BeginInvoke(new Action<bool>(v => Player.IsMuted = v), value); }
+            get { return (bool)Player.Dispatcher.Invoke(new Func<bool>(() => Player.IsMuted)); }
+            set { Player.Dispatcher.BeginInvoke(new Action<bool>(v => Player.IsMuted = v), value); }
         }
 
         public double Volume
         {
-            get { return (double)Application.Current.Dispatcher.Invoke(new Func<double>(() => Player.Volume)); }
-            set { Application.Current.Dispatcher.BeginInvoke(new Action<double>(v => Player.Volume = v), value); }
+            get { return (double)Player.Dispatcher.Invoke(new Func<double>(() => Player.Volume)); }
+            set { Player.Dispatcher.BeginInvoke(new Action<double>(v => Player.Volume = v), value); }
         }
 
         public double BufferingProgress
         {
-            get { return (double)Application.Current.Dispatcher.Invoke(new Func<double>(() => Player.BufferingProgress)); }
+            get { return (double)Player.Dispatcher.Invoke(new Func<double>(() => Player.BufferingProgress)); }
         }
 
         public TimeSpan Position
         {
-            get { return (TimeSpan)Application.Current.Dispatcher.Invoke(new Func<TimeSpan>(() => Player.Position)); }
-            set { Application.Current.Dispatcher.BeginInvoke(new Action<TimeSpan>(v => Player.Position = v), value); }
+            get { return (TimeSpan)Player.Dispatcher.Invoke(new Func<TimeSpan>(() => Player.Position)); }
+            set { Player.Dispatcher.BeginInvoke(new Action<TimeSpan>(v => Player.Position = v), value); }
         }
 
         protected Track CurrentTrack
@@ -130,40 +136,68 @@ namespace Torshify.Radio.EightTracks
 
         public virtual void Load(Track track)
         {
-            var mediaPlayerTrack = track as EightTracksTrack;
-
-            if (mediaPlayerTrack != null)
+            if (Player.CheckAccess())
             {
-                CurrentTrack = mediaPlayerTrack;
-                CurrentTrackElapsed = TimeSpan.Zero;
+                var mediaPlayerTrack = track as EightTracksTrack;
 
-                Player.Open(mediaPlayerTrack.Uri);
+                if (mediaPlayerTrack != null)
+                {
+                    CurrentTrack = mediaPlayerTrack;
+                    CurrentTrackElapsed = TimeSpan.Zero;
+
+                    Player.Open(mediaPlayerTrack.Uri);
+                }
+            }
+            else
+            {
+                Player.Dispatcher.BeginInvoke(new Action<Track>(Load), DispatcherPriority.Background, track);
             }
         }
 
         public void Pause()
         {
-            if (Player.CanPause)
+            if (Player.CheckAccess())
             {
-                IsPlaying = false;
-                Player.Pause();
-                _mediaElementProgressTimer.Stop();
+                if (Player.CanPause)
+                {
+                    IsPlaying = false;
+                    Player.Pause();
+                    _mediaElementProgressTimer.Stop();
+                }
+            }
+            else
+            {
+                Player.Dispatcher.BeginInvoke(new Action(Pause), DispatcherPriority.Background);
             }
         }
 
         public virtual void Play()
         {
-            Player.Play();
-            IsPlaying = true;
+            if (Player.CheckAccess())
+            {
+                Player.Play();
+                IsPlaying = true;
+            }
+            else
+            {
+                Player.Dispatcher.BeginInvoke(new Action(Play), DispatcherPriority.Background);
+            }
         }
 
         public virtual void Stop()
         {
-            Player.Stop();
-            CurrentTrack = null;
-            CurrentTrackElapsed = TimeSpan.Zero;
+            if (Player.CheckAccess())
+            {
+                Player.Stop();
+                CurrentTrack = null;
+                CurrentTrackElapsed = TimeSpan.Zero;
 
-            _mediaElementProgressTimer.Stop();
+                _mediaElementProgressTimer.Stop();
+            }
+            else
+            {
+                Player.Dispatcher.BeginInvoke(new Action(Stop), DispatcherPriority.Background);
+            }
         }
 
         protected virtual void OnIsPlayingChanged()

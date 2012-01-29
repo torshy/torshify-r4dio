@@ -31,15 +31,14 @@
                 Width="60">
                 <Button.ContentTemplate>
                     <DataTemplate>
-                        <Grid>
-                            <Path
-                                Height="25"
-                                Width="25"
-                                Name="PlayIcon"
-                                Data="{StaticResource PlayGeometry}"
-                                Fill="{Binding Foreground, ElementName=Btn}"
-                                Stretch="Fill"/>
-                        </Grid>
+                        <Path
+                            Height="25"
+                            Width="25"
+                            Name="PlayIcon"
+                            Data="{StaticResource PlayGeometry}"
+                            Fill="{Binding Foreground, ElementName=Btn}"
+                            Stretch="Fill" 
+                            Margin="10"/>
                         <DataTemplate.Triggers>
                             <DataTrigger
                                 Binding="{Binding IsPlaying}"
@@ -75,7 +74,7 @@
             </Button>
         </StackPanel>
         <DockPanel>
-            
+
         </DockPanel>
     </DockPanel>
 </UserControl>

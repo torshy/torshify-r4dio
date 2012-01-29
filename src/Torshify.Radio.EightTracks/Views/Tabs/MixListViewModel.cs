@@ -9,6 +9,7 @@ using System.Timers;
 using EightTracks;
 
 using Microsoft.Practices.Prism.ViewModel;
+
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 
@@ -23,6 +24,8 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
 
         private Timer _deferredSearchTimer;
         private TaskScheduler _ui;
+        private int? _currentPage;
+        private int? _numberOfPages;
 
         #endregion Fields
 
@@ -38,16 +41,13 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             ToggleTagFilterCommand = new StaticCommand<string>(ExecuteToggleTagFilter);
             PlayMixCommand = new StaticCommand<Mix>(ExecutePlayMix);
             QueueMixCommand = new StaticCommand<Mix>(ExecuteQueueMix);
+            GoToNextPageCommand = new ManualCommand(ExecuteGoToNextPage, CanExecuteGoToNextPage);
+            GoToPreviousPageCommand = new ManualCommand(ExecuteGoToPreviousPage, CanExecuteGoToPreviousPage);
         }
 
         #endregion Constructors
 
         #region Properties
-
-        public abstract HeaderInfo HeaderInfo
-        {
-            get;
-        }
 
         [Import]
         public ILoadingIndicatorService LoadingIndicatorService
@@ -56,9 +56,30 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             set;
         }
 
-        public IEnumerable<Mix> Mixes
+        [Import]
+        public IRadio Radio
         {
-            get { return _mixes; }
+            get;
+            set;
+        }
+
+        [Import]
+        public IToastService ToastService
+        {
+            get;
+            set;
+        }
+
+        public ManualCommand GoToNextPageCommand
+        {
+            get;
+            private set;
+        }
+
+        public ManualCommand GoToPreviousPageCommand
+        {
+            get;
+            private set;
         }
 
         public StaticCommand<Mix> PlayMixCommand
@@ -73,29 +94,25 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             private set;
         }
 
-        [Import]
-        public IRadio Radio
+        public StaticCommand<string> ToggleTagFilterCommand
         {
             get;
-            set;
+            private set;
+        }
+
+        public abstract HeaderInfo HeaderInfo
+        {
+            get;
+        }
+
+        public IEnumerable<Mix> Mixes
+        {
+            get { return _mixes; }
         }
 
         public IEnumerable<string> TagFilterList
         {
             get { return _tagFilterList; }
-        }
-
-        [Import]
-        public IToastService ToastService
-        {
-            get;
-            set;
-        }
-
-        public StaticCommand<string> ToggleTagFilterCommand
-        {
-            get;
-            private set;
         }
 
         protected abstract Mixes.Sort SortType
@@ -107,7 +124,7 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
 
         #region Methods
 
-        protected virtual void SearchForMixes(Mixes.Sort sortType)
+        protected virtual void SearchForMixes(Mixes.Sort sortType, int page = 1)
         {
             Task.Factory.StartNew(() =>
             {
@@ -115,26 +132,67 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                 {
                     using (var session = new EightTracksSession(EightTracksModule.ApiKey))
                     {
-                        var response = session.Query<Mixes>().GetMix(sorting: sortType, filter: String.Join(",", TagFilterList), resultsPerPage: 25);
-                        return response.Mixes;
+                        var response = session.Query<Mixes>().GetMix(
+                        sorting: sortType, 
+                        filter: String.Join(",", TagFilterList),
+                        page: page,
+                        resultsPerPage: 25);
+
+                        if (response != null)
+                        {
+                            _currentPage = response.Page;
+                            _numberOfPages = response.TotalPages;
+                            return response.Mixes;
+                        }
                     }
                 }
+
+                return null;
             })
             .ContinueWith(t =>
             {
-                if (!t.Result.Any() && SortType != global::EightTracks.Mixes.Sort.Random)
+                GoToNextPageCommand.NotifyCanExecuteChanged();
+                GoToPreviousPageCommand.NotifyCanExecuteChanged();
+
+                if (t.Result != null)
                 {
-                    ToastService.Show("No results found");
-                    return;
+                    if (!t.Result.Any() && SortType != global::EightTracks.Mixes.Sort.Random)
+                    {
+                        ToastService.Show("No results found");
+                        return;
+                    }
+
+                    _mixes.Clear();
+
+                    foreach (var mix in t.Result)
+                    {
+                        _mixes.Add(mix);
+                    }
                 }
-
-                _mixes.Clear();
-
-                foreach (var mix in t.Result)
                 {
-                    _mixes.Add(mix);
+                    // TODO : Notify user
                 }
             }, _ui);
+        }
+
+        private bool CanExecuteGoToNextPage()
+        {
+            return _currentPage.HasValue && _currentPage < _numberOfPages;
+        }
+
+        private bool CanExecuteGoToPreviousPage()
+        {
+            return _currentPage.HasValue && _currentPage > 1;
+        }
+
+        private void ExecuteGoToNextPage()
+        {
+            SearchForMixes(SortType, _currentPage.GetValueOrDefault() + 1);
+        }
+
+        private void ExecuteGoToPreviousPage()
+        {
+            SearchForMixes(SortType, _currentPage.GetValueOrDefault() - 1);
         }
 
         private void ExecutePlayMix(Mix mix)
@@ -144,6 +202,7 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
 
         private void ExecuteQueueMix(Mix mix)
         {
+            Radio.QueueTrackStream(new EightTracksMixTrackStream(mix));
         }
 
         private void ExecuteToggleTagFilter(string tagFilter)
