@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="bb00cfb2-991b-42cd-9625-f24d73506b36" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="abc6ed6a-878a-45f6-b958-2a551d0dd4c8" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -21,11 +21,11 @@
     <MetadataSource Address="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="v1.wsdl" MetadataType="Wsdl" ID="391300a9-9bf3-4df7-b3c1-839bc60a284b" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="1e7219c2-878b-4792-9c0a-727f79ebfd10" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
-    <MetadataFile FileName="v1.xsd" MetadataType="Schema" ID="ab54ccdb-14eb-4c66-9a71-6dfb7795546b" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="d2d003cf-1745-491e-983f-fac9ebdf433b" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
-    <MetadataFile FileName="Torshify.Origo.Contracts.V1.xsd" MetadataType="Schema" ID="5dd3efaf-10d1-4f68-998e-8270bbc9720f" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
+    <MetadataFile FileName="v1.wsdl" MetadataType="Wsdl" ID="35aa1881-64b2-49e8-b93c-088f6f7eb2c8" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="5a1f534f-689c-4f88-8baa-9363a313c9ea" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
+    <MetadataFile FileName="v1.xsd" MetadataType="Schema" ID="e9bad49d-6198-4b78-b0c4-17e16bd2fd1a" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="30522b64-eb5d-45df-a00d-e7c7d4a44c25" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
+    <MetadataFile FileName="Torshify.Origo.Contracts.V1.xsd" MetadataType="Schema" ID="977760ee-5bfe-4a4f-990c-70c37d3dc250" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/trackplayer/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

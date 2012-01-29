@@ -31,9 +31,9 @@
   </wsdl:binding>
   <wsdl:service name="TrackPlayerService">
     <wsdl:port name="NetTcpBinding_TrackPlayerService" binding="tns:NetTcpBinding_TrackPlayerService">
-      <soap12:address location="net.tcp://hulken:1337/torshify/v1/trackplayer" />
+      <soap12:address location="net.tcp://localhost:1337/torshify/v1/trackplayer" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://hulken:1337/torshify/v1/trackplayer</wsa10:Address>
+        <wsa10:Address>net.tcp://localhost:1337/torshify/v1/trackplayer</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

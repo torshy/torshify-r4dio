@@ -67,9 +67,9 @@
   </wsdl:binding>
   <wsdl:service name="QueryService">
     <wsdl:port name="NetTcpBinding_QueryService" binding="tns:NetTcpBinding_QueryService">
-      <soap12:address location="net.tcp://hulken:1337/torshify/v1/query" />
+      <soap12:address location="net.tcp://localhost:1337/torshify/v1/query" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://hulken:1337/torshify/v1/query</wsa10:Address>
+        <wsa10:Address>net.tcp://localhost:1337/torshify/v1/query</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

@@ -3,6 +3,8 @@ using System.Collections.Concurrent;
 using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Torshify.Radio.Framework;
 
@@ -20,27 +22,29 @@ namespace Torshify.Radio.Core.Services
 
         public void Show(string message, double displayTimeMs = 1000)
         {
-            Window window = new Window();
-            window.Content = new TextBlock
+            if (!Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action<string, double>(Show), message, displayTimeMs);
+                return;
+            }
+
+            Popup popup = new Popup();
+            popup.Child = new TextBlock
                              {
                                  Text = message, 
                                  FontSize = 24,
+                                 Foreground = Brushes.White,
                                  HorizontalAlignment = HorizontalAlignment.Center, 
                                  VerticalAlignment = VerticalAlignment.Center
                              };
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.WindowStyle = WindowStyle.None;
-            window.ResizeMode = ResizeMode.NoResize;
-            window.SizeToContent = SizeToContent.WidthAndHeight;
-            window.Owner = Application.Current.MainWindow;
-            window.Show();
+            popup.IsOpen = true;
 
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(displayTimeMs);
             timer.Tick += (sender, args) =>
                           {
                               ((DispatcherTimer)sender).Stop();
-                              window.Close();
+                              popup.IsOpen = false;
                           };
             timer.Start();
         }

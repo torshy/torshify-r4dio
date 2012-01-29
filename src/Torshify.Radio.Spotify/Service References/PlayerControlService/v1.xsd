@@ -35,7 +35,6 @@
       <xs:element minOccurs="0" name="IsLocal" type="xs:boolean" />
       <xs:element minOccurs="0" name="Artists" nillable="true" type="tns:ArrayOfArtist" />
       <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="IsAvailable" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Track" nillable="true" type="tns:Track" />

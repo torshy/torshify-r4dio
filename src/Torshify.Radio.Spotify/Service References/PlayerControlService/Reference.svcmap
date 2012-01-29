@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="c5bc4b5c-419b-46e8-b658-04562524b2dd" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d674bbea-d5e8-4288-91cc-eb01e05f8834" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -21,11 +21,11 @@
     <MetadataSource Address="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="v1.wsdl" MetadataType="Wsdl" ID="8cfed1d4-8cce-43cb-b5cf-50d8dd6250f3" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="45e3a90f-3d45-4dbd-8950-59f7ac212ada" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
-    <MetadataFile FileName="v1.xsd" MetadataType="Schema" ID="02e4bd15-2f67-43b7-a6d0-5f66e2bf3b48" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="c2d3cf4c-2775-46e7-9101-efedbcc9ca9c" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
-    <MetadataFile FileName="Torshify.Origo.Contracts.V1.xsd" MetadataType="Schema" ID="8f54444a-f23e-4cf9-b259-a27423d30fa3" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
+    <MetadataFile FileName="v1.wsdl" MetadataType="Wsdl" ID="c2d34690-2896-4012-8e9d-ce726de00923" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="280b37c6-f82a-4a3b-bff6-6ebdab6a4874" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
+    <MetadataFile FileName="v1.xsd" MetadataType="Schema" ID="e4305a9c-00a6-48a9-8897-d75ddb1b7fb8" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="a2302947-0279-421c-8c25-6ea1ac832a51" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
+    <MetadataFile FileName="Torshify.Origo.Contracts.V1.xsd" MetadataType="Schema" ID="98a8003d-f57f-4ddd-ab48-fb1d2c022809" SourceId="1" SourceUrl="net.tcp://localhost:1337/torshify/v1/playercontrol/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
