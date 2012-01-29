@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.torshify/v1" elementFormDefault="qualified" targetNamespace="http://schemas.torshify/v1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="GetStatus">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetStatusResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetStatusResult" nillable="true" type="tns:PlayerStatus" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="PlayerStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CurrentTrack" nillable="true" type="tns:Track" />
+      <xs:element minOccurs="0" name="ElapsedTime" type="xs:double" />
+      <xs:element minOccurs="0" name="TotalTime" type="xs:double" />
+      <xs:element minOccurs="0" name="IsPlaying" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Volume" type="xs:float" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerStatus" nillable="true" type="tns:PlayerStatus" />
+  <xs:complexType name="Track">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Album" nillable="true" type="tns:Album" />
+      <xs:element minOccurs="0" name="Duration" type="xs:double" />
+      <xs:element minOccurs="0" name="Index" type="xs:int" />
+      <xs:element minOccurs="0" name="Disc" type="xs:int" />
+      <xs:element minOccurs="0" name="Popularity" type="xs:int" />
+      <xs:element minOccurs="0" name="IsStarred" type="xs:boolean" />
+      <xs:element minOccurs="0" name="OfflineStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsLocal" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Artists" nillable="true" type="tns:ArrayOfArtist" />
+      <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsAvailable" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Track" nillable="true" type="tns:Track" />
+  <xs:complexType name="Album">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CoverID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsAvailable" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Year" type="xs:int" />
+      <xs:element minOccurs="0" name="Artist" nillable="true" type="tns:Artist" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Album" nillable="true" type="tns:Album" />
+  <xs:complexType name="Artist">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PortraitID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Artist" nillable="true" type="tns:Artist" />
+  <xs:complexType name="ArrayOfArtist">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Artist" nillable="true" type="tns:Artist" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfArtist" nillable="true" type="tns:ArrayOfArtist" />
+  <xs:element name="TogglePause">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TogglePauseResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetVolume">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="volume" type="xs:float" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetVolumeResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetVolume">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetVolumeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetVolumeResult" type="xs:float" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Seek">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="milliseconds" type="xs:double" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SeekResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Subscribe">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SubscribeResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Unsubscribe">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UnsubscribeResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnTrackChanged">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="track" nillable="true" type="tns:Track" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnTrackComplete">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="track" nillable="true" type="tns:Track" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnElapsed">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="elapsedMs" type="xs:double" />
+        <xs:element minOccurs="0" name="totalMs" type="xs:double" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnPlayStateChanged">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="isPlaying" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnVolumeChanged">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="volume" type="xs:float" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnPing">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

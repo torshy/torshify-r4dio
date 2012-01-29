@@ -4,9 +4,7 @@ using System.Threading;
 
 using Microsoft.Practices.Prism.ViewModel;
 
-using Torshify.Radio.Framework;
-
-namespace Torshify.Radio.Core.Services
+namespace Torshify.Radio.Framework
 {
     [Export(typeof(ILoadingIndicatorService))]
     [PartCreationPolicy(CreationPolicy.Shared)]

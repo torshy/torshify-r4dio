@@ -103,7 +103,6 @@
     </Compile>
     <Compile Include="Services\BackdropService.cs" />
     <Compile Include="Services\InactivityNotificatorService.cs" />
-    <Compile Include="Services\LoadingIndicatorService.cs" />
     <Compile Include="Services\SearchBarService.cs" />
     <Compile Include="Services\TileService.cs" />
     <Compile Include="Services\ToastService.cs" />

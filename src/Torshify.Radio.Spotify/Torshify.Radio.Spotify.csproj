@@ -35,13 +35,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\lib\Torshify\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\..\packages\Prism.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.Prism.MefExtensions">
       <HintPath>..\..\packages\Prism.MEFExtensions.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.MefExtensions.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\..\packages\Unity.2.1.505.0\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="Raven.Client.Lightweight">
@@ -52,13 +64,33 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Torshify">
+      <HintPath>..\..\lib\Torshify\Torshify.dll</HintPath>
+    </Reference>
+    <Reference Include="Torshify.Origo">
+      <HintPath>..\..\lib\Torshify\Torshify.Origo.dll</HintPath>
+    </Reference>
+    <Reference Include="Torshify.Origo.Contracts">
+      <HintPath>..\..\lib\Torshify\Torshify.Origo.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="WcfContrib">
+      <HintPath>..\..\lib\Torshify\WcfContrib.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\..\packages\Extended.Wpf.Toolkit.1.5.0\lib\net40\WPFToolkit.Extended.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Options.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -72,11 +104,35 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Service References\LoginService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\PlayerControlService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\QueryService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\TrackPlayerService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="SpotifyAppDomainHandler.cs" />
     <Compile Include="SpotifyModule.cs" />
     <Compile Include="Views\MainStationView.xaml.cs">
       <DependentUpon>MainStationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainStationViewModel.cs" />
+    <Compile Include="Wizard\SpotifyWizardPage1.xaml.cs">
+      <DependentUpon>SpotifyWizardPage1.xaml</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -86,6 +142,53 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Service References\LoginService\service.wsdl" />
+    <None Include="Service References\LoginService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LoginService\v1.wsdl" />
+    <None Include="Service References\LoginService\v1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PlayerControlService\service.wsdl" />
+    <None Include="Service References\PlayerControlService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PlayerControlService\Torshify.Origo.Contracts.V1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\PlayerControlService\v1.wsdl" />
+    <None Include="Service References\PlayerControlService\v1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QueryService\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QueryService\service.wsdl" />
+    <None Include="Service References\QueryService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QueryService\Torshify.Origo.Contracts.V1.Query.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QueryService\Torshify.Origo.Contracts.V1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\QueryService\v1.wsdl" />
+    <None Include="Service References\QueryService\v1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TrackPlayerService\service.wsdl" />
+    <None Include="Service References\TrackPlayerService\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TrackPlayerService\Torshify.Origo.Contracts.V1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TrackPlayerService\v1.wsdl" />
+    <None Include="Service References\TrackPlayerService\v1.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Torshify.Radio.Framework\Torshify.Radio.Framework.csproj">
@@ -94,14 +197,77 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Page Include="Views\MainStationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Wizard\SpotifyWizardPage1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\LoginService\" />
+    <WCFMetadataStorage Include="Service References\PlayerControlService\" />
+    <WCFMetadataStorage Include="Service References\QueryService\" />
+    <WCFMetadataStorage Include="Service References\TrackPlayerService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\QueryService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\QueryService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\QueryService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LoginService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LoginService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LoginService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TrackPlayerService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TrackPlayerService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TrackPlayerService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PlayerControlService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PlayerControlService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\PlayerControlService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Spotify_Core.png" />
+    <Resource Include="Resources\Spotify_Logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

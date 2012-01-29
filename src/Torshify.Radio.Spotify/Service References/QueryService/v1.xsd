@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.torshify/v1" elementFormDefault="qualified" targetNamespace="http://schemas.torshify/v1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1.Query" />
+  <xs:element name="Query">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="query" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="trackOffset" type="xs:int" />
+        <xs:element minOccurs="0" name="trackCount" type="xs:int" />
+        <xs:element minOccurs="0" name="albumOffset" type="xs:int" />
+        <xs:element minOccurs="0" name="albumCount" type="xs:int" />
+        <xs:element minOccurs="0" name="artistOffset" type="xs:int" />
+        <xs:element minOccurs="0" name="artistCount" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="QueryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="QueryResult" nillable="true" type="tns:QueryResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="QueryResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Albums" nillable="true" type="tns:ArrayOfAlbum" />
+      <xs:element minOccurs="0" name="Artists" nillable="true" type="tns:ArrayOfArtist" />
+      <xs:element minOccurs="0" name="Tracks" nillable="true" type="tns:ArrayOfTrack" />
+      <xs:element minOccurs="0" name="TotalAlbums" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalArtists" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalTracks" type="xs:int" />
+      <xs:element minOccurs="0" name="Query" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DidYouMean" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="QueryResult" nillable="true" type="tns:QueryResult" />
+  <xs:complexType name="ArrayOfAlbum">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Album" nillable="true" type="tns:Album" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfAlbum" nillable="true" type="tns:ArrayOfAlbum" />
+  <xs:complexType name="Album">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CoverID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsAvailable" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Year" type="xs:int" />
+      <xs:element minOccurs="0" name="Artist" nillable="true" type="tns:Artist" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Album" nillable="true" type="tns:Album" />
+  <xs:complexType name="Artist">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PortraitID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Artist" nillable="true" type="tns:Artist" />
+  <xs:complexType name="ArrayOfArtist">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Artist" nillable="true" type="tns:Artist" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfArtist" nillable="true" type="tns:ArrayOfArtist" />
+  <xs:complexType name="ArrayOfTrack">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Track" nillable="true" type="tns:Track" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTrack" nillable="true" type="tns:ArrayOfTrack" />
+  <xs:complexType name="Track">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Album" nillable="true" type="tns:Album" />
+      <xs:element minOccurs="0" name="Duration" type="xs:double" />
+      <xs:element minOccurs="0" name="Index" type="xs:int" />
+      <xs:element minOccurs="0" name="Disc" type="xs:int" />
+      <xs:element minOccurs="0" name="Popularity" type="xs:int" />
+      <xs:element minOccurs="0" name="IsStarred" type="xs:boolean" />
+      <xs:element minOccurs="0" name="OfflineStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsLocal" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Artists" nillable="true" type="tns:ArrayOfArtist" />
+      <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsAvailable" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Track" nillable="true" type="tns:Track" />
+  <xs:element name="AlbumBrowse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="albumId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AlbumBrowseResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="AlbumBrowseResult" nillable="true" type="tns:AlbumBrowseResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="AlbumBrowseResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Album" nillable="true" type="tns:Album" />
+      <xs:element minOccurs="0" name="Artist" nillable="true" type="tns:Artist" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Copyrights" nillable="true" type="q1:ArrayOfstring" />
+      <xs:element minOccurs="0" name="Review" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Tracks" nillable="true" type="tns:ArrayOfTrack" />
+      <xs:element minOccurs="0" name="BackendRequestDuration" type="xs:double" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AlbumBrowseResult" nillable="true" type="tns:AlbumBrowseResult" />
+  <xs:element name="ArtistBrowse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="artistId" nillable="true" type="xs:string" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Torshify.Origo.Contracts.V1.Query" minOccurs="0" name="type" type="q2:ArtistBrowsingType" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ArtistBrowseResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ArtistBrowseResult" nillable="true" type="tns:ArtistBrowseResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="ArtistBrowseResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Artist" nillable="true" type="tns:Artist" />
+      <xs:element minOccurs="0" name="Albums" nillable="true" type="tns:ArrayOfAlbum" />
+      <xs:element minOccurs="0" name="BackendRequestDuration" type="xs:double" />
+      <xs:element minOccurs="0" name="Biography" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Tracks" nillable="true" type="tns:ArrayOfTrack" />
+      <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Portraits" nillable="true" type="q3:ArrayOfstring" />
+      <xs:element minOccurs="0" name="SimilarArtists" nillable="true" type="tns:ArrayOfArtist" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArtistBrowseResult" nillable="true" type="tns:ArtistBrowseResult" />
+  <xs:element name="GetPlaylist">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="link" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetPlaylistResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetPlaylistResult" nillable="true" type="tns:Playlist" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="Playlist">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsCollaborative" type="xs:boolean" />
+      <xs:element minOccurs="0" name="OfflineStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PendingChanges" type="xs:boolean" />
+      <xs:element minOccurs="0" name="ImageID" nillable="true" type="xs:string" />
+      <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Subscribers" nillable="true" type="q4:ArrayOfstring" />
+      <xs:element minOccurs="0" name="Tracks" nillable="true" type="tns:ArrayOfTrack" />
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Playlist" nillable="true" type="tns:Playlist" />
+</xs:schema>

@@ -741,6 +741,103 @@
     </Style>
 
     <Style
+        x:Key="{x:Type PasswordBox}"
+        TargetType="{x:Type PasswordBox}">
+        <Setter
+            Property="Controls:PasswordBoxMonitor.IsMonitoring"
+            Value="True" />
+        <Setter
+            Property="Foreground"
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxForegroundBrushKey}}" />
+        <Setter
+            Property="Background"
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
+        <Setter
+            Property="BorderBrush"
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
+        <Setter
+            Property="SelectionBrush"
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditSelectionBrushKey}}" />
+        <Setter
+            Property="CaretBrush"
+            Value="{DynamicResource {x:Static Framework:AppTheme.TextCaretBrushKey}}" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type PasswordBox}">
+                    <Border
+                        Name="Bd"
+                        Background="{TemplateBinding Background}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        SnapsToDevicePixels="true">
+                        <Grid>
+                            <ScrollViewer
+                                x:Name="PART_ContentHost"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <ContentPresenter
+                                x:Name="PART_WatermarkHost"
+                                Content="{Binding (Controls:PasswordBoxMonitor.Watermark), RelativeSource={RelativeSource TemplatedParent}}"
+                                ContentTemplate="{StaticResource DefaultWatermarkTemplate}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                IsHitTestVisible="False"
+                                Margin="{TemplateBinding Padding}"
+                                Visibility="Collapsed" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger
+                            Property="Controls:PasswordBoxMonitor.PasswordLength"
+                            Value="0">
+                            <Setter
+                                Property="Visibility"
+                                TargetName="PART_WatermarkHost"
+                                Value="Visible" />
+                        </Trigger>
+                        <Trigger
+                            Property="IsFocused"
+                            Value="True">
+                            <Setter
+                                Property="Background"
+                                TargetName="Bd"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditBackgroundBrushKey}}" />
+                            <Setter
+                                Property="BorderBrush"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxEditBorderBrushKey}}" />
+                            <Setter
+                                Property="Visibility"
+                                TargetName="PART_WatermarkHost"
+                                Value="Collapsed" />
+                        </Trigger>
+                        <Trigger
+                            Property="IsEnabled"
+                            Value="False">
+                            <Setter
+                                Property="Background"
+                                TargetName="Bd"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.TextBoxBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger
+                Property="IsEnabled"
+                Value="False">
+                <Setter
+                    Property="BorderBrush"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.DisabledBrushKey}}" />
+                <Setter
+                    Property="Foreground"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.DisabledBrushKey}}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style
         TargetType="{x:Type ButtonBase}">
         <Setter
             Property="Background"
