@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using EightTracks;
 
 using Torshify.Radio.EightTracks.Converters;
@@ -61,6 +62,17 @@ namespace Torshify.Radio.EightTracks
             }
         }
 
+        public bool SupportsTrackSkipping
+        {
+            get { return false; }
+        }
+
+        public bool MoveToNextSimilarMixAtEnd
+        {
+            get; 
+            set;
+        }
+
         object IEnumerator.Current
         {
             get { return Current; }
@@ -94,20 +106,24 @@ namespace Torshify.Radio.EightTracks
                     _currentPlayResponse = session.Query<Play>().Next(_playToken.PlayToken, _currentMix.ID);
                 }
 
-                if (_currentPlayResponse.Set == null || _currentPlayResponse.Set.AtEnd)
+                if (MoveToNextSimilarMixAtEnd)
                 {
-                    if (_currentMix != null)
+                    if (_currentPlayResponse.Set == null || _currentPlayResponse.Set.AtEnd)
                     {
-                        var nextMixResponse = session.Query<Mixes>().GetNextMix(_playToken.PlayToken, _currentMix.ID);
-                        _currentMix = nextMixResponse.NextMix;
-
                         if (_currentMix != null)
                         {
-                            _currentPlayResponse = session.Query<Play>().Execute(_playToken.PlayToken, _currentMix.ID);
-                        }
-                    }
+                            var nextMixResponse = session.Query<Mixes>().GetNextMix(_playToken.PlayToken, _currentMix.ID);
+                            _currentMix = nextMixResponse.NextMix;
 
-                    // TODO : Add user-notification and logging if there is any errors
+                            if (_currentMix != null)
+                            {
+                                _currentPlayResponse = session.Query<Play>().Execute(_playToken.PlayToken,
+                                                                                     _currentMix.ID);
+                            }
+                        }
+
+                        // TODO : Add user-notification and logging if there is any errors
+                    }
                 }
 
                 if (_currentPlayResponse.Set == null)

@@ -103,6 +103,8 @@ namespace Torshify.Radio.EightTracks
             {
                 Logger.Log("Error while getting 8tracks mixes. " + e.Message, Category.Exception, Priority.Medium);
             }
+
+            return new string[0];
         }
 
         #endregion Methods

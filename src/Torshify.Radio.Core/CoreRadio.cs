@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core
@@ -14,12 +15,13 @@ namespace Torshify.Radio.Core
     {
         #region Fields
 
+        private readonly ILoadingIndicatorService _loadingIndicatorService;
         private readonly ConcurrentQueue<ITrackStream> _trackStreamQueue;
 
         private CorePlayer _corePlayer;
-        private readonly ILoadingIndicatorService _loadingIndicatorService;
-        private ITrackStream _currentTrackStream;
+        private Track _currentTrack;
         private ConcurrentQueue<Track> _trackQueue;
+        private Track _upcomingTrack;
 
         #endregion Fields
 
@@ -39,18 +41,34 @@ namespace Torshify.Radio.Core
 
         #endregion Constructors
 
+        #region Events
+
+        public event EventHandler CurrentTrackChanged;
+
+        public event EventHandler UpcomingTrackChanged;
+
+        #endregion Events
+
         #region Properties
 
         public Track CurrentTrack
         {
-            get;
-            private set;
+            get { return _currentTrack; }
+            private set
+            {
+                _currentTrack = value;
+                OnCurrentTrackChanged();
+            }
         }
 
         public Track UpcomingTrack
         {
-            get;
-            private set;
+            get { return _upcomingTrack; }
+            private set
+            {
+                _upcomingTrack = value;
+                OnUpcomingTrackChanged();
+            }
         }
 
         public IEnumerable<ITrackStream> TrackStreams
@@ -59,6 +77,25 @@ namespace Torshify.Radio.Core
             {
                 return _trackStreamQueue;
             }
+        }
+
+        public bool CanGoToNextTrack
+        {
+            get
+            {
+                if (CurrentTrackStream != null)
+                {
+                    return CurrentTrackStream.SupportsTrackSkipping;
+                }
+
+                return false;
+            }
+        }
+
+        public ITrackStream CurrentTrackStream
+        {
+            get;
+            set;
         }
 
         [ImportMany]
@@ -120,8 +157,8 @@ namespace Torshify.Radio.Core
             Task.Factory.StartNew(() =>
                                   {
                                       _loadingIndicatorService.Push();
-                                      _currentTrackStream = trackStream;
                                       _trackQueue = new ConcurrentQueue<Track>();
+                                      CurrentTrackStream = trackStream;
                                       GetNextBatch();
                                       MoveToNextTrack();
                                       PeekToNextTrack();
@@ -131,7 +168,32 @@ namespace Torshify.Radio.Core
 
         public void QueueTrackStream(ITrackStream trackStream)
         {
-            _trackStreamQueue.Enqueue(trackStream);
+            if (CurrentTrackStream == null)
+            {
+                PlayTrackStream(trackStream);
+            }
+            else
+            {
+                _trackStreamQueue.Enqueue(trackStream);
+            }
+        }
+
+        public void NextTrack()
+        {
+            Task.Factory.StartNew(() =>
+                                  {
+                                      _loadingIndicatorService.Push();
+
+                                      if (_trackQueue.IsEmpty)
+                                      {
+                                          GetNextBatch();
+                                      }
+
+                                      MoveToNextTrack();
+                                      PeekToNextTrack();
+
+                                      _loadingIndicatorService.Pop();
+                                  });
         }
 
         public bool SupportsLink(TrackLink trackLink)
@@ -141,13 +203,26 @@ namespace Torshify.Radio.Core
 
         private void GetNextBatch()
         {
-            if (_currentTrackStream.MoveNext())
+            if (CurrentTrackStream.MoveNext())
             {
-                var tracks = _currentTrackStream.Current;
+                var tracks = CurrentTrackStream.Current;
 
                 foreach (var track in tracks)
                 {
                     _trackQueue.Enqueue(track);
+                }
+            }
+            else
+            {
+                ITrackStream nextTrackStream;
+                if (_trackStreamQueue.TryDequeue(out nextTrackStream))
+                {
+                    CurrentTrackStream = nextTrackStream;
+                    GetNextBatch();
+                }
+                else
+                {
+                    CurrentTrackStream = null;
                 }
             }
         }
@@ -190,6 +265,31 @@ namespace Torshify.Radio.Core
 
             MoveToNextTrack();
             PeekToNextTrack();
+        }
+
+        private Lazy<ITrackPlayer, ITrackPlayerMetadata> GetPlayerForTrack(Track track)
+        {
+            return TrackPlayers.FirstOrDefault(p => p.Value.CanPlay(track));
+        }
+
+        private void OnCurrentTrackChanged()
+        {
+            var handler = CurrentTrackChanged;
+
+            if(handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        private void OnUpcomingTrackChanged()
+        {
+            var handler = UpcomingTrackChanged;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
         }
 
         #endregion Methods

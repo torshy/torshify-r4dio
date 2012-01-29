@@ -39,6 +39,10 @@
                             <StackPanel
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Right">
+                                <Button
+                                    Content="Queue"
+                                    Command="{Binding DataContext.QueueMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                    CommandParameter="{Binding}" />
                                 <Path
                                     Data="{StaticResource RightArrow}"
                                     Width="10"
