@@ -11,7 +11,7 @@
 
     <Converters:StringToUpperConverter
         x:Key="StringToUpperConverter" />
-    
+
     <Style
         TargetType="{x:Type TextBox}">
         <Setter
@@ -2443,7 +2443,7 @@
             Value="4" />
         <Setter
             Property="Width"
-            Value="8" />
+            Value="4" />
         <Setter
             Property="Template">
             <Setter.Value>
@@ -2489,7 +2489,7 @@
             <Border
                 x:Name="TrackBackground"
                 CornerRadius="0"
-                Margin="8,0,0,0"
+                Margin="4,0,0,0"
                 Height="4"
                 Grid.Row="1"
                 BorderThickness="0"
@@ -2607,6 +2607,14 @@
                     Value="{StaticResource VerticalSlider}" />
             </Trigger>-->
         </Style.Triggers>
+    </Style>
+
+    <Style
+        TargetType="{x:Type Controls:DragSlider}"
+        BasedOn="{StaticResource {x:Type Slider}}">
+        <Setter
+            Property="IsMoveToPointEnabled"
+            Value="True" />
     </Style>
 
 </ResourceDictionary>

@@ -27,7 +27,7 @@
                     Name="img"
                     Source="pack://siteoforigin:,,,/Resources/Icons/volume.png" 
                     MaxHeight="24"/>
-                <Slider
+                <Controls:DragSlider
                     Margin="0,2,0,2" />
             </DockPanel>
             <StackPanel
