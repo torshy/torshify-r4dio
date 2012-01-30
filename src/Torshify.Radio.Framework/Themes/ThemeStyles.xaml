@@ -2588,7 +2588,7 @@
                     Value="104" />
                 <Setter
                     Property="MinHeight"
-                    Value="21" />
+                    Value="12" />
                 <Setter
                     Property="Template"
                     Value="{StaticResource HorizontalSlider}" />

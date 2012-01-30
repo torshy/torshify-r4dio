@@ -101,6 +101,9 @@
     <Compile Include="Resources\R4dioIcon.xaml.cs">
       <DependentUpon>R4dioIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Resources\VolumeIcon.xaml.cs">
+      <DependentUpon>VolumeIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\BackdropService.cs" />
     <Compile Include="Services\InactivityNotificatorService.cs" />
     <Compile Include="Services\SearchBarService.cs" />
@@ -165,6 +168,10 @@
     <Page Include="Resources\R4dioIcon.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\VolumeIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\ControlsView.xaml">
       <SubType>Designer</SubType>
