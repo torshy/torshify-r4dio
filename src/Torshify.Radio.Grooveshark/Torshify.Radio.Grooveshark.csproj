@@ -43,6 +43,15 @@
       <HintPath>..\..\packages\Prism.MEFExtensions.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.MefExtensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json.Compact">
+      <HintPath>..\..\lib\Grooveshark\Newtonsoft.Json.Compact.dll</HintPath>
+    </Reference>
+    <Reference Include="SciLors Logger">
+      <HintPath>..\..\lib\Grooveshark\SciLors Logger.dll</HintPath>
+    </Reference>
+    <Reference Include="SciLorsGroovesharkAPI">
+      <HintPath>..\..\lib\Grooveshark\SciLorsGroovesharkAPI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -84,6 +93,12 @@
       <Name>Torshify.Radio.Framework</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\lib\Grooveshark\GrooveFix.xml">
+      <Link>GrooveFix.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

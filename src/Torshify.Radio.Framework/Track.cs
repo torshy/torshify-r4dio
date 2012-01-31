@@ -1,9 +1,11 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Dynamic;
 
 namespace Torshify.Radio.Framework
 {
+    [DebuggerDisplay("{Name}")]
     public abstract class Track : INotifyPropertyChanged
     {
         #region Fields

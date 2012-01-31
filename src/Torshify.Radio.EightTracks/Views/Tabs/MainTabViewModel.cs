@@ -1,10 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 
 using EightTracks;
-
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 
 using Torshify.Radio.Framework;
@@ -32,6 +33,13 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
         #endregion Constructors
 
         #region Properties
+
+        [Import]
+        public ILoggerFacade Logger
+        {
+            get; 
+            set;
+        }
 
         public override HeaderInfo HeaderInfo
         {
@@ -118,17 +126,25 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             })
             .ContinueWith(t =>
             {
-                if (!t.Result.Any())
+                if (t.Exception != null)
                 {
-                    ToastService.Show("No results found");
-                    return;
+                    Logger.Log("Error while fetching mixes: " + t.Exception, Category.Exception, Priority.Medium);
+                    ToastService.Show("An error occurred while getting mixes");
                 }
-
-                _mixes.Clear();
-
-                foreach (var mix in t.Result)
+                else
                 {
-                    _mixes.Add(mix);
+                    if (!t.Result.Any())
+                    {
+                        ToastService.Show("No results found");
+                        return;
+                    }
+
+                    _mixes.Clear();
+
+                    foreach (var mix in t.Result)
+                    {
+                        _mixes.Add(mix);
+                    }
                 }
             }, ui);
         }

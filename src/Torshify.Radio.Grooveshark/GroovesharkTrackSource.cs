@@ -1,5 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
+
+using Microsoft.Practices.Prism.Logging;
+
+using SciLorsGroovesharkAPI.Groove;
+using SciLorsGroovesharkAPI.Groove.Functions;
 
 using Torshify.Radio.Framework;
 
@@ -9,14 +16,89 @@ namespace Torshify.Radio.Grooveshark
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class GroovesharkTrackSource : ITrackSource
     {
+        #region Fields
+
+        private readonly ILoggerFacade _logger;
+
+        private Lazy<GroovesharkClient> _client;
+
+        #endregion Fields
+
+        #region Constructors
+
+        [ImportingConstructor]
+        public GroovesharkTrackSource(ILoggerFacade logger)
+        {
+            _logger = logger;
+            _client = new Lazy<GroovesharkClient>(() => new GroovesharkClient());
+        }
+
+        #endregion Constructors
+
+        #region Methods
+
         public IEnumerable<Track> GetTracksByName(string name)
         {
-            return new Track[0];
+            List<Track> tracks = new List<Track>();
+
+            try
+            {
+                var response = _client.Value.SearchArtist(name);
+                var results = response.result.result as List<SearchArtist.SearchArtistResult>;
+                tracks.AddRange(Convert(results));
+            }
+            catch (Exception e)
+            {
+                _logger.Log("Grooveshark: " + e, Category.Info, Priority.Medium);
+            }
+
+            return tracks;
         }
 
         public IEnumerable<TrackContainer> GetAlbumsByArtist(string artist)
         {
-            return new TrackContainer[0];
+            List<TrackContainer> containers = new List<TrackContainer>();
+
+            try
+            {
+                var response = _client.Value.SearchArtist(artist);
+                var results = response.result.result as List<SearchArtist.SearchArtistResult>;
+                var byAlbum = results
+                    .Where(s => artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase))
+                    .GroupBy(s => new { Album = s.AlbumName, Year = s.Year });
+
+                foreach (var albumGroup in byAlbum)
+                {
+                    int year;
+                    if (!int.TryParse(albumGroup.Key.Year, out year))
+                    {
+                        year = DateTime.Now.Year;
+                    }
+
+                    TrackContainer container = new TrackContainer
+                                               {
+                                                   Name = albumGroup.Key.Album,
+                                                   Year = year,
+                                                   Owner = new TrackContainerOwner(artist),
+                                                   Tracks = Convert(albumGroup).ToArray(),
+                                               };
+
+                    var firstTrack = container.Tracks.FirstOrDefault();
+
+                    if (firstTrack != null)
+                    {
+                        container.Image = firstTrack.AlbumArt;
+                    }
+
+                    containers.Add(container);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Log("Grooveshark: " + e, Category.Exception, Priority.Medium);
+            }
+
+            return containers;
         }
 
         public bool SupportsLink(TrackLink trackLink)
@@ -32,10 +114,30 @@ namespace Torshify.Radio.Grooveshark
 
             if (int.TryParse(songIdAsString, out songId))
             {
-                return new GroovesharkTrack(songId);
+                string artistIdAsString = trackLink["ArtistID"];
+
+                int artistId;
+
+                if (int.TryParse(artistIdAsString, out artistId))
+                {
+                    return new GroovesharkTrack(songId, artistId);
+                }
             }
 
             return null;
         }
+
+        private IEnumerable<Track> Convert(IEnumerable<SearchArtist.SearchArtistResult> songs)
+        {
+            return songs.Select(result => new GroovesharkTrack(result.SongID, result.AlbumID)
+            {
+                Name = result.SongName,
+                Album = result.AlbumName,
+                Artist = result.ArtistName,
+                AlbumArt = "http://images.grooveshark.com/static/albums/90_" + result.AlbumID + ".jpg"
+            });
+        }
+
+        #endregion Methods
     }
 }

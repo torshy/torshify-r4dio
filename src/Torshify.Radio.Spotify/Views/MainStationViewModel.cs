@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
-using System.Linq;
 
 namespace Torshify.Radio.Spotify.Views
 {
@@ -32,6 +32,7 @@ namespace Torshify.Radio.Spotify.Views
         public void OnTuneIn(NavigationContext context)
         {
             IEnumerable<Track> tracks = Radio.GetTracksByName("NOFX").OrderBy(t => t.TotalDuration).Take(2);
+            IEnumerable<TrackContainer> albums = Radio.GetAlbumsByArtist("NOFX").OrderBy(a => a.Year).ThenBy(a => a.Name);
 
             Radio.PlayTrackStream(new TrackSource(tracks));
         }

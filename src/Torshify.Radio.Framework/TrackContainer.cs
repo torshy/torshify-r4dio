@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Dynamic;
 
 namespace Torshify.Radio.Framework
 {
+    [DebuggerDisplay("{Name}")]
     public class TrackContainer : INotifyPropertyChanged
     {
         #region Fields
@@ -13,6 +15,7 @@ namespace Torshify.Radio.Framework
         private string _name;
         private TrackContainerOwner _owner;
         private IEnumerable<Track> _tracks;
+        private int _year;
 
         #endregion Fields
 
@@ -62,6 +65,19 @@ namespace Torshify.Radio.Framework
                 {
                     _name = value;
                     RaisePropertyChanged("Name");
+                }
+            }
+        }
+
+        public int Year
+        {
+            get { return _year; }
+            set
+            {
+                if (_year != value)
+                {
+                    _year = value;
+                    RaisePropertyChanged("Year");
                 }
             }
         }

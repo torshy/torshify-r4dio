@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<GrooveFix>
+  <htmlshark>
+    <GrooveClient>htmlshark</GrooveClient>
+    <GrooveClientRevision>20120123</GrooveClientRevision>
+    <GrooveStaticRandomizer>:sloppyJoes:</GrooveStaticRandomizer>
+  </htmlshark>
+  <jsqueue>
+    <GrooveClient>jsqueue</GrooveClient>
+    <GrooveClientRevision>20120123.02</GrooveClientRevision>
+    <GrooveStaticRandomizer>:ieSuxBalz:</GrooveStaticRandomizer>
+  </jsqueue>
+  <mobileshark>
+    <GrooveClient>mobileshark</GrooveClient>
+    <GrooveClientRevision>20120112</GrooveClientRevision>
+    <GrooveStaticRandomizer>:boomGoesTheDolphin:</GrooveStaticRandomizer>
+  </mobileshark>
+</GrooveFix>

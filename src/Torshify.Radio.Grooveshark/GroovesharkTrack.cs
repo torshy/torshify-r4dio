@@ -7,9 +7,10 @@ namespace Torshify.Radio.Grooveshark
     {
         #region Constructors
 
-        public GroovesharkTrack(int songID)
+        public GroovesharkTrack(int songID, int artistID)
         {
             SongID = songID;
+            ArtistID = artistID;
         }
 
         #endregion Constructors
@@ -17,6 +18,12 @@ namespace Torshify.Radio.Grooveshark
         #region Properties
 
         public int SongID
+        {
+            get;
+            private set;
+        }
+
+        public int ArtistID
         {
             get;
             private set;
@@ -30,6 +37,7 @@ namespace Torshify.Radio.Grooveshark
         {
             TrackLink link = new TrackLink("grooveshark");
             link["SongID"] = SongID.ToString(CultureInfo.InvariantCulture);
+            link["ArtistID"] = ArtistID.ToString(CultureInfo.InvariantCulture);
             return link;
         }
 
