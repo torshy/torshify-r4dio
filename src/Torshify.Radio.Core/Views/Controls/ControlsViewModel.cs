@@ -16,8 +16,6 @@ namespace Torshify.Radio.Core.Views.Controls
         private readonly CorePlayer _player;
         private readonly IRadio _radio;
 
-        private bool _isPlaying;
-
         #endregion Fields
 
         #region Constructors
@@ -31,12 +29,19 @@ namespace Torshify.Radio.Core.Views.Controls
             _player = player;
             _player.IsPlayingChanged += (sender, args) => RaisePropertyChanged("IsPlaying");
 
-            NextTrackCommand = new AutomaticCommand(ExecuteNextTrackCommand, CanExecuteNextTrack);
+            NextTrackCommand = new AutomaticCommand(ExecuteNextTrack, CanExecuteNextTrack);
+            TogglePlayPauseCommand = new AutomaticCommand(ExecuteTogglePlayPause, CanExecuteTogglePlayPause);
         }
 
         #endregion Constructors
 
         #region Properties
+
+        public AutomaticCommand TogglePlayPauseCommand
+        {
+            get;
+            private set;
+        }
 
         public AutomaticCommand NextTrackCommand
         {
@@ -54,14 +59,21 @@ namespace Torshify.Radio.Core.Views.Controls
 
         public bool IsPlaying
         {
-            get { return _isPlaying; }
+            get
+            {
+                return _player.IsPlaying;
+            }
+        }
+
+        public double Volume
+        {
+            get
+            {
+                return _player.Volume;
+            }
             set
             {
-                if (_isPlaying != value)
-                {
-                    _isPlaying = value;
-                    RaisePropertyChanged("IsPlaying");
-                }
+                _player.Volume = value;
             }
         }
 
@@ -69,12 +81,29 @@ namespace Torshify.Radio.Core.Views.Controls
 
         #region Methods
 
+        private void ExecuteTogglePlayPause()
+        {
+            if (_player.IsPlaying)
+            {
+                _player.Pause();
+            }
+            else
+            {
+                _player.Play();
+            }
+        }
+
+        private bool CanExecuteTogglePlayPause()
+        {
+            return _radio.CurrentTrack != null;
+        }
+
         private bool CanExecuteNextTrack()
         {
             return _radio.CanGoToNextTrack;
         }
 
-        private void ExecuteNextTrackCommand()
+        private void ExecuteNextTrack()
         {
             _radio.NextTrack();
         }
@@ -85,7 +114,7 @@ namespace Torshify.Radio.Core.Views.Controls
 
         private void RadioOnCurrentTrackChanged(object sender, EventArgs eventArgs)
         {
-            RaisePropertyChanged("HasTracks");
+            RaisePropertyChanged("HasTracks", "Volume");
         }
 
         #endregion Methods

@@ -13,7 +13,7 @@ using Torshify.Radio.Spotify.QueryService;
 
 namespace Torshify.Radio.Spotify
 {
-    //[TrackSourceMetadata(Name = "Spotify", IconUri = "pack://application:,,,/Torstify.Radio.Spotify;component/Resources/Spotify_Logo.png")]
+    [TrackSourceMetadata(Name = "Spotify", IconUri = "pack://application:,,,/Torstify.Radio.Spotify;component/Resources/Spotify_Logo.png")]
     public class SpotifyTrackSource : ITrackSource
     {
         #region Fields

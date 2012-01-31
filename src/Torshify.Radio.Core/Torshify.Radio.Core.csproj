@@ -121,10 +121,16 @@
     <Compile Include="Utilities\Hooks\HookManager.Structures.cs" />
     <Compile Include="Utilities\Hooks\HookManager.Windows.cs" />
     <Compile Include="Utilities\Hooks\MouseEventExtArgs.cs" />
+    <Compile Include="Views\Controls\ControlsPart.xaml.cs">
+      <DependentUpon>ControlsPart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\ControlsView.xaml.cs">
       <DependentUpon>ControlsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\ControlsViewModel.cs" />
+    <Compile Include="Views\Controls\TrackInformationPart.xaml.cs">
+      <DependentUpon>TrackInformationPart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\FirstTime\FirstTimeUseView.xaml.cs">
       <DependentUpon>FirstTimeUseView.xaml</DependentUpon>
     </Compile>
@@ -173,7 +179,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Controls\ControlsPart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Controls\ControlsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\TrackInformationPart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

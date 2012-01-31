@@ -168,6 +168,11 @@ namespace Torshify.Radio.Core
 
         public void Load(Track track)
         {
+            if (CurrentPlayer != null)
+            {
+                CurrentPlayer.Value.Stop();
+            }
+
             var player = TrackPlayers.FirstOrDefault(p => p.Value.CanPlay(track));
 
             if (player != null)
@@ -202,6 +207,7 @@ namespace Torshify.Radio.Core
         {
             if (CurrentPlayer != null)
             {
+                CurrentPlayer.Value.Volume = Volume;
                 CurrentPlayer.Value.Play();
             }
         }
