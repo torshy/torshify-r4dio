@@ -171,7 +171,7 @@ namespace Torshify.Radio.Core
             return tracks;
         }
 
-        public void PlayTrackStream(ITrackStream trackStream)
+        public void Play(ITrackStream trackStream)
         {
             Task.Factory.StartNew(() =>
                                   {
@@ -185,11 +185,11 @@ namespace Torshify.Radio.Core
                                   });
         }
 
-        public void QueueTrackStream(ITrackStream trackStream)
+        public void Queue(ITrackStream trackStream)
         {
             if (CurrentTrackStream == null)
             {
-                PlayTrackStream(trackStream);
+                Play(trackStream);
             }
             else
             {

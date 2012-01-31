@@ -2,7 +2,7 @@ using System;
 
 namespace Torshify.Radio.Framework
 {
-    public interface ITrackPlayer
+    public interface ITrackPlayer : IDisposable
     {
         #region Events
 

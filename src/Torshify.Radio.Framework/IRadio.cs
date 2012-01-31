@@ -46,9 +46,9 @@ namespace Torshify.Radio.Framework
             get;
         }
 
-        void PlayTrackStream(ITrackStream trackStream);
+        void Play(ITrackStream trackStream);
 
-        void QueueTrackStream(ITrackStream trackStream);
+        void Queue(ITrackStream trackStream);
 
         void NextTrack();
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Globalization;
 using System.Linq;
@@ -46,6 +47,13 @@ namespace Torshify.Radio.Core
             set;
         }
 
+        [Import]
+        public CorePlayer CorePlayer
+        {
+            get;
+            set;
+        }
+
         #endregion Properties
 
         #region Methods
@@ -83,6 +91,16 @@ namespace Torshify.Radio.Core
             foreach (var startable in Startables)
             {
                 startable.Start();
+            }
+
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
+        }
+
+        private void CurrentDomainOnProcessExit(object sender, EventArgs eventArgs)
+        {
+            if (CorePlayer != null)
+            {
+                CorePlayer.Dispose();
             }
         }
 

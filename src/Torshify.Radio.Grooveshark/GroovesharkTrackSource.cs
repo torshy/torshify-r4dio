@@ -20,8 +20,6 @@ namespace Torshify.Radio.Grooveshark
 
         private readonly ILoggerFacade _logger;
 
-        private Lazy<GroovesharkClient> _client;
-
         #endregion Fields
 
         #region Constructors
@@ -30,7 +28,6 @@ namespace Torshify.Radio.Grooveshark
         public GroovesharkTrackSource(ILoggerFacade logger)
         {
             _logger = logger;
-            _client = new Lazy<GroovesharkClient>(() => new GroovesharkClient());
         }
 
         #endregion Constructors
@@ -43,7 +40,7 @@ namespace Torshify.Radio.Grooveshark
 
             try
             {
-                var response = _client.Value.SearchArtist(name);
+                var response = GroovesharkModule.GetClient().SearchArtist(name);
                 var results = response.result.result as List<SearchArtist.SearchArtistResult>;
                 tracks.AddRange(Convert(results));
             }
@@ -61,7 +58,7 @@ namespace Torshify.Radio.Grooveshark
 
             try
             {
-                var response = _client.Value.SearchArtist(artist);
+                var response = GroovesharkModule.GetClient().SearchArtist(artist);
                 var results = response.result.result as List<SearchArtist.SearchArtistResult>;
                 var byAlbum = results
                     .Where(s => artist.Equals(s.ArtistName, StringComparison.InvariantCultureIgnoreCase))

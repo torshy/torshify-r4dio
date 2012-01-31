@@ -199,7 +199,7 @@
     <Compile Include="TrackLink.cs" />
     <Compile Include="TrackLinkBuilder.cs" />
     <Compile Include="TrackProgressEventArgs.cs" />
-    <Compile Include="TrackSource.cs" />
+    <Compile Include="TrackStream.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -1,8 +1,8 @@
 using System;
 using System.Timers;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
+
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EightTracks
@@ -29,11 +29,11 @@ namespace Torshify.Radio.EightTracks
 
         #region Events
 
+        public event EventHandler<TrackBufferingEventArgs> BufferingProgressChanged;
+
         public event EventHandler IsBufferingChanged;
 
         public event EventHandler IsPlayingChanged;
-
-        public event EventHandler<TrackBufferingEventArgs> BufferingProgressChanged;
 
         public event EventHandler<TrackEventArgs> TrackComplete;
 
@@ -92,6 +92,11 @@ namespace Torshify.Radio.EightTracks
             set { Player.Dispatcher.BeginInvoke(new Action<TimeSpan>(v => Player.Position = v), value); }
         }
 
+        public bool CanSeek
+        {
+            get { return false; }
+        }
+
         protected Track CurrentTrack
         {
             get;
@@ -114,11 +119,6 @@ namespace Torshify.Radio.EightTracks
 
         #region Methods
 
-        public bool CanSeek
-        {
-            get { return false; }
-        }
-
         public virtual bool CanPlay(Track radioTrack)
         {
             return radioTrack is EightTracksTrack;
@@ -130,7 +130,7 @@ namespace Torshify.Radio.EightTracks
             Player.MediaOpened += OnMediaOpened;
             Player.BufferingStarted += OnBufferingStarted;
             Player.BufferingEnded += OnBufferingEnded;
-            
+
             _mediaElementProgressTimer.Elapsed += OnProgressTimerElapsed;
         }
 
@@ -198,6 +198,10 @@ namespace Torshify.Radio.EightTracks
             {
                 Player.Dispatcher.BeginInvoke(new Action(Stop), DispatcherPriority.Background);
             }
+        }
+
+        public void Dispose()
+        {
         }
 
         protected virtual void OnIsPlayingChanged()

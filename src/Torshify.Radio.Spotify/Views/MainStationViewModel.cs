@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -21,6 +21,13 @@ namespace Torshify.Radio.Spotify.Views
             set;
         }
 
+        [Import]
+        public ILoadingIndicatorService LoadingIndicatorService
+        {
+            get; 
+            set;
+        }
+
         #endregion Properties
 
         #region Methods
@@ -31,10 +38,15 @@ namespace Torshify.Radio.Spotify.Views
 
         public void OnTuneIn(NavigationContext context)
         {
-            IEnumerable<Track> tracks = Radio.GetTracksByName("NOFX").OrderBy(t => t.TotalDuration).Take(2);
-            IEnumerable<TrackContainer> albums = Radio.GetAlbumsByArtist("NOFX").OrderBy(a => a.Year).ThenBy(a => a.Name);
-
-            Radio.PlayTrackStream(new TrackSource(tracks));
+            Task.Factory.StartNew(() =>
+                                  {
+                                      using (LoadingIndicatorService.EnterLoadingBlock())
+                                      {
+                                          Radio.Play(
+                                              Radio.GetTracksByName("NOFX").OrderBy(t => t.TotalDuration).Take(2).
+                                                  ToTrackStream());
+                                      }
+                                  });
         }
 
         #endregion Methods

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Torshify.Radio.Framework
 {
-    public class TrackSource : ITrackStream
+    public class TrackStream : ITrackStream
     {
         #region Fields
 
@@ -14,7 +14,7 @@ namespace Torshify.Radio.Framework
 
         #region Constructors
 
-        public TrackSource(IEnumerable<Track> tracks)
+        public TrackStream(IEnumerable<Track> tracks)
         {
             _tracks = new List<IEnumerable<Track>>(new[] { tracks });
             _enumerator = _tracks.GetEnumerator();
@@ -61,5 +61,13 @@ namespace Torshify.Radio.Framework
         }
 
         #endregion Methods
+    }
+
+    public static class TrackStreamExtensions
+    {
+        public static ITrackStream ToTrackStream(this IEnumerable<Track> tracks)
+        {
+            return new TrackStream(tracks);
+        }
     }
 }

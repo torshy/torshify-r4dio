@@ -197,12 +197,12 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
 
         private void ExecutePlayMix(Mix mix)
         {
-            Radio.PlayTrackStream(new EightTracksMixTrackStream(mix));
+            Radio.Play(new EightTracksMixTrackStream(mix));
         }
 
         private void ExecuteQueueMix(Mix mix)
         {
-            Radio.QueueTrackStream(new EightTracksMixTrackStream(mix));
+            Radio.Queue(new EightTracksMixTrackStream(mix));
         }
 
         private void ExecuteToggleTagFilter(string tagFilter)

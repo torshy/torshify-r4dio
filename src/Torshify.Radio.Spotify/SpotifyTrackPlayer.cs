@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Torshify.Radio.Framework;
 using Torshify.Radio.Spotify.LoginService;
 using Torshify.Radio.Spotify.PlayerControlService;
@@ -10,7 +11,7 @@ using Torshify.Radio.Spotify.TrackPlayerService;
 
 namespace Torshify.Radio.Spotify
 {
-    [TrackPlayerMetadata(Name = "Spotify", IconUri = "pack://application:,,,/Torshify.Radio.Spotify;component;Resources/Spotify_Logo.png")]
+    //[TrackPlayerMetadata(Name = "Spotify", IconUri = "pack://application:,,,/Torshify.Radio.Spotify;component;Resources/Spotify_Logo.png")]
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class SpotifyRadioTrackPlayer : ITrackPlayer, PlayerControlServiceCallback, LoginServiceCallback
     {
@@ -105,7 +106,7 @@ namespace Torshify.Radio.Spotify
 
         public TimeSpan Position
         {
-            get; 
+            get;
             set;
         }
 
@@ -329,6 +330,10 @@ namespace Torshify.Radio.Spotify
                 _currentTrack = null;
                 _isPaused = false;
             }
+        }
+
+        public void Dispose()
+        {
         }
 
         private void EnsureControlServiceIsAlive()
