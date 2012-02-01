@@ -79,6 +79,15 @@ namespace Torshify.Radio.EightTracks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @Queue.
+        /// </summary>
+        internal static string Queue {
+            get {
+                return ResourceManager.GetString("Queue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @TimeSincePublished.
         /// </summary>
         internal static string TimeSincePublished {

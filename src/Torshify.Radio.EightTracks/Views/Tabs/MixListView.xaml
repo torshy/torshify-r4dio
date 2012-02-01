@@ -40,9 +40,15 @@
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Right">
                                 <Button
-                                    Content="Queue"
                                     Command="{Binding DataContext.QueueMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                    CommandParameter="{Binding}" />
+                                    CommandParameter="{Binding}"
+                                    BorderThickness="0"
+                                    Padding="0"
+                                    ToolTip="{lex:LocText Key=Queue, Dict=Strings, Assembly=Torshify.Radio.EightTracks}">
+                                    <Image
+                                        Height="20"
+                                        Source="pack://siteoforigin:,,,/Resources/Icons/download.png" />
+                                </Button>
                                 <Path
                                     Data="{StaticResource RightArrow}"
                                     Width="10"
@@ -70,15 +76,30 @@
                             </StackPanel>
                             <DockPanel>
                                 <Button
+                                    Name="playButton"
                                     DockPanel.Dock="Left"
                                     Command="{Binding DataContext.PlayMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                     CommandParameter="{Binding}"
                                     Height="128"
                                     Width="128"
-                                    BorderThickness="0">
-                                    <Image
-                                        Stretch="UniformToFill"
-                                        Source="{Binding Converter={StaticResource MixToImageConverter}}" />
+                                    BorderThickness="1"
+                                    Padding="0"
+                                    VerticalAlignment="Top"
+                                    Margin="0,4,0,0">
+                                    <Grid>
+                                        <Image
+                                            Name="playImageBackground"
+                                            IsHitTestVisible="False"
+                                            Stretch="UniformToFill"
+                                            Source="{Binding Converter={StaticResource MixToImageConverter}}" />
+                                        <Image
+                                            IsHitTestVisible="False"
+                                            Name="playIcon"
+                                            Stretch="None"
+                                            Source="pack://siteoforigin:,,,/Resources/Icons/play.png"
+                                            RenderOptions.BitmapScalingMode="HighQuality"
+                                            Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    </Grid>
                                 </Button>
                                 <StackPanel
                                     Margin="4">
@@ -129,6 +150,37 @@
                                 </StackPanel>
                             </DockPanel>
                         </StackPanel>
+                        <DataTemplate.Triggers>
+                            <Trigger
+                                Property="IsMouseOver"
+                                SourceName="playButton"
+                                Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="playImageBackground"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="0.3"
+                                                From="1.0" 
+                                                Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetName="playImageBackground"
+                                                Storyboard.TargetProperty="Opacity"
+                                                To="1.0"
+                                                From="0.3"
+                                                Duration="0:0:0.2" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -138,12 +190,12 @@
                 Orientation="Horizontal"
                 Margin="0,0,4,0">
                 <Button
-                    Content="Prev page" 
-                    Command="{Binding GoToPreviousPageCommand}"/>
+                    Content="Prev page"
+                    Command="{Binding GoToPreviousPageCommand}" />
                 <Button
                     Margin="4,0,0,0"
-                    Content="Next page" 
-                    Command="{Binding GoToNextPageCommand}"/>
+                    Content="Next page"
+                    Command="{Binding GoToNextPageCommand}" />
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

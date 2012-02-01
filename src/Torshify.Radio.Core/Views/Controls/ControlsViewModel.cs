@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-
+using System.Windows.Threading;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
@@ -14,6 +14,7 @@ namespace Torshify.Radio.Core.Views.Controls
         #region Fields
 
         private readonly CorePlayer _player;
+        private readonly Dispatcher _dispatcher;
         private readonly IRadio _radio;
 
         #endregion Fields
@@ -21,30 +22,35 @@ namespace Torshify.Radio.Core.Views.Controls
         #region Constructors
 
         [ImportingConstructor]
-        public ControlsViewModel(IRadio radio, CorePlayer player)
+        public ControlsViewModel(IRadio radio, CorePlayer player, Dispatcher dispatcher)
         {
             _radio = radio;
             _radio.CurrentTrackChanged += RadioOnCurrentTrackChanged;
             _radio.UpcomingTrackChanged += RadioOnUpcomingTrackChanged;
             _radio.CurrentTrackStreamChanged += RadioOnCurrentTrackStreamChanged;
             _player = player;
-            _player.IsPlayingChanged += (sender, args) => RaisePropertyChanged("IsPlaying");
+            _dispatcher = dispatcher;
+            _player.IsPlayingChanged += (sender, args) =>
+                                        {
+                                            RaisePropertyChanged("IsPlaying");
+                                            RefreshCommands();
+                                        };
 
-            NextTrackCommand = new AutomaticCommand(ExecuteNextTrack, CanExecuteNextTrack);
-            TogglePlayPauseCommand = new AutomaticCommand(ExecuteTogglePlayPause, CanExecuteTogglePlayPause);
+            NextTrackCommand = new ManualCommand(ExecuteNextTrack, CanExecuteNextTrack);
+            TogglePlayPauseCommand = new ManualCommand(ExecuteTogglePlayPause, CanExecuteTogglePlayPause);
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public AutomaticCommand TogglePlayPauseCommand
+        public ManualCommand TogglePlayPauseCommand
         {
             get;
             private set;
         }
 
-        public AutomaticCommand NextTrackCommand
+        public ManualCommand NextTrackCommand
         {
             get;
             private set;
@@ -144,16 +150,32 @@ namespace Torshify.Radio.Core.Views.Controls
         private void RadioOnCurrentTrackStreamChanged(object sender, EventArgs eventArgs)
         {
             RaisePropertyChanged("CurrentTrackStream");
+            RefreshCommands();
         }
 
         private void RadioOnUpcomingTrackChanged(object sender, EventArgs eventArgs)
         {
             RaisePropertyChanged("HasUpcomingTrack", "UpcomingTrack");
+            RefreshCommands();
         }
 
         private void RadioOnCurrentTrackChanged(object sender, EventArgs eventArgs)
         {
             RaisePropertyChanged("CurrentTrack", "HasTracks", "Volume");
+            RefreshCommands();
+        }
+
+        private void RefreshCommands()
+        {
+            if (_dispatcher.CheckAccess())
+            {
+                TogglePlayPauseCommand.NotifyCanExecuteChanged();
+                NextTrackCommand.NotifyCanExecuteChanged();
+            }
+            else
+            {
+                _dispatcher.BeginInvoke(new Action(RefreshCommands));
+            }
         }
 
         #endregion Methods

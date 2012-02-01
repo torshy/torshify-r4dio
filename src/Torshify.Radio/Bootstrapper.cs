@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
+
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -20,6 +23,16 @@ namespace Torshify.Radio
 {
     public class Bootstrapper : MefBootstrapper
     {
+        #region Properties
+
+        [Export]
+        public Dispatcher Dispatcher
+        {
+            get { return Application.Current.Dispatcher; }
+        }
+
+        #endregion Properties
+
         #region Methods
 
         protected override void ConfigureAggregateCatalog()
@@ -104,11 +117,11 @@ namespace Torshify.Radio
                     Level = Level.Info
                 });
             consoleAppender.Layout = new PatternLayout("%date{dd MM HH:mm} %-5level - %message%newline");
-#if DEBUG
+            #if DEBUG
             consoleAppender.Threshold = Level.All;
-#else
+            #else
             consoleAppender.Threshold = Level.Info;
-#endif
+            #endif
             consoleAppender.ActivateOptions();
 
             Logger root;

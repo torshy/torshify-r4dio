@@ -16,7 +16,9 @@
     <DockPanel>
         <Grid
             DockPanel.Dock="Left"
-            Margin="4">
+            Margin="4"
+            Height="128"
+            Width="128">
             <Image
                 RenderOptions.BitmapScalingMode="HighQuality"
                 Source="{Binding CurrentTrack.AlbumArt, FallbackValue='pack://siteoforigin:,,,/Resources/Icons/questionmark.png'}" />

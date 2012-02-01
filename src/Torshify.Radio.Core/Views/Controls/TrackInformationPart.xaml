@@ -11,13 +11,17 @@
     <DockPanel>
         <Grid
             DockPanel.Dock="Left"
-            Margin="4">
+            Margin="4"
+            Height="60"
+            Width="60">
             <Image
                 RenderOptions.BitmapScalingMode="HighQuality"
-                Source="{Binding CurrentTrack.AlbumArt, FallbackValue='pack://siteoforigin:,,,/Resources/Icons/questionmark.png'}" />
+                Source="{Binding CurrentTrack.AlbumArt, FallbackValue='pack://siteoforigin:,,,/Resources/Icons/questionmark.png'}" 
+                Stretch="Fill" />
             <Image
                 RenderOptions.BitmapScalingMode="HighQuality"
-                Source="pack://siteoforigin:,,,/Resources/jewel.png" />
+                Source="pack://siteoforigin:,,,/Resources/jewel.png"
+                Stretch="Uniform" />
         </Grid>
         <DockPanel>
             <StackPanel>

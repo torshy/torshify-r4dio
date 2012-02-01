@@ -123,6 +123,9 @@
   <data name="Number_Played" xml:space="preserve">
     <value>Number of plays</value>
   </data>
+  <data name="Queue" xml:space="preserve">
+    <value>Queue</value>
+  </data>
   <data name="TimeSincePublished" xml:space="preserve">
     <value>Published</value>
   </data>

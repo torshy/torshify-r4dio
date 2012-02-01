@@ -31,7 +31,7 @@
                     TargetType="ToolTip">
                     <Border
                         Name="Border"
-                        Padding="0,0,0,20"
+                        Padding="0,0,0,0"
                         Width="{TemplateBinding Width}"
                         Height="{TemplateBinding Height}">
                         <Border
@@ -51,14 +51,31 @@
                                     StrokeThickness="2"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Bottom"
-                                    Margin="0,0,0,-21" />
+                                    Margin="0,0,0,-21"
+                                    Visibility="Collapsed" />
                             </Grid>
                         </Border>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger
                             Property="Placement"
+                            Value="Top">
+                            <Setter
+                                Property="Visibility"
+                                Value="Visible"
+                                TargetName="ArrowPath" />
+                            <Setter
+                                Property="Padding"
+                                Value="0,0,0,20"
+                                TargetName="Border" />
+                        </Trigger>
+                        <Trigger
+                            Property="Placement"
                             Value="Bottom">
+                            <Setter
+                                Property="Visibility"
+                                Value="Visible"
+                                TargetName="ArrowPath" />
                             <Setter
                                 Property="RenderTransformOrigin"
                                 Value="0.5,0"
@@ -83,6 +100,10 @@
                         <Trigger
                             Property="Placement"
                             Value="Right">
+                            <Setter
+                                Property="Visibility"
+                                Value="Visible"
+                                TargetName="ArrowPath" />
                             <Setter
                                 Property="RenderTransformOrigin"
                                 Value="0,0"
@@ -115,6 +136,10 @@
                         <Trigger
                             Property="Placement"
                             Value="Left">
+                            <Setter
+                                Property="Visibility"
+                                Value="Visible"
+                                TargetName="ArrowPath" />
                             <Setter
                                 Property="RenderTransformOrigin"
                                 Value="0.5,0.5"
