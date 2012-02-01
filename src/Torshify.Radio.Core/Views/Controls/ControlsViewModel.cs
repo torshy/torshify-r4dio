@@ -26,6 +26,7 @@ namespace Torshify.Radio.Core.Views.Controls
             _radio = radio;
             _radio.CurrentTrackChanged += RadioOnCurrentTrackChanged;
             _radio.UpcomingTrackChanged += RadioOnUpcomingTrackChanged;
+            _radio.CurrentTrackStreamChanged += RadioOnCurrentTrackStreamChanged;
             _player = player;
             _player.IsPlayingChanged += (sender, args) => RaisePropertyChanged("IsPlaying");
 
@@ -49,11 +50,35 @@ namespace Torshify.Radio.Core.Views.Controls
             private set;
         }
 
+        public ITrackStream CurrentTrackStream
+        {
+            get
+            {
+                return _radio.CurrentTrackStream;
+            }
+        }
+
         public Track CurrentTrack
         {
             get
             {
                 return _radio.CurrentTrack;
+            }
+        }
+
+        public Track UpcomingTrack
+        {
+            get
+            {
+                return _radio.UpcomingTrack;
+            }
+        }
+
+        public bool HasUpcomingTrack
+        {
+            get
+            {
+                return _radio.UpcomingTrack != null;
             }
         }
 
@@ -116,8 +141,14 @@ namespace Torshify.Radio.Core.Views.Controls
             _radio.NextTrack();
         }
 
+        private void RadioOnCurrentTrackStreamChanged(object sender, EventArgs eventArgs)
+        {
+            RaisePropertyChanged("CurrentTrackStream");
+        }
+
         private void RadioOnUpcomingTrackChanged(object sender, EventArgs eventArgs)
         {
+            RaisePropertyChanged("HasUpcomingTrack", "UpcomingTrack");
         }
 
         private void RadioOnCurrentTrackChanged(object sender, EventArgs eventArgs)

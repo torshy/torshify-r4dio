@@ -76,6 +76,8 @@
         x:Key="{x:Static Framework:AppTheme.FontFamilySemiLight}">Segoe UI SemiLight</FontFamily>
     <FontFamily
         x:Key="{x:Static Framework:AppTheme.FontFamilySemiBold}">Segoe UI Semibold</FontFamily>
+    <FontFamily
+        x:Key="{x:Static Framework:AppTheme.FontFamilyBold}">Segoe UI Bold</FontFamily>
 
     <!-- Font sizes -->
     <System:Double

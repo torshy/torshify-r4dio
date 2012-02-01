@@ -69,7 +69,8 @@ namespace Torshify.Radio.EightTracks
 
             TileService.Add<MainStationView>(new TileData
                                                 {
-                                                    Title = "8tracks"
+                                                    Title = "8tracks",
+                                                    BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_9999_8tracks.png")
                                                 });
 
             SearchBarService.Add<MainStationView>(new SearchBarData

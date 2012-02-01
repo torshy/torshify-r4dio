@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 using EightTracks;
 
+using Microsoft.Practices.Prism.ViewModel;
+
 using Torshify.Radio.EightTracks.Converters;
 using Torshify.Radio.Framework;
 
@@ -11,7 +13,7 @@ using Track = Torshify.Radio.Framework.Track;
 
 namespace Torshify.Radio.EightTracks
 {
-    public class EightTracksMixTrackStream : ITrackStream
+    public class EightTracksMixTrackStream : NotificationObject, ITrackStream
     {
         #region Fields
 
@@ -19,6 +21,7 @@ namespace Torshify.Radio.EightTracks
 
         private Mix _currentMix;
         private PlayResponse _currentPlayResponse;
+        private string _description;
         private PlayTokenResponse _playToken;
 
         #endregion Fields
@@ -29,6 +32,7 @@ namespace Torshify.Radio.EightTracks
         {
             _startMix = startMix;
             _currentMix = startMix;
+            Description = _currentMix.Name;
         }
 
         #endregion Constructors
@@ -51,6 +55,7 @@ namespace Torshify.Radio.EightTracks
                     new EightTracksTrack
                     {
                         AlbumArt = (string)imageUrlConverter.Convert(_currentMix, null, null, null),
+                        Album = _currentMix.Name,
                         Artist = _currentPlayResponse.Set.Track.Performer,
                         Name = _currentPlayResponse.Set.Track.Name,
                         TrackId = _currentPlayResponse.Set.Track.ID,
@@ -67,9 +72,22 @@ namespace Torshify.Radio.EightTracks
             get { return false; }
         }
 
+        public string Description
+        {
+            get { return _description; }
+            set
+            {
+                if (_description != value)
+                {
+                    _description = value;
+                    RaisePropertyChanged("Description");
+                }
+            }
+        }
+
         public bool MoveToNextSimilarMixAtEnd
         {
-            get; 
+            get;
             set;
         }
 
@@ -117,6 +135,8 @@ namespace Torshify.Radio.EightTracks
 
                             if (_currentMix != null)
                             {
+                                Description = _currentMix.Name;
+
                                 _currentPlayResponse = session.Query<Play>().Execute(_playToken.PlayToken,
                                                                                      _currentMix.ID);
                             }

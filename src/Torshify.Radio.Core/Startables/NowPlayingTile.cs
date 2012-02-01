@@ -91,6 +91,9 @@ namespace Torshify.Radio.Core.Startables
             else
             {
                 _tileData.Title = "Now playing";
+                _tileData.Effect = null;
+                _tileData.Content = null;
+                _tileData.BackgroundImage = null;
             }
         }
 

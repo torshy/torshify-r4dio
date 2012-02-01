@@ -29,6 +29,7 @@ namespace Torshify.Radio.Framework
         public const string FontFamilyLight = "FontFamilyLight";
         public const string FontFamilySemiLight = "FontFamilySemiLight";
         public const string FontFamilySemiBold = "FontFamilySemiBold";
+        public const string FontFamilyBold = "FontFamilyBold";
 
         // Font sizes
         public const string FontSizeSmall = "FontSizeSmall";

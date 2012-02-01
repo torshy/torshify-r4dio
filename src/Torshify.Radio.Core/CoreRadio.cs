@@ -179,6 +179,9 @@ namespace Torshify.Radio.Core
                                       _trackQueue = new ConcurrentQueue<Track>();
                                       CurrentTrackStream = trackStream;
                                       GetNextBatch();
+
+                                      _corePlayer.Stop();
+
                                       MoveToNextTrack();
                                       PeekToNextTrack();
                                       _loadingIndicatorService.Pop();
@@ -202,6 +205,7 @@ namespace Torshify.Radio.Core
             Task.Factory.StartNew(() =>
                                   {
                                       _loadingIndicatorService.Push();
+                                      _corePlayer.Stop();
 
                                       if (_trackQueue.IsEmpty)
                                       {

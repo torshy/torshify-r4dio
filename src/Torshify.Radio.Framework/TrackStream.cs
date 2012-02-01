@@ -1,14 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using Microsoft.Practices.Prism.ViewModel;
+
 namespace Torshify.Radio.Framework
 {
-    public class TrackStream : ITrackStream
+    public class TrackStream : NotificationObject, ITrackStream
     {
         #region Fields
 
-        private List<IEnumerable<Track>> _tracks;
         private readonly IEnumerator _enumerator;
+
+        private string _description;
+        private List<IEnumerable<Track>> _tracks;
 
         #endregion Fields
 
@@ -33,8 +37,21 @@ namespace Torshify.Radio.Framework
 
         public bool SupportsTrackSkipping
         {
-            get; 
+            get;
             set;
+        }
+
+        public string Description
+        {
+            get { return _description; }
+            set
+            {
+                if (_description != value)
+                {
+                    _description = value;
+                    RaisePropertyChanged("Description");
+                }
+            }
         }
 
         object IEnumerator.Current
@@ -65,9 +82,13 @@ namespace Torshify.Radio.Framework
 
     public static class TrackStreamExtensions
     {
-        public static ITrackStream ToTrackStream(this IEnumerable<Track> tracks)
+        #region Methods
+
+        public static ITrackStream ToTrackStream(this IEnumerable<Track> tracks, string description = null)
         {
-            return new TrackStream(tracks);
+            return new TrackStream(tracks) { Description = description };
         }
+
+        #endregion Methods
     }
 }

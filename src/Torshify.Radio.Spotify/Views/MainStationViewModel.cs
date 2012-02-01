@@ -44,7 +44,7 @@ namespace Torshify.Radio.Spotify.Views
                                       {
                                           Radio.Play(
                                               Radio.GetTracksByName("NOFX").OrderBy(t => t.TotalDuration).Take(2).
-                                                  ToTrackStream());
+                                                  ToTrackStream("My custom track stream"));
                                       }
                                   });
         }

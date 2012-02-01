@@ -128,6 +128,9 @@
       <DependentUpon>ControlsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Controls\ControlsViewModel.cs" />
+    <Compile Include="Views\Controls\ExtendedTrackInformationPart.xaml.cs">
+      <DependentUpon>ExtendedTrackInformationPart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\TrackInformationPart.xaml.cs">
       <DependentUpon>TrackInformationPart.xaml</DependentUpon>
     </Compile>
@@ -184,6 +187,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Controls\ControlsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Controls\ExtendedTrackInformationPart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

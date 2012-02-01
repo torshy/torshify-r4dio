@@ -15,16 +15,19 @@
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
-    <DockPanel>
+    <DockPanel
+        Visibility="{Binding HasTracks, Converter={StaticResource BooleanToVisibilityConverter}}">
         <local:ControlsPart
             DockPanel.Dock="Right"
-            Margin="0,0,12,0"
-            Visibility="{Binding HasTracks, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            Margin="0,0,12,0" />
         <local:TrackInformationPart
-            ToolTipService.Placement="Top">
+            ToolTipService.Placement="Top"
+            DockPanel.Dock="Left">
             <local:TrackInformationPart.ToolTip>
-                <local:TrackInformationPart />
+                <local:ExtendedTrackInformationPart
+                    Height="128" />
             </local:TrackInformationPart.ToolTip>
         </local:TrackInformationPart>
+        <DockPanel />
     </DockPanel>
 </UserControl>

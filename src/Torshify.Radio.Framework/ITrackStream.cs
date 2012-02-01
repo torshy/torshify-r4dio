@@ -4,6 +4,14 @@ namespace Torshify.Radio.Framework
 {
     public interface ITrackStream : IEnumerator<IEnumerable<Track>>
     {
-        bool SupportsTrackSkipping { get; }
+        bool SupportsTrackSkipping
+        {
+            get;
+        }
+
+        string Description
+        {
+            get;
+        }
     }
 }
