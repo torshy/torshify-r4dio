@@ -75,11 +75,14 @@
                                     <Border
                                         Effect="{Binding Data.Effect}"
                                         Background="Transparent">
-                                        <Image
-                                            RenderOptions.BitmapScalingMode="HighQuality"
-                                            Stretch="UniformToFill"
-                                            Source="{Binding Data.BackgroundImage}">
-                                        </Image>
+                                        <Grid>
+                                            <Image
+                                                RenderOptions.BitmapScalingMode="LowQuality"
+                                                Stretch="UniformToFill"
+                                                Source="{Binding Data.BackgroundImage}" />
+                                            <ContentPresenter
+                                                Content="{Binding Data.Content}" />
+                                        </Grid>
                                     </Border>
                                     <TextBlock
                                         Text="{Binding Data.Title}"

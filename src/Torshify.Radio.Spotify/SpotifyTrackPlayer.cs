@@ -11,7 +11,7 @@ using Torshify.Radio.Spotify.TrackPlayerService;
 
 namespace Torshify.Radio.Spotify
 {
-    [TrackPlayerMetadata(Name = "Spotify", IconUri = "pack://application:,,,/Torshify.Radio.Spotify;component;Resources/Spotify_Logo.png")]
+    //[TrackPlayerMetadata(Name = "Spotify", IconUri = "pack://application:,,,/Torshify.Radio.Spotify;component;Resources/Spotify_Logo.png")]
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class SpotifyRadioTrackPlayer : ITrackPlayer, PlayerControlServiceCallback, LoginServiceCallback
     {
@@ -334,6 +334,7 @@ namespace Torshify.Radio.Spotify
 
         public void Dispose()
         {
+
         }
 
         private void EnsureControlServiceIsAlive()

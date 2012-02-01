@@ -20,6 +20,11 @@
             DockPanel.Dock="Right"
             Margin="0,0,12,0"
             Visibility="{Binding HasTracks, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        <local:TrackInformationPart />
+        <local:TrackInformationPart
+            ToolTipService.Placement="Top">
+            <local:TrackInformationPart.ToolTip>
+                <local:TrackInformationPart />
+            </local:TrackInformationPart.ToolTip>
+        </local:TrackInformationPart>
     </DockPanel>
 </UserControl>

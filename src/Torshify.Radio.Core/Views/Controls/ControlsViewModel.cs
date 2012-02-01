@@ -49,6 +49,14 @@ namespace Torshify.Radio.Core.Views.Controls
             private set;
         }
 
+        public Track CurrentTrack
+        {
+            get
+            {
+                return _radio.CurrentTrack;
+            }
+        }
+
         public bool HasTracks
         {
             get
@@ -114,7 +122,7 @@ namespace Torshify.Radio.Core.Views.Controls
 
         private void RadioOnCurrentTrackChanged(object sender, EventArgs eventArgs)
         {
-            RaisePropertyChanged("HasTracks", "Volume");
+            RaisePropertyChanged("CurrentTrack", "HasTracks", "Volume");
         }
 
         #endregion Methods

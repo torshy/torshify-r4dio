@@ -13,20 +13,12 @@ namespace Torshify.Radio.Framework
         private object _backContent;
         private Uri _backgroundImage;
         private string _backTitle;
+        private object _content;
         private Effect _effect;
         private bool _isLarge;
         private string _title;
 
         #endregion Fields
-
-        #region Constructors
-
-        public TileData()
-        {
-            BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0019_profiles.png");
-        }
-
-        #endregion Constructors
 
         #region Properties
 
@@ -104,6 +96,19 @@ namespace Torshify.Radio.Framework
                 {
                     _isLarge = value;
                     RaisePropertyChanged("IsLarge");
+                }
+            }
+        }
+
+        public object Content
+        {
+            get { return _content; }
+            set
+            {
+                if (_content != value)
+                {
+                    _content = value;
+                    RaisePropertyChanged("Content");
                 }
             }
         }

@@ -2,12 +2,35 @@
     x:Class="Torshify.Radio.Core.Views.Controls.TrackInformationPart"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="300">
-    <Grid>
-
-    </Grid>
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework">
+    <UserControl.Resources>
+        <Converters:StringToUpperConverter
+            x:Key="StringToUpperConverter" />
+    </UserControl.Resources>
+    <DockPanel>
+        <Grid
+            DockPanel.Dock="Left"
+            Margin="4">
+            <Image
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="{Binding CurrentTrack.AlbumArt, FallbackValue='pack://siteoforigin:,,,/Resources/Icons/questionmark.png'}" />
+            <Image
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="pack://siteoforigin:,,,/Resources/jewel.png" />
+        </Grid>
+        <DockPanel>
+            <StackPanel>
+                <TextBlock
+                    Text="{Binding CurrentTrack.Artist, Converter={StaticResource StringToUpperConverter}}"
+                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}" />
+                <TextBlock
+                    Margin="0,-2,0,0"
+                    Text="{Binding CurrentTrack.Album, Converter={StaticResource StringToUpperConverter}}"
+                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}" />
+                <TextBlock
+                    Text="{Binding CurrentTrack.Name}" />
+            </StackPanel>
+        </DockPanel>
+    </DockPanel>
 </UserControl>
