@@ -13,7 +13,7 @@ namespace Torshify.Radio.Core.Views.Controls
     {
         #region Fields
 
-        private readonly CorePlayer _player;
+        private readonly ITrackPlayer _player;
         private readonly Dispatcher _dispatcher;
         private readonly IRadio _radio;
 
@@ -22,7 +22,7 @@ namespace Torshify.Radio.Core.Views.Controls
         #region Constructors
 
         [ImportingConstructor]
-        public ControlsViewModel(IRadio radio, CorePlayer player, Dispatcher dispatcher)
+        public ControlsViewModel(IRadio radio, [Import("CorePlayer")] ITrackPlayer player, Dispatcher dispatcher)
         {
             _radio = radio;
             _radio.CurrentTrackChanged += RadioOnCurrentTrackChanged;

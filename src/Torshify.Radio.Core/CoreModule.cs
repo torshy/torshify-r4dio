@@ -47,10 +47,17 @@ namespace Torshify.Radio.Core
             set;
         }
 
-        [Import]
-        public CorePlayer CorePlayer
+        [Import("CorePlayer")]
+        public ITrackPlayer Player
         {
             get;
+            set;
+        }
+
+        [Import]
+        public IRadio Radio
+        {
+            get; 
             set;
         }
 
@@ -96,11 +103,11 @@ namespace Torshify.Radio.Core
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
         }
 
-        private void CurrentDomainOnProcessExit(object sender, EventArgs eventArgs)
+        private void CurrentDomainOnProcessExit(object sender, EventArgs e)
         {
-            if (CorePlayer != null)
+            if (Player != null)
             {
-                CorePlayer.Dispose();
+                Player.Dispose();
             }
         }
 

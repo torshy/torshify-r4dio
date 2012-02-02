@@ -7,7 +7,7 @@ using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core
 {
-    [Export(typeof(CorePlayer))]
+    [Export("CorePlayer", typeof(ITrackPlayer))]
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class CorePlayer : ITrackPlayer, IPartImportsSatisfiedNotification
     {

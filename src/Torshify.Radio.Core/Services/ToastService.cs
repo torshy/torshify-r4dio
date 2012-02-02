@@ -22,7 +22,7 @@ namespace Torshify.Radio.Core.Services
 
         public void Show(string message, double displayTimeMs = 1000)
         {
-            if (!Application.Current.Dispatcher.CheckAccess())
+            if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
             {
                 Application.Current.Dispatcher.BeginInvoke(new Action<string, double>(Show), message, displayTimeMs);
                 return;

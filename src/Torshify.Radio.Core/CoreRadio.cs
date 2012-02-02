@@ -18,7 +18,7 @@ namespace Torshify.Radio.Core
         private readonly ILoadingIndicatorService _loadingIndicatorService;
         private readonly ConcurrentQueue<ITrackStream> _trackStreamQueue;
 
-        private CorePlayer _corePlayer;
+        private ITrackPlayer _corePlayer;
         private Track _currentTrack;
         private ITrackStream _currentTrackStream;
         private ConcurrentQueue<Track> _trackQueue;
@@ -29,7 +29,7 @@ namespace Torshify.Radio.Core
         #region Constructors
 
         [ImportingConstructor]
-        public CoreRadio(CorePlayer corePlayer, ILoadingIndicatorService loadingIndicatorService)
+        public CoreRadio([Import("CorePlayer")]ITrackPlayer corePlayer, ILoadingIndicatorService loadingIndicatorService)
         {
             _trackStreamQueue = new ConcurrentQueue<ITrackStream>();
             _trackQueue = new ConcurrentQueue<Track>();
