@@ -21,6 +21,7 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
 
         protected ObservableCollection<Mix> _mixes;
         protected ObservableCollection<string> _tagFilterList;
+        protected ObservableCollection<string> _tags;
 
         private Timer _deferredSearchTimer;
         private TaskScheduler _ui;
@@ -36,6 +37,7 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             _ui = TaskScheduler.FromCurrentSynchronizationContext();
             _mixes = new ObservableCollection<Mix>();
             _tagFilterList = new ObservableCollection<string>();
+            _tags = new ObservableCollection<string>();
             _deferredSearchTimer = new Timer(750);
             _deferredSearchTimer.Elapsed += OnDeferredSearchTimerTick;
             ToggleTagFilterCommand = new StaticCommand<string>(ExecuteToggleTagFilter);
@@ -110,6 +112,11 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             get { return _mixes; }
         }
 
+        public IEnumerable<string> Tags
+        {
+            get { return _tags; }
+        }
+
         public IEnumerable<string> TagFilterList
         {
             get { return _tagFilterList; }
@@ -156,6 +163,20 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
 
                 if (t.Result != null)
                 {
+                    _tags.Clear();
+
+                    foreach (var mix in t.Result)
+                    {
+                        foreach (var tag in mix.TagListCacheAsArray)
+                        {
+                            var value = tag.Trim();
+                            if (!_tags.Contains(value) && !_tagFilterList.Contains(value))
+                            {
+                                _tags.Add(value);
+                            }
+                        }
+                    }
+
                     if (!t.Result.Any() && SortType != global::EightTracks.Mixes.Sort.Random)
                     {
                         ToastService.Show("No results found");
@@ -169,6 +190,7 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                         _mixes.Add(mix);
                     }
                 }
+                else
                 {
                     // TODO : Notify user
                 }
@@ -216,6 +238,11 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             else
             {
                 _tagFilterList.Add(tagFilter);
+            }
+
+            if (_tags.Contains(tagFilter))
+            {
+                _tags.Remove(tagFilter);
             }
 
             _deferredSearchTimer.Stop();

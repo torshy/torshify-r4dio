@@ -21,30 +21,37 @@
             Width="128">
             <Image
                 RenderOptions.BitmapScalingMode="HighQuality"
+                Stretch="UniformToFill"
                 Source="{Binding CurrentTrack.AlbumArt, FallbackValue='pack://siteoforigin:,,,/Resources/Icons/questionmark.png'}" />
             <Image
                 RenderOptions.BitmapScalingMode="HighQuality"
+                Stretch="UniformToFill"
                 Source="pack://siteoforigin:,,,/Resources/jewel.png" />
         </Grid>
-        <DockPanel>
+        <DockPanel
+            MaxWidth="350">
             <StackPanel
                 DockPanel.Dock="Top">
                 <TextBlock
                     Text="{Binding CurrentTrack.Artist, Converter={StaticResource StringToUpperConverter}}"
+                    TextTrimming="CharacterEllipsis"
                     FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}"
                     FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}" />
                 <TextBlock
                     Margin="0,-4,0,0"
                     Text="{Binding CurrentTrack.Album, Converter={StaticResource StringToUpperConverter}}"
+                    TextTrimming="CharacterEllipsis"
                     FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
                     FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}" />
                 <TextBlock
                     Text="{Binding CurrentTrack.Name}"
+                    TextTrimming="CharacterEllipsis"
                     FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyNormal}}"
                     FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}" />
             </StackPanel>
             <TextBlock
                 Text="{Binding CurrentTrackStream.Description}"
+                TextTrimming="CharacterEllipsis"
                 VerticalAlignment="Bottom"
                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyNormal}}" />
         </DockPanel>

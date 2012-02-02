@@ -1,11 +1,272 @@
-﻿<UserControl x:Class="Torshify.Radio.EightTracks.Views.Tabs.TagsTabView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+﻿<UserControl
+    x:Class="Torshify.Radio.EightTracks.Views.Tabs.TagsTabView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
+    Engine:LocalizeDictionary.DesignCulture="en-US"
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Converters="clr-namespace:Torshify.Radio.EightTracks.Converters"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:MixToImageConverter
+            x:Key="MixToImageConverter" />
+        <Converters:DateDifferenceConverter
+            x:Key="DateDifferenceConverter" />
+        <Converters:ListContainsItemToBoolConverter
+            x:Key="ListContainsItemToBoolConverter" />
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
+        <Geometry
+            x:Key="RightArrow">M0,0 L1,0.5 0,1Z</Geometry>
+        <Geometry
+            x:Key="HeartGeometry">M0.049953445,0.16803508 C0.04578678,-0.12358551 0.30811449,-0.24162239 0.5,0 0.66666667,-0.24802004 0.97286929,-0.14054061 0.97081673,0.15110447 0.96036811,0.49482904 0.75783142,0.75800598 0.5,1 0.23674121,0.73954824 0.062453446,0.5273969 0.049953445,0.16803508 z</Geometry>
+    </UserControl.Resources>
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition
+                Width="0.4*" />
+        </Grid.ColumnDefinitions>
+        <ScrollViewer>
+            <StackPanel>
+                <ItemsControl
+                    Name="MixList"
+                    ItemsSource="{Binding Mixes}"
+                    VirtualizingStackPanel.IsVirtualizing="True">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel
+                                Margin="12">
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right">
+                                    <Button
+                                        Command="{Binding DataContext.QueueMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                        CommandParameter="{Binding}"
+                                        BorderThickness="0"
+                                        Padding="0"
+                                        ToolTip="{lex:LocText Key=Queue, Dict=Strings, Assembly=Torshify.Radio.EightTracks}">
+                                        <Image
+                                            Height="20"
+                                            Source="pack://siteoforigin:,,,/Resources/Icons/download.png" />
+                                    </Button>
+                                    <Path
+                                        Data="{StaticResource RightArrow}"
+                                        Width="10"
+                                        Height="8"
+                                        Stretch="Fill"
+                                        Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                                        Margin="8,0,4,0"
+                                        ToolTip="{lex:LocText Key=Number_Played, Dict=Strings, Assembly=Torshify.Radio.EightTracks}" />
+                                    <TextBlock
+                                        Text="{Binding PlaysCount}" />
+                                    <Path
+                                        Data="{StaticResource HeartGeometry}"
+                                        Width="10"
+                                        Height="8"
+                                        Stretch="Fill"
+                                        Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                                        Margin="8,0,4,0"
+                                        ToolTip="{lex:LocText Key=Number_Liked, Dict=Strings, Assembly=Torshify.Radio.EightTracks}" />
+                                    <TextBlock
+                                        Text="{Binding LikesCount}" />
+                                    <TextBlock
+                                        Margin="8,0,0,0"
+                                        Text="{Binding FirstPublishedAt, Converter={StaticResource DateDifferenceConverter}}"
+                                        ToolTip="{lex:LocText Key=TimeSincePublished, Dict=Strings, Assembly=Torshify.Radio.EightTracks}" />
+                                </StackPanel>
+                                <DockPanel>
+                                    <Button
+                                        Name="playButton"
+                                        DockPanel.Dock="Left"
+                                        Command="{Binding DataContext.PlayMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                        CommandParameter="{Binding}"
+                                        Height="128"
+                                        Width="128"
+                                        BorderThickness="1"
+                                        Padding="0"
+                                        VerticalAlignment="Top"
+                                        Margin="0,4,0,0">
+                                        <Grid>
+                                            <Image
+                                                Name="playImageBackground"
+                                                IsHitTestVisible="False"
+                                                Stretch="UniformToFill"
+                                                Source="{Binding Converter={StaticResource MixToImageConverter}}" />
+                                            <Image
+                                                IsHitTestVisible="False"
+                                                Name="playIcon"
+                                                Stretch="None"
+                                                Source="pack://siteoforigin:,,,/Resources/Icons/play.png"
+                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        </Grid>
+                                    </Button>
+                                    <StackPanel
+                                        Margin="4">
+                                        <TextBlock
+                                            Text="{Binding Name}"
+                                            TextTrimming="CharacterEllipsis"
+                                            FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                                            FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
+                                        <DockPanel>
+                                            <ItemsControl
+                                                DockPanel.Dock="Bottom"
+                                                ItemsSource="{Binding TagListCacheAsArray}"
+                                                Margin="0,8,0,0">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <ToggleButton
+                                                            Margin="0,0,2,2"
+                                                            Content="{Binding}"
+                                                            Command="{Binding DataContext.ToggleTagFilterCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, AncestorLevel=2}}"
+                                                            CommandParameter="{Binding}">
+                                                            <ToggleButton.IsChecked>
+                                                                <MultiBinding
+                                                                    Mode="OneWay"
+                                                                    Converter="{StaticResource ListContainsItemToBoolConverter}">
+                                                                    <Binding
+                                                                        Path="DataContext.TagStringFilterList"
+                                                                        RelativeSource="{RelativeSource AncestorType={x:Type ItemsControl}, AncestorLevel=2}"
+                                                                        Mode="OneWay" />
+                                                                    <Binding
+                                                                        Mode="OneWay" />
+                                                                </MultiBinding>
+                                                            </ToggleButton.IsChecked>
+                                                        </ToggleButton>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                            <TextBlock
+                                                Margin="0,4,0,0"
+                                                Text="{Binding Description}"
+                                                TextWrapping="Wrap"
+                                                TextTrimming="CharacterEllipsis" />
+                                        </DockPanel>
+                                    </StackPanel>
+                                </DockPanel>
+                            </StackPanel>
+                            <DataTemplate.Triggers>
+                                <Trigger
+                                    Property="IsMouseOver"
+                                    SourceName="playButton"
+                                    Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="playImageBackground"
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    To="0.3"
+                                                    From="1.0"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="playImageBackground"
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    To="1.0"
+                                                    From="0.3"
+                                                    Duration="0:0:0.2" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <StackPanel
+                    HorizontalAlignment="Right"
+                    Visibility="{Binding HasItems, ElementName=MixList, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Orientation="Horizontal"
+                    Margin="0,0,4,0">
+                    <Button
+                        Content="Prev page"
+                        Command="{Binding GoToPreviousPageCommand}" />
+                    <Button
+                        Margin="4,0,0,0"
+                        Content="Next page"
+                        Command="{Binding GoToNextPageCommand}" />
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <ScrollViewer
+            Grid.Column="1"
+            HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+                <StackPanel
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal"
+                    Height="24"
+                    Margin="0,0,0,4">
+                    <Button
+                        Margin="2,0,0,0"
+                        Padding="0"
+                        Command="{Binding GoToPreviousTagPageCommand}">
+                        <Image
+                            Source="pack://siteoforigin:,,,/Resources/Icons/back.png" />
+                    </Button>
+                    <Button
+                        Margin="2,0,0,0"
+                        Padding="0"
+                        Command="{Binding GoToNextTagPageCommand}">
+                        <Image
+                            Source="pack://siteoforigin:,,,/Resources/Icons/next.png" />
+                    </Button>
+                </StackPanel>
+                <WrapPanel>
+                    <ItemsControl
+                        ItemsSource="{Binding TagFilterList}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ToggleButton
+                                    Margin="2"
+                                    Content="{Binding Name}"
+                                    Command="{Binding DataContext.ToggleTagCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                    CommandParameter="{Binding}"
+                                    IsChecked="True" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <ItemsControl
+                        ItemsSource="{Binding Tags}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <ToggleButton
+                                    Margin="2"
+                                    Content="{Binding Name}"
+                                    Command="{Binding DataContext.ToggleTagCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                    CommandParameter="{Binding}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </WrapPanel>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

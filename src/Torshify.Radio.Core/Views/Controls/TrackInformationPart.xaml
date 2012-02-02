@@ -9,31 +9,31 @@
             x:Key="StringToUpperConverter" />
     </UserControl.Resources>
     <DockPanel>
-        <Grid
+        <Border
             DockPanel.Dock="Left"
             Margin="4"
-            Height="60"
-            Width="60">
+            Width="60"
+            BorderThickness="1"
+            BorderBrush="{DynamicResource {x:Static Framework:AppTheme.ContrastBackgroundKey}}">
             <Image
                 RenderOptions.BitmapScalingMode="HighQuality"
                 Source="{Binding CurrentTrack.AlbumArt, FallbackValue='pack://siteoforigin:,,,/Resources/Icons/questionmark.png'}" 
-                Stretch="Fill" />
-            <Image
-                RenderOptions.BitmapScalingMode="HighQuality"
-                Source="pack://siteoforigin:,,,/Resources/jewel.png"
-                Stretch="Uniform" />
-        </Grid>
+                Stretch="UniformToFill" />
+        </Border>
         <DockPanel>
             <StackPanel>
                 <TextBlock
                     Text="{Binding CurrentTrack.Artist, Converter={StaticResource StringToUpperConverter}}"
+                    TextTrimming="CharacterEllipsis"
                     FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}" />
                 <TextBlock
                     Margin="0,-4,0,0"
                     Text="{Binding CurrentTrack.Album, Converter={StaticResource StringToUpperConverter}}"
+                    TextTrimming="CharacterEllipsis"
                     FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}" />
                 <TextBlock
                     Text="{Binding CurrentTrack.Name}"
+                    TextTrimming="CharacterEllipsis"
                     FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyNormal}}"/>
             </StackPanel>
         </DockPanel>

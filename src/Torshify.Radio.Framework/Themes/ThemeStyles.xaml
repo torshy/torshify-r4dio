@@ -25,6 +25,9 @@
             Property="HasDropShadow"
             Value="True" />
         <Setter
+            Property="Foreground"
+            Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+        <Setter
             Property="Template">
             <Setter.Value>
                 <ControlTemplate

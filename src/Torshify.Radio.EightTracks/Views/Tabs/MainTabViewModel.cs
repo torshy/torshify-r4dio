@@ -80,6 +80,13 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
 
         private void SearchForMixes(string text, string type)
         {
+            _tagFilterList.Clear();
+
+            if (type == "Tag")
+            {
+                _tagFilterList.Add(text);
+            }
+
             var ui = TaskScheduler.FromCurrentSynchronizationContext();
             Task.Factory.StartNew(() =>
             {
@@ -102,6 +109,22 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             })
             .ContinueWith(t =>
             {
+                _tags.Clear();
+                
+
+
+                foreach (var mix in t.Result)
+                {
+                    foreach (var tag in mix.TagListCacheAsArray)
+                    {
+                        var value = tag.Trim();
+                        if (!_tags.Contains(value) && !_tagFilterList.Contains(value))
+                        {
+                            _tags.Add(value);
+                        }
+                    }
+                }
+
                 _mixes.Clear();
                 foreach (var mix in t.Result)
                 {
@@ -133,6 +156,20 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                 }
                 else
                 {
+                    _tags.Clear();
+
+                    foreach (var mix in t.Result)
+                    {
+                        foreach (var tag in mix.TagListCacheAsArray)
+                        {
+                            var value = tag.Trim();
+                            if (!_tags.Contains(value) && !_tagFilterList.Contains(value))
+                            {
+                                _tags.Add(value);
+                            }
+                        }
+                    }
+
                     if (!t.Result.Any())
                     {
                         ToastService.Show("No results found");
