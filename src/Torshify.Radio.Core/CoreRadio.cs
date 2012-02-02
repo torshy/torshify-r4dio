@@ -281,13 +281,18 @@ namespace Torshify.Radio.Core
 
         private void OnTrackComplete(object sender, TrackEventArgs e)
         {
-            if (_trackQueue.IsEmpty)
-            {
-                GetNextBatch();
-            }
+            Task.Factory.StartNew(() =>
+                                  {
+                                      _loadingIndicatorService.Push();
+                                      if (_trackQueue.IsEmpty)
+                                      {
+                                          GetNextBatch();
+                                      }
 
-            MoveToNextTrack();
-            PeekToNextTrack();
+                                      MoveToNextTrack();
+                                      PeekToNextTrack();
+                                      _loadingIndicatorService.Pop();
+                                  });
         }
 
         private void OnCurrentTrackStreamChanged()

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using EightTracks;
-
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
@@ -60,6 +60,20 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
         #endregion Constructors
 
         #region Properties
+
+        [Import]
+        public ILoggerFacade Logger
+        {
+            get; 
+            set;
+        }
+
+        [Import]
+        public IToastService ToastService
+        {
+            get;
+            set;
+        }
 
         [Import]
         public ILoadingIndicatorService LoadingIndicatorService
@@ -157,6 +171,13 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                 .ContinueWith(t =>
                 {
                     RefreshCommands();
+
+                    if (t.Exception != null)
+                    {
+                        ToastService.Show(t.Exception.Message);
+                        Logger.Log(t.Exception.ToString(), Category.Exception, Priority.Medium);
+                        return;
+                    }
 
                     if (t.Result != null)
                     {

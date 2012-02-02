@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Timers;
 
 using EightTracks;
-
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
@@ -50,6 +50,13 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
         #endregion Constructors
 
         #region Properties
+
+        [Import]
+        public ILoggerFacade Logger
+        {
+            get; 
+            set;
+        }
 
         [Import]
         public ILoadingIndicatorService LoadingIndicatorService
@@ -141,7 +148,7 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                     {
                         var response = session.Query<Mixes>().GetMix(
                         sorting: sortType, 
-                        filter: String.Join(",", TagFilterList),
+                        filter: String.Join("+", TagFilterList),
                         page: page,
                         resultsPerPage: 25);
 
@@ -161,6 +168,13 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                 GoToNextPageCommand.NotifyCanExecuteChanged();
                 GoToPreviousPageCommand.NotifyCanExecuteChanged();
 
+                if  (t.Exception != null)
+                {
+                    ToastService.Show(t.Exception.Message);
+                    Logger.Log(t.Exception.ToString(), Category.Exception, Priority.Medium);
+                    return;
+                }
+                
                 if (t.Result != null)
                 {
                     _tags.Clear();
