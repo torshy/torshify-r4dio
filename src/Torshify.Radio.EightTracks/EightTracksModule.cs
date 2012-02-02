@@ -66,6 +66,7 @@ namespace Torshify.Radio.EightTracks
             RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(PopularMixListView));
             RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(HotMixListView));
             RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(TagsTabView));
+            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(FavoritesView));
 
             TileService.Add<MainStationView>(new TileData
                                                 {

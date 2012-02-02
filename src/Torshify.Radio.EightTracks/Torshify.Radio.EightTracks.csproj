@@ -94,6 +94,10 @@
     </Compile>
     <Compile Include="Views\MainStationViewModel.cs" />
     <Compile Include="EightTracksMixTrackStream.cs" />
+    <Compile Include="Views\Tabs\FavoritesView.xaml.cs">
+      <DependentUpon>FavoritesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Tabs\FavoritesViewModel.cs" />
     <Compile Include="Views\Tabs\HotMixListView.cs" />
     <Compile Include="Views\Tabs\HotMixListViewModel.cs" />
     <Compile Include="Views\Tabs\MainTabView.cs" />
@@ -134,6 +138,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\MainStationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Tabs\FavoritesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

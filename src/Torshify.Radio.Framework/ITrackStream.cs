@@ -13,12 +13,5 @@ namespace Torshify.Radio.Framework
         {
             get;
         }
-
-        TrackStreamStore Get();
-    }
-
-    public class TrackStreamStore
-    {
-        
     }
 }

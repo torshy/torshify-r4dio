@@ -15,7 +15,7 @@ using Torshify.Radio.Framework.Commands;
 
 namespace Torshify.Radio.EightTracks.Views.Tabs
 {
-    public abstract class MixListViewModel : NotificationObject
+    public abstract class MixListViewModel : NotificationObject, IHeaderInfoProvider<HeaderInfo>
     {
         #region Fields
 

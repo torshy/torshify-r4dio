@@ -34,13 +34,6 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
 
         #region Properties
 
-        [Import]
-        public ILoggerFacade Logger
-        {
-            get; 
-            set;
-        }
-
         public override HeaderInfo HeaderInfo
         {
             get { return _headerInfo; }
