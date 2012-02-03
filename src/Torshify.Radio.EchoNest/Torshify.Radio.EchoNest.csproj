@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EchoNest-Sharp">
+      <HintPath>..\..\lib\EchoNestSharp\EchoNest-Sharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\..\packages\Prism.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
       <Private>False</Private>
@@ -76,6 +80,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Services\EchoNestSuggestArtistsService.cs" />
+    <Compile Include="Services\ISuggestArtistsService.cs" />
+    <Compile Include="Views\Similar\SimilarArtistModel.cs" />
+    <Compile Include="Views\Similar\SimilarArtistsTrackStream.cs" />
+    <Compile Include="Views\Similar\SimilarView.xaml.cs">
+      <DependentUpon>SimilarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Similar\SimilarViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -85,6 +97,19 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\Similar\SimilarView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Torshify.Radio.Framework\Torshify.Radio.Framework.csproj">
+      <Project>{3F5BAFDD-058B-4128-9B11-685DAD42A9FC}</Project>
+      <Name>Torshify.Radio.Framework</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

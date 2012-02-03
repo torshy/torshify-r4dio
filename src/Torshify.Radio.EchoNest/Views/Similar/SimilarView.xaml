@@ -1,0 +1,113 @@
+﻿<UserControl
+    x:Class="Torshify.Radio.EchoNest.Views.Similar.SimilarView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
+        <Converters:ImageLoaderConverter
+            x:Key="ImageConverter"
+            DecodePixelWidth="64" />
+    </UserControl.Resources>
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Disabled">
+        <ItemsControl
+            ItemsSource="{Binding SimilarArtists}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <Button
+                            Name="playButton"
+                            DockPanel.Dock="Left"
+                            Command="{Binding DataContext.PlayArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                            CommandParameter="{Binding}"
+                            Height="64"
+                            Width="64"
+                            BorderThickness="1"
+                            Padding="0"
+                            VerticalAlignment="Top"
+                            Margin="0,4,0,0">
+                            <Grid>
+                                <Image
+                                    Name="playImageBackground"
+                                    IsHitTestVisible="False"
+                                    Stretch="UniformToFill"
+                                    Source="{Binding Image.Url, Converter={StaticResource ImageConverter}, FallbackValue='pack://siteoforigin:,,,/Resources/Icons/questionmark.png'}" />
+                                <Image
+                                    IsHitTestVisible="False"
+                                    Name="playIcon"
+                                    Stretch="None"
+                                    Source="pack://siteoforigin:,,,/Resources/Icons/play.png"
+                                    RenderOptions.BitmapScalingMode="HighQuality"
+                                    Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            </Grid>
+                        </Button>
+                        <StackPanel
+                            Margin="4">
+                            <TextBlock
+                                Text="{Binding Name}"
+                                TextTrimming="CharacterEllipsis"
+                                FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                                FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
+                            <ItemsControl
+                                ItemsSource="{Binding Terms}"
+                                Margin="0,8,0,0">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <ToggleButton
+                                            Margin="0,0,2,2"
+                                            IsEnabled="False"
+                                            Content="{Binding Name}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </DockPanel>
+                    <DataTemplate.Triggers>
+                        <Trigger
+                            Property="IsMouseOver"
+                            SourceName="playButton"
+                            Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="playImageBackground"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0.3"
+                                            From="1.0"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="playImageBackground"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1.0"
+                                            From="0.3"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>
