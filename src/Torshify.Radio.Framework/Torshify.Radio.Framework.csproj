@@ -149,6 +149,7 @@
     <Compile Include="Controls\WindowChromeWorker.cs" />
     <Compile Include="Converters\BoolToVisibleOrHidden.cs" />
     <Compile Include="Converters\CountToFontSizeConverter.cs" />
+    <Compile Include="Converters\ImageLoaderConverter.cs" />
     <Compile Include="Converters\InstanceToObjectTypeConverter.cs" />
     <Compile Include="Converters\NegateValueConverter.cs" />
     <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />

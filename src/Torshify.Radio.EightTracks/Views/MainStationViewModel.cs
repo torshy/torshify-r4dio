@@ -53,14 +53,7 @@ namespace Torshify.Radio.EightTracks.Views
 
         public void OnTuneIn(NavigationContext context)
         {
-            // TODO : Add a helper method to do this much easier
-            string main8tracksView = typeof (MainStationView).FullName;
-
-            if (!SearchBarService.Current.NavigationUri.OriginalString.StartsWith(main8tracksView))
-            {
-                SearchBarService.Current = SearchBarService.SearchBars.FirstOrDefault(
-                    s => s.NavigationUri.OriginalString.StartsWith(main8tracksView));
-            }
+            SearchBarService.SetActive(bar => bar.NavigationUri.OriginalString.StartsWith(context.Uri.OriginalString));
 
             if (!string.IsNullOrEmpty(context.Parameters[SearchBar.IsFromSearchBarParameter]))
             {

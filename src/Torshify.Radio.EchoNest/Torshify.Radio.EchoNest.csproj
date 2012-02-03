@@ -82,12 +82,16 @@
     </Compile>
     <Compile Include="Services\EchoNestSuggestArtistsService.cs" />
     <Compile Include="Services\ISuggestArtistsService.cs" />
-    <Compile Include="Views\Similar\SimilarArtistModel.cs" />
-    <Compile Include="Views\Similar\SimilarArtistsTrackStream.cs" />
-    <Compile Include="Views\Similar\SimilarView.xaml.cs">
+    <Compile Include="Views\Similar\MainStationView.xaml.cs">
+      <DependentUpon>MainStationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Similar\MainStationViewModel.cs" />
+    <Compile Include="Views\Similar\Tabs\SimilarArtistModel.cs" />
+    <Compile Include="Views\Similar\Tabs\SimilarArtistsTrackStream.cs" />
+    <Compile Include="Views\Similar\Tabs\SimilarView.xaml.cs">
       <DependentUpon>SimilarView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Similar\SimilarViewModel.cs" />
+    <Compile Include="Views\Similar\Tabs\SimilarViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -99,7 +103,11 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\Similar\SimilarView.xaml">
+    <Page Include="Views\Similar\MainStationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Similar\Tabs\SimilarView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -111,6 +119,7 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

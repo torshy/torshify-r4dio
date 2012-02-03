@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Data;
-using System.Windows.Media.Imaging;
+
 using EchoNest;
 using EchoNest.Artist;
 
@@ -17,17 +14,17 @@ using Microsoft.Practices.Prism.ViewModel;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 
-namespace Torshify.Radio.EchoNest.Views.Similar
+namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 {
     [Export(typeof(SimilarViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     [RegionMemberLifetime(KeepAlive = false)]
-    public class SimilarViewModel : NotificationObject, INavigationAware
+    public class SimilarViewModel : NotificationObject, INavigationAware, IHeaderInfoProvider<HeaderInfo>
     {
         #region Fields
 
-        private ObservableCollection<SimilarArtistModel> _similarArtists;
         private string _currentMainArtist;
+        private ObservableCollection<SimilarArtistModel> _similarArtists;
 
         #endregion Fields
 
@@ -37,12 +34,15 @@ namespace Torshify.Radio.EchoNest.Views.Similar
         {
             _similarArtists = new ObservableCollection<SimilarArtistModel>();
 
+            HeaderInfo = new HeaderInfo { Title = "Similar artists" };
             PlayArtistCommand = new StaticCommand<SimilarArtistModel>(ExecutePlaySimilarArtist);
         }
 
         #endregion Constructors
 
         #region Properties
+
+
 
         [Import]
         public IRadio Radio
@@ -84,6 +84,12 @@ namespace Torshify.Radio.EchoNest.Views.Similar
             {
                 return _similarArtists;
             }
+        }
+
+        public HeaderInfo HeaderInfo
+        {
+            get;
+            private set;
         }
 
         #endregion Properties
@@ -183,37 +189,5 @@ namespace Torshify.Radio.EchoNest.Views.Similar
         }
 
         #endregion Methods
-    }
-
-    public class ImageConverter : IValueConverter
-    {
-        public int? DecodePixelWidth { get; set; }
-        public int? DecodePixelHeight { get; set; }
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            image.UriSource = new Uri(value.ToString(), UriKind.RelativeOrAbsolute);
-
-            if (DecodePixelHeight.HasValue)
-            {
-                image.DecodePixelHeight = DecodePixelHeight.GetValueOrDefault();
-            }
-
-            if (DecodePixelWidth.HasValue)
-            {
-                image.DecodePixelWidth = DecodePixelWidth.GetValueOrDefault();
-            }
-
-            image.EndInit();
-
-            return image;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

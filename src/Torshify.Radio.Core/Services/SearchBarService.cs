@@ -83,6 +83,18 @@ namespace Torshify.Radio.Core.Services
             }
         }
 
+        public void SetActive(Predicate<SearchBar> predicate)
+        {
+            foreach (var searchBar in SearchBars)
+            {
+                if (predicate(searchBar))
+                {
+                    Current = searchBar;
+                    break;
+                }
+            }
+        }
+
         protected void OnCurrentChanged()
         {
             var handler = CurrentChanged;

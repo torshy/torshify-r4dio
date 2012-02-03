@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-
 using Torshify.Radio.Framework;
 using System.Linq;
 
-namespace Torshify.Radio.EchoNest.Views.Similar
+namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 {
     public class SimilarArtistsTrackStream : ITrackStream
     {

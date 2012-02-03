@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using EchoNest.Artist;
 using Microsoft.Practices.Prism.ViewModel;
 
-namespace Torshify.Radio.EchoNest.Views.Similar
+namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 {
     public class SimilarArtistModel : NotificationObject
     {
