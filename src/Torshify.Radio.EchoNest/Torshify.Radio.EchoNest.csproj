@@ -47,6 +47,10 @@
       <HintPath>..\..\packages\Prism.MEFExtensions.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.MefExtensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\packages\RavenDB-Embedded.1.0.573\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
@@ -86,6 +90,10 @@
       <DependentUpon>MainStationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Similar\MainStationViewModel.cs" />
+    <Compile Include="Views\Similar\Tabs\RecentView.xaml.cs">
+      <DependentUpon>RecentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Similar\Tabs\RecentViewModel.cs" />
     <Compile Include="Views\Similar\Tabs\SimilarArtistModel.cs" />
     <Compile Include="Views\Similar\Tabs\SimilarArtistsTrackStream.cs" />
     <Compile Include="Views\Similar\Tabs\SimilarView.xaml.cs">
@@ -104,6 +112,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\Similar\MainStationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Similar\Tabs\RecentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

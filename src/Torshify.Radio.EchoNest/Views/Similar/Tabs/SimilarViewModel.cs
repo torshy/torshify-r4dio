@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -11,6 +12,9 @@ using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
+using Raven.Client;
+using Raven.Client.Linq;
+
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 
@@ -18,7 +22,6 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 {
     [Export(typeof(SimilarViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    [RegionMemberLifetime(KeepAlive = false)]
     public class SimilarViewModel : NotificationObject, INavigationAware, IHeaderInfoProvider<HeaderInfo>
     {
         #region Fields
@@ -41,8 +44,6 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
         #endregion Constructors
 
         #region Properties
-
-
 
         [Import]
         public IRadio Radio
@@ -67,6 +68,13 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 
         [Import]
         public ILoggerFacade Logger
+        {
+            get;
+            set;
+        }
+
+        [Import]
+        public IDocumentStore DocumentStore
         {
             get;
             set;
@@ -102,6 +110,7 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             {
                 string query = context.Parameters[SearchBar.ValueParameter];
                 ExecuteGetSimilarArtists(query);
+                ExecuteStoreRecentSimilarArtist(query);
             }
         }
 
@@ -114,9 +123,66 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
         {
         }
 
+        private void ExecuteStoreRecentSimilarArtist(string query)
+        {
+            Task
+                .Factory
+                .StartNew(state => GetArtistInformation(state.ToString()), query)
+                .ContinueWith(task =>
+                              {
+                                  if (task.Exception != null)
+                                  {
+                                      Logger.Log(task.Exception.ToString(), Category.Exception, Priority.Low);
+                                  }
+                                  else
+                                  {
+                                      if (task.Result != null)
+                                      {
+                                          SaveRecentSimilarArtist(ConvertToModel(task.Result));
+                                      }
+                                  }
+                              });
+        }
+
+        private void SaveRecentSimilarArtist(SimilarArtistModel artistModel)
+        {
+            try
+            {
+                using (var session = DocumentStore.OpenSession())
+                {
+                    IRavenQueryable<SimilarArtistModel> artists = session.Query<SimilarArtistModel>();
+
+                    if (artists.Any(a => a.Name.Equals(artistModel.Name, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        return;
+                    }
+
+                    int count = artists.Count();
+
+                    if (count > 50)
+                    {
+                        var tooMany = count - 50;
+                        var tooManyArtists = artists.Take(tooMany);
+
+                        foreach (var artist in tooManyArtists)
+                        {
+                            session.Delete(artist);
+                        }
+                    }
+
+                    session.Store(artistModel);
+                    session.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Log(e.Message, Category.Exception, Priority.Medium);
+            }
+        }
+
         private void ExecutePlaySimilarArtist(SimilarArtistModel artist)
         {
-            Radio.Play(new SimilarArtistsTrackStream(Radio, new[] { artist.BucketItem.Name })
+            Radio.Play(new SimilarArtistsTrackStream(Radio, new[] { artist.Name })
                        {
                            Description = "Similar artists of " + _currentMainArtist
                        });
@@ -139,7 +205,7 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
                                   }
                                   else
                                   {
-                                      PresentSimilarArists(task.Result);
+                                      PresentSimilarArtists(task.Result);
                                   }
                               }, ui);
         }
@@ -169,7 +235,7 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             return new ArtistBucketItem[0];
         }
 
-        private void PresentSimilarArists(IEnumerable<ArtistBucketItem> similarArtists)
+        private void PresentSimilarArtists(IEnumerable<ArtistBucketItem> similarArtists)
         {
             using (LoadingIndicatorService.EnterLoadingBlock())
             {
@@ -177,15 +243,49 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 
                 foreach (var bucket in similarArtists)
                 {
-                    _similarArtists.Add(new SimilarArtistModel
-                                        {
-                                            BucketItem = bucket,
-                                            Name = bucket.Name,
-                                            Image = bucket.Images != null ? bucket.Images.FirstOrDefault() : null,
-                                            Terms = bucket.Terms != null ? bucket.Terms.Take(3) : null
-                                        });
+                    _similarArtists.Add(ConvertToModel(bucket));
                 }
             }
+        }
+
+        private static ArtistBucketItem GetArtistInformation(string query)
+        {
+            using (var session = new EchoNestSession(EchoNestModule.ApiKey))
+            {
+                var response = session
+                    .Query<Profile>()
+                    .Execute(query, ArtistBucket.Terms | ArtistBucket.Images);
+
+                if (response.Status.Code == ResponseCode.Success)
+                {
+                    return response.Artist;
+                }
+            }
+
+            return null;
+        }
+
+        private static SimilarArtistModel ConvertToModel(ArtistBucketItem bucket)
+        {
+            ImageItem image = null;
+            TermsItem[] terms = null;
+
+            if (bucket.Images != null)
+            {
+                image = bucket.Images.FirstOrDefault();
+            }
+
+            if (bucket.Terms != null)
+            {
+                terms = bucket.Terms.Take(3).ToArray();
+            }
+
+            return new SimilarArtistModel
+                   {
+                       Name = bucket.Name,
+                       Image = image != null ? image.Url : null,
+                       Terms = terms != null ? terms.Select(t => t.Name) : null
+                   };
         }
 
         #endregion Methods

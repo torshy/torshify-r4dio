@@ -47,6 +47,7 @@ namespace Torshify.Radio.EchoNest
         public void Initialize()
         {
             RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(SimilarView));
+            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(RecentView));
 
             TileService.Add<MainStationView>(new TileData
             {

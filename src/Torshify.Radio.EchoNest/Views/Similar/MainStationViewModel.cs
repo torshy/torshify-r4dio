@@ -44,10 +44,7 @@ namespace Torshify.Radio.EchoNest.Views.Similar
         public void OnTuneIn(NavigationContext context)
         {
             SearchBarService.SetActive(bar => bar.NavigationUri.OriginalString.StartsWith(context.Uri.OriginalString));
-
-            RegionManager.RequestNavigate(
-                MainStationView.TabViewRegion,
-                typeof(SimilarView).FullName + context.Parameters);
+            RegionManager.RequestNavigate(MainStationView.TabViewRegion, typeof(SimilarView).FullName + context.Parameters);
         }
 
         public void OnTuneAway(NavigationContext context)

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using EchoNest.Artist;
+
 using Microsoft.Practices.Prism.ViewModel;
 
 namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
@@ -8,13 +8,7 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
     {
         #region Properties
 
-        public ArtistBucketItem BucketItem
-        {
-            get;
-            set;
-        }
-
-        public ImageItem Image
+        public string Image
         {
             get;
             set;
@@ -26,7 +20,7 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             set;
         }
 
-        public IEnumerable<TermsItem> Terms
+        public IEnumerable<string> Terms
         {
             get;
             set;
