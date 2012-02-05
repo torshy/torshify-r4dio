@@ -90,11 +90,15 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                         if (type == "Tag")
                         {
                             var response = session.Query<Mixes>().GetMix(tag: text);
+                            _currentPage = response.Page;
+                            _numberOfPages = response.TotalPages;
                             return response.Mixes;
                         }
                         else
                         {
                             var response = session.Query<Mixes>().GetMix(filter: text);
+                            _currentPage = response.Page;
+                            _numberOfPages = response.TotalPages;
                             return response.Mixes;
                         }
                     }
@@ -102,9 +106,10 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             })
             .ContinueWith(t =>
             {
-                _tags.Clear();
-                
+                GoToNextPageCommand.NotifyCanExecuteChanged();
+                GoToPreviousPageCommand.NotifyCanExecuteChanged();
 
+                _tags.Clear();
 
                 foreach (var mix in t.Result)
                 {
@@ -136,12 +141,17 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                     using (var session = new EightTracksSession(EightTracksModule.ApiKey))
                     {
                         var response = session.Query<Mixes>().GetMix(sorting: global::EightTracks.Mixes.Sort.Random, resultsPerPage: 25);
+                        _currentPage = response.Page;
+                        _numberOfPages = response.TotalPages;
                         return response.Mixes;
                     }
                 }
             })
             .ContinueWith(t =>
             {
+                GoToNextPageCommand.NotifyCanExecuteChanged();
+                GoToPreviousPageCommand.NotifyCanExecuteChanged();
+
                 if (t.Exception != null)
                 {
                     Logger.Log("Error while fetching mixes: " + t.Exception, Category.Exception, Priority.Medium);

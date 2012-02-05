@@ -22,11 +22,11 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
         protected ObservableCollection<Mix> _mixes;
         protected ObservableCollection<string> _tagFilterList;
         protected ObservableCollection<string> _tags;
+        protected int? _currentPage;
+        protected int? _numberOfPages;
 
         private Timer _deferredSearchTimer;
         private TaskScheduler _ui;
-        private int? _currentPage;
-        private int? _numberOfPages;
 
         #endregion Fields
 

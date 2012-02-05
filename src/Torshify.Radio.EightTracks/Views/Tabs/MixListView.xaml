@@ -67,7 +67,7 @@
                                         Text="{Binding LikesCount}" />
                                     <TextBlock
                                         Margin="8,0,0,0"
-                                        Text="{Binding FirstPublishedAt, Converter={StaticResource DateDifferenceConverter}}"
+                                        Text="{Binding FirstPublishedAt.Value, Converter={StaticResource DateDifferenceConverter}}"
                                         ToolTip="{lex:LocText Key=TimeSincePublished, Dict=Strings, Assembly=Torshify.Radio.EightTracks}" />
                                     <Button
                                         Margin="8,0,0,0"

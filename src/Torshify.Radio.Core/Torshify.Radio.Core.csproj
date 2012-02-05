@@ -71,6 +71,7 @@
     </Reference>
     <Reference Include="WpfShaderEffects">
       <HintPath>..\..\lib\WpfShaderEffects\WpfShaderEffects.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="WPFToolkit.Extended">
       <HintPath>..\..\packages\Extended.Wpf.Toolkit.1.5.0\lib\net40\WPFToolkit.Extended.dll</HintPath>
