@@ -6,6 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
+    Engine:LocalizeDictionary.DesignCulture="en-US"
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -82,7 +85,8 @@
                                     Height="24"
                                     Width="24"
                                     Command="{Binding DataContext.QueueArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                    CommandParameter="{Binding}">
+                                    CommandParameter="{Binding}"
+                                    ToolTip="{lex:LocText Key=Add_To_Queue, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
                                     <Image
                                         Stretch="Uniform"
                                         Source="pack://siteoforigin:,,,/Resources/Icons/add.png" />
@@ -93,7 +97,8 @@
                                     Height="24"
                                     Width="24"
                                     Command="{Binding DataContext.AddFavoriteArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                    CommandParameter="{Binding}">
+                                    CommandParameter="{Binding}"
+                                    ToolTip="{lex:LocText Key=Add_To_Favorites, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
                                     <Image
                                         Stretch="Uniform"
                                         Source="pack://siteoforigin:,,,/Resources/Icons/favs.addto.png" />
@@ -104,7 +109,8 @@
                                     Height="24"
                                     Width="24"
                                     Command="{Binding DataContext.SearchForSimilarArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                    CommandParameter="{Binding}">
+                                    CommandParameter="{Binding}"
+                                    ToolTip="{lex:LocText Key=Search_For_Similar_Artist, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
                                     <Image
                                         Stretch="Uniform"
                                         Source="pack://siteoforigin:,,,/Resources/Icons/search.png" />
