@@ -7,7 +7,7 @@ namespace Torshify.Radio.Framework
     {
         event EventHandler CurrentTrackStreamChanged;
 
-        event EventHandler CurrentTrackChanged;
+        event EventHandler<TrackChangedEventArgs> CurrentTrackChanged;
 
         event EventHandler UpcomingTrackChanged;
 

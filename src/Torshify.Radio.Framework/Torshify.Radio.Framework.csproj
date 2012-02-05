@@ -193,6 +193,7 @@
     <Compile Include="Tile.cs" />
     <Compile Include="TileData.cs" />
     <Compile Include="TrackBufferingEventArgs.cs" />
+    <Compile Include="TrackChangedEventArgs.cs" />
     <Compile Include="TrackContainer.cs" />
     <Compile Include="Track.cs" />
     <Compile Include="TrackContainerOwner.cs" />

@@ -126,6 +126,13 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
                 ExecuteGetSimilarArtists(query);
                 ExecuteStoreRecentSimilarArtist(query);
             }
+            else
+            {
+                if (Radio.CurrentTrack != null)
+                {
+                    ExecuteGetSimilarArtists(Radio.CurrentTrack.Artist);
+                }
+            }
         }
 
         bool INavigationAware.IsNavigationTarget(NavigationContext context)

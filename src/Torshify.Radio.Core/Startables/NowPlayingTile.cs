@@ -81,12 +81,18 @@ namespace Torshify.Radio.Core.Startables
             TileService.Add<NowPlayingView>(_tileData, AppRegions.MainRegion);
         }
 
-        private void RadioOnCurrentTrackChanged(object sender, EventArgs eventArgs)
+        private void RadioOnCurrentTrackChanged(object sender, TrackChangedEventArgs e)
         {
-            if (Radio.CurrentTrack != null)
+            // If the new tracks artist is the same as the previous one we do nothing
+            if ((e.PreviousTrack != null && e.CurrentTrack != null) && e.PreviousTrack.Artist == e.CurrentTrack.Artist)
             {
-                _tileData.Title = "Now playing " + Radio.CurrentTrack.Artist;
-                SetTileBackground(Radio.CurrentTrack.Artist);
+                return;
+            }
+
+            if (e.CurrentTrack != null)
+            {
+                _tileData.Title = "Now playing " + e.CurrentTrack.Artist;
+                SetTileBackground(e.CurrentTrack.Artist);
             }
             else
             {

@@ -44,7 +44,7 @@ namespace Torshify.Radio.Core
 
         #region Events
 
-        public event EventHandler CurrentTrackChanged;
+        public event EventHandler<TrackChangedEventArgs> CurrentTrackChanged;
 
         public event EventHandler CurrentTrackStreamChanged;
 
@@ -61,8 +61,9 @@ namespace Torshify.Radio.Core
             {
                 if (_currentTrack != value)
                 {
+                    var previousTrack = _currentTrack;
                     _currentTrack = value;
-                    OnCurrentTrackChanged();
+                    OnCurrentTrackChanged(new TrackChangedEventArgs(previousTrack, _currentTrack));
                     RaisePropertyChanged("CurrentTrack");
                 }
             }
@@ -305,13 +306,13 @@ namespace Torshify.Radio.Core
             }
         }
 
-        private void OnCurrentTrackChanged()
+        private void OnCurrentTrackChanged(TrackChangedEventArgs e)
         {
             var handler = CurrentTrackChanged;
 
             if (handler != null)
             {
-                handler(this, EventArgs.Empty);
+                handler(this, e);
             }
         }
 
