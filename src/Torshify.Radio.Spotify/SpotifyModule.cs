@@ -10,7 +10,6 @@ using Microsoft.Practices.Prism.Regions;
 
 using Torshify.Radio.Framework;
 using Torshify.Radio.Spotify.LoginService;
-using Torshify.Radio.Spotify.Views;
 
 namespace Torshify.Radio.Spotify
 {
@@ -46,12 +45,12 @@ namespace Torshify.Radio.Spotify
 
         public void Initialize()
         {
-            TileService.Add<MainStationView>(new TileData
-                                             {
-                                                 Title = "Spotify",
-                                                 BackgroundImage =
-                                                     new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0003_Favs1.png")
-                                             });
+            //TileService.Add<MainStationView>(new TileData
+            //                                 {
+            //                                     Title = "Spotify",
+            //                                     BackgroundImage =
+            //                                         new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0003_Favs1.png")
+            //                                 });
 
             if (!SpotifyAppDomainHandler.Instance.IsLoaded)
             {

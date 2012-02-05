@@ -12,70 +12,157 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter" />
+        <Converters:BoolToVisibleOrHidden
+            x:Key="BoolToVisibleInverted"
+            Collapse="True"
+            Reverse="True" />
         <Converters:ImageLoaderConverter
             x:Key="ImageConverter"
-            DecodePixelWidth="64" />
+            DecodePixelWidth="72" />
     </UserControl.Resources>
-    <ScrollViewer
-        HorizontalScrollBarVisibility="Disabled">
+    <Grid>
+        <Image
+            Visibility="{Binding HasItems, ElementName=artistList, Converter={StaticResource BoolToVisibleInverted}}"
+            Source="pack://siteoforigin:,,,/Resources/Tiles/MS_0000s_0036_search.png"
+            Stretch="None"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Opacity="0.5" />
         <ItemsControl
-            ItemsSource="{Binding RecentArtists}">
+            Name="artistList"
+            ItemsSource="{Binding RecentArtists}"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ScrollViewer
+                        CanContentScroll="True">
+                        <VirtualizingStackPanel
+                            IsItemsHost="True" />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <DockPanel>
+                    <DockPanel
+                        Margin="0,4,0,0"
+                        Background="Transparent">
                         <Button
                             Name="playButton"
                             DockPanel.Dock="Left"
                             Command="{Binding DataContext.PlayArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                             CommandParameter="{Binding}"
-                            Height="64"
-                            Width="64"
+                            Height="72"
+                            Width="72"
                             BorderThickness="1"
                             Padding="0"
-                            VerticalAlignment="Top"
-                            Margin="0,4,0,0">
+                            VerticalAlignment="Top">
                             <Grid>
                                 <Image
                                     Name="playImageBackground"
-                                    IsHitTestVisible="False"
                                     Stretch="UniformToFill"
                                     Source="{Binding Image, Converter={StaticResource ImageConverter}, FallbackValue='pack://siteoforigin:,,,/Resources/Icons/questionmark.png'}" />
                                 <Image
-                                    IsHitTestVisible="False"
                                     Name="playIcon"
                                     Stretch="None"
                                     Source="pack://siteoforigin:,,,/Resources/Icons/play.png"
-                                    RenderOptions.BitmapScalingMode="HighQuality"
                                     Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
                             </Grid>
                         </Button>
-                        <StackPanel
-                            Margin="4">
-                            <TextBlock
-                                Text="{Binding Name}"
-                                TextTrimming="CharacterEllipsis"
-                                FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
-                                FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
-                            <ItemsControl
-                                ItemsSource="{Binding Terms}"
-                                Margin="0,8,0,0">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <ToggleButton
-                                            Margin="0,0,2,2"
-                                            IsEnabled="False"
-                                            Content="{Binding}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
+                        <DockPanel>
+                            <StackPanel
+                                Name="controlPanel"
+                                DockPanel.Dock="Left"
+                                VerticalAlignment="Top"
+                                Opacity="0.5">
+                                <Button
+                                    Padding="0"
+                                    BorderThickness="0"
+                                    Height="24"
+                                    Width="24"
+                                    Command="{Binding DataContext.QueueArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                    CommandParameter="{Binding}">
+                                    <Image
+                                        Stretch="Uniform"
+                                        Source="pack://siteoforigin:,,,/Resources/Icons/add.png" />
+                                </Button>
+                                <Button
+                                    Padding="0"
+                                    BorderThickness="0"
+                                    Height="24"
+                                    Width="24"
+                                    Command="{Binding DataContext.AddFavoriteArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                    CommandParameter="{Binding}">
+                                    <Image
+                                        Stretch="Uniform"
+                                        Source="pack://siteoforigin:,,,/Resources/Icons/favs.addto.png" />
+                                </Button>
+                                <Button
+                                    Padding="0"
+                                    BorderThickness="0"
+                                    Height="24"
+                                    Width="24"
+                                    Command="{Binding DataContext.SearchForSimilarArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                    CommandParameter="{Binding}">
+                                    <Image
+                                        Stretch="Uniform"
+                                        Source="pack://siteoforigin:,,,/Resources/Icons/search.png" />
+                                </Button>
+                            </StackPanel>
+                            <StackPanel>
+                                <TextBlock
+                                    Text="{Binding Name}"
+                                    TextTrimming="CharacterEllipsis"
+                                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
+                                <ItemsControl
+                                    ItemsSource="{Binding Terms}"
+                                    Margin="0,2,0,0">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                IsEnabled="False"
+                                                Text="{Binding}"
+                                                Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </DockPanel>
                     </DockPanel>
                     <DataTemplate.Triggers>
+                        <Trigger
+                            Property="IsMouseOver"
+                            Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="controlPanel"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1.0"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="controlPanel"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0.5"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
                         <Trigger
                             Property="IsMouseOver"
                             SourceName="playButton"
@@ -109,5 +196,5 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-    </ScrollViewer>
+    </Grid>
 </UserControl>

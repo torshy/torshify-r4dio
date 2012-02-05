@@ -1,11 +1,16 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
-using System.Threading.Tasks;
-using Microsoft.Practices.Prism.Logging;
-using Microsoft.Practices.Prism.ViewModel;
-using Raven.Client;
-using Torshify.Radio.Framework;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Practices.Prism;
+using Microsoft.Practices.Prism.Logging;
+using Microsoft.Practices.Prism.Regions;
+using Microsoft.Practices.Prism.ViewModel;
+
+using Raven.Client;
+
+using Torshify.Radio.Framework;
+using Torshify.Radio.Framework.Commands;
 
 namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 {
@@ -13,7 +18,11 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class RecentViewModel : NotificationObject, IHeaderInfoProvider<HeaderInfo>
     {
+        #region Fields
+
         private ObservableCollection<SimilarArtistModel> _recentArtists;
+
+        #endregion Fields
 
         #region Constructors
 
@@ -24,6 +33,10 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             HeaderInfo = new HeaderInfo();
             HeaderInfo.Title = "Recent";
             HeaderInfo.IsSelectedAction = IsSelectedAction;
+            PlayArtistCommand = new StaticCommand<SimilarArtistModel>(ExecutePlayArtist);
+            QueueArtistCommand = new StaticCommand<SimilarArtistModel>(ExecuteQueueSimilarArtist);
+            AddFavoriteArtistCommand = new StaticCommand<SimilarArtistModel>(ExecuteAddFavoriteArtist);
+            SearchForSimilarArtistCommand = new StaticCommand<SimilarArtistModel>(ExecuteSearchForSimilarArtist);
         }
 
         #endregion Constructors
@@ -39,6 +52,27 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 
         [Import]
         public ILoggerFacade Logger
+        {
+            get;
+            set;
+        }
+
+        [Import]
+        public IRadio Radio
+        {
+            get;
+            set;
+        }
+
+        [Import]
+        public IToastService ToastService
+        {
+            get;
+            set;
+        }
+
+        [Import]
+        public IRegionManager RegionManager
         {
             get; 
             set;
@@ -56,6 +90,30 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             {
                 return _recentArtists;
             }
+        }
+
+        public StaticCommand<SimilarArtistModel> PlayArtistCommand
+        {
+            get;
+            private set;
+        }
+
+        public StaticCommand<SimilarArtistModel> QueueArtistCommand
+        {
+            get;
+            private set;
+        }
+
+        public StaticCommand<SimilarArtistModel> AddFavoriteArtistCommand
+        {
+            get;
+            private set;
+        }
+
+        public StaticCommand<SimilarArtistModel> SearchForSimilarArtistCommand
+        {
+            get;
+            private set;
         }
 
         #endregion Properties
@@ -100,6 +158,36 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             {
                 _recentArtists.Add(model);
             }
+        }
+
+        private void ExecuteSearchForSimilarArtist(SimilarArtistModel artist)
+        {
+            UriQuery q = new UriQuery();
+            q.Add(SearchBar.IsFromSearchBarParameter, "true");
+            q.Add(SearchBar.ValueParameter, artist.Name);
+            RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(MainStationView).FullName + q);
+        }
+
+        private void ExecuteAddFavoriteArtist(SimilarArtistModel artist)
+        {
+        }
+
+        private void ExecutePlayArtist(SimilarArtistModel artist)
+        {
+            Radio.Play(new SimilarArtistsTrackStream(Radio, new[] { artist.Name })
+            {
+                Description = artist.Name + " radio"
+            });
+        }
+
+        private void ExecuteQueueSimilarArtist(SimilarArtistModel artist)
+        {
+            Radio.Queue(new SimilarArtistsTrackStream(Radio, new[] { artist.Name })
+            {
+                Description = artist.Name + " radio"
+            });
+
+            ToastService.Show("Queued " + artist.Name);
         }
 
         #endregion Methods

@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
@@ -12,6 +13,11 @@ namespace Torshify.Radio.Framework.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null || value == DependencyProperty.UnsetValue)
+            {
+                return DependencyProperty.UnsetValue;
+            }
+
             BitmapImage image = new BitmapImage();
             image.BeginInit();
             image.UriSource = new Uri(value.ToString(), UriKind.RelativeOrAbsolute);

@@ -78,7 +78,7 @@
                                         ToolTip="{lex:LocText Key=Queue, Dict=Strings, Assembly=Torshify.Radio.EightTracks}">
                                         <Image
                                             Height="20"
-                                            Source="pack://siteoforigin:,,,/Resources/Icons/download.png" />
+                                            Source="pack://siteoforigin:,,,/Resources/Icons/add.png" />
                                     </Button>
                                 </StackPanel>
                                 <DockPanel>

@@ -39,6 +39,8 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 
             HeaderInfo = new HeaderInfo { Title = "Similar artists" };
             PlayArtistCommand = new StaticCommand<SimilarArtistModel>(ExecutePlaySimilarArtist);
+            QueueArtistCommand = new StaticCommand<SimilarArtistModel>(ExecuteQueueSimilarArtist);
+            AddFavoriteArtistCommand = new StaticCommand<SimilarArtistModel>(ExecuteAddFavoriteArtist);
         }
 
         #endregion Constructors
@@ -86,6 +88,18 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             private set;
         }
 
+        public StaticCommand<SimilarArtistModel> QueueArtistCommand
+        {
+            get;
+            private set;
+        }
+
+        public StaticCommand<SimilarArtistModel> AddFavoriteArtistCommand
+        {
+            get;
+            private set;
+        }
+
         public ObservableCollection<SimilarArtistModel> SimilarArtists
         {
             get
@@ -121,6 +135,46 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 
         void INavigationAware.OnNavigatedFrom(NavigationContext context)
         {
+        }
+
+        private static ArtistBucketItem GetArtistInformation(string query)
+        {
+            using (var session = new EchoNestSession(EchoNestModule.ApiKey))
+            {
+                var response = session
+                    .Query<Profile>()
+                    .Execute(query, ArtistBucket.Terms | ArtistBucket.Images);
+
+                if (response.Status.Code == ResponseCode.Success)
+                {
+                    return response.Artist;
+                }
+            }
+
+            return null;
+        }
+
+        private static SimilarArtistModel ConvertToModel(ArtistBucketItem bucket)
+        {
+            ImageItem image = null;
+            TermsItem[] terms = null;
+
+            if (bucket.Images != null)
+            {
+                image = bucket.Images.FirstOrDefault();
+            }
+
+            if (bucket.Terms != null)
+            {
+                terms = bucket.Terms.Take(2).ToArray();
+            }
+
+            return new SimilarArtistModel
+                   {
+                       Name = bucket.Name,
+                       Image = image != null ? image.Url : null,
+                       Terms = terms != null ? terms.Select(t => t.Name) : null
+                   };
         }
 
         private void ExecuteStoreRecentSimilarArtist(string query)
@@ -180,12 +234,26 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             }
         }
 
+        private void ExecuteAddFavoriteArtist(SimilarArtistModel artist)
+        {
+        }
+
         private void ExecutePlaySimilarArtist(SimilarArtistModel artist)
         {
             Radio.Play(new SimilarArtistsTrackStream(Radio, new[] { artist.Name })
-                       {
-                           Description = "Similar artists of " + _currentMainArtist
-                       });
+            {
+                Description = "Similar artists of " + _currentMainArtist
+            });
+        }
+
+        private void ExecuteQueueSimilarArtist(SimilarArtistModel artist)
+        {
+            Radio.Queue(new SimilarArtistsTrackStream(Radio, new[] { artist.Name })
+            {
+                Description = "Similar artists of " + _currentMainArtist
+            });
+
+            ToastService.Show("Queued " + artist.Name);
         }
 
         private void ExecuteGetSimilarArtists(string artistName)
@@ -246,46 +314,6 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
                     _similarArtists.Add(ConvertToModel(bucket));
                 }
             }
-        }
-
-        private static ArtistBucketItem GetArtistInformation(string query)
-        {
-            using (var session = new EchoNestSession(EchoNestModule.ApiKey))
-            {
-                var response = session
-                    .Query<Profile>()
-                    .Execute(query, ArtistBucket.Terms | ArtistBucket.Images);
-
-                if (response.Status.Code == ResponseCode.Success)
-                {
-                    return response.Artist;
-                }
-            }
-
-            return null;
-        }
-
-        private static SimilarArtistModel ConvertToModel(ArtistBucketItem bucket)
-        {
-            ImageItem image = null;
-            TermsItem[] terms = null;
-
-            if (bucket.Images != null)
-            {
-                image = bucket.Images.FirstOrDefault();
-            }
-
-            if (bucket.Terms != null)
-            {
-                terms = bucket.Terms.Take(3).ToArray();
-            }
-
-            return new SimilarArtistModel
-                   {
-                       Name = bucket.Name,
-                       Image = image != null ? image.Url : null,
-                       Terms = terms != null ? terms.Select(t => t.Name) : null
-                   };
         }
 
         #endregion Methods
