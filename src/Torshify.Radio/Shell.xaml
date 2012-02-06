@@ -5,7 +5,7 @@
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     xmlns:Regions="clr-namespace:Microsoft.Practices.Prism.Regions;assembly=Microsoft.Practices.Prism"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
-    Title="r4dio"
+    xmlns:Radio="clr-namespace:Torshify.Radio" xmlns:Controls1="clr-namespace:Torshify.Radio.Controls" Title="r4dio"
     Height="600"
     Width="800"
     MinHeight="390"
@@ -18,7 +18,8 @@
         <ContentControl
             Margin="8,12,8,8"
             Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainRegion}" />
-        <ItemsControl
+        <Controls1:FaderFrame
+            NavigationUIVisibility="Hidden"
             Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainOverlayRegion}" />
     </Grid>
 </Controls:MetroWindow>

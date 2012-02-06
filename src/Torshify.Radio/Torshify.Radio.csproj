@@ -91,6 +91,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Controls\FaderFrame.cs" />
     <Compile Include="Utilities\ConsoleManager.cs" />
     <Compile Include="Utilities\SingleInstance.cs" />
     <Page Include="Shell.xaml">

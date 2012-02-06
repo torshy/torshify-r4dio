@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.Composition;
-
 using Torshify.Radio.Framework.Controls;
 
 namespace Torshify.Radio
