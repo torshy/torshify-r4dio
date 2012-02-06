@@ -14,8 +14,11 @@
     TextElement.FontFamily="Segoe UI"
     TextElement.FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeNormal}}"
     TextOptions.TextFormattingMode="Display">
-    <ContentControl
-        Margin="8,12,8,8"
-        Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainRegion}">
-    </ContentControl>
+    <Grid>
+        <ContentControl
+            Margin="8,12,8,8"
+            Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainRegion}" />
+        <ItemsControl
+            Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainOverlayRegion}" />
+    </Grid>
 </Controls:MetroWindow>

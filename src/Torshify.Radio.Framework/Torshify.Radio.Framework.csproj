@@ -192,6 +192,7 @@
     <Compile Include="SearchBarData.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="TileData.cs" />
+    <Compile Include="ToastData.cs" />
     <Compile Include="TrackBufferingEventArgs.cs" />
     <Compile Include="TrackChangedEventArgs.cs" />
     <Compile Include="TrackContainer.cs" />

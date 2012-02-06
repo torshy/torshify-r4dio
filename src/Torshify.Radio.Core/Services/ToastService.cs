@@ -1,63 +1,94 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.ComponentModel.Composition;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Media;
 using System.Windows.Threading;
+
+using Microsoft.Practices.Prism.Regions;
+
+using Torshify.Radio.Core.Views.Notifications;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core.Services
 {
     [Export(typeof(IToastService))]
-    public class ToastService : IToastService
+    public class ToastService : IToastService, IPartImportsSatisfiedNotification
     {
-        private ConcurrentQueue<ToastContainer> _toasts;
+        #region Fields
 
-        public ToastService()
+        private readonly IRegionManager _regionManager;
+        private readonly ToastServiceView _view;
+        private readonly ToastServiceViewModel _viewModel;
+        private IRegion _region;
+
+        #endregion Fields
+
+        #region Constructors
+
+        [ImportingConstructor]
+        public ToastService(IRegionManager regionManager, ToastServiceView view)
         {
-            _toasts = new ConcurrentQueue<ToastContainer>();
+            _regionManager = regionManager;
+            _view = view;
+            _viewModel = view.Model;
+            _viewModel.Activate += ViewModelOnActivate;
+            _viewModel.Deactivate += ViewModelOnDeactivate;
         }
 
-        public void Show(string message, double displayTimeMs = 1000)
+        #endregion Constructors
+
+        #region Methods
+
+        public void Show(string message, int displayTimeMs = 2500)
         {
-            if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
+            Show(new ToastData { Message = message, DisplayTime = displayTimeMs });
+        }
+
+        public void Show(ToastData data)
+        {
+            if (_view.CheckAccess())
             {
-                Application.Current.Dispatcher.BeginInvoke(new Action<string, double>(Show), message, displayTimeMs);
-                return;
+                _viewModel.NewNotification(data);
             }
-
-            Popup popup = new Popup();
-            popup.Child = new TextBlock
-                             {
-                                 Text = message, 
-                                 FontSize = 24,
-                                 Foreground = Brushes.White,
-                                 HorizontalAlignment = HorizontalAlignment.Center, 
-                                 VerticalAlignment = VerticalAlignment.Center
-                             };
-            popup.IsOpen = true;
-
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(displayTimeMs);
-            timer.Tick += (sender, args) =>
-                          {
-                              ((DispatcherTimer)sender).Stop();
-                              popup.IsOpen = false;
-                          };
-            timer.Start();
+            else
+            {
+                _view.Dispatcher.BeginInvoke(new Action<ToastData>(Show), DispatcherPriority.Background, data);
+            }
         }
 
-        public void Show(UIElement element, double displayTimeMs = 1000)
+        public void OnImportsSatisfied()
         {
-            _toasts.Enqueue(new ToastContainer { Item = element, Timeout = displayTimeMs });
+            _region = _regionManager.Regions[AppRegions.MainOverlayRegion];
         }
 
-        private class ToastContainer
+        private void ViewModelOnDeactivate(object sender, EventArgs eventArgs)
         {
-            public object Item { get; set; }
-            public double Timeout { get; set; }
+            if (_view.CheckAccess())
+            {
+                if (_region.Views.Contains(_view))
+                {
+                    _region.Remove(_view);
+                }
+            }
+            else
+            {
+                _view.Dispatcher.BeginInvoke(new Action<object, EventArgs>(ViewModelOnDeactivate), sender, eventArgs);
+            }
         }
+
+        private void ViewModelOnActivate(object sender, EventArgs eventArgs)
+        {
+            if (_view.CheckAccess())
+            {
+                if (!_region.Views.Contains(_view))
+                {
+                    _region.Add(_view);
+                }
+            }
+            else
+            {
+                _view.Dispatcher.BeginInvoke(new Action<object, EventArgs>(ViewModelOnActivate), sender, eventArgs);
+            }
+        }
+
+        #endregion Methods
     }
 }
