@@ -91,6 +91,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Views\Browse\MainStationView.xaml.cs">
+      <DependentUpon>MainStationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Browse\MainStationViewModel.cs" />
+    <Compile Include="Views\Browse\Tabs\SearchResultsView.xaml.cs">
+      <DependentUpon>SearchResultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Browse\Tabs\SearchResultsViewModel.cs" />
     <Compile Include="Views\Similar\MainStationView.xaml.cs">
       <DependentUpon>MainStationView.xaml</DependentUpon>
     </Compile>
@@ -121,6 +129,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Browse\MainStationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Browse\Tabs\SearchResultsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Similar\MainStationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

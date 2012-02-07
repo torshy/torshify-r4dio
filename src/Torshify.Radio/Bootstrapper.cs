@@ -1,14 +1,12 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
-using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using Torshify.Radio.Framework.Commands;
-using Torshify.Radio.Utilities;
+
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -19,7 +17,9 @@ using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.MefExtensions;
 
 using Torshify.Radio.Framework;
+using Torshify.Radio.Framework.Commands;
 using Torshify.Radio.Logging;
+using Torshify.Radio.Utilities;
 
 namespace Torshify.Radio
 {
