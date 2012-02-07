@@ -149,7 +149,7 @@ namespace Torshify.Radio.Grooveshark
             }
             catch (Exception e)
             {
-                _log.Log("Error while stopping Grooveshark player. " + e.Message, Category.Info, Priority.Medium);
+                _log.Log("Grooveshark: Error while stopping player. " + e.Message, Category.Info, Priority.Medium);
             }
             finally
             {
@@ -164,7 +164,7 @@ namespace Torshify.Radio.Grooveshark
             {
                 if (_waveOut == null && _bufferedWaveProvider != null)
                 {
-                    _log.Log("Initializing grooveshark player", Category.Info, Priority.Medium);
+                    _log.Log("Grooveshark: Initializing", Category.Info, Priority.Medium);
 
                     try
                     {
@@ -175,7 +175,7 @@ namespace Torshify.Radio.Grooveshark
                     }
                     catch (Exception ex)
                     {
-                        _log.Log(ex.ToString(), Category.Exception, Priority.High);
+                        _log.Log("Grooveshark: " + ex.ToString(), Category.Exception, Priority.High);
                         _elapsedTimeSpan = TimeSpan.Zero;
                         _playbackState = StreamingPlaybackState.Stopped;
                         _timer.Stop();
@@ -191,7 +191,7 @@ namespace Torshify.Radio.Grooveshark
                     {
                         _isBuffering(true);
 
-                        _log.Log("Buffering..", Category.Info, Priority.Medium);
+                        _log.Log("Grooveshark: Buffering..", Category.Info, Priority.Medium);
 
                         _playbackState = StreamingPlaybackState.Buffering;
 
@@ -203,7 +203,7 @@ namespace Torshify.Radio.Grooveshark
                     }
                     else if (bufferedSeconds > 4 && _playbackState == StreamingPlaybackState.Buffering)
                     {
-                        _log.Log("Buffering complete", Category.Info, Priority.Medium);
+                        _log.Log("Grooveshark: Buffering complete", Category.Info, Priority.Medium);
 
                         if (_waveOut != null)
                         {
@@ -216,7 +216,7 @@ namespace Torshify.Radio.Grooveshark
                     }
                     else if (_fullyDownloaded && bufferedSeconds < 0.5)
                     {
-                        _log.Log("Buffer empty and the stream is fully downloaded. Complete..", Category.Info, Priority.Medium);
+                        _log.Log("Grooveshark: Buffer empty and the stream is fully downloaded. Complete..", Category.Info, Priority.Medium);
                         _elapsedTimeSpan = TimeSpan.Zero;
                         _isPlaying(false);
                         _playbackState = StreamingPlaybackState.Stopped;
@@ -251,7 +251,7 @@ namespace Torshify.Radio.Grooveshark
                         {
                             if (_bufferedWaveProvider != null &&
                                 _bufferedWaveProvider.BufferLength - _bufferedWaveProvider.BufferedBytes <
-                                _bufferedWaveProvider.WaveFormat.AverageBytesPerSecond/4)
+                                _bufferedWaveProvider.WaveFormat.AverageBytesPerSecond / 4)
                             {
                                 Thread.Sleep(500);
                             }
@@ -296,14 +296,14 @@ namespace Torshify.Radio.Grooveshark
                                                                                   : 2, frame.FrameLength, frame.BitRate);
                                     decompressor = new AcmMp3FrameDecompressor(waveFormat);
                                     _bufferedWaveProvider = new BufferedWaveProvider(decompressor.OutputFormat);
-                                    
+
                                     if (_track.TotalDuration != TimeSpan.Zero)
                                     {
                                         _bufferedWaveProvider.BufferDuration = _track.TotalDuration;
                                     }
                                     else
                                     {
-                                        _bufferedWaveProvider.BufferDuration = TimeSpan.FromSeconds(45);
+                                        _bufferedWaveProvider.BufferDuration = TimeSpan.FromSeconds(10);
                                     }
                                 }
 
@@ -317,8 +317,7 @@ namespace Torshify.Radio.Grooveshark
                                     catch (Exception e)
                                     {
                                         _fullyDownloaded = true;
-                                        _log.Log("Error decompressing frame: " + e.Message, Category.Exception,
-                                                 Priority.Medium);
+                                        _log.Log("Grooveshark: Error decompressing frame: " + e.Message, Category.Exception, Priority.Medium);
                                         break;
                                     }
                                 }
@@ -345,7 +344,7 @@ namespace Torshify.Radio.Grooveshark
                 }
             }
 
-            _log.Log("Buffer thread exiting", Category.Info, Priority.Medium);
+            _log.Log("Grooveshark: Buffer thread exiting", Category.Info, Priority.Medium);
         }
 
         #endregion Methods

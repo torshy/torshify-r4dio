@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Windows.Threading;
+
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
@@ -13,8 +14,8 @@ namespace Torshify.Radio.Core.Views.Controls
     {
         #region Fields
 
-        private readonly ITrackPlayer _player;
         private readonly Dispatcher _dispatcher;
+        private readonly ITrackPlayer _player;
         private readonly IRadio _radio;
 
         #endregion Fields
@@ -38,11 +39,18 @@ namespace Torshify.Radio.Core.Views.Controls
 
             NextTrackCommand = new ManualCommand(ExecuteNextTrack, CanExecuteNextTrack);
             TogglePlayPauseCommand = new ManualCommand(ExecuteTogglePlayPause, CanExecuteTogglePlayPause);
+            ShareTrackCommand = new ManualCommand<Track>(ExecuteShareTrack, CanExecuteShareTrack);
         }
 
         #endregion Constructors
 
         #region Properties
+
+        public ManualCommand<Track> ShareTrackCommand
+        {
+            get;
+            private set;
+        }
 
         public ManualCommand TogglePlayPauseCommand
         {
@@ -119,6 +127,15 @@ namespace Torshify.Radio.Core.Views.Controls
         #endregion Properties
 
         #region Methods
+
+        private bool CanExecuteShareTrack(Track track)
+        {
+            return true;
+        }
+
+        private void ExecuteShareTrack(Track track)
+        {
+        }
 
         private void ExecuteTogglePlayPause()
         {

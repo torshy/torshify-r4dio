@@ -1,0 +1,323 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Twitterizer2.Streaming</name>
+    </assembly>
+    <members>
+        <member name="P:Twitterizer.Streaming.StreamOptions.Count">
+            <summary>
+            Gets or sets the number of previous statuses to consider for delivery before transitioning to live stream delivery.
+            </summary>
+            <value>The count.</value>
+            <remarks>Currently disabled by Twitter. On unfiltered streams, all considered statuses are delivered, so the number requested is the number returned. On filtered streams, the number requested is the number of statuses that are applied to the filter predicate, and not the number of statuses returned.</remarks>
+        </member>
+        <member name="P:Twitterizer.Streaming.StreamOptions.Follow">
+            <summary>
+            Gets or sets the user IDs that is to be referenced in the stream.
+            </summary>
+            <value>The follow.</value>
+        </member>
+        <member name="P:Twitterizer.Streaming.StreamOptions.Track">
+            <summary>
+            Gets or sets the keywords to track.
+            </summary>
+            <value>The keywords to track.</value>
+        </member>
+        <member name="P:Twitterizer.Streaming.StreamOptions.Locations">
+            <summary>
+            Gets or sets the locations.
+            </summary>
+            <value>The locations.</value>
+        </member>
+        <member name="T:Twitterizer2.Streaming.TwitterSteamEvent">
+            <summary>
+            Describes the type of event that has occured on twitter
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.Block">
+            <summary>
+            The source user has blocked the target user.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.Unblock">
+            <summary>
+            The source user has unblocked the target user.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.Favorite">
+            <summary>
+            The source user has favorited the target users tweet.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.Unfavorite">
+            <summary>
+            The source user has unfaovorited the target users tweet.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.Follow">
+            <summary>
+            The source user has followed the target user.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.Unfollow">
+            <summary>
+            The source user has unfollowed the target user.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.ListMemberAdded">
+            <summary>
+            The source user has added the target user to the a list.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.ListMemberRemoved">
+            <summary>
+            The source user has removed the target user from a list.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.ListUserSubscribed">
+            <summary>
+            The source user has subscribed to a list.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.ListUserUnsubscribed">
+            <summary>
+            The source user has unsubscribed from a list.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.ListCreated">
+            <summary>
+            The source user created a list.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.ListUpdated">
+            <summary>
+            The source user update a lists properties.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.ListDestroyed">
+            <summary>
+            The source user deleted a list.
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterSteamEvent.UserUpdated">
+            <summary>
+            The source users profile was updated.
+            </summary>
+        </member>
+        <member name="T:Twitterizer.Streaming.TwitterStream">
+            <summary>
+            The TwitterStream class. Provides an interface to real-time status changes.
+            </summary>
+        </member>
+        <member name="F:Twitterizer.Streaming.TwitterStream.stopReceived">
+            <summary>
+            This value is set to true to indicate that the stream connection should be closed. 
+            </summary>
+        </member>
+        <member name="M:Twitterizer.Streaming.TwitterStream.#ctor(Twitterizer.OAuthTokens,System.String,Twitterizer.Streaming.StreamOptions)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Twitterizer.Streaming.TwitterStream"/> class.
+            </summary>
+            <param name="tokens">The tokens.</param>
+            <param name="userAgent">The useragent string which shall include the version of your client.</param>
+            <param name="streamoptions">The stream or user stream options to intially use when starting the stream.</param>
+        </member>
+        <member name="M:Twitterizer.Streaming.TwitterStream.StartUserStream(Twitterizer.Streaming.InitUserStreamCallback,Twitterizer.Streaming.StreamStoppedCallback,Twitterizer.Streaming.StatusCreatedCallback,Twitterizer.Streaming.StatusDeletedCallback,Twitterizer.Streaming.DirectMessageCreatedCallback,Twitterizer.Streaming.DirectMessageDeletedCallback,Twitterizer.Streaming.EventCallback,Twitterizer.Streaming.RawJsonCallback)">
+            <summary>
+            Starts the user stream.
+            </summary>
+        </member>
+        <member name="M:Twitterizer.Streaming.TwitterStream.StartPublicStream(Twitterizer.Streaming.StreamStoppedCallback,Twitterizer.Streaming.StatusCreatedCallback,Twitterizer.Streaming.StatusDeletedCallback,Twitterizer.Streaming.EventCallback,Twitterizer.Streaming.RawJsonCallback)">
+            <summary>
+            Starts the public stream.
+            </summary>
+        </member>
+        <member name="M:Twitterizer.Streaming.TwitterStream.PrepareStreamOptions(Twitterizer.WebRequestBuilder)">
+            <summary>
+            Prepares the stream options.
+            </summary>
+            <param name="builder">The builder.</param>
+        </member>
+        <member name="M:Twitterizer.Streaming.TwitterStream.StreamCallback(System.IAsyncResult)">
+            <summary>
+            The callback handler for all streams
+            </summary>
+            <param name="result">The result.</param>
+        </member>
+        <member name="M:Twitterizer.Streaming.TwitterStream.ParseMessage(System.String)">
+            <summary>
+            Parses the message.
+            </summary>
+            <param name="p">The p.</param>
+        </member>
+        <member name="M:Twitterizer.Streaming.TwitterStream.OnStreamStopped(Twitterizer.Streaming.StopReasons)">
+            <summary>
+            Called when the stream is stopped.
+            </summary>
+            <param name="reason">The reason.</param>
+            <remarks></remarks>
+        </member>
+        <member name="M:Twitterizer.Streaming.TwitterStream.EndStream">
+            <summary>
+            Ends the stream.
+            </summary>
+        </member>
+        <member name="M:Twitterizer.Streaming.TwitterStream.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="P:Twitterizer.Streaming.TwitterStream.UserAgent">
+            <summary>
+            The useragant which shall be used in connections to Twitter (a must in the specs of the API)
+            </summary>
+        </member>
+        <member name="P:Twitterizer.Streaming.TwitterStream.Tokens">
+            <summary>
+            Gets or sets the tokens.
+            </summary>
+            <value>The tokens.</value>
+        </member>
+        <member name="P:Twitterizer.Streaming.TwitterStream.StreamOptions">
+            <summary>
+            Gets or sets the stream options.
+            </summary>
+            <value>The stream options.</value>
+        </member>
+        <member name="P:Twitterizer.Streaming.TwitterStream.NetworkCredentials">
+            <summary>
+            Gets or sets the Basic Auth Credentials.
+            </summary>
+            <value>The Basic Auth Credentials.</value>
+        </member>
+        <member name="P:Twitterizer.Streaming.UserStreamOptions.AllReplies">
+            <summary>
+            Gets or sets whether to request all replies from the stream.
+            </summary>
+            <value>Boolean.</value>
+            <remarks>Will return all replies to a users stream (eg where the user doesn't follow both people replying to each other).</remarks>
+        </member>
+        <member name="T:Twitterizer.Core.SerializationHelper`1">
+            <summary>
+            The Serialization Helper class. Provides a simple interface for common serialization tasks.
+            </summary>
+            <typeparam name="T">The type of object to be deserialized</typeparam>
+        </member>
+        <member name="M:Twitterizer.Core.SerializationHelper`1.Deserialize(System.Byte[],Twitterizer.Core.SerializationHelper{`0}.DeserializationHandler)">
+            <summary>
+            Deserializes the specified web response.
+            </summary>
+            <param name="webResponseData">The web response data.</param>
+            <param name="deserializationHandler">The deserialization handler.</param>
+            <returns>
+            A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
+            </returns>
+        </member>
+        <member name="M:Twitterizer.Core.SerializationHelper`1.Deserialize(System.Byte[])">
+            <summary>
+            Deserializes the specified web response.
+            </summary>
+            <param name="webResponseData">The web response data.</param>
+            <returns>
+            A strongly typed object representing the deserialized data of type <typeparamref name="T"/>
+            </returns>
+        </member>
+        <member name="T:Twitterizer.Core.SerializationHelper`1.DeserializationHandler">
+            <summary>
+            The JavascriptConversionDelegate. The delegate is invokes when using the JavaScriptSerializer to manually construct a result object.
+            </summary>
+            <param name="value">Contains nested dictionary objects containing deserialized values for manual parsing.</param>
+            <returns>A strongly typed object representing the deserialized data of type <typeparamref name="T"/></returns>
+        </member>
+        <member name="P:Twitterizer.Streaming.TwitterStreamEvent.EventType">
+            <summary>
+            Gets or sets the type of the event.
+            </summary>
+            <value>The type of the event.</value>
+        </member>
+        <member name="P:Twitterizer.Streaming.TwitterStreamEvent.Source">
+            <summary>
+            Gets or sets the source of the event. This is always the user who initiated the event.
+            </summary>
+            <value>The source.</value>
+        </member>
+        <member name="P:Twitterizer.Streaming.TwitterStreamEvent.Target">
+            <summary>
+            Gets or sets the target of the event. This is the user who was affected, or who owns the affected object.
+            </summary>
+            <value>The source.</value>
+        </member>
+        <member name="P:Twitterizer.Streaming.TwitterStreamEvent.TargetObject">
+            <summary>
+            Gets or sets the target object.
+            </summary>
+            <value>The target object.</value>
+        </member>
+        <member name="P:Twitterizer.Streaming.TwitterStreamEvent.CreatedAt">
+            <summary>
+            Gets or sets the creation date.
+            </summary>
+            <value>The creation date.</value>
+        </member>
+        <member name="T:Twitterizer2.Streaming.TwitterizerDateConverter">
+            <summary>
+            Converts date strings returned by the Twitter API into <see cref="T:System.DateTime"/>
+            </summary>
+        </member>
+        <member name="F:Twitterizer2.Streaming.TwitterizerDateConverter.DateFormat">
+            <summary>
+            The date pattern for most dates returned by the API
+            </summary>
+        </member>
+        <member name="M:Twitterizer2.Streaming.TwitterizerDateConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Reads the json.
+            </summary>
+            <param name="reader">The reader.</param>
+            <param name="objectType">Type of the object.</param>
+            <param name="existingValue">The existing value.</param>
+            <param name="serializer">The serializer.</param>
+            <returns>The parsed value as a DateTime, or null.</returns>
+        </member>
+        <member name="M:Twitterizer2.Streaming.TwitterizerDateConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.Object,Newtonsoft.Json.JsonSerializer)">
+            <summary>
+            Writes the json.
+            </summary>
+            <param name="writer">The writer.</param>
+            <param name="value">The value.</param>
+            <param name="serializer">The serializer.</param>
+        </member>
+        <member name="P:Twitterizer.Streaming.TwitterStreamDeletedEvent.UserId">
+            <summary>
+            Gets or sets the user id of the event. This is always the user who initiated the event.
+            </summary>
+            <value>The User Id.</value>
+        </member>
+        <member name="P:Twitterizer.Streaming.TwitterStreamDeletedEvent.Id">
+            <summary>
+            Gets or sets the id of the event. This is the status that was affected.
+            </summary>
+            <value>The Direct Message or Status Id.</value>
+        </member>
+        <member name="M:Twitterizer.Streaming.Location.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> that represents this instance.
+            </returns>
+        </member>
+        <member name="P:Twitterizer.Streaming.Location.Latitude">
+            <summary>
+            Gets or sets the latitude.
+            </summary>
+            <value>The latitude.</value>
+        </member>
+        <member name="P:Twitterizer.Streaming.Location.Longitude">
+            <summary>
+            Gets or sets the longitude.
+            </summary>
+            <value>The longitude.</value>
+        </member>
+    </members>
+</doc>

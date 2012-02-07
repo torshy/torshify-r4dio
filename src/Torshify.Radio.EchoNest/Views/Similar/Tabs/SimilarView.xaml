@@ -40,7 +40,7 @@
             <ItemsControl.Template>
                 <ControlTemplate>
                     <ScrollViewer
-                        CanContentScroll="True">
+                        CanContentScroll="False">
                         <VirtualizingStackPanel
                             IsItemsHost="True" />
                     </ScrollViewer>

@@ -100,24 +100,30 @@ namespace Torshify.Radio.Grooveshark
 
         public bool SupportsLink(TrackLink trackLink)
         {
-            return trackLink.TrackSource == "grooveshark";
+            return trackLink.TrackSource == "gs";
         }
 
         public Track FromLink(TrackLink trackLink)
         {
-            string songIdAsString = trackLink["SongID"];
+            string songIdAsString = trackLink["S"];
 
             int songId;
 
             if (int.TryParse(songIdAsString, out songId))
             {
-                string artistIdAsString = trackLink["ArtistID"];
+                string artistIdAsString = trackLink["A"];
+                string songName = trackLink["N"];
+                string artistName = trackLink["AR"];
 
                 int artistId;
 
                 if (int.TryParse(artistIdAsString, out artistId))
                 {
-                    return new GroovesharkTrack(songId, artistId);
+                    return new GroovesharkTrack(songId, artistId)
+                           {
+                               Name = songName,
+                               Artist = artistName
+                           };
                 }
             }
 

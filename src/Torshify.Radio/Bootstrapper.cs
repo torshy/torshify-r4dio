@@ -4,9 +4,11 @@ using System.ComponentModel.Composition.Hosting;
 using System.Globalization;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-
+using Torshify.Radio.Framework.Commands;
+using Torshify.Radio.Utilities;
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -69,6 +71,7 @@ namespace Torshify.Radio
         {
             base.InitializeShell();
             Application.Current.MainWindow = (Shell)Shell;
+            Application.Current.MainWindow.InputBindings.Add(new KeyBinding(new StaticCommand(ConsoleManager.Toggle), Key.D0, ModifierKeys.Alt));
         }
 
         private void InitializeLogging()

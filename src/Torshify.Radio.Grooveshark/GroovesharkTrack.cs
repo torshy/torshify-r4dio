@@ -35,9 +35,11 @@ namespace Torshify.Radio.Grooveshark
 
         public override TrackLink ToLink()
         {
-            TrackLink link = new TrackLink("grooveshark");
-            link["SongID"] = SongID.ToString(CultureInfo.InvariantCulture);
-            link["ArtistID"] = ArtistID.ToString(CultureInfo.InvariantCulture);
+            TrackLink link = new TrackLink("gs");
+            link["S"] = SongID.ToString(CultureInfo.InvariantCulture);
+            link["A"] = ArtistID.ToString(CultureInfo.InvariantCulture);
+            link["N"] = Name;
+            link["AR"] = Artist;
             return link;
         }
 
