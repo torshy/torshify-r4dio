@@ -6,11 +6,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300"
     VerticalAlignment="Top">
-
+    <UserControl.Resources>
+        <Converters:StringToUpperConverter
+            x:Key="StringToUpperConverter" />
+    </UserControl.Resources>
     <ContentControl
         Content="{Binding CurrentToast}">
         <ContentControl.ContentTemplate>
@@ -19,18 +23,25 @@
                     Name="Bd"
                     Height="24"
                     Background="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}"
-                    Padding="8,0,0,0">
+                    Padding="2,0,0,0">
                     <Border.RenderTransform>
                         <TranslateTransform
                             Y="-24" />
                     </Border.RenderTransform>
-                    <TextBlock
-                        Name="Tb"
-                        Text="{Binding Message}"
-                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
-                        FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}"
-                        Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}">
-                    </TextBlock>
+                    <DockPanel>
+                        <Image
+                            Margin="2,4,8,4"
+                            DockPanel.Dock="Left"
+                            Source="{Binding Icon}" />
+                        <TextBlock
+                            Name="Tb"
+                            Text="{Binding Message, Converter={StaticResource StringToUpperConverter}}"
+                            FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                            FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeSmall}}"
+                            Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                            VerticalAlignment="Center">
+                        </TextBlock>
+                    </DockPanel>
                 </Border>
                 <DataTemplate.Triggers>
                     <EventTrigger
