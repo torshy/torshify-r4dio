@@ -1,13 +1,12 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Threading;
 
 namespace Torshify.Radio.Core.Views
 {
     [Export(typeof(MainView))]
-    public partial class MainView : UserControl
+    public partial class MainView
     {
         #region Fields
 

@@ -1,4 +1,4 @@
-﻿<UserControl
+﻿<DockPanel
     x:Class="Torshify.Radio.Core.Views.MainView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -17,107 +17,106 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
-    <UserControl.Resources>
+    <DockPanel.Resources>
         <Converters:BoolToVisibleOrHidden
             x:Key="BoolToHiddenConverter"
             Collapse="True" />
-    </UserControl.Resources>
-    <DockPanel>
+    </DockPanel.Resources>
+    <StackPanel
+        DockPanel.Dock="Top">
+        <Resources:R4dioIcon
+            Margin="0,-8,0,4"
+            HorizontalAlignment="Left"
+            Height="20" />
         <StackPanel
-            DockPanel.Dock="Top">
-            <Resources:R4dioIcon
-                Margin="0,-8,0,4"
-                HorizontalAlignment="Left"
-                Height="20" />
-            <StackPanel
-                Orientation="Horizontal"
-                Controls:WindowChrome.IsHitTestVisibleInChrome="True">
-                <Button
-                    Width="20"
-                    Command="{Binding NavigateBackCommand}"
-                    Padding="0"
-                    BorderThickness="0">
-                    <Button.ContentTemplate>
-                        <DataTemplate>
-                            <Image
-                                Name="Img"
-                                ToolTip="{lex:LocText Key=Button_Back_ToolTip, Dict=Strings, Assembly=Torshify.Radio.Core}"
-                                ToolTipService.ShowOnDisabled="True"
-                                Source="pack://siteoforigin:,,,/Resources/Icons/back.png" />
-                            <DataTemplate.Triggers>
-                                <Trigger
-                                    Property="IsEnabled"
-                                    Value="False">
-                                    <Setter
-                                        Property="Opacity"
-                                        Value="0.5" />
-                                    <Setter
-                                        Property="ToolTip"
-                                        Value="{lex:LocText Key=Button_Back_Unable_ToolTip, Dict=Strings, Assembly=Torshify.Radio.Core}"
-                                        TargetName="Img" />
-                                </Trigger>
-                            </DataTemplate.Triggers>
-                        </DataTemplate>
-                    </Button.ContentTemplate>
-                </Button>
-                <Button
-                    Width="20"
-                    Margin="2,0,0,0"
-                    Command="{Binding NavigateForwardCommand}"
-                    Padding="0"
-                    BorderThickness="0">
-                    <Button.ContentTemplate>
-                        <DataTemplate>
-                            <Image
-                                Name="Img"
-                                ToolTip="{lex:LocText Key=Button_Forward_ToolTip, Dict=Strings, Assembly=Torshify.Radio.Core}"
-                                ToolTipService.ShowOnDisabled="True"
-                                Source="pack://siteoforigin:,,,/Resources/Icons/next.png" />
-                            <DataTemplate.Triggers>
-                                <Trigger
-                                    Property="IsEnabled"
-                                    Value="False">
-                                    <Setter
-                                        Property="Opacity"
-                                        Value="0.5" />
-                                    <Setter
-                                        Property="ToolTip"
-                                        Value="{lex:LocText Key=Button_Forward_Unable_ToolTip, Dict=Strings, Assembly=Torshify.Radio.Core}"
-                                        TargetName="Img" />
-                                </Trigger>
-                            </DataTemplate.Triggers>
-                        </DataTemplate>
-                    </Button.ContentTemplate>
-                </Button>
-                <Grid
-                    Margin="8,0,0,0">
-                    <ComboBox
-                        ItemsSource="{Binding SearchBarService.SearchBars}"
-                        SelectedItem="{Binding SearchBarService.Current}"
-                        DisplayMemberPath="Data.Category"
-                        Style="{DynamicResource ComboBox_SelectedItemInvisibleStyle}" />
-                    <Controls:SearchTextBox
-                        x:Name="InputBox"
-                        Width="200"
-                        Margin="0,0,24,0"
-                        ToolTip="{Binding SearchBarService.Current.Data.WatermarkText}"
-                        Watermark="{Binding SearchBarService.Current.Data.WatermarkText}"
-                        ItemsSource="{Binding AutoCompleteList}"
-                        TextChanged="AutoCompleteTextChanged"
-                        Search="SearchTextBoxSearch">
-                        <i:Interaction.Behaviors>
-                            <Behaviors:KeyboardBehavior
-                                Key="Enter"
-                                Command="{Binding SearchCommand}"
-                                CommandParameter="{Binding Text, ElementName=InputBox}" />
-                        </i:Interaction.Behaviors>
-                    </Controls:SearchTextBox>
-                    <Controls:MetroProgressBar
-                        VerticalAlignment="Bottom"
-                        Visibility="{Binding SearchBarLoadingIndicatorService.IsLoading, Converter={StaticResource BoolToHiddenConverter}}"
-                        IsIndeterminate="{Binding SearchBarLoadingIndicatorService.IsLoading}" />
-                </Grid>
-                <!--<TextBlock
+            Orientation="Horizontal"
+            Controls:WindowChrome.IsHitTestVisibleInChrome="True">
+            <Button
+                Width="20"
+                Command="{Binding NavigateBackCommand}"
+                Padding="0"
+                BorderThickness="0">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <Image
+                            Name="Img"
+                            ToolTip="{lex:LocText Key=Button_Back_ToolTip, Dict=Strings, Assembly=Torshify.Radio.Core}"
+                            ToolTipService.ShowOnDisabled="True"
+                            Source="pack://siteoforigin:,,,/Resources/Icons/back.png" />
+                        <DataTemplate.Triggers>
+                            <Trigger
+                                Property="IsEnabled"
+                                Value="False">
+                                <Setter
+                                    Property="Opacity"
+                                    Value="0.5" />
+                                <Setter
+                                    Property="ToolTip"
+                                    Value="{lex:LocText Key=Button_Back_Unable_ToolTip, Dict=Strings, Assembly=Torshify.Radio.Core}"
+                                    TargetName="Img" />
+                            </Trigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+            <Button
+                Width="20"
+                Margin="2,0,0,0"
+                Command="{Binding NavigateForwardCommand}"
+                Padding="0"
+                BorderThickness="0">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <Image
+                            Name="Img"
+                            ToolTip="{lex:LocText Key=Button_Forward_ToolTip, Dict=Strings, Assembly=Torshify.Radio.Core}"
+                            ToolTipService.ShowOnDisabled="True"
+                            Source="pack://siteoforigin:,,,/Resources/Icons/next.png" />
+                        <DataTemplate.Triggers>
+                            <Trigger
+                                Property="IsEnabled"
+                                Value="False">
+                                <Setter
+                                    Property="Opacity"
+                                    Value="0.5" />
+                                <Setter
+                                    Property="ToolTip"
+                                    Value="{lex:LocText Key=Button_Forward_Unable_ToolTip, Dict=Strings, Assembly=Torshify.Radio.Core}"
+                                    TargetName="Img" />
+                            </Trigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+            <Grid
+                Margin="8,0,0,0">
+                <ComboBox
+                    ItemsSource="{Binding SearchBarService.SearchBars}"
+                    SelectedItem="{Binding SearchBarService.Current}"
+                    DisplayMemberPath="Data.Category"
+                    Style="{DynamicResource ComboBox_SelectedItemInvisibleStyle}" />
+                <Controls:SearchTextBox
+                    x:Name="InputBox"
+                    Width="200"
+                    Margin="0,0,24,0"
+                    ToolTip="{Binding SearchBarService.Current.Data.WatermarkText}"
+                    Watermark="{Binding SearchBarService.Current.Data.WatermarkText}"
+                    ItemsSource="{Binding AutoCompleteList}"
+                    TextChanged="AutoCompleteTextChanged"
+                    Search="SearchTextBoxSearch">
+                    <i:Interaction.Behaviors>
+                        <Behaviors:KeyboardBehavior
+                            Key="Enter"
+                            Command="{Binding SearchCommand}"
+                            CommandParameter="{Binding Text, ElementName=InputBox}" />
+                    </i:Interaction.Behaviors>
+                </Controls:SearchTextBox>
+                <Controls:MetroProgressBar
+                    VerticalAlignment="Bottom"
+                    Visibility="{Binding SearchBarLoadingIndicatorService.IsLoading, Converter={StaticResource BoolToHiddenConverter}}"
+                    IsIndeterminate="{Binding SearchBarLoadingIndicatorService.IsLoading}" />
+            </Grid>
+            <!--<TextBlock
                     Margin="12,0,0,0"
                     Text="//"
                     FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMediumLarge}}"
@@ -129,29 +128,28 @@
                     FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMediumLarge}}"
                     FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
                     Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />-->
-            </StackPanel>
-
         </StackPanel>
-        <DockPanel>
-            <DockPanel
-                DockPanel.Dock="Bottom"
-                Margin="0,0,0,2">
-                <Decorator
-                    Height="4"
-                    DockPanel.Dock="Top"
-                    VerticalAlignment="Bottom">
-                    <Controls:MetroProgressBar
-                        Visibility="{Binding LoadingIndicatorService.IsLoading, Converter={StaticResource BoolToHiddenConverter}}"
-                        IsIndeterminate="{Binding LoadingIndicatorService.IsLoading}" />
-                </Decorator>
-                <ContentControl
-                    FocusVisualStyle="{x:Null}"
-                    Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.BottomRegion}" />
-            </DockPanel>
+
+    </StackPanel>
+    <DockPanel>
+        <DockPanel
+            DockPanel.Dock="Bottom"
+            Margin="0,0,0,2">
+            <Decorator
+                Height="4"
+                DockPanel.Dock="Top"
+                VerticalAlignment="Bottom">
+                <Controls:MetroProgressBar
+                    Visibility="{Binding LoadingIndicatorService.IsLoading, Converter={StaticResource BoolToHiddenConverter}}"
+                    IsIndeterminate="{Binding LoadingIndicatorService.IsLoading}" />
+            </Decorator>
             <ContentControl
-                Margin="0,8,0,0"
                 FocusVisualStyle="{x:Null}"
-                Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.ViewRegion}" />
+                Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.BottomRegion}" />
         </DockPanel>
+        <ContentControl
+            Margin="0,8,0,0"
+            FocusVisualStyle="{x:Null}"
+            Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.ViewRegion}" />
     </DockPanel>
-</UserControl>
+</DockPanel>

@@ -2792,4 +2792,17 @@
             Value="True" />
     </Style>
 
+    <Style
+        TargetType="{x:Type ItemsControl}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type ItemsControl}">
+                    <ItemsPresenter />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
 </ResourceDictionary>
