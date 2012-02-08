@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Windows.Threading;
 
 using EightTracks;
 
@@ -23,7 +24,19 @@ namespace Torshify.Radio.EightTracks
 
         internal const string ApiKey = "63b5cb8daf03ec1df8f1c25fec5479b612739a29";
 
+        private readonly Dispatcher _dispatcher;
+
         #endregion Fields
+
+        #region Constructors
+
+        [ImportingConstructor]
+        public EightTracksModule(Dispatcher dispatcher)
+        {
+            _dispatcher = dispatcher;
+        }
+
+        #endregion Constructors
 
         #region Properties
 
@@ -61,34 +74,38 @@ namespace Torshify.Radio.EightTracks
 
         public void Initialize()
         {
-            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(MainTabView));
-            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(RecentMixListView));
-            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(PopularMixListView));
-            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(HotMixListView));
-            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(TagsTabView));
-            RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof(FavoritesView));
+            _dispatcher.BeginInvoke(new Action(() =>
+            {
+                RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof (MainTabView));
+                RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof (RecentMixListView));
+                RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof (PopularMixListView));
+                RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof (HotMixListView));
+                RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof (TagsTabView));
+                RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof (FavoritesView));
 
-            TileService.Add<MainStationView>(new TileData
-                                                {
-                                                    Title = "8tracks",
-                                                    BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_9999_8tracks.png")
-                                                });
+                TileService.Add<MainStationView>(new TileData
+                {
+                    Title = "8tracks",
+                    BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_9999_8tracks.png")
+                });
 
-            SearchBarService.Add<MainStationView>(new SearchBarData
-                                                 {
-                                                     Category = "8tracks by tag",
-                                                     WatermarkText = "Search for mixes by tag",
-                                                     AutoCompleteProvider = GetMixesByTag
-                                                 },
-                                                 Tuple.Create("Type", "Tag"));
+                SearchBarService.Add<MainStationView>(new SearchBarData
+                {
+                    Category = "8tracks by tag",
+                    WatermarkText = "Search for mixes by tag",
+                    AutoCompleteProvider = GetMixesByTag
+                },
+                Tuple.Create("Type", "Tag"));
 
-            SearchBarService.Add<MainStationView>(new SearchBarData
-                                                  {
-                                                      Category = "8tracks by artist",
-                                                      WatermarkText = "Search for mixes by artist",
-                                                      AutoCompleteProvider = GetMixesByTag
-                                                  },
-                                                  Tuple.Create("Type", "Artist"));
+                SearchBarService.Add<MainStationView>(new SearchBarData
+                {
+                    Category = "8tracks by artist",
+                    WatermarkText = "Search for mixes by artist",
+                    AutoCompleteProvider = GetMixesByTag
+                },
+                Tuple.Create("Type", "Artist"));
+
+            }), DispatcherPriority.Background);
         }
 
         private IEnumerable<string> GetMixesByTag(string tag)

@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.Composition;
-using System.Windows.Controls;
 
 namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 {
     [Export]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public partial class SearchResultsView : UserControl
+    public partial class SearchResultsView
     {
         #region Constructors
 

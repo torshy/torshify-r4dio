@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-
+using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
+using Torshify.Radio.Framework.Commands;
 
 namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 {
@@ -15,7 +17,11 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class SearchResultsViewModel : NotificationObject, IHeaderInfoProvider<HeaderInfo>, INavigationAware
     {
+        #region Fields
+
         private ObservableCollection<Track> _results;
+
+        #endregion Fields
 
         #region Constructors
 
@@ -27,6 +33,9 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
                          {
                              Title = "Results"
                          };
+
+            GoToAlbumCommand = new StaticCommand<string>(ExecuteGoToAlbum);
+            GoToArtistCommand = new StaticCommand<string>(ExecuteGoToArtist);
         }
 
         #endregion Constructors
@@ -48,31 +57,50 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
         }
 
         [Import]
-        public ILoadingIndicatorService LoadingIndicatorService
+        public IRegionManager RegionManager
         {
             get; 
+            set;
+        }
+
+        [Import]
+        public ILoadingIndicatorService LoadingIndicatorService
+        {
+            get;
             set;
         }
 
         [Import]
         public IRadio Radio
         {
-            get; 
+            get;
             set;
         }
 
         [Import]
         public IToastService ToastService
         {
-            get; 
+            get;
             set;
         }
 
         [Import]
         public ILoggerFacade Logger
         {
-            get; 
+            get;
             set;
+        }
+
+        public StaticCommand<string> GoToArtistCommand
+        {
+            get;
+            private set;
+        }
+
+        public StaticCommand<string> GoToAlbumCommand
+        {
+            get;
+            private set;
         }
 
         #endregion Properties
@@ -126,6 +154,20 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 
                     LoadingIndicatorService.Pop();
                 }, ui);
+        }
+
+        private void ExecuteGoToArtist(string artistName)
+        {
+            UriQuery q = new UriQuery();
+            q.Add("artistName", artistName);
+            RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(ArtistView).FullName + q);
+        }
+
+        private void ExecuteGoToAlbum(string albumName)
+        {
+            UriQuery q = new UriQuery();
+            q.Add("albumName", albumName);
+            RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(AlbumView).FullName + q);
         }
 
         #endregion Methods

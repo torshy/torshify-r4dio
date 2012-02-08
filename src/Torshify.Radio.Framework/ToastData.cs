@@ -10,7 +10,7 @@ namespace Torshify.Radio.Framework
 
         public ToastData()
         {
-            Icon = new Uri(AppIcons.InformationWithCircle, UriKind.RelativeOrAbsolute);
+            Icon = AppIcons.InformationWithCircle;
         }
 
         #endregion Constructors

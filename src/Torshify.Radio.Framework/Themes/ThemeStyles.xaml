@@ -3051,4 +3051,38 @@
             Value="0" />
     </Style>
 
+    <Style
+        x:Key="{x:Type Hyperlink}"
+        TargetType="{x:Type Hyperlink}">
+        <Style.Triggers>
+            <Trigger
+                Property="IsMouseOver"
+                Value="True">
+                <Setter
+                    Property="TextDecorations"
+                    Value="Underline" />
+            </Trigger>
+            <Trigger
+                Property="IsEnabled"
+                Value="False">
+                <Setter
+                    Property="Foreground"
+                    Value="{DynamicResource {x:Static Framework:AppTheme.DisabledBrushKey}}" />
+            </Trigger>
+            <Trigger
+                Property="IsEnabled"
+                Value="True">
+                <Setter
+                    Property="Cursor"
+                    Value="Hand" />
+            </Trigger>
+        </Style.Triggers>
+        <Setter
+            Property="TextDecorations"
+            Value="None" />
+        <Setter
+            Property="Foreground"
+            Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+    </Style>
+    
 </ResourceDictionary>
