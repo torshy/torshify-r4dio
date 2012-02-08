@@ -9,15 +9,20 @@
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter
-            x:Key="BooleanToVisibilityConverter" />
         <Converters:BoolToVisibleOrHidden
             x:Key="BoolToVisibleInverted"
             Collapse="True"
             Reverse="True" />
-        <Converters:ImageLoaderConverter
-            x:Key="ImageConverter"
-            DecodePixelWidth="72" />
+        <Style
+            x:Key="DataGridTextColumnElementStyle"
+            TargetType="{x:Type TextBlock}">
+            <Setter
+                Property="Margin"
+                Value="4,0,0,0" />
+            <Setter
+                Property="TextTrimming"
+                Value="CharacterEllipsis" />
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Image
@@ -27,27 +32,43 @@
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
             Opacity="0.5" />
-        <ItemsControl
+        <DataGrid
             Name="resultList"
             ItemsSource="{Binding Results}"
             VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ItemsControl.Template>
-                <ControlTemplate>
-                    <ScrollViewer
-                        CanContentScroll="False">
-                        <VirtualizingStackPanel
-                            IsItemsHost="True" />
-                    </ScrollViewer>
-                </ControlTemplate>
-            </ItemsControl.Template>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock
-                        Text="{Binding Name}" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Binding="{Binding Name}"
+                    Width="250"
+                    ElementStyle="{StaticResource DataGridTextColumnElementStyle}">
+                    <DataGridTextColumn.Header>
+                        <TextBlock
+                            Text="Track"
+                            TextTrimming="CharacterEllipsis" />
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Binding="{Binding Artist}"
+                    Width="*"
+                    ElementStyle="{StaticResource DataGridTextColumnElementStyle}">
+                    <DataGridTextColumn.Header>
+                        <TextBlock
+                            Text="Artist"
+                            TextTrimming="CharacterEllipsis" />
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn
+                    Binding="{Binding Album}"
+                    Width="250"
+                    ElementStyle="{StaticResource DataGridTextColumnElementStyle}">
+                    <DataGridTextColumn.Header>
+                        <TextBlock
+                            Text="Album"
+                            TextTrimming="CharacterEllipsis" />
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

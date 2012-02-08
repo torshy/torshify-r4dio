@@ -11,10 +11,10 @@
 
     <Converters:StringToUpperConverter
         x:Key="StringToUpperConverter" />
-    
+
     <PopupAnimation
         x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">Slide</PopupAnimation>
-    
+
     <Style
         x:Key="{x:Type ToolTip}"
         TargetType="ToolTip">
@@ -2804,5 +2804,251 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+    <Style
+        x:Key="ColumnHeaderGripperStyle"
+        TargetType="{x:Type Thumb}">
+        <Setter
+            Property="Width"
+            Value="8" />
+        <Setter
+            Property="Background"
+            Value="Transparent" />
+        <Setter
+            Property="Cursor"
+            Value="SizeWE" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type Thumb}">
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type DataGridColumnHeader}">
+        <Setter
+            Property="Foreground"
+            Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+        <Setter
+            Property="FontFamily"
+            Value="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type DataGridColumnHeader}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="*" />
+                            <ColumnDefinition
+                                Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Border
+                            x:Name="BackgroundBorder"
+                            BorderThickness="0,1,0,1"
+                            Background="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}"
+                            Grid.ColumnSpan="2"
+                            Opacity="0.4" />
+                        <ContentPresenter
+                            Margin="6,3,6,3"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                        <Path
+                            x:Name="SortArrow"
+                            Visibility="Collapsed"
+                            Data="M0,0 L1,0 0.5,1 z"
+                            Stretch="Fill"
+                            Grid.Column="1"
+                            Width="8"
+                            Height="6"
+                            Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                            Margin="0,0,8,0"
+                            VerticalAlignment="Center"
+                            RenderTransformOrigin="0.5,0.4" />
+                        <Rectangle
+                            Width="1"
+                            Fill="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
+                            HorizontalAlignment="Right"
+                            Grid.ColumnSpan="2" />
+                        <Thumb
+                            x:Name="PART_LeftHeaderGripper"
+                            HorizontalAlignment="Left"
+                            Style="{StaticResource ColumnHeaderGripperStyle}" />
+                        <Thumb
+                            x:Name="PART_RightHeaderGripper"
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource ColumnHeaderGripperStyle}" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger
+                            Property="SortDirection"
+                            Value="{x:Null}">
+                            <Setter
+                                TargetName="BackgroundBorder"
+                                Property="Background"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
+                            <Setter
+                                TargetName="BackgroundBorder"
+                                Property="BorderBrush"
+                                Value="Transparent" />
+                        </Trigger>
+                        <Trigger
+                            Property="IsMouseOver"
+                            Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="BackgroundBorder"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1.0"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="BackgroundBorder"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0.4"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger
+                            Property="SortDirection"
+                            Value="Ascending">
+                            <Setter
+                                TargetName="SortArrow"
+                                Property="Visibility"
+                                Value="Visible" />
+                            <Setter
+                                TargetName="SortArrow"
+                                Property="RenderTransform">
+                                <Setter.Value>
+                                    <RotateTransform
+                                        Angle="180" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger
+                            Property="SortDirection"
+                            Value="Descending">
+                            <Setter
+                                TargetName="SortArrow"
+                                Property="Visibility"
+                                Value="Visible" />
+                        </Trigger>
+                        <Trigger
+                            Property="DisplayIndex"
+                            Value="0">
+                            <Setter
+                                Property="Visibility"
+                                Value="Collapsed"
+                                TargetName="PART_LeftHeaderGripper"></Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type DataGridCell}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type DataGridCell}">
+                    <Border
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        SnapsToDevicePixels="True">
+                        <ContentPresenter
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        x:Key="DataGridRowStyle"
+        TargetType="{x:Type DataGridRow}">
+        <Setter
+            Property="Background"
+            Value="Transparent" />
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="{x:Type DataGridRow}">
+                    <Border
+                        x:Name="DGR_Border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        SnapsToDevicePixels="True">
+                        <DataGridCellsPresenter
+                            ItemsPanel="{TemplateBinding ItemsPanel}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        TargetType="{x:Type DataGrid}">
+        <Setter
+            Property="AutoGenerateColumns"
+            Value="False" />
+        <Setter
+            Property="CanUserAddRows"
+            Value="False" />
+        <Setter
+            Property="CanUserDeleteRows"
+            Value="False" />
+        <Setter
+            Property="CanUserReorderColumns"
+            Value="False" />
+        <Setter
+            Property="CanUserResizeRows"
+            Value="False" />
+        <Setter
+            Property="IsReadOnly"
+            Value="True" />
+        <Setter
+            Property="RowStyle"
+            Value="{StaticResource DataGridRowStyle}" />
+        <Setter
+            Property="Background"
+            Value="{x:Null}" />
+        <Setter
+            Property="Foreground"
+            Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+        <Setter
+            Property="SelectionUnit"
+            Value="FullRow" />
+        <Setter
+            Property="BorderThickness"
+            Value="0" />
+        <Setter
+            Property="GridLinesVisibility"
+            Value="None" />
+        <Setter
+            Property="RowHeaderWidth"
+            Value="0" />
+    </Style>
+
 </ResourceDictionary>
