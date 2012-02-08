@@ -34,7 +34,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
                              Title = "Results"
                          };
 
-            GoToAlbumCommand = new StaticCommand<string>(ExecuteGoToAlbum);
+            GoToAlbumCommand = new StaticCommand<Track>(ExecuteGoToAlbum);
             GoToArtistCommand = new StaticCommand<string>(ExecuteGoToArtist);
         }
 
@@ -97,7 +97,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             private set;
         }
 
-        public StaticCommand<string> GoToAlbumCommand
+        public StaticCommand<Track> GoToAlbumCommand
         {
             get;
             private set;
@@ -163,10 +163,11 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(ArtistView).FullName + q);
         }
 
-        private void ExecuteGoToAlbum(string albumName)
+        private void ExecuteGoToAlbum(Track track)
         {
             UriQuery q = new UriQuery();
-            q.Add("albumName", albumName);
+            q.Add("artistName", track.Artist);
+            q.Add("albumName", track.Album);
             RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(AlbumView).FullName + q);
         }
 

@@ -3006,10 +3006,29 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger
+                Property="ItemsControl.AlternationIndex"
+                Value="0">
+                <Setter
+                    Property="Background"
+                    Value="#AA000000"></Setter>
+            </Trigger>
+            <Trigger
+                Property="ItemsControl.AlternationIndex"
+                Value="1">
+                <Setter
+                    Property="Background"
+                    Value="#CC111111"></Setter>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style
         TargetType="{x:Type DataGrid}">
+        <Setter
+            Property="AlternationCount"
+            Value="2" />
         <Setter
             Property="AutoGenerateColumns"
             Value="False" />
@@ -3047,8 +3066,8 @@
             Property="GridLinesVisibility"
             Value="None" />
         <Setter
-            Property="RowHeaderWidth"
-            Value="0" />
+            Property="HeadersVisibility"
+            Value="Column" />
     </Style>
 
     <Style

@@ -4,11 +4,109 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="300"
-    Background="Yellow">
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:ImageLoaderConverter
+            x:Key="ImageLoaderConverter" />
+        <Style
+            x:Key="DataGridTextColumnElementStyle"
+            TargetType="{x:Type TextBlock}">
+            <Setter
+                Property="Margin"
+                Value="4,0,0,0" />
+            <Setter
+                Property="TextTrimming"
+                Value="CharacterEllipsis" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition
+                Width="1.2*" />
+        </Grid.ColumnDefinitions>
 
+        <TabControl
+            Grid.Column="0">
+            <TabItem
+                Header="{Binding CurrentTrackContainer.Owner.Name}">
+                <FlowDocumentScrollViewer>
+                    <FlowDocument
+                        FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeNormal}}"
+                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiLight}}"
+                        PagePadding="0">
+                        <Paragraph>
+                            <Floater
+                                Width="108"
+                                HorizontalAlignment="Left"
+                                Margin="0,0,2,2"
+                                Padding="2">
+                                <BlockUIContainer>
+                                    <Image
+                                        Source="{Binding CurrentTrackContainer.Image}"
+                                        Width="100" />
+                                </BlockUIContainer>
+                            </Floater>
+                            <Run
+                                Text="{Binding CurrentTrackContainer.ExtraData.Review.Summary}" />
+                        </Paragraph>
+                        <Paragraph>
+                            <Run
+                                Text="{Binding CurrentTrackContainer.ExtraData.Review.Name}"
+                                Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                        </Paragraph>
+                    </FlowDocument>
+                </FlowDocumentScrollViewer>
+            </TabItem>
+        </TabControl>
+
+        <DockPanel
+            Grid.Column="1">
+            <StackPanel
+                DockPanel.Dock="Left">
+                <Button
+                    BorderThickness="0">
+                    <Image
+                        Height="24"
+                        Source="{Binding Source={x:Static Framework:AppIcons.PlayWithCircle}, Converter={StaticResource ImageLoaderConverter}}" />
+                </Button>
+            </StackPanel>
+            <StackPanel
+                DockPanel.Dock="Top"
+                Orientation="Horizontal"
+                TextElement.FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                TextElement.FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}">
+                <TextBlock
+                    Text="{Binding CurrentTrackContainer.Name}"
+                    TextTrimming="CharacterEllipsis"
+                    Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+                <TextBlock
+                    Margin="4,0,0,0"
+                    Text="{Binding CurrentTrackContainer.Year, StringFormat={}({0})}"
+                    TextTrimming="CharacterEllipsis"
+                    Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+            </StackPanel>
+            <DataGrid
+                ItemsSource="{Binding CurrentTrackContainer.Tracks}"
+                DisplayMemberPath="Name"
+                HeadersVisibility="None">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Binding="{Binding Name}"
+                        Width="*"
+                        ElementStyle="{StaticResource DataGridTextColumnElementStyle}">
+                        <DataGridColumn.Header>
+                            <TextBlock
+                                Text="Track"
+                                TextTrimming="CharacterEllipsis" />
+                        </DataGridColumn.Header>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
     </Grid>
 </UserControl>
