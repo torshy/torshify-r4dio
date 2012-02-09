@@ -103,7 +103,13 @@
     <Compile Include="Views\Browse\Tabs\AlbumView.xaml.cs">
       <DependentUpon>AlbumView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Browse\Tabs\AlbumViewMedium.xaml.cs">
+      <DependentUpon>AlbumViewMedium.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Browse\Tabs\AlbumViewModel.cs" />
+    <Compile Include="Views\Browse\Tabs\AlbumViewSmall.xaml.cs">
+      <DependentUpon>AlbumViewSmall.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Browse\Tabs\ArtistView.xaml.cs">
       <DependentUpon>ArtistView.xaml</DependentUpon>
     </Compile>
@@ -147,6 +153,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Browse\Tabs\AlbumView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Browse\Tabs\AlbumViewMedium.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Browse\Tabs\AlbumViewSmall.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
