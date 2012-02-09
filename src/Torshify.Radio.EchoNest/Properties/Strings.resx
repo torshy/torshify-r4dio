@@ -123,6 +123,9 @@
   <data name="Add_To_Queue" xml:space="preserve">
     <value>@Add_To_Queue</value>
   </data>
+  <data name="Play_Album" xml:space="preserve">
+    <value>@Play_Album</value>
+  </data>
   <data name="Search_For_Similar_Artist" xml:space="preserve">
     <value>@Search_For_Similar_Artist</value>
   </data>

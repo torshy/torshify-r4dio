@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
+using Torshify.Radio.Framework.Commands;
 
 namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 {
@@ -25,7 +27,28 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 
         #endregion Fields
 
+        #region Constructors
+
+        public AlbumViewModel()
+        {
+            PlayTracksCommand = new StaticCommand<IEnumerable>(ExecutePlayTracks);
+            QueueTracksCommand = new StaticCommand<IEnumerable>(ExecuteQueueTracks);
+        }
+
+        #endregion Constructors
+
         #region Properties
+
+        public StaticCommand<IEnumerable> QueueTracksCommand
+        {
+            get;
+            private set;
+        }
+
+        public StaticCommand<IEnumerable> PlayTracksCommand
+        {
+            get; private set;
+        }
 
         [Import]
         public IRadio Radio
@@ -54,7 +77,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             get;
             set;
         }
-        
+
         public TrackContainer CurrentTrackContainer
         {
             get
@@ -93,6 +116,18 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             CurrentTrackContainer = null;
         }
 
+        private void ExecuteQueueTracks(IEnumerable tracks)
+        {
+            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(CurrentTrackContainer.Name + " by " + CurrentTrackContainer.Owner.Name);
+            Radio.Queue(stream);
+        }
+
+        private void ExecutePlayTracks(IEnumerable tracks)
+        {
+            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(CurrentTrackContainer.Name + " by " + CurrentTrackContainer.Owner.Name);
+            Radio.Play(stream);
+        }
+
         private void ExecuteSearchForAlbum(string artist, string album)
         {
             Task.Factory.StartNew(state => GetAlbumMatchingName(state), Tuple.Create(artist, album))
@@ -108,7 +143,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
                 else
                 {
                     CurrentTrackContainer = task.Result;
-                    
+
                     if (task.Result == null)
                     {
                         ToastService.Show("Unable to find album " + data.Item2 + " by " + data.Item1);

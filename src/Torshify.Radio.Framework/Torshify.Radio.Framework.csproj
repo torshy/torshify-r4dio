@@ -80,6 +80,7 @@
     <Compile Include="AppTheme.cs" />
     <Compile Include="AppConstants.cs" />
     <Compile Include="AppRegions.cs" />
+    <Compile Include="Behaviors\DataGridTriStateSortingBehavior.cs" />
     <Compile Include="Behaviors\InactivityBehavior of T.cs" />
     <Compile Include="Behaviors\InactivityFadeBehavior.cs" />
     <Compile Include="Behaviors\InactivityScaleBehavior.cs" />

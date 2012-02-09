@@ -79,6 +79,15 @@ namespace Torshify.Radio.EchoNest.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @Play_Album.
+        /// </summary>
+        internal static string Play_Album {
+            get {
+                return ResourceManager.GetString("Play_Album", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @Search_For_Similar_Artist.
         /// </summary>
         internal static string Search_For_Similar_Artist {

@@ -5,6 +5,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -36,6 +38,9 @@
         ItemsSource="{Binding Results}"
         VirtualizingStackPanel.IsVirtualizing="True"
         VirtualizingStackPanel.VirtualizationMode="Recycling">
+        <i:Interaction.Behaviors>
+            <Behaviors:DataGridTriStateSortingBehavior />
+        </i:Interaction.Behaviors>
         <DataGrid.Columns>
             <DataGridTextColumn
                 Binding="{Binding Name}"
@@ -59,12 +64,12 @@
                     <DataTemplate>
                         <TextBlock>
                                 <Hyperlink
-                                    Command="{Binding DataContext.GoToArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-                                    CommandParameter="{Binding Artist}">
+                                Command="{Binding DataContext.GoToArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                CommandParameter="{Binding Artist}">
                                     <TextBlock
-                                        Margin="4,0,0,0"
-                                        Text="{Binding Artist}"
-                                        TextTrimming="CharacterEllipsis" />
+                                    Margin="4,0,0,0"
+                                    Text="{Binding Artist}"
+                                    TextTrimming="CharacterEllipsis" />
                                 </Hyperlink>
                             </TextBlock>
                     </DataTemplate>
@@ -82,12 +87,12 @@
                     <DataTemplate>
                         <TextBlock>
                                 <Hyperlink
-                                    Command="{Binding DataContext.GoToAlbumCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
-                                    CommandParameter="{Binding}">
+                                Command="{Binding DataContext.GoToAlbumCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                CommandParameter="{Binding}">
                                     <TextBlock
-                                        Margin="4,0,0,0"
-                                        Text="{Binding Album}"
-                                        TextTrimming="CharacterEllipsis" />
+                                    Margin="4,0,0,0"
+                                    Text="{Binding Album}"
+                                    TextTrimming="CharacterEllipsis" />
                                 </Hyperlink>
                             </TextBlock>
                     </DataTemplate>

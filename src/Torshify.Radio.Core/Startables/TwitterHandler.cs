@@ -69,17 +69,34 @@ namespace Torshify.Radio.Core.Startables
                 Title = "Peeps",
                 BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0005_weather1.png")
             });
-            Radio.CurrentTrackChanged += RadioOnCurrentTrackChanged;
 
-            OAuthTokens tokens = new OAuthTokens();
-            tokens.AccessToken = "478840940-tgD2Fp5NWXpDPGWyrHTxIjroDODe6F9r8JEkabQ";
-            tokens.AccessTokenSecret = "Jo4fgjtkYBPTfyuigi3slqOo7lVer7rLXwj6rWs";
-            tokens.ConsumerKey = "O6MTEfpHhHfhnBr4PuVmlw";
-            tokens.ConsumerSecret = "lDZgfovK9FEtn8MBsTpGPn8WvuTbGal2yBD4kHLgI";
 
-            StreamOptions options = new StreamOptions();
-            Stream = new TwitterStream(tokens, "v1", options);
-            Stream.StartUserStream(Friends, Stopped, Created, Deleted, DirectMessageCreated, DirectMessageDeleted, Callback);
+            Task.Factory.StartNew(() =>
+            {
+                OAuthTokens tokens = new OAuthTokens();
+                tokens.AccessToken = "478840940-tgD2Fp5NWXpDPGWyrHTxIjroDODe6F9r8JEkabQ";
+                tokens.AccessTokenSecret = "Jo4fgjtkYBPTfyuigi3slqOo7lVer7rLXwj6rWs";
+                tokens.ConsumerKey = "O6MTEfpHhHfhnBr4PuVmlw";
+                tokens.ConsumerSecret = "lDZgfovK9FEtn8MBsTpGPn8WvuTbGal2yBD4kHLgI";
+
+                StreamOptions options = new StreamOptions();
+                Stream = new TwitterStream(tokens, "v1", options);
+                Stream.StartUserStream(Friends,
+                                       Stopped,
+                                       Created,
+                                       Deleted,
+                                       DirectMessageCreated,
+                                       DirectMessageDeleted,
+                                       Callback);
+                Radio.CurrentTrackChanged += RadioOnCurrentTrackChanged;
+            })
+            .ContinueWith(task =>
+            {
+                if (task.Exception != null)
+                {
+                    Logger.Log(task.Exception.ToString(), Category.Exception, Priority.Medium);
+                }
+            });
         }
 
         private void RadioOnCurrentTrackChanged(object sender, TrackChangedEventArgs e)

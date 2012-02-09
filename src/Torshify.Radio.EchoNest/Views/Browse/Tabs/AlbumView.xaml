@@ -6,10 +6,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
+    Engine:LocalizeDictionary.DesignCulture="en-US"
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
         <Converters:ImageLoaderConverter
             x:Key="ImageLoaderConverter" />
         <Style
@@ -23,13 +28,13 @@
                 Value="CharacterEllipsis" />
         </Style>
     </UserControl.Resources>
-    <Grid>
+    <Grid
+        Visibility="{Binding HasItems, ElementName=trackList, Converter={StaticResource BooleanToVisibilityConverter}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition
                 Width="1.2*" />
         </Grid.ColumnDefinitions>
-
         <TabControl
             Grid.Column="0">
             <TabItem
@@ -41,14 +46,62 @@
                         PagePadding="0">
                         <Paragraph>
                             <Floater
-                                Width="108"
+                                Width="100"
                                 HorizontalAlignment="Left"
                                 Margin="0,0,2,2"
                                 Padding="2">
                                 <BlockUIContainer>
-                                    <Image
-                                        Source="{Binding CurrentTrackContainer.Image}"
-                                        Width="100" />
+                                    <Button
+                                        Name="playButton"
+                                        DockPanel.Dock="Left"
+                                        Command="{Binding PlayTracksCommand}"
+                                        CommandParameter="{Binding CurrentTrackContainer.Tracks}"
+                                        Height="96"
+                                        Width="96"
+                                        BorderThickness="1"
+                                        Padding="0"
+                                        VerticalAlignment="Top">
+                                        <Grid>
+                                            <Image
+                                                Name="playImageBackground"
+                                                Stretch="UniformToFill"
+                                                Source="{Binding CurrentTrackContainer.Image}">
+                                                <Image.Triggers>
+                                                    <EventTrigger
+                                                        RoutedEvent="UIElement.MouseEnter">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation
+                                                                    Storyboard.TargetProperty="Opacity"
+                                                                    To="0.3"
+                                                                    From="1.0"
+                                                                    Duration="0:0:0.2" />
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                    <EventTrigger
+                                                        RoutedEvent="UIElement.MouseLeave">
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <DoubleAnimation
+                                                                    Storyboard.TargetProperty="Opacity"
+                                                                    To="1.0"
+                                                                    From="0.3"
+                                                                    Duration="0:0:0.2" />
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger>
+                                                </Image.Triggers>
+                                            </Image>
+                                            <Image
+                                                IsHitTestVisible="False"
+                                                Name="playIcon"
+                                                Stretch="None"
+                                                Source="pack://siteoforigin:,,,/Resources/Icons/play.png"
+                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        </Grid>
+                                    </Button>
                                 </BlockUIContainer>
                             </Floater>
                             <Run
@@ -63,16 +116,28 @@
                 </FlowDocumentScrollViewer>
             </TabItem>
         </TabControl>
-
         <DockPanel
             Grid.Column="1">
             <StackPanel
-                DockPanel.Dock="Left">
+                DockPanel.Dock="Left"
+                Margin="0,2,0,0">
                 <Button
-                    BorderThickness="0">
+                    BorderThickness="0"
+                    Command="{Binding PlayTracksCommand}"
+                    CommandParameter="{Binding CurrentTrackContainer.Tracks}"
+                    ToolTip="{lex:LocText Key=Play_Album, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
                     <Image
                         Height="24"
                         Source="{Binding Source={x:Static Framework:AppIcons.PlayWithCircle}, Converter={StaticResource ImageLoaderConverter}}" />
+                </Button>
+                <Button
+                    BorderThickness="0"
+                    Command="{Binding QueueTracksCommand}"
+                    CommandParameter="{Binding CurrentTrackContainer.Tracks}"
+                    ToolTip="{lex:LocText Key=Add_To_Queue, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
+                    <Image
+                        Height="24"
+                        Source="{Binding Source={x:Static Framework:AppIcons.AddWithCircle}, Converter={StaticResource ImageLoaderConverter}}" />
                 </Button>
             </StackPanel>
             <StackPanel
@@ -91,8 +156,8 @@
                     Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
             </StackPanel>
             <DataGrid
+                Name="trackList"
                 ItemsSource="{Binding CurrentTrackContainer.Tracks}"
-                DisplayMemberPath="Name"
                 HeadersVisibility="None">
                 <DataGrid.Columns>
                     <DataGridTextColumn
