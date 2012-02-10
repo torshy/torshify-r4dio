@@ -11,12 +11,12 @@
     d:DesignWidth="300">
     <fx:SizeTemplateControl>
         <fx:SizeTemplateControl.Templates>
-            <fx:SizeControlTemplate
+            <!--<fx:SizeControlTemplate
                 MinWidth="600">
                 <ControlTemplate>
-                    <Tabs:ArtistViewMedium />
+                    <Tabs:ArtistViewSmall />
                 </ControlTemplate>
-            </fx:SizeControlTemplate>
+            </fx:SizeControlTemplate>-->
             <fx:SizeControlTemplate>
                 <ControlTemplate>
                     <Tabs:ArtistViewSmall />

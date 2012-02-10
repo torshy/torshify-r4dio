@@ -106,7 +106,7 @@
             </DataGridTemplateColumn>
             <DataGridTemplateColumn
                 SortMemberPath="Album"
-                Width="250">
+                Width="*">
                 <DataGridColumn.Header>
                     <TextBlock
                         Text="Album"

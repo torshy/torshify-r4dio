@@ -7,12 +7,18 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
+    Engine:LocalizeDictionary.DesignCulture="en-US"
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter" />
+        <Converters:ImageLoaderConverter
+            x:Key="ImageLoaderConverter" />
     </UserControl.Resources>
     <Grid>
         <TreeView
@@ -41,67 +47,90 @@
                 <DataTemplate>
                     <DockPanel
                         Margin="0,12,0,0">
-                        <Button
-                            Name="playButton"
-                            DockPanel.Dock="Left"
-                            Command="{Binding PlayTracksCommand}"
-                            CommandParameter="{Binding Tracks}"
-                            Height="96"
-                            Width="96"
-                            BorderThickness="1"
-                            Padding="0"
-                            Margin="0,8,8,0"
-                            VerticalAlignment="Top">
-                            <Grid>
-                                <Image
-                                    Name="playImageBackground"
-                                    Stretch="UniformToFill"
-                                    Source="{Binding Image}">
-                                    <Image.Triggers>
-                                        <EventTrigger
-                                            RoutedEvent="UIElement.MouseEnter">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation
-                                                        Storyboard.TargetProperty="Opacity"
-                                                        To="0.3"
-                                                        From="1.0"
-                                                        Duration="0:0:0.2" />
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                        <EventTrigger
-                                            RoutedEvent="UIElement.MouseLeave">
-                                            <BeginStoryboard>
-                                                <Storyboard>
-                                                    <DoubleAnimation
-                                                        Storyboard.TargetProperty="Opacity"
-                                                        To="1.0"
-                                                        From="0.3"
-                                                        Duration="0:0:0.2" />
-                                                </Storyboard>
-                                            </BeginStoryboard>
-                                        </EventTrigger>
-                                    </Image.Triggers>
-                                </Image>
-                                <Image
-                                    IsHitTestVisible="False"
-                                    Name="playIcon"
-                                    Stretch="None"
-                                    Source="pack://siteoforigin:,,,/Resources/Icons/play.png"
-                                    RenderOptions.BitmapScalingMode="HighQuality"
-                                    Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            </Grid>
-                        </Button>
+                        <StackPanel>
+                            <Button
+                                Name="playButton"
+                                DockPanel.Dock="Left"
+                                Command="{Binding DataContext.PlayTracksCommand, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Mode=OneTime}"
+                                CommandParameter="{Binding Tracks, Mode=OneTime}"
+                                Height="96"
+                                Width="96"
+                                BorderThickness="1"
+                                Padding="0"
+                                Margin="0,8,8,0"
+                                VerticalAlignment="Top">
+                                <Grid>
+                                    <Image
+                                        Name="playImageBackground"
+                                        Stretch="UniformToFill"
+                                        Source="{Binding Image}">
+                                        <Image.Triggers>
+                                            <EventTrigger
+                                                RoutedEvent="UIElement.MouseEnter">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation
+                                                            Storyboard.TargetProperty="Opacity"
+                                                            To="0.3"
+                                                            From="1.0"
+                                                            Duration="0:0:0.2" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                            <EventTrigger
+                                                RoutedEvent="UIElement.MouseLeave">
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation
+                                                            Storyboard.TargetProperty="Opacity"
+                                                            To="1.0"
+                                                            From="0.3"
+                                                            Duration="0:0:0.2" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </EventTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+                                    <Image
+                                        IsHitTestVisible="False"
+                                        Name="playIcon"
+                                        Stretch="None"
+                                        Source="pack://siteoforigin:,,,/Resources/Icons/play.png"
+                                        RenderOptions.BitmapScalingMode="HighQuality"
+                                        Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                </Grid>
+                            </Button>
+                            <StackPanel
+                                DockPanel.Dock="Left"
+                                Orientation="Horizontal">
+                                <Button
+                                    BorderThickness="0"
+                                    Command="{Binding DataContext.QueueTracksCommand, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Mode=OneTime}"
+                                    CommandParameter="{Binding Tracks, Mode=OneTime}"
+                                    ToolTip="{lex:LocText Key=Add_To_Queue, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
+                                    <Image
+                                        Height="24"
+                                        Source="{Binding Source={x:Static Framework:AppIcons.Add}, Converter={StaticResource ImageLoaderConverter}}" />
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
                         <TextBlock
-                            DockPanel.Dock="Top"
-                            Text="{Binding Name}"
-                            FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
-                            FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
-                            Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+                            DockPanel.Dock="Top">
+                                <Hyperlink
+                                    Command="{Binding DataContext.GoToAlbumCommand, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
+                                    CommandParameter="{Binding}">
+                                    <TextBlock
+                                        Margin="4,0,0,0"
+                                        Text="{Binding Name, Mode=OneTime}"
+                                        TextTrimming="CharacterEllipsis"
+                                        FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
+                                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                                        Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+                                </Hyperlink>
+                            </TextBlock>
                         <DataGrid
                             Name="Dg"
-                            ItemsSource="{Binding Tracks}"
+                            ItemsSource="{Binding Tracks, Mode=OneTime}"
                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                             HeadersVisibility="None"
@@ -109,8 +138,8 @@
                             <i:Interaction.Behaviors>
                                 <Behaviors:IgnoreMouseWheelBehavior />
                                 <Behaviors:DataGridRowActionBehavior
-                                    Command="{Binding DataContext.PlayCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Mode=OneTime}"
-                                    CommandParameter="{Binding SelectedItem, ElementName=Dg}" />
+                                    Command="{Binding DataContext.PlayTracksCommand, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Mode=OneTime}"
+                                    CommandParameter="{Binding SelectedItems, ElementName=Dg}" />
                             </i:Interaction.Behaviors>
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn
@@ -118,7 +147,7 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock
-                                                Text="{Binding Name}"
+                                                Text="{Binding Name, Mode=OneTime}"
                                                 TextTrimming="CharacterEllipsis" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
