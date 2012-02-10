@@ -3012,14 +3012,14 @@
                 Value="0">
                 <Setter
                     Property="Background"
-                    Value="#AA000000"></Setter>
+                    Value="{DynamicResource {x:Static Framework:AppTheme.DataGridRowAlternate1BrushKey}}" />
             </Trigger>
             <Trigger
                 Property="ItemsControl.AlternationIndex"
                 Value="1">
                 <Setter
                     Property="Background"
-                    Value="#CC111111"></Setter>
+                    Value="{DynamicResource {x:Static Framework:AppTheme.DataGridRowAlternate2BrushKey}}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -3068,6 +3068,30 @@
         <Setter
             Property="HeadersVisibility"
             Value="Column" />
+    </Style>
+
+    <Style
+        TargetType="{x:Type TreeView}">
+        <Setter
+            Property="Background"
+            Value="{x:Null}" />
+        <Setter
+            Property="BorderThickness"
+            Value="0" />
+        <Style.Triggers>
+            <Trigger
+                Property="VirtualizingStackPanel.IsVirtualizing"
+                Value="true">
+                <Setter
+                    Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style

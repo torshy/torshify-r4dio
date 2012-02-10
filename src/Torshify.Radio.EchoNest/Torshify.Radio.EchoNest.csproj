@@ -110,10 +110,17 @@
     <Compile Include="Views\Browse\Tabs\AlbumViewSmall.xaml.cs">
       <DependentUpon>AlbumViewSmall.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Browse\Tabs\Models\ArtistModel.cs" />
     <Compile Include="Views\Browse\Tabs\ArtistView.xaml.cs">
       <DependentUpon>ArtistView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Browse\Tabs\ArtistViewMedium.xaml.cs">
+      <DependentUpon>ArtistViewMedium.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Browse\Tabs\ArtistViewModel.cs" />
+    <Compile Include="Views\Browse\Tabs\ArtistViewSmall.xaml.cs">
+      <DependentUpon>ArtistViewSmall.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Browse\Tabs\SearchResultsView.xaml.cs">
       <DependentUpon>SearchResultsView.xaml</DependentUpon>
     </Compile>
@@ -165,6 +172,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Browse\Tabs\ArtistView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Browse\Tabs\ArtistViewMedium.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Browse\Tabs\ArtistViewSmall.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

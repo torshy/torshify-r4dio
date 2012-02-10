@@ -80,6 +80,7 @@
     <Compile Include="AppTheme.cs" />
     <Compile Include="AppConstants.cs" />
     <Compile Include="AppRegions.cs" />
+    <Compile Include="Behaviors\DataGridRowActionBehavior.cs" />
     <Compile Include="Behaviors\DataGridTriStateSortingBehavior.cs" />
     <Compile Include="Behaviors\InactivityBehavior of T.cs" />
     <Compile Include="Behaviors\InactivityFadeBehavior.cs" />
@@ -160,6 +161,7 @@
     <Compile Include="Events\SystemInactivityEvent.cs" />
     <Compile Include="HeaderInfo.cs" />
     <Compile Include="IBackdropService.cs" />
+    <Compile Include="Behaviors\IgnoreMouseWheelBehavior.cs" />
     <Compile Include="IHeaderInfoProvider.cs" />
     <Compile Include="ILoadingIndicatorService.cs" />
     <Compile Include="IRadio.cs" />

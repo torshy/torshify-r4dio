@@ -118,12 +118,18 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 
         private void ExecuteQueueTracks(IEnumerable tracks)
         {
+            if (tracks == null)
+                return;
+
             ITrackStream stream = tracks.OfType<Track>().ToTrackStream(CurrentTrackContainer.Name + " by " + CurrentTrackContainer.Owner.Name);
             Radio.Queue(stream);
         }
 
         private void ExecutePlayTracks(IEnumerable tracks)
         {
+            if (tracks == null)
+                return;
+
             ITrackStream stream = tracks.OfType<Track>().ToTrackStream(CurrentTrackContainer.Name + " by " + CurrentTrackContainer.Owner.Name);
             Radio.Play(stream);
         }

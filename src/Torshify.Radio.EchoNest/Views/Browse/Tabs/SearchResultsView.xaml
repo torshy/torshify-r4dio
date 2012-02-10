@@ -66,6 +66,9 @@
         VirtualizingStackPanel.VirtualizationMode="Recycling">
         <i:Interaction.Behaviors>
             <Behaviors:DataGridTriStateSortingBehavior />
+            <Behaviors:DataGridRowActionBehavior
+                Command="{Binding DataContext.PlayTracksCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Mode=OneTime}"
+                CommandParameter="{Binding SelectedItems, ElementName=resultList}" />
         </i:Interaction.Behaviors>
         <DataGrid.Columns>
             <DataGridTextColumn

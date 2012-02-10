@@ -4,11 +4,24 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fx="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
+    xmlns:Tabs="clr-namespace:Torshify.Radio.EchoNest.Views.Browse.Tabs"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="300"
-    Background="Red">
-    <Grid>
-
-    </Grid>
+    d:DesignWidth="300">
+    <fx:SizeTemplateControl>
+        <fx:SizeTemplateControl.Templates>
+            <fx:SizeControlTemplate
+                MinWidth="600">
+                <ControlTemplate>
+                    <Tabs:ArtistViewMedium />
+                </ControlTemplate>
+            </fx:SizeControlTemplate>
+            <fx:SizeControlTemplate>
+                <ControlTemplate>
+                    <Tabs:ArtistViewSmall />
+                </ControlTemplate>
+            </fx:SizeControlTemplate>
+        </fx:SizeTemplateControl.Templates>
+    </fx:SizeTemplateControl>
 </UserControl>

@@ -23,6 +23,8 @@ namespace Torshify.Radio.Framework
         public const string RadioCheckBoxCheckDisabledBrushKey = "RadioCheckBoxCheckDisabledBrushKey";
         public const string RadioCheckBoxPressedBrushKey = "RadioCheckBoxPressedBrushKey";
         public const string RadioCheckBoxPressedBorderBrushKey = "RadioCheckBoxPressedBorderBrushKey";
+        public const string DataGridRowAlternate1BrushKey = "DataGridRowAlternate1BrushKey";
+        public const string DataGridRowAlternate2BrushKey = "DataGridRowAlternate2BrushKey";
 
         // Fonts
         public const string FontFamilyNormal = "FontFamilyNormal";

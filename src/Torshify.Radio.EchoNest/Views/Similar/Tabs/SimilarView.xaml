@@ -24,13 +24,39 @@
             DecodePixelWidth="72" />
     </UserControl.Resources>
     <Grid>
-        <Image
-            Visibility="{Binding HasItems, ElementName=artistList, Converter={StaticResource BoolToVisibleInverted}}"
-            Source="pack://siteoforigin:,,,/Resources/Tiles/MS_0000s_0036_search.png"
-            Stretch="None" 
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center"
-            Opacity="0.5"/>
+        <ContentControl
+            Content="{Binding}"
+            Visibility="{Binding HasItems, ElementName=artistList, Converter={StaticResource BoolToVisibleInverted}}">
+            <ContentControl.ContentTemplate>
+                <DataTemplate>
+                    <Image
+                        Name="img"
+                        Source="pack://siteoforigin:,,,/Resources/Tiles/MS_0000s_0036_search.png"
+                        Stretch="None"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Opacity="0.5" />
+                    <DataTemplate.Triggers>
+                        <DataTrigger
+                            Binding="{Binding LoadingIndicatorService.IsLoading}"
+                            Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="img"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0.2"
+                                            AutoReverse="True"
+                                            RepeatBehavior="Forever" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ContentControl.ContentTemplate>
+        </ContentControl>
         <ItemsControl
             Name="artistList"
             ItemsSource="{Binding SimilarArtists}"

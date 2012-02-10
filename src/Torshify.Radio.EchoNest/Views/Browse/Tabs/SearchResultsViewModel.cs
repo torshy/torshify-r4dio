@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Logging;
@@ -36,6 +38,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 
             GoToAlbumCommand = new StaticCommand<Track>(ExecuteGoToAlbum);
             GoToArtistCommand = new StaticCommand<string>(ExecuteGoToArtist);
+            PlayTracksCommand = new StaticCommand<IEnumerable>(ExecutePlayTracks);
         }
 
         #endregion Constructors
@@ -89,6 +92,12 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
         {
             get;
             set;
+        }
+
+        public StaticCommand<IEnumerable> PlayTracksCommand
+        {
+            get;
+            private set;
         }
 
         public StaticCommand<string> GoToArtistCommand
@@ -169,6 +178,15 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             q.Add("artistName", track.Artist);
             q.Add("albumName", track.Album);
             RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(AlbumView).FullName + q);
+        }
+
+        private void ExecutePlayTracks(IEnumerable tracks)
+        {
+            if (tracks == null)
+                return;
+
+            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(string.Empty);
+            Radio.Play(stream);
         }
 
         #endregion Methods

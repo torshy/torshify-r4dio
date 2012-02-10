@@ -66,7 +66,13 @@
     <SolidColorBrush
         x:Key="{x:Static Framework:AppTheme.RadioCheckBoxPressedBrushKey}"
         Color="#FFFFFFFF" />
-    
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.DataGridRowAlternate1BrushKey}"
+        Color="#CC111111" />
+    <SolidColorBrush
+        x:Key="{x:Static Framework:AppTheme.DataGridRowAlternate2BrushKey}"
+        Color="#AA000000" />
+
     <!-- Font names -->
     <FontFamily
         x:Key="{x:Static Framework:AppTheme.FontFamilyNormal}">Segoe UI</FontFamily>
