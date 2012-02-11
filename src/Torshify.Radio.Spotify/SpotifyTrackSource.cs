@@ -46,6 +46,7 @@ namespace Torshify.Radio.Spotify
 
             return new SpotifyTrack
             {
+                Index = track.Index,
                 TrackId = track.ID,
                 Name = track.Name,
                 Artist = track.Album.Artist.Name,

@@ -15,6 +15,7 @@ namespace Torshify.Radio.Framework
         private string _artist;
         private string _name;
         private TimeSpan _totalDuration;
+        private int _index;
 
         #endregion Fields
 
@@ -34,6 +35,19 @@ namespace Torshify.Radio.Framework
         #endregion Events
 
         #region Properties
+
+        public int Index
+        {
+            get { return _index; }
+            set
+            {
+                if (_index != value)
+                {
+                    _index = value;
+                    OnPropertyChanged("Index");
+                }
+            }
+        }
 
         public string Album
         {

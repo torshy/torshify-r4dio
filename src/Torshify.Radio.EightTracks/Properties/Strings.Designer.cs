@@ -61,6 +61,15 @@ namespace Torshify.Radio.EightTracks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @Add_To_Favorites.
+        /// </summary>
+        internal static string Add_To_Favorites {
+            get {
+                return ResourceManager.GetString("Add_To_Favorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @Number_Liked.
         /// </summary>
         internal static string Number_Liked {

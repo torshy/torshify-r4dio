@@ -77,7 +77,7 @@ namespace Torshify.Radio.Grooveshark
                                                    Name = albumGroup.Key.Album,
                                                    Year = year,
                                                    Owner = new TrackContainerOwner(artist),
-                                                   Tracks = Convert(albumGroup).ToArray(),
+                                                   Tracks = Convert(albumGroup).OrderBy(t => t.Index).ToArray(),
                                                };
 
                     var firstTrack = container.Tracks.FirstOrDefault();
@@ -137,8 +137,16 @@ namespace Torshify.Radio.Grooveshark
                 Name = result.SongName,
                 Album = result.AlbumName,
                 Artist = result.ArtistName,
+                Index = TryParse(result.TrackNum),
                 AlbumArt = "http://images.grooveshark.com/static/albums/90_" + result.AlbumID + ".jpg"
             });
+        }
+
+        private int TryParse(string number)
+        {
+            int i;
+            int.TryParse(number, out i);
+            return i;
         }
 
         #endregion Methods

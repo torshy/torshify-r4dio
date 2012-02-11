@@ -111,11 +111,11 @@
                                                     Source="pack://siteoforigin:,,,/Resources/Icons/add.png" />
                                             </Button>
                                             <Button
-                                                Command="{Binding DataContext.QueueMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                Command="{Binding DataContext.AddToFavoritesCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                                 CommandParameter="{Binding}"
                                                 BorderThickness="0"
                                                 Padding="0"
-                                                ToolTip="{lex:LocText Key=Queue, Dict=Strings, Assembly=Torshify.Radio.EightTracks}">
+                                                ToolTip="{lex:LocText Key=Add_To_Favorites, Dict=Strings, Assembly=Torshify.Radio.EightTracks}">
                                                 <Image
                                                     Height="24"
                                                     Source="pack://siteoforigin:,,,/Resources/Icons/favs.png" />
