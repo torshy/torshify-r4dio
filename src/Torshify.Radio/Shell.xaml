@@ -5,7 +5,7 @@
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     xmlns:Regions="clr-namespace:Microsoft.Practices.Prism.Regions;assembly=Microsoft.Practices.Prism"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
-    xmlns:Controls1="clr-namespace:Torshify.Radio.Controls"
+    xmlns:local="clr-namespace:Torshify.Radio.Controls"
     Title="r4dio"
     Height="600"
     Width="800"
@@ -15,11 +15,12 @@
     TextElement.FontFamily="Segoe UI"
     TextElement.FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeNormal}}"
     TextOptions.TextFormattingMode="Display">
-    <Grid>
+    <Grid
+        Background="{DynamicResource {x:Static Framework:AppTheme.AppBackgroundBrush}}">
         <ContentControl
             Margin="8,12,8,8"
             Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainRegion}" />
-        <Controls1:FaderFrame
+        <local:FaderFrame
             NavigationUIVisibility="Hidden"
             Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainOverlayRegion}" />
     </Grid>

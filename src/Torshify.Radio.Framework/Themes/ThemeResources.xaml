@@ -3,6 +3,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework"
     xmlns:System="clr-namespace:System;assembly=mscorlib">
+    <RadialGradientBrush
+        x:Key="{x:Static Framework:AppTheme.AppBackgroundBrush}"
+        RadiusY="0.75"
+        RadiusX="1">
+        <GradientStop
+            Color="#FF1B1B1B"
+            Offset="1" />
+        <GradientStop
+            Color="Black" />
+    </RadialGradientBrush>
     <SolidColorBrush
         x:Key="{x:Static SystemColors.HighlightBrushKey}"
         Color="#FF1BA1E2" />

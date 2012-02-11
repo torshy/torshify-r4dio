@@ -3,6 +3,7 @@ namespace Torshify.Radio.Framework
     public class AppTheme
     {
         // Brushes
+        public const string AppBackgroundBrush = "AppBackgroundBrush";
         public const string AccentBrushKey = "AccentBrushKey";
         public const string BackgroundBrushKey = "BackgroundBrushKey";
         public const string ForegroundBrushKey = "ForegroundBrushKey";
