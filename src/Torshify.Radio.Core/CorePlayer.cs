@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-
+using Microsoft.Practices.Prism.ViewModel;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core
 {
     [Export("CorePlayer", typeof(ITrackPlayer))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class CorePlayer : ITrackPlayer, IPartImportsSatisfiedNotification
+    public class CorePlayer : NotificationObject, ITrackPlayer, IPartImportsSatisfiedNotification
     {
         #region Fields
 
@@ -98,6 +98,8 @@ namespace Torshify.Radio.Core
                 {
                     player.Value.IsMuted = _isMuted;
                 }
+
+                RaisePropertyChanged("IsMuted");
             }
         }
 
@@ -126,6 +128,8 @@ namespace Torshify.Radio.Core
                 {
                     CurrentPlayer.Value.Position = value;
                 }
+
+                RaisePropertyChanged("Position");
             }
         }
 
@@ -154,6 +158,8 @@ namespace Torshify.Radio.Core
                     _volumeMap[CurrentPlayer.Metadata.Name] = value;
                     CurrentPlayer.Value.Volume = value;
                 }
+
+                RaisePropertyChanged("Volume");
             }
         }
 

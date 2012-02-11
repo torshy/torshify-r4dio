@@ -123,7 +123,36 @@
     <Compile Include="Services\SearchBarService.cs" />
     <Compile Include="Services\TileService.cs" />
     <Compile Include="Services\ToastService.cs" />
+    <Compile Include="Startables\AppCommandsHandler.cs" />
+    <Compile Include="Startables\HotKeyHandler.cs" />
     <Compile Include="Startables\TwitterHandler.cs" />
+    <Compile Include="Utilities\Hooks\BaseHookListener.cs" />
+    <Compile Include="Utilities\Hooks\Controls\HookType.cs" />
+    <Compile Include="Utilities\Hooks\Controls\MouseKeyEventProvider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Utilities\Hooks\HotKeys\HotKeyArgs.cs" />
+    <Compile Include="Utilities\Hooks\HotKeys\HotKeySet.cs" />
+    <Compile Include="Utilities\Hooks\HotKeys\HotKeySetCollection.cs" />
+    <Compile Include="Utilities\Hooks\HotKeys\HotKeySetsListener.cs" />
+    <Compile Include="Utilities\Hooks\KeyboardHookListener.cs" />
+    <Compile Include="Utilities\Hooks\KeyboardState.cs" />
+    <Compile Include="Utilities\Hooks\KeyEventArgsExt.cs" />
+    <Compile Include="Utilities\Hooks\KeyPressEventArgsExt.cs" />
+    <Compile Include="Utilities\Hooks\MouseEventExtArgs.cs" />
+    <Compile Include="Utilities\Hooks\MouseHookListener.cs" />
+    <Compile Include="Utilities\Hooks\WinApi\AppHooker.cs" />
+    <Compile Include="Utilities\Hooks\WinApi\GlobalHooker.cs" />
+    <Compile Include="Utilities\Hooks\WinApi\HookCallback.cs" />
+    <Compile Include="Utilities\Hooks\WinApi\Hooker.cs" />
+    <Compile Include="Utilities\Hooks\WinApi\HookNativeMethods.cs" />
+    <Compile Include="Utilities\Hooks\WinApi\KeyboardHookStruct.cs" />
+    <Compile Include="Utilities\Hooks\WinApi\KeyboardNativeMethods.cs" />
+    <Compile Include="Utilities\Hooks\WinApi\Messages.cs" />
+    <Compile Include="Utilities\Hooks\WinApi\MouseNativeMethods.cs" />
+    <Compile Include="Utilities\Hooks\WinApi\MouseStructures.cs" />
+    <Compile Include="Utilities\Hooks\WinApi\Point.cs" />
+    <Compile Include="Utilities\Hooks\WinApi\ThreadNativeMethods.cs" />
     <Compile Include="Views\Notifications\ToastServiceView.xaml.cs">
       <DependentUpon>ToastServiceView.xaml</DependentUpon>
     </Compile>
@@ -135,11 +164,6 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Startables\NowPlayingTile.cs" />
-    <Compile Include="Utilities\Hooks\HookManager.Callbacks.cs" />
-    <Compile Include="Utilities\Hooks\HookManager.cs" />
-    <Compile Include="Utilities\Hooks\HookManager.Structures.cs" />
-    <Compile Include="Utilities\Hooks\HookManager.Windows.cs" />
-    <Compile Include="Utilities\Hooks\MouseEventExtArgs.cs" />
     <Compile Include="Views\Controls\ControlsPart.xaml.cs">
       <DependentUpon>ControlsPart.xaml</DependentUpon>
     </Compile>
@@ -260,6 +284,9 @@
       <Name>Torshify.Radio.Framework</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Utilities\Hooks\HotKeys\ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

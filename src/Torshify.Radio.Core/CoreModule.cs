@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Globalization;
 using System.Linq;
-using System.Net.Mime;
-using System.Windows;
-using System.Windows.Input;
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
@@ -13,13 +10,12 @@ using Microsoft.Practices.Prism.Regions;
 using Raven.Client;
 
 using Torshify.Radio.Core.Models;
-using Torshify.Radio.Core.Utilities.Hooks;
 using Torshify.Radio.Core.Views;
 using Torshify.Radio.Core.Views.Controls;
 using Torshify.Radio.Core.Views.FirstTime;
 using Torshify.Radio.Core.Views.Stations;
 using Torshify.Radio.Framework;
-using Torshify.Radio.Framework.Commands;
+
 using WPFLocalizeExtension.Engine;
 
 namespace Torshify.Radio.Core

@@ -112,15 +112,11 @@ namespace Torshify.Radio.Core.Views.Controls
             }
         }
 
-        public double Volume
+        public ITrackPlayer Player
         {
             get
             {
-                return _player.Volume;
-            }
-            set
-            {
-                _player.Volume = value;
+                return _player;
             }
         }
 

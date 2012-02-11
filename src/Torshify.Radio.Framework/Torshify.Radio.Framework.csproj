@@ -76,6 +76,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AppCommands.cs" />
     <Compile Include="AppIcons.cs" />
     <Compile Include="AppTheme.cs" />
     <Compile Include="AppConstants.cs" />
@@ -168,6 +169,9 @@
     <Compile Include="Behaviors\IgnoreMouseWheelBehavior.cs" />
     <Compile Include="IHeaderInfoProvider.cs" />
     <Compile Include="ILoadingIndicatorService.cs" />
+    <Compile Include="Input\ExtendedMouseBinding.cs" />
+    <Compile Include="Input\ExtendedMouseGesture.cs" />
+    <Compile Include="Input\ExtendedMouseGestureConverter.cs" />
     <Compile Include="IRadio.cs" />
     <Compile Include="IRadioStation.cs" />
     <Compile Include="ISearchBarService.cs" />
