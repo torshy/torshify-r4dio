@@ -120,7 +120,6 @@
                                     Command="{Binding DataContext.GoToAlbumCommand, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
                                     CommandParameter="{Binding}">
                                     <TextBlock
-                                        Margin="4,0,0,0"
                                         Text="{Binding Name, Mode=OneTime}"
                                         TextTrimming="CharacterEllipsis"
                                         FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"

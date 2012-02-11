@@ -147,9 +147,10 @@
                 FocusVisualStyle="{x:Null}"
                 Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.BottomRegion}" />
         </DockPanel>
-        <ContentControl
+        <Controls:TransitioningContentControl
             Margin="0,8,0,0"
             FocusVisualStyle="{x:Null}"
-            Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.ViewRegion}" />
+            Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.ViewRegion}"
+            Transition="RightReplaceTransition"/>
     </DockPanel>
 </DockPanel>

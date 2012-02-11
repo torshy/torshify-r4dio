@@ -45,16 +45,6 @@
                                 <StackPanel
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right">
-                                    <Button
-                                        Command="{Binding DataContext.QueueMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                        CommandParameter="{Binding}"
-                                        BorderThickness="0"
-                                        Padding="0"
-                                        ToolTip="{lex:LocText Key=Queue, Dict=Strings, Assembly=Torshify.Radio.EightTracks}">
-                                        <Image
-                                            Height="20"
-                                            Source="pack://siteoforigin:,,,/Resources/Icons/add.png" />
-                                    </Button>
                                     <Path
                                         Data="{StaticResource RightArrow}"
                                         Width="10"
@@ -81,32 +71,45 @@
                                         ToolTip="{lex:LocText Key=TimeSincePublished, Dict=Strings, Assembly=Torshify.Radio.EightTracks}" />
                                 </StackPanel>
                                 <DockPanel>
-                                    <Button
-                                        Name="playButton"
-                                        DockPanel.Dock="Left"
-                                        Command="{Binding DataContext.PlayMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                        CommandParameter="{Binding}"
-                                        Height="128"
-                                        Width="128"
-                                        BorderThickness="1"
-                                        Padding="0"
-                                        VerticalAlignment="Top"
-                                        Margin="0,12,0,0">
-                                        <Grid>
+                                    <StackPanel>
+                                        <Button
+                                            Name="playButton"
+                                            DockPanel.Dock="Left"
+                                            Command="{Binding DataContext.PlayMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding}"
+                                            Height="96"
+                                            Width="96"
+                                            BorderThickness="1"
+                                            Padding="0"
+                                            VerticalAlignment="Top"
+                                            Margin="0,12,0,0">
+                                            <Grid>
+                                                <Image
+                                                    Name="playImageBackground"
+                                                    IsHitTestVisible="False"
+                                                    Stretch="UniformToFill"
+                                                    Source="{Binding Converter={StaticResource MixToImageConverter}}" />
+                                                <Image
+                                                    IsHitTestVisible="False"
+                                                    Name="playIcon"
+                                                    Stretch="None"
+                                                    Source="pack://siteoforigin:,,,/Resources/Icons/play.png"
+                                                    RenderOptions.BitmapScalingMode="HighQuality"
+                                                    Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                            </Grid>
+                                        </Button>
+                                        <Button
+                                            Command="{Binding DataContext.QueueMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding}"
+                                            BorderThickness="0"
+                                            Padding="0"
+                                            ToolTip="{lex:LocText Key=Queue, Dict=Strings, Assembly=Torshify.Radio.EightTracks}"
+                                            HorizontalAlignment="Left">
                                             <Image
-                                                Name="playImageBackground"
-                                                IsHitTestVisible="False"
-                                                Stretch="UniformToFill"
-                                                Source="{Binding Converter={StaticResource MixToImageConverter}}" />
-                                            <Image
-                                                IsHitTestVisible="False"
-                                                Name="playIcon"
-                                                Stretch="None"
-                                                Source="pack://siteoforigin:,,,/Resources/Icons/play.png"
-                                                RenderOptions.BitmapScalingMode="HighQuality"
-                                                Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                        </Grid>
-                                    </Button>
+                                                Height="20"
+                                                Source="pack://siteoforigin:,,,/Resources/Icons/add.png" />
+                                        </Button>
+                                    </StackPanel>
                                     <StackPanel
                                         Margin="4">
                                         <TextBlock
