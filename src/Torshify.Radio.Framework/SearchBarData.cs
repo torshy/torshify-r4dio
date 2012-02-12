@@ -82,6 +82,7 @@ namespace Torshify.Radio.Framework
                     string uiString;
                     LocTextExtension locExtension = new LocTextExtension(_watermarkText);
                     locExtension.Assembly = ResourceAssembly;
+                    locExtension.Dict = ResourceName;
                     locExtension.ResolveLocalizedValue(out uiString);
                     return uiString;
                 }
