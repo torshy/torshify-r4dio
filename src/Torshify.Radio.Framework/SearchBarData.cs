@@ -21,7 +21,8 @@ namespace Torshify.Radio.Framework
         public SearchBarData()
         {
             AutoCompleteProvider = phrase => new string[0];
-            ResourceAssembly = Assembly.GetCallingAssembly().FullName;
+            ResourceAssembly = Assembly.GetCallingAssembly().GetName().Name;
+            ResourceName = "Strings";
         }
 
         #endregion Constructors
@@ -43,6 +44,7 @@ namespace Torshify.Radio.Framework
                     string uiString;
                     LocTextExtension locExtension = new LocTextExtension(_category);
                     locExtension.Assembly = ResourceAssembly;
+                    locExtension.Dict = ResourceName;
                     locExtension.ResolveLocalizedValue(out uiString);
                     return uiString;
                 }
@@ -62,6 +64,12 @@ namespace Torshify.Radio.Framework
         public string ResourceAssembly
         {
             get;
+            set;
+        }
+
+        public string ResourceName
+        {
+            get; 
             set;
         }
 

@@ -10,7 +10,7 @@ using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
-
+using Torshify.Radio.EightTracks.Properties;
 using Torshify.Radio.EightTracks.Views;
 using Torshify.Radio.EightTracks.Views.Tabs;
 using Torshify.Radio.Framework;
@@ -91,16 +91,16 @@ namespace Torshify.Radio.EightTracks
 
                 SearchBarService.Add<MainStationView>(new SearchBarData
                 {
-                    Category = "8tracks by tag",
-                    WatermarkText = "Search for mixes by tag",
+                    Category = "Search_By_Tag",
+                    WatermarkText = "Search_By_Tag_Watermark",
                     AutoCompleteProvider = GetMixesByTag
                 },
                 Tuple.Create("Type", "Tag"));
 
                 SearchBarService.Add<MainStationView>(new SearchBarData
                 {
-                    Category = "8tracks by artist",
-                    WatermarkText = "Search for mixes by artist",
+                    Category = "Search_By_Artist",
+                    WatermarkText = "Search_By_Artist_Watermark",
                     AutoCompleteProvider = GetMixesByTag
                 },
                 Tuple.Create("Type", "Artist"));

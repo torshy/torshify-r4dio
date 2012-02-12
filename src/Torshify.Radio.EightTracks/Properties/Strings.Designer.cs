@@ -97,6 +97,42 @@ namespace Torshify.Radio.EightTracks.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @Search_By_Artist.
+        /// </summary>
+        internal static string Search_By_Artist {
+            get {
+                return ResourceManager.GetString("Search_By_Artist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Search_By_Artist_Watermark.
+        /// </summary>
+        internal static string Search_By_Artist_Watermark {
+            get {
+                return ResourceManager.GetString("Search_By_Artist_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Search_By_Tag.
+        /// </summary>
+        internal static string Search_By_Tag {
+            get {
+                return ResourceManager.GetString("Search_By_Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Search_By_Tag_Watermark.
+        /// </summary>
+        internal static string Search_By_Tag_Watermark {
+            get {
+                return ResourceManager.GetString("Search_By_Tag_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @TimeSincePublished.
         /// </summary>
         internal static string TimeSincePublished {

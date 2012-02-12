@@ -129,6 +129,18 @@
   <data name="Queue" xml:space="preserve">
     <value>@Queue</value>
   </data>
+  <data name="Search_By_Artist" xml:space="preserve">
+    <value>@Search_By_Artist</value>
+  </data>
+  <data name="Search_By_Artist_Watermark" xml:space="preserve">
+    <value>@Search_By_Artist_Watermark</value>
+  </data>
+  <data name="Search_By_Tag" xml:space="preserve">
+    <value>@Search_By_Tag</value>
+  </data>
+  <data name="Search_By_Tag_Watermark" xml:space="preserve">
+    <value>@Search_By_Tag_Watermark</value>
+  </data>
   <data name="TimeSincePublished" xml:space="preserve">
     <value>@TimeSincePublished</value>
   </data>
