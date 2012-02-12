@@ -88,6 +88,7 @@
     <Compile Include="Behaviors\InactivityScaleBehavior.cs" />
     <Compile Include="Behaviors\KeyboardBehavior.cs" />
     <Compile Include="Behaviors\TiltBehavior.cs" />
+    <Compile Include="CommandModel.cs" />
     <Compile Include="Commands\AutomaticCommand%28of T%29.cs" />
     <Compile Include="Commands\AutomaticCommand.cs" />
     <Compile Include="Commands\AutomaticCompositeCommand.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Common\DoubleUtilities.cs" />
     <Compile Include="Common\ObjectExtensions.cs" />
     <Compile Include="Controls\CircleButton.cs" />
+    <Compile Include="Controls\CommandBarContextMenu.cs" />
     <Compile Include="Controls\DragSlider.cs" />
     <Compile Include="Controls\MetroProgressBar.cs" />
     <Compile Include="Controls\MetroWindow.cs" />
@@ -167,6 +169,7 @@
     <Compile Include="HeaderInfo.cs" />
     <Compile Include="IBackdropService.cs" />
     <Compile Include="Behaviors\IgnoreMouseWheelBehavior.cs" />
+    <Compile Include="ICommandBar.cs" />
     <Compile Include="IHeaderInfoProvider.cs" />
     <Compile Include="ILoadingIndicatorService.cs" />
     <Compile Include="Input\ExtendedMouseBinding.cs" />
@@ -230,6 +233,10 @@
     <Page Include="Resources\Icons\Search.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\CommandBarContextMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
