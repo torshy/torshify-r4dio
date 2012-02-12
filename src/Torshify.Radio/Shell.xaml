@@ -18,7 +18,8 @@
     <Grid>
         <Controls:TransitioningContentControl
             FocusVisualStyle="{x:Null}"
-            Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainRegion}" />
+            Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainRegion}"
+            Transition="UpTransition"/>
         <local:FaderFrame
             NavigationUIVisibility="Hidden"
             Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainOverlayRegion}" />
