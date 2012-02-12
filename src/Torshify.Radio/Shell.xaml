@@ -15,8 +15,7 @@
     TextElement.FontFamily="Segoe UI"
     TextElement.FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeNormal}}"
     TextOptions.TextFormattingMode="Display">
-    <Grid
-        Background="{DynamicResource {x:Static Framework:AppTheme.AppBackgroundBrush}}">
+    <Grid>
         <ContentControl
             Margin="8,12,8,8"
             Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainRegion}" />
