@@ -48,7 +48,7 @@ namespace Torshify.Radio.EightTracks
             {
                 if (_currentPlayResponse == null)
                 {
-                    return null;
+                    return new Track[0];
                 }
 
                 var imageUrlConverter = new MixToImageConverter();

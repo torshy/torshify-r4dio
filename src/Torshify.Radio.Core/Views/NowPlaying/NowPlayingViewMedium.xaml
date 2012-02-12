@@ -9,14 +9,20 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
-    <UI:TrackInformationPart
-        HorizontalAlignment="Left"
-        VerticalAlignment="Bottom"
-        TrackName="{Binding Radio.CurrentTrack.Name, Mode=OneWay}"
-        TrackNameFontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeExtraExtraLarge}}"
-        ArtistName="{Binding Radio.CurrentTrack.Artist, Mode=OneWay}"
-        AlbumName="{Binding Radio.CurrentTrack.Album, Mode=OneWay}"
-        AlbumNameFontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
-        AlbumArt="{Binding Radio.CurrentTrack.AlbumArt, Mode=OneWay}"
-        AlbumArtSize="256" />
+    <DockPanel>
+        <UI:UpcomingTracksPart
+            DockPanel.Dock="Right"
+            UpcomingTracks="{Binding Radio.UpcomingTracks}"
+            UpcomingTrackStreams="{Binding Radio.TrackStreams}"/>
+        <UI:TrackInformationPart
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            TrackName="{Binding Radio.CurrentTrack.Name, Mode=OneWay}"
+            TrackNameFontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeHuge}}"
+            ArtistName="{Binding Radio.CurrentTrack.Artist, Mode=OneWay}"
+            AlbumName="{Binding Radio.CurrentTrack.Album, Mode=OneWay}"
+            AlbumNameFontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeExtraLarge}}"
+            AlbumArt="{Binding Radio.CurrentTrack.AlbumArt, Mode=OneWay}"
+            AlbumArtSize="192" />
+    </DockPanel>
 </UserControl>

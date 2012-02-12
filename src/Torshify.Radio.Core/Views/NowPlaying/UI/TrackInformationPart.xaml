@@ -18,19 +18,25 @@
             x:Key="StringToUpperConverter" />
     </UserControl.Resources>
     <DockPanel>
+        <DockPanel.Effect>
+            <DropShadowEffect
+                ShadowDepth="0"
+                BlurRadius="40" />
+        </DockPanel.Effect>
         <Border
             DockPanel.Dock="Left"
             HorizontalAlignment="Left"
             Width="{Binding AlbumArtSize, ElementName=Root, Mode=OneWay}"
             Height="{Binding AlbumArtSize, ElementName=Root, Mode=OneWay}"
             Background="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
-            Padding="2">
+            Padding="4">
             <Image
                 Stretch="UniformToFill"
                 Source="{Binding AlbumArt, ElementName=Root, Converter={StaticResource ImageLoaderConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
         </Border>
         <StackPanel
-            Margin="8,0,0,0">
+            Margin="8,0,0,0"
+            VerticalAlignment="Center">
             <TextBlock
                 Text="{Binding TrackName, ElementName=Root, Mode=OneWay}"
                 TextTrimming="CharacterEllipsis"

@@ -13,10 +13,10 @@
         HorizontalAlignment="Left"
         VerticalAlignment="Bottom"
         TrackName="{Binding Radio.CurrentTrack.Name, Mode=OneWay}"
-        TrackNameFontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
+        TrackNameFontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeExtraLarge}}"
         ArtistName="{Binding Radio.CurrentTrack.Artist, Mode=OneWay}"
         AlbumName="{Binding Radio.CurrentTrack.Album, Mode=OneWay}"
-        AlbumNameFontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}"
+        AlbumNameFontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
         AlbumArt="{Binding Radio.CurrentTrack.AlbumArt, Mode=OneWay}"
         AlbumArtSize="128" />
 </UserControl>

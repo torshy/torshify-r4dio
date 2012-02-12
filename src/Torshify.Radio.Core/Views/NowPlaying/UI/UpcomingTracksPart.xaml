@@ -1,0 +1,110 @@
+﻿<UserControl
+    x:Name="Root"
+    x:FieldModifier="private"
+    x:Class="Torshify.Radio.Core.Views.NowPlaying.UI.UpcomingTracksPart"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:StringToUpperConverter
+            x:Key="StringToUpperConverter" />
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
+        <Converters:ImageLoaderConverter
+            x:Key="ImageLoaderConverter" />
+    </UserControl.Resources>
+    <Border
+        Background="#DD000000"
+        Padding="4,24,4,24"
+        VerticalAlignment="Bottom">
+        <i:Interaction.Behaviors>
+            <Behaviors:InactivityFadeBehavior />
+            <Behaviors:InactivityScaleBehavior
+                InDuration="0:0:0.1" />
+        </i:Interaction.Behaviors>
+        <ScrollViewer
+            HorizontalScrollBarVisibility="Disabled"
+            MaxHeight="400">
+            <StackPanel>
+                <ItemsControl
+                    ItemsSource="{Binding UpcomingTracks, ElementName=Root}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    Visibility="{Binding HasItems, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    AlternationCount="2"
+                    Width="350">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel
+                                Name="Panel"
+                                Margin="0,4,0,4">
+                                <TextBlock
+                                    Text="{Binding Name, Mode=OneTime}"
+                                    TextTrimming="CharacterEllipsis"
+                                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMediumLarge}}" />
+                                <TextBlock
+                                    Text="{Binding Artist, Mode=OneTime, Converter={StaticResource StringToUpperConverter}}"
+                                    TextTrimming="CharacterEllipsis"
+                                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeSmall}}"
+                                    Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                            </StackPanel>
+                            <DataTemplate.Triggers>
+                                <Trigger
+                                    Property="ItemsControl.AlternationIndex"
+                                    Value="0">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{DynamicResource {x:Static Framework:AppTheme.DataGridRowAlternate1BrushKey}}"
+                                        TargetName="Panel" />
+                                </Trigger>
+                                <Trigger
+                                    Property="ItemsControl.AlternationIndex"
+                                    Value="1">
+                                    <Setter
+                                        Property="Background"
+                                        Value="{DynamicResource {x:Static Framework:AppTheme.DataGridRowAlternate2BrushKey}}"
+                                        TargetName="Panel" />
+                                </Trigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <ItemsControl
+                    ItemsSource="{Binding UpcomingTrackStreams, ElementName=Root}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    Visibility="{Binding HasItems, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    AlternationCount="2"
+                    Width="350">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel
+                                Name="Panel"
+                                Margin="0,4,0,4"
+                                Orientation="Horizontal">
+                                <Image
+                                    Source="{Binding Source={x:Static Framework:AppIcons.Folder}, Mode=OneTime, Converter={StaticResource ImageLoaderConverter}}"
+                                    Height="24"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,4,0" />
+                                <TextBlock
+                                    Text="{Binding Description, Mode=OneTime, Converter={StaticResource StringToUpperConverter}}"
+                                    TextTrimming="CharacterEllipsis"
+                                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMediumLarge}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+</UserControl>

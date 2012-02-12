@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using Microsoft.Practices.Prism.ViewModel;
+
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core
@@ -16,12 +19,15 @@ namespace Torshify.Radio.Core
         #region Fields
 
         private readonly ILoadingIndicatorService _loadingIndicatorService;
+        private readonly Dispatcher _dispatcher;
         private readonly ConcurrentQueue<ITrackStream> _trackStreamQueue;
 
         private ITrackPlayer _corePlayer;
         private Track _currentTrack;
         private ITrackStream _currentTrackStream;
         private ConcurrentQueue<Track> _trackQueue;
+        private ObservableCollection<Track> _trackQueuePublic;
+        private ObservableCollection<ITrackStream> _trackStreamQueuePublic;
         private Track _upcomingTrack;
 
         #endregion Fields
@@ -29,12 +35,18 @@ namespace Torshify.Radio.Core
         #region Constructors
 
         [ImportingConstructor]
-        public CoreRadio([Import("CorePlayer")]ITrackPlayer corePlayer, ILoadingIndicatorService loadingIndicatorService)
+        public CoreRadio(
+            [Import("CorePlayer")]ITrackPlayer corePlayer, 
+            ILoadingIndicatorService loadingIndicatorService,
+            Dispatcher dispatcher)
         {
+            _trackQueuePublic = new ObservableCollection<Track>();
+            _trackStreamQueuePublic = new ObservableCollection<ITrackStream>();
             _trackStreamQueue = new ConcurrentQueue<ITrackStream>();
             _trackQueue = new ConcurrentQueue<Track>();
             _corePlayer = corePlayer;
             _loadingIndicatorService = loadingIndicatorService;
+            _dispatcher = dispatcher;
             _corePlayer.Volume = 0.2;
             _corePlayer.TrackComplete += OnTrackComplete;
             _corePlayer.Initialize();
@@ -63,8 +75,8 @@ namespace Torshify.Radio.Core
                 {
                     var previousTrack = _currentTrack;
                     _currentTrack = value;
-                    OnCurrentTrackChanged(new TrackChangedEventArgs(previousTrack, _currentTrack));
                     RaisePropertyChanged("CurrentTrack");
+                    OnCurrentTrackChanged(new TrackChangedEventArgs(previousTrack, _currentTrack));
                 }
             }
         }
@@ -83,11 +95,19 @@ namespace Torshify.Radio.Core
             }
         }
 
+        public IEnumerable<Track> UpcomingTracks
+        {
+            get
+            {
+                return _trackQueuePublic;
+            }
+        }
+
         public IEnumerable<ITrackStream> TrackStreams
         {
             get
             {
-                return _trackStreamQueue;
+                return _trackStreamQueuePublic;
             }
         }
 
@@ -178,6 +198,7 @@ namespace Torshify.Radio.Core
                                   {
                                       _loadingIndicatorService.Push();
                                       _trackQueue = new ConcurrentQueue<Track>();
+                                      _dispatcher.BeginInvoke(new Action(_trackQueuePublic.Clear));
                                       CurrentTrackStream = trackStream;
                                       GetNextBatch();
 
@@ -198,6 +219,7 @@ namespace Torshify.Radio.Core
             else
             {
                 _trackStreamQueue.Enqueue(trackStream);
+                _dispatcher.BeginInvoke(new Action<ITrackStream>(_trackStreamQueuePublic.Add), trackStream);
             }
         }
 
@@ -234,6 +256,7 @@ namespace Torshify.Radio.Core
                 foreach (var track in tracks)
                 {
                     _trackQueue.Enqueue(track);
+                    _dispatcher.BeginInvoke(new Action<Track>(_trackQueuePublic.Add), track);
                 }
             }
             else
@@ -241,6 +264,7 @@ namespace Torshify.Radio.Core
                 ITrackStream nextTrackStream;
                 if (_trackStreamQueue.TryDequeue(out nextTrackStream))
                 {
+                    _dispatcher.BeginInvoke(new Func<ITrackStream, bool>(_trackStreamQueuePublic.Remove), nextTrackStream);
                     CurrentTrackStream = nextTrackStream;
                     GetNextBatch();
                 }
@@ -269,6 +293,7 @@ namespace Torshify.Radio.Core
             Track firstTrack;
             if (_trackQueue.TryDequeue(out firstTrack))
             {
+                _dispatcher.BeginInvoke(new Func<Track, bool>(_trackQueuePublic.Remove), firstTrack);
                 _corePlayer.Load(firstTrack);
                 _corePlayer.Play();
 

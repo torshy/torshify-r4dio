@@ -36,6 +36,11 @@ namespace Torshify.Radio.Framework
             get;
         }
 
+        IEnumerable<Track> UpcomingTracks
+        {
+            get;
+        }
+        
         IEnumerable<ITrackStream> TrackStreams
         {
             get;

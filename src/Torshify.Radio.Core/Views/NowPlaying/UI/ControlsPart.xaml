@@ -10,6 +10,8 @@
     xmlns:Resources="clr-namespace:Torshify.Radio.Core.Resources"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     xmlns:Converters="clr-namespace:Torshify.Radio.Core.Views.NowPlaying.UI.Converters"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300"
@@ -21,6 +23,9 @@
     </UserControl.Resources>
     <Grid
         Background="{Binding Foreground, ElementName=Root, Converter={StaticResource BrushOpacityConverter}}">
+        <i:Interaction.Behaviors>
+            <Behaviors:InactivityFadeBehavior />
+        </i:Interaction.Behaviors>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition
@@ -47,8 +52,8 @@
                     Orientation="Horizontal">
                     <Button
                         BorderThickness="0"
-                        Command="{Binding TogglePlayPauseCommand}"
-                        Content="{Binding}">
+                        Command="{Binding TogglePlayPauseCommand, ElementName=Root}"
+                        Content="{Binding IsPlaying, ElementName=Root}">
                         <Button.ContentTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -63,7 +68,7 @@
                                 </Grid>
                                 <DataTemplate.Triggers>
                                     <DataTrigger
-                                        Binding="{Binding Player.IsPlaying}"
+                                        Binding="{Binding}"
                                         Value="False">
                                         <Setter
                                             Property="Visibility"
@@ -87,7 +92,7 @@
                     </Button>
                     <Button
                         BorderThickness="0"
-                        Command="{Binding NextTrackCommand}">
+                        Command="{Binding NextTrackCommand, ElementName=Root}">
                         <Button.ContentTemplate>
                             <DataTemplate>
                                 <Image

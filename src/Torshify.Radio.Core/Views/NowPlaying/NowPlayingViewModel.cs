@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-
+using System.Windows.Threading;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
-using System.Linq;
 
 namespace Torshify.Radio.Core.Views.NowPlaying
 {
@@ -21,10 +22,12 @@ namespace Torshify.Radio.Core.Views.NowPlaying
     {
         #region Fields
 
-        private readonly IRadio _radio;
         private readonly ITrackPlayer _player;
+        private readonly Dispatcher _dispatcher;
+        private readonly IRadio _radio;
 
         private ImageSource _backgroundImage;
+        private bool _hasTrack;
         private IRegionNavigationService _navigationService;
 
         #endregion Fields
@@ -32,10 +35,11 @@ namespace Torshify.Radio.Core.Views.NowPlaying
         #region Constructors
 
         [ImportingConstructor]
-        public NowPlayingViewModel(IRadio radio, [Import("CorePlayer")] ITrackPlayer player)
+        public NowPlayingViewModel(IRadio radio, [Import("CorePlayer")] ITrackPlayer player, Dispatcher dispatcher)
         {
             _radio = radio;
             _player = player;
+            _dispatcher = dispatcher;
 
             NavigateBackCommand = new AutomaticCommand(ExecuteNavigateBack, CanExecuteNavigateBack);
             NextTrackCommand = new ManualCommand(ExecuteNextTrack, CanExecuteNextTrack);
@@ -86,7 +90,7 @@ namespace Torshify.Radio.Core.Views.NowPlaying
         [Import]
         public IBackdropService BackdropService
         {
-            get; 
+            get;
             set;
         }
 
@@ -110,8 +114,6 @@ namespace Torshify.Radio.Core.Views.NowPlaying
             }
         }
 
-        private bool _hasTrack;
-
         public bool HasTrack
         {
             get { return _hasTrack; }
@@ -124,6 +126,7 @@ namespace Torshify.Radio.Core.Views.NowPlaying
                 }
             }
         }
+
         #endregion Properties
 
         #region Methods
@@ -151,10 +154,29 @@ namespace Torshify.Radio.Core.Views.NowPlaying
                 HasTrack = true;
                 QueryForBackdrop(_radio.CurrentTrack.Artist);
             }
+
+            RefreshCommands();
+        }
+
+        private static BitmapImage GetImageSource(string imageUrl)
+        {
+            var imageSource = new BitmapImage();
+            imageSource.BeginInit();
+            imageSource.CacheOption = BitmapCacheOption.None;
+            imageSource.UriSource = new Uri(imageUrl, UriKind.Absolute);
+            imageSource.EndInit();
+
+            if (imageSource.CanFreeze)
+            {
+                imageSource.Freeze();
+            }
+
+            return imageSource;
         }
 
         private void RadioOnUpcomingTrackChanged(object sender, EventArgs eventArgs)
         {
+            RefreshCommands();
         }
 
         private void RadioOnCurrentTrackChanged(object sender, TrackChangedEventArgs e)
@@ -171,8 +193,11 @@ namespace Torshify.Radio.Core.Views.NowPlaying
 
             if (e.CurrentTrack != null)
             {
+                HasTrack = true;
                 QueryForBackdrop(e.CurrentTrack.Artist);
             }
+
+            RefreshCommands();
         }
 
         private void QueryForBackdrop(string artist)
@@ -207,22 +232,6 @@ namespace Torshify.Radio.Core.Views.NowPlaying
                         }
                     }
                 });
-        }
-
-        private static BitmapImage GetImageSource(string imageUrl)
-        {
-            var imageSource = new BitmapImage();
-            imageSource.BeginInit();
-            imageSource.CacheOption = BitmapCacheOption.None;
-            imageSource.UriSource = new Uri(imageUrl, UriKind.Absolute);
-            imageSource.EndInit();
-
-            if (imageSource.CanFreeze)
-            {
-                imageSource.Freeze();
-            }
-
-            return imageSource;
         }
 
         private bool CanExecuteNavigateBack()
@@ -271,6 +280,18 @@ namespace Torshify.Radio.Core.Views.NowPlaying
             _radio.NextTrack();
         }
 
+        private void RefreshCommands()
+        {
+            if (_dispatcher.CheckAccess())
+            {
+                TogglePlayPauseCommand.NotifyCanExecuteChanged();
+                NextTrackCommand.NotifyCanExecuteChanged();
+            }
+            else
+            {
+                _dispatcher.BeginInvoke(new Action(RefreshCommands));
+            }
+        }
         #endregion Methods
     }
 }

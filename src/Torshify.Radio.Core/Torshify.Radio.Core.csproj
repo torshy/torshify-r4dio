@@ -214,6 +214,9 @@
     <Compile Include="Views\NowPlaying\UI\TrackInformationPart.xaml.cs">
       <DependentUpon>TrackInformationPart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NowPlaying\UI\UpcomingTracksPart.xaml.cs">
+      <DependentUpon>UpcomingTracksPart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
@@ -313,6 +316,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NowPlaying\UI\TrackInformationPart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NowPlaying\UI\UpcomingTracksPart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

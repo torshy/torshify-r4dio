@@ -260,6 +260,8 @@ namespace Torshify.Radio.Core
             {
                 handler(sender, e);
             }
+
+            RaisePropertyChanged("IsPlaying");
         }
 
         private void PlayerTrackComplete(object sender, TrackEventArgs e)
