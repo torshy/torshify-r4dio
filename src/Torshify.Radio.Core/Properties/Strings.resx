@@ -129,7 +129,13 @@
   <data name="Button_Forward_Unable_ToolTip" xml:space="preserve">
     <value>@Button_Forward_Unable_ToolTip</value>
   </data>
+  <data name="Home" xml:space="preserve">
+    <value>@Home</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>@Search</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>@Settings</value>
   </data>
 </root>

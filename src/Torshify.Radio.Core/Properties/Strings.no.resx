@@ -129,7 +129,13 @@
   <data name="Button_Forward_Unable_ToolTip" xml:space="preserve">
     <value>Du kan ikke gå fremover fra hvor du er nå</value>
   </data>
+  <data name="Home" xml:space="preserve">
+    <value>Hjem</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Søk</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Oppsett</value>
   </data>
 </root>

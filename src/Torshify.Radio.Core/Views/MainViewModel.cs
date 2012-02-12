@@ -8,7 +8,8 @@ using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-using Torshify.Radio.Core.Services;
+using Torshify.Radio.Core.Views.Settings;
+using Torshify.Radio.Core.Views.Stations;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 
@@ -32,12 +33,19 @@ namespace Torshify.Radio.Core.Views
             SearchBarLoadingIndicatorService = new LoadingIndicatorService();
             NavigateBackCommand = new AutomaticCommand(ExecuteNavigateBack, CanExecuteNavigateBack);
             NavigateForwardCommand = new AutomaticCommand(ExecuteNavigateForward, CanExecuteNavigateForward);
+            NavigateToHomeCommand = new AutomaticCommand(ExecuteNavigateToHome, CanExecuteNavigateToHome);
+            NavigateToSettingsCommand = new AutomaticCommand(ExecuteNavigateToSettings, CanExecuteNavigateToSettings);
             SearchCommand = new AutomaticCommand<string>(ExecuteSearch, CanExecuteSearch);
         }
 
         #endregion Constructors
 
         #region Properties
+
+        public AutomaticCommand NavigateToSettingsCommand
+        {
+            get; private set;
+        }
 
         public IEnumerable<string> AutoCompleteList
         {
@@ -59,16 +67,22 @@ namespace Torshify.Radio.Core.Views
             private set;
         }
 
+        public AutomaticCommand NavigateToHomeCommand
+        {
+            get;
+            private set;
+        }
+
         public ILoadingIndicatorService SearchBarLoadingIndicatorService
         {
-            get; 
+            get;
             set;
         }
 
         [Import]
         public ILoadingIndicatorService LoadingIndicatorService
         {
-            get; 
+            get;
             set;
         }
 
@@ -89,7 +103,7 @@ namespace Torshify.Radio.Core.Views
         [Import]
         public ILoggerFacade Logger
         {
-            get; 
+            get;
             set;
         }
 
@@ -146,6 +160,40 @@ namespace Torshify.Radio.Core.Views
                         _autoCompleteList.Add(phrase);
                     }
                 }, ui);
+        }
+
+        private bool CanExecuteNavigateToSettings()
+        {
+            var entry = RegionManager.Regions[AppRegions.ViewRegion].NavigationService.Journal.CurrentEntry;
+
+            if (entry != null &&
+                entry.Uri.OriginalString ==
+                typeof(SettingsView).FullName)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ExecuteNavigateToSettings()
+        {
+            RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(SettingsView).FullName);
+        }
+
+        private bool CanExecuteNavigateToHome()
+        {
+            var entry = RegionManager.Regions[AppRegions.ViewRegion].NavigationService.Journal.CurrentEntry;
+            
+            return
+                entry != null &&
+                entry.Uri.OriginalString !=
+                typeof(StationsView).FullName;
+        }
+
+        private void ExecuteNavigateToHome()
+        {
+            RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(StationsView).FullName);
         }
 
         private bool CanExecuteNavigateBack()

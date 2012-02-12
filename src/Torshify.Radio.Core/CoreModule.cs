@@ -13,6 +13,7 @@ using Torshify.Radio.Core.Models;
 using Torshify.Radio.Core.Views;
 using Torshify.Radio.Core.Views.Controls;
 using Torshify.Radio.Core.Views.FirstTime;
+using Torshify.Radio.Core.Views.Settings;
 using Torshify.Radio.Core.Views.Stations;
 using Torshify.Radio.Framework;
 
@@ -75,6 +76,7 @@ namespace Torshify.Radio.Core
 
             RegionManager.RegisterViewWithRegion(AppRegions.MainRegion, typeof(MainView));
             RegionManager.RegisterViewWithRegion(AppRegions.BottomRegion, typeof(ControlsView));
+            RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof(SettingsView));
             RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof(StationsView));
 
             if (displayWizard)

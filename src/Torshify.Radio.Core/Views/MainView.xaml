@@ -22,16 +22,19 @@
         <Converters:BoolToVisibleOrHidden
             x:Key="BoolToHiddenConverter"
             Collapse="True" />
+        <Converters:ImageLoaderConverter
+            x:Key="ImageLoaderConverter" />
     </DockPanel.Resources>
-    <StackPanel
+    <DockPanel
         DockPanel.Dock="Top">
         <Resources:R4dioIcon
+            DockPanel.Dock="Top"
             Margin="0,-8,0,4"
             HorizontalAlignment="Left"
             Height="20" />
         <StackPanel
-            Orientation="Horizontal"
-            Controls:WindowChrome.IsHitTestVisibleInChrome="True">
+            Controls:WindowChrome.IsHitTestVisibleInChrome="True"
+            Orientation="Horizontal">
             <Button
                 Width="20"
                 Command="{Binding NavigateBackCommand}"
@@ -89,49 +92,98 @@
                     </DataTemplate>
                 </Button.ContentTemplate>
             </Button>
-            <Grid
-                Margin="8,0,0,0">
-                <ComboBox
-                    ItemsSource="{Binding SearchBarService.SearchBars}"
-                    SelectedItem="{Binding SearchBarService.Current}"
-                    DisplayMemberPath="Data.Category"
-                    Style="{DynamicResource ComboBox_SelectedItemInvisibleStyle}" />
-                <Controls:SearchTextBox
-                    x:Name="InputBox"
-                    Width="200"
-                    Margin="0,0,24,0"
-                    ToolTip="{Binding SearchBarService.Current.Data.WatermarkText}"
-                    Watermark="{Binding SearchBarService.Current.Data.WatermarkText}"
-                    ItemsSource="{Binding AutoCompleteList}"
-                    TextChanged="AutoCompleteTextChanged"
-                    Search="SearchTextBoxSearch">
-                    <i:Interaction.Behaviors>
-                        <Behaviors:KeyboardBehavior
-                            Key="Enter"
-                            Command="{Binding SearchCommand}"
-                            CommandParameter="{Binding Text, ElementName=InputBox}" />
-                    </i:Interaction.Behaviors>
-                </Controls:SearchTextBox>
-                <Controls:MetroProgressBar
-                    VerticalAlignment="Bottom"
-                    Visibility="{Binding SearchBarLoadingIndicatorService.IsLoading, Converter={StaticResource BoolToHiddenConverter}}"
-                    IsIndeterminate="{Binding SearchBarLoadingIndicatorService.IsLoading}" />
-            </Grid>
-            <!--<TextBlock
-                    Margin="12,0,0,0"
-                    Text="//"
-                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMediumLarge}}"
-                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}" 
-                    Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
-                <TextBlock
-                    Margin="4,0,0,0"
-                    Text="8tracks"
-                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMediumLarge}}"
-                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
-                    Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />-->
+            <DockPanel>
+                <Grid
+                    DockPanel.Dock="Left"
+                    Margin="8,0,0,0">
+                    <ComboBox
+                        ItemsSource="{Binding SearchBarService.SearchBars}"
+                        SelectedItem="{Binding SearchBarService.Current}"
+                        DisplayMemberPath="Data.Category"
+                        Style="{DynamicResource ComboBox_SelectedItemInvisibleStyle}" />
+                    <Controls:SearchTextBox
+                        x:Name="InputBox"
+                        Width="200"
+                        Margin="0,0,24,0"
+                        ToolTip="{Binding SearchBarService.Current.Data.WatermarkText}"
+                        Watermark="{Binding SearchBarService.Current.Data.WatermarkText}"
+                        ItemsSource="{Binding AutoCompleteList}"
+                        TextChanged="AutoCompleteTextChanged"
+                        Search="SearchTextBoxSearch">
+                        <i:Interaction.Behaviors>
+                            <Behaviors:KeyboardBehavior
+                                Key="Enter"
+                                Command="{Binding SearchCommand}"
+                                CommandParameter="{Binding Text, ElementName=InputBox}" />
+                        </i:Interaction.Behaviors>
+                    </Controls:SearchTextBox>
+                    <Controls:MetroProgressBar
+                        VerticalAlignment="Bottom"
+                        Visibility="{Binding SearchBarLoadingIndicatorService.IsLoading, Converter={StaticResource BoolToHiddenConverter}}"
+                        IsIndeterminate="{Binding SearchBarLoadingIndicatorService.IsLoading}" />
+                </Grid>
+            </DockPanel>
         </StackPanel>
-
-    </StackPanel>
+        <StackPanel
+            DockPanel.Dock="Right"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                Controls:WindowChrome.IsHitTestVisibleInChrome="True"
+                BorderThickness="0"
+                Padding="0"
+                ToolTip="{lex:LocText Key=Home, Dict=Strings, Assembly=Torshify.Radio.Core}"
+                Command="{Binding NavigateToHomeCommand}">
+                <i:Interaction.Behaviors>
+                    <Behaviors:InactivityFadeBehavior />
+                </i:Interaction.Behaviors>
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <Image
+                            Name="Img"
+                            Height="24"
+                            Source="{Binding Source={x:Static Framework:AppIcons.Parent}, Converter={StaticResource ImageLoaderConverter}}" />
+                        <DataTemplate.Triggers>
+                            <Trigger
+                                Property="IsEnabled"
+                                Value="False">
+                                <Setter
+                                    Property="Opacity"
+                                    Value="0.5" />
+                            </Trigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+            <Button
+                Controls:WindowChrome.IsHitTestVisibleInChrome="True"
+                BorderThickness="0"
+                Padding="0"
+                ToolTip="{lex:LocText Key=Settings, Dict=Strings, Assembly=Torshify.Radio.Core}"
+                Command="{Binding NavigateToSettingsCommand}">
+                <i:Interaction.Behaviors>
+                    <Behaviors:InactivityFadeBehavior />
+                </i:Interaction.Behaviors>
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <Image
+                            Name="Img"
+                            Height="24"
+                            Source="{Binding Source={x:Static Framework:AppIcons.Settings}, Converter={StaticResource ImageLoaderConverter}}" />
+                        <DataTemplate.Triggers>
+                            <Trigger
+                                Property="IsEnabled"
+                                Value="False">
+                                <Setter
+                                    Property="Opacity"
+                                    Value="0.5" />
+                            </Trigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+        </StackPanel>
+    </DockPanel>
     <DockPanel>
         <DockPanel
             DockPanel.Dock="Bottom"
@@ -152,6 +204,6 @@
             Margin="0,8,0,0"
             FocusVisualStyle="{x:Null}"
             Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.ViewRegion}"
-            Transition="RightReplaceTransition"/>
+            Transition="RightReplaceTransition" />
     </DockPanel>
 </DockPanel>
