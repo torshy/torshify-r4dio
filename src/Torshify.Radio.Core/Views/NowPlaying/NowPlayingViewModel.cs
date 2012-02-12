@@ -1,12 +1,16 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Threading.Tasks;
 using System.Windows.Input;
-
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
+using System.Linq;
 
 namespace Torshify.Radio.Core.Views.NowPlaying
 {
@@ -19,6 +23,7 @@ namespace Torshify.Radio.Core.Views.NowPlaying
 
         private readonly IRadio _radio;
 
+        private ImageSource _backgroundImage;
         private IRegionNavigationService _navigationService;
 
         #endregion Fields
@@ -47,6 +52,33 @@ namespace Torshify.Radio.Core.Views.NowPlaying
             get { return _radio; }
         }
 
+        [Import]
+        public IBackdropService BackdropService
+        {
+            get; 
+            set;
+        }
+
+        [Import]
+        public ILoggerFacade Logger
+        {
+            get;
+            set;
+        }
+
+        public ImageSource BackgroundImage
+        {
+            get { return _backgroundImage; }
+            set
+            {
+                if (_backgroundImage != value)
+                {
+                    _backgroundImage = value;
+                    RaisePropertyChanged("BackgroundImage");
+                }
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -68,14 +100,65 @@ namespace Torshify.Radio.Core.Views.NowPlaying
 
             _radio.CurrentTrackChanged += RadioOnCurrentTrackChanged;
             _radio.UpcomingTrackChanged += RadioOnUpcomingTrackChanged;
+
+            if (_radio.CurrentTrack != null)
+            {
+                QueryForBackdrop(_radio.CurrentTrack.Artist);
+            }
         }
 
         private void RadioOnUpcomingTrackChanged(object sender, EventArgs eventArgs)
         {
         }
 
-        private void RadioOnCurrentTrackChanged(object sender, EventArgs eventArgs)
+        private void RadioOnCurrentTrackChanged(object sender, TrackChangedEventArgs e)
         {
+            if (e.CurrentTrack != null && e.PreviousTrack != null && e.CurrentTrack.Artist == e.PreviousTrack.Artist)
+            {
+                return;
+            }
+
+            if (e.CurrentTrack != null)
+            {
+                QueryForBackdrop(e.CurrentTrack.Artist);
+            }
+        }
+
+        private void QueryForBackdrop(string artist)
+        {
+            BackdropService
+                .Query(artist)
+                .ContinueWith(task =>
+                {
+                    if (task.Exception != null)
+                    {
+                        Logger.Log(task.Exception.ToString(), Category.Exception, Priority.Medium);
+                    }
+                    else
+                    {
+                        var imageUrl = task.Result.OrderBy(k => Guid.NewGuid()).FirstOrDefault();
+
+                        if (imageUrl != null)
+                        {
+                            var coverArtSource = new BitmapImage();
+                            coverArtSource.BeginInit();
+                            coverArtSource.CacheOption = BitmapCacheOption.None;
+                            coverArtSource.UriSource = new Uri(imageUrl, UriKind.Absolute);
+                            coverArtSource.EndInit();
+
+                            if (coverArtSource.CanFreeze)
+                            {
+                                coverArtSource.Freeze();
+                            }
+
+                            BackgroundImage = coverArtSource;
+                        }
+                        else
+                        {
+                            BackgroundImage = null;
+                        }
+                    }
+                });
         }
 
         private bool CanExecuteNavigateBack()

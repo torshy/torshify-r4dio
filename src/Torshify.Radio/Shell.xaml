@@ -16,8 +16,8 @@
     TextElement.FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeNormal}}"
     TextOptions.TextFormattingMode="Display">
     <Grid>
-        <ContentControl
-            Margin="8,12,8,8"
+        <Controls:TransitioningContentControl
+            FocusVisualStyle="{x:Null}"
             Regions:RegionManager.RegionName="{x:Static Framework:AppRegions.MainRegion}" />
         <local:FaderFrame
             NavigationUIVisibility="Hidden"

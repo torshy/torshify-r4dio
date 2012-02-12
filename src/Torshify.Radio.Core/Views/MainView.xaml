@@ -16,7 +16,8 @@
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="300">
+    d:DesignWidth="300"
+    Margin="8,12,8,8">
     <DockPanel.Resources>
         <Converters:BoolToVisibleOrHidden
             x:Key="BoolToHiddenConverter"

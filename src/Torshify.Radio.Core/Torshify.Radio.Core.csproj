@@ -191,6 +191,12 @@
     <Compile Include="Views\NowPlaying\BackArrow.xaml.cs">
       <DependentUpon>BackArrow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NowPlaying\UI\ColorOverlayFrame.xaml.cs">
+      <DependentUpon>ColorOverlayFrame.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NowPlaying\UI\KenBurnsPhotoFrame.xaml.cs">
+      <DependentUpon>KenBurnsPhotoFrame.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NowPlaying\NowPlayingView.xaml.cs">
       <DependentUpon>NowPlayingView.xaml</DependentUpon>
     </Compile>
@@ -264,6 +270,14 @@
     <Page Include="Views\NowPlaying\BackArrow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NowPlaying\UI\ColorOverlayFrame.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NowPlaying\UI\KenBurnsPhotoFrame.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\NowPlaying\NowPlayingView.xaml">
       <SubType>Designer</SubType>
