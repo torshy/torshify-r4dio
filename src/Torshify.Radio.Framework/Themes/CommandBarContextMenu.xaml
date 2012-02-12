@@ -36,7 +36,7 @@
                     Margin="6,0,6,0"
                     VerticalAlignment="Center"
                     ContentSource="Icon"
-                    MaxHeight="20" />
+                    MaxHeight="18" />
                 <Border
                     Name="Check"
                     Width="13"
@@ -58,6 +58,7 @@
                 </Border>
                 <ContentPresenter
                     Name="HeaderHost"
+                    VerticalAlignment="Center"
                     Grid.Column="1"
                     ContentSource="Header"
                     RecognizesAccessKey="True" />
@@ -141,16 +142,18 @@
                     Margin="6,0,6,0"
                     VerticalAlignment="Center"
                     ContentSource="Icon"
-                    MaxHeight="20"/>
+                    MaxHeight="18"/>
                 <ContentPresenter
                     Name="HeaderHost"
                     Grid.Column="1"
                     ContentSource="Header"
+                    VerticalAlignment="Center"
                     RecognizesAccessKey="True" />
                 <TextBlock
                     x:Name="InputGestureText"
                     Grid.Column="2"
                     Text="{TemplateBinding InputGestureText}"
+                    VerticalAlignment="Center"
                     Margin="5,2,2,2"
                     DockPanel.Dock="Right" />
                 <Path
@@ -266,6 +269,12 @@
             Property="IsEnabled"
             Value="False" />
         <Setter
+            Property="Focusable"
+            Value="False" />
+        <Setter
+            Property="IsHitTestVisible"
+            Value="True" />
+        <Setter
             Property="Template">
             <Setter.Value>
                 <ControlTemplate
@@ -283,14 +292,16 @@
 
                             <Border
                                 Grid.Column="0"
-                                BorderBrush="Gray"
+                                BorderBrush="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
                                 BorderThickness="0,1,0,0"
                                 VerticalAlignment="Center" />
                             <ContentPresenter
                                 Name="HeaderHost"
                                 Grid.Column="1"
                                 Content="{Binding Content}"
-                                TextBlock.Foreground="Black"
+                                TextBlock.Foreground="{TemplateBinding Foreground}"
+                                TextBlock.FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                                TextBlock.FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}"
                                 Visibility="{Binding Content,
                                                      RelativeSource={RelativeSource Mode=Self},
                                                      Converter={StaticResource StringEmptyToVisibilityConverter}}"
@@ -298,7 +309,7 @@
                                 Margin="4,0,4,0" />
                             <Border
                                 Grid.Column="2"
-                                BorderBrush="Gray"
+                                BorderBrush="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
                                 BorderThickness="0,1,0,0"
                                 VerticalAlignment="Center" />
                         </Grid>
