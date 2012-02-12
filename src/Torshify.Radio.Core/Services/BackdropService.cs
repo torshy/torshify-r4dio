@@ -172,6 +172,30 @@ namespace Torshify.Radio.Core.Services
             return false;
         }
 
+        public bool TryGetAny(out string[] fileNames)
+        {
+            string[] directories = Directory.GetDirectories(CacheLocation);
+
+            if (directories.Length > 0)
+            {
+                Random random = new Random();
+                int directory = random.Next(directories.Length);
+                string randomDirectory = directories[directory];
+                fileNames = Directory.GetFiles(randomDirectory);
+
+                if (!fileNames.Any())
+                {
+                    fileNames = null;
+                    return false;
+                }
+
+                return true;
+            }
+
+            fileNames = null;
+            return false;
+        }
+
         private static string ByteArrayToString(byte[] arrInput)
         {
             int i;

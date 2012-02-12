@@ -10,5 +10,7 @@ namespace Torshify.Radio.Framework
         bool TryGet(string artistName, out string fileName);
 
         bool TryGet(string artistName, out string[] fileNames);
+
+        bool TryGetAny(out string[] fileNames);
     }
 }

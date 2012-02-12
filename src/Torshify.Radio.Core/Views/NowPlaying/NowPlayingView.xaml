@@ -10,10 +10,14 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid>
         <UI:KenBurnsPhotoFrame
             ImageSource="{Binding BackgroundImage}" />
-        <UI:ColorOverlayFrame />        
+        <UI:ColorOverlayFrame />
         <Controls:CircleButton
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
@@ -23,6 +27,33 @@
             Width="60"
             Command="{Binding NavigateBackCommand}">
             <NowPlaying:BackArrow />
-        </Controls:CircleButton>        
+        </Controls:CircleButton>
+        <Grid
+            Visibility="{Binding HasTrack, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"
+            Margin="8,12,8,8">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition
+                    Height="Auto" />
+            </Grid.RowDefinitions>
+            <Controls:SizeTemplateControl>
+                <Controls:SizeTemplateControl.Templates>
+                    <Controls:SizeControlTemplate
+                        MinWidth="800">
+                        <ControlTemplate>
+                            <NowPlaying:NowPlayingViewMedium />
+                        </ControlTemplate>
+                    </Controls:SizeControlTemplate>
+                    <Controls:SizeControlTemplate>
+                        <ControlTemplate>
+                            <NowPlaying:NowPlayingViewSmall />
+                        </ControlTemplate>
+                    </Controls:SizeControlTemplate>
+                </Controls:SizeTemplateControl.Templates>
+            </Controls:SizeTemplateControl>
+            <UI:ControlsPart
+                Margin="0,8,0,0"
+                Grid.Row="1" />
+        </Grid>
     </Grid>
 </UserControl>

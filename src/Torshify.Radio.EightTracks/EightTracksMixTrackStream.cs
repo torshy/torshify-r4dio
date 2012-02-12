@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Xml;
 using EightTracks;
 
 using Microsoft.Practices.Prism.ViewModel;
@@ -10,6 +10,7 @@ using Torshify.Radio.EightTracks.Converters;
 using Torshify.Radio.Framework;
 
 using Track = Torshify.Radio.Framework.Track;
+using System.Linq;
 
 namespace Torshify.Radio.EightTracks
 {
@@ -18,6 +19,7 @@ namespace Torshify.Radio.EightTracks
         #region Fields
 
         private readonly Mix _startMix;
+        private readonly IToastService _toastService;
 
         private Mix _currentMix;
         private PlayResponse _currentPlayResponse;
@@ -28,9 +30,10 @@ namespace Torshify.Radio.EightTracks
 
         #region Constructors
 
-        public EightTracksMixTrackStream(Mix startMix)
+        public EightTracksMixTrackStream(Mix startMix, IToastService toastService)
         {
             _startMix = startMix;
+            _toastService = toastService;
             _currentMix = startMix;
             Description = _currentMix.Name;
         }
@@ -122,6 +125,21 @@ namespace Torshify.Radio.EightTracks
                 else if (!_currentPlayResponse.Set.AtEnd)
                 {
                     _currentPlayResponse = session.Query<Play>().Next(_playToken.PlayToken, _currentMix.ID);
+                }
+
+                if (_currentPlayResponse.Errors != null)
+                {
+                    var errorNodes = _currentPlayResponse.Errors as XmlNode[];
+
+                    if (errorNodes != null && errorNodes.Any())
+                    {
+                        var errorNode = errorNodes.FirstOrDefault();
+                        if (errorNode != null && (errorNode.Name != "nil" && errorNode.Value != "true"))
+                        {
+                            var errorText = errorNode.InnerText;
+                            _toastService.Show(errorText);
+                        }
+                    }
                 }
 
                 if (MoveToNextSimilarMixAtEnd)

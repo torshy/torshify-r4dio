@@ -191,9 +191,19 @@
     <Compile Include="Views\NowPlaying\BackArrow.xaml.cs">
       <DependentUpon>BackArrow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NowPlaying\NowPlayingViewMedium.xaml.cs">
+      <DependentUpon>NowPlayingViewMedium.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NowPlaying\NowPlayingViewSmall.xaml.cs">
+      <DependentUpon>NowPlayingViewSmall.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NowPlaying\UI\ColorOverlayFrame.xaml.cs">
       <DependentUpon>ColorOverlayFrame.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\NowPlaying\UI\ControlsPart.xaml.cs">
+      <DependentUpon>ControlsPart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NowPlaying\UI\Converters\BrushOpacityConverter.cs" />
     <Compile Include="Views\NowPlaying\UI\KenBurnsPhotoFrame.xaml.cs">
       <DependentUpon>KenBurnsPhotoFrame.xaml</DependentUpon>
     </Compile>
@@ -201,6 +211,9 @@
       <DependentUpon>NowPlayingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NowPlaying\NowPlayingViewModel.cs" />
+    <Compile Include="Views\NowPlaying\UI\TrackInformationPart.xaml.cs">
+      <DependentUpon>TrackInformationPart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Stations\StationsView.xaml.cs">
       <DependentUpon>StationsView.xaml</DependentUpon>
     </Compile>
@@ -271,15 +284,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\NowPlaying\NowPlayingViewMedium.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NowPlaying\NowPlayingViewSmall.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\NowPlaying\UI\ColorOverlayFrame.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\NowPlaying\UI\ControlsPart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NowPlaying\UI\KenBurnsPhotoFrame.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\NowPlaying\NowPlayingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NowPlaying\UI\TrackInformationPart.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
