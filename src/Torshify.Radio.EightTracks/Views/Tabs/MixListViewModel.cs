@@ -239,6 +239,11 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
         private void ExecuteQueueMix(Mix mix)
         {
             Radio.Queue(new EightTracksMixTrackStream(mix, ToastService));
+            ToastService.Show(new ToastData
+            {
+                Message = "Queued " + mix.Name,
+                Icon = AppIcons.Add
+            });
         }
 
         private void ExecuteToggleTagFilter(string tagFilter)

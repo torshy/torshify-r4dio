@@ -24,7 +24,8 @@
         <TreeView
             ItemsSource="{Binding CurrentArtist.Albums}"
             VirtualizingStackPanel.IsVirtualizing="True"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.PanningMode="VerticalOnly">
             <TreeView.ItemContainerStyle>
                 <Style
                     TargetType="{x:Type TreeViewItem}">

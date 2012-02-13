@@ -62,7 +62,8 @@
             ItemsSource="{Binding SimilarArtists}"
             VirtualizingStackPanel.IsVirtualizing="True"
             VirtualizingStackPanel.VirtualizationMode="Recycling"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.PanningMode="VerticalOnly">
             <ItemsControl.Template>
                 <ControlTemplate>
                     <ScrollViewer

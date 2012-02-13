@@ -11,6 +11,7 @@ namespace Torshify.Radio.Framework
         public ToastData()
         {
             Icon = AppIcons.InformationWithCircle;
+            DisplayTime = 2500;
         }
 
         #endregion Constructors

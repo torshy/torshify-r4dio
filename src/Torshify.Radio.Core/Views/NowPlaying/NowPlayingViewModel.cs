@@ -158,17 +158,25 @@ namespace Torshify.Radio.Core.Views.NowPlaying
             RefreshCommands();
         }
 
-        private static BitmapImage GetImageSource(string imageUrl)
+        private BitmapImage GetImageSource(string imageUrl)
         {
             var imageSource = new BitmapImage();
-            imageSource.BeginInit();
-            imageSource.CacheOption = BitmapCacheOption.None;
-            imageSource.UriSource = new Uri(imageUrl, UriKind.Absolute);
-            imageSource.EndInit();
 
-            if (imageSource.CanFreeze)
+            try
             {
-                imageSource.Freeze();
+                imageSource.BeginInit();
+                imageSource.CacheOption = BitmapCacheOption.None;
+                imageSource.UriSource = new Uri(imageUrl, UriKind.Absolute);
+                imageSource.EndInit();
+
+                if (imageSource.CanFreeze)
+                {
+                    imageSource.Freeze();
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Log(e.ToString(), Category.Exception, Priority.Low);
             }
 
             return imageSource;

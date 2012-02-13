@@ -63,7 +63,8 @@
         Name="resultList"
         ItemsSource="{Binding Results}"
         VirtualizingStackPanel.IsVirtualizing="True"
-        VirtualizingStackPanel.VirtualizationMode="Recycling">
+        VirtualizingStackPanel.VirtualizationMode="Recycling"
+        ScrollViewer.PanningMode="VerticalOnly">
         <i:Interaction.Behaviors>
             <Behaviors:DataGridTriStateSortingBehavior />
             <Behaviors:DataGridRowActionBehavior

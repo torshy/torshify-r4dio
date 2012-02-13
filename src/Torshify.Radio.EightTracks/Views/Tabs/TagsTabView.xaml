@@ -32,7 +32,8 @@
             <ColumnDefinition
                 Width="0.4*" />
         </Grid.ColumnDefinitions>
-        <ScrollViewer>
+        <ScrollViewer
+            PanningMode="VerticalOnly">
             <StackPanel>
                 <ItemsControl
                     Name="MixList"

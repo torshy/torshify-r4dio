@@ -197,6 +197,7 @@
                 ItemsSource="{Binding CurrentTrackContainer.Tracks}"
                 HeadersVisibility="None"
                 ScrollViewer.CanContentScroll="False"
+                ScrollViewer.PanningMode="VerticalOnly"
                 VirtualizingStackPanel.IsVirtualizing="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn

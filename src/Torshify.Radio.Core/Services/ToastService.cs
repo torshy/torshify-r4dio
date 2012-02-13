@@ -39,7 +39,12 @@ namespace Torshify.Radio.Core.Services
 
         public void Show(string message, int displayTimeMs = 2500)
         {
-            Show(new ToastData { Message = message, DisplayTime = displayTimeMs });
+            Show(new ToastData
+            {
+                Icon = AppIcons.Information,
+                Message = message, 
+                DisplayTime = displayTimeMs
+            });
         }
 
         public void Show(ToastData data)

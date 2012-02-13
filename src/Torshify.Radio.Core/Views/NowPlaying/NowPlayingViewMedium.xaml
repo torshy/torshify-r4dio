@@ -11,9 +11,10 @@
     d:DesignWidth="300">
     <DockPanel>
         <UI:UpcomingTracksPart
+            Width="350"
             DockPanel.Dock="Right"
             UpcomingTracks="{Binding Radio.UpcomingTracks}"
-            UpcomingTrackStreams="{Binding Radio.TrackStreams}"/>
+            UpcomingTrackStreams="{Binding Radio.TrackStreams}" />
         <UI:TrackInformationPart
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"

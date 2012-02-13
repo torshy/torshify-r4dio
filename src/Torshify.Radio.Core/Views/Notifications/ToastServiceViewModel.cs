@@ -15,7 +15,7 @@ namespace Torshify.Radio.Core.Views.Notifications
         #region Fields
 
         private ToastData _currentToast;
-        private ManualResetEventSlim _event;
+        private object _lock = new object();
         private ConcurrentQueue<ToastData> _toastQueue;
         private Thread _toastThread;
 
@@ -25,7 +25,6 @@ namespace Torshify.Radio.Core.Views.Notifications
 
         public ToastServiceViewModel()
         {
-            _event = new ManualResetEventSlim(false);
             _toastQueue = new ConcurrentQueue<ToastData>();
             _toastThread = new Thread(ToastRun);
             _toastThread.IsBackground = true;
@@ -46,7 +45,10 @@ namespace Torshify.Radio.Core.Views.Notifications
 
         public ToastData CurrentToast
         {
-            get { return _currentToast; }
+            get
+            {
+                return _currentToast;
+            }
             set
             {
                 if (_currentToast != value)
@@ -61,48 +63,57 @@ namespace Torshify.Radio.Core.Views.Notifications
 
         #region Methods
 
-        public void OnActivate()
-        {
-            EventHandler handler = Activate;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
-        public void OnDeactivate()
-        {
-            EventHandler handler = Deactivate;
-            if (handler != null) handler(this, EventArgs.Empty);
-        }
-
         public void NewNotification(ToastData data)
         {
-            _toastQueue.Enqueue(data);
-            _event.Set();
+            lock (_lock)
+            {
+                _toastQueue.Enqueue(data);
+                Monitor.Pulse(_lock);
+            }
+        }
+
+        private void OnActivate()
+        {
+            EventHandler handler = Activate;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        private void OnDeactivate()
+        {
+            EventHandler handler = Deactivate;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
         }
 
         private void ToastRun()
         {
             while (true)
             {
-                if (_toastQueue.IsEmpty)
+                lock (_lock)
                 {
-                    if (CurrentToast != null)
+                    if (_toastQueue.IsEmpty)
                     {
-                        CurrentToast = null;
-                        OnDeactivate();
+                        if (CurrentToast != null)
+                        {
+                            CurrentToast = null;
+                            OnDeactivate();
+                        }
+
+                        Monitor.Wait(_lock);
                     }
-
-                    _event.Wait();
                 }
-
-                _event.Reset();
 
                 ToastData toastData;
                 if (_toastQueue.TryDequeue(out toastData))
                 {
                     OnActivate();
-
                     CurrentToast = toastData;
-                    Thread.Sleep(toastData.DisplayTime);
+                    Thread.Sleep(Math.Max(toastData.DisplayTime, 2000));
                 }
             }
         }

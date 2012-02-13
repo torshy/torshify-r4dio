@@ -10,7 +10,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 
 using Microsoft.Practices.Prism.Events;
-
+using Microsoft.Practices.Prism.Logging;
 using Torshify.Radio.Core.Views.NowPlaying;
 using Torshify.Radio.Framework;
 
@@ -66,6 +66,13 @@ namespace Torshify.Radio.Core.Startables
             set;
         }
 
+        [Import]
+        public ILoggerFacade Logger
+        {
+            get; 
+            set;
+        }
+
         #endregion Properties
 
         #region Methods
@@ -109,52 +116,63 @@ namespace Torshify.Radio.Core.Startables
                 .Query(artistName)
                 .ContinueWith(t =>
                               {
-                                  if (t.Result.Any())
+                                  if (t.Exception != null)
                                   {
-                                      if (t.Result.Count() > 1)
+                                      Logger.Log("Error occurred while getting backdrop for NowPlaying tile: " + t.Exception, Category.Exception, Priority.Low);
+                                  }
+                                  else if (t.Result.Any())
+                                  {
+                                      try
                                       {
-                                          //_tileData.BackgroundImage = new Uri(t.Result.FirstOrDefault(), UriKind.RelativeOrAbsolute);
-                                          //_tileData.Effect = new ColorToneShaderEffect
-                                          //                    {
-                                          //                        DarkColor = Colors.Black,
-                                          //                        LightColor = Colors.DarkGray,
-                                          //                        Desaturation = 0.5,
-                                          //                        Toned = 1.0
-                                          //                    };
+                                          if (t.Result.Count() > 1)
+                                          {
+                                              //_tileData.BackgroundImage = new Uri(t.Result.FirstOrDefault(), UriKind.RelativeOrAbsolute);
+                                              //_tileData.Effect = new ColorToneShaderEffect
+                                              //                    {
+                                              //                        DarkColor = Colors.Black,
+                                              //                        LightColor = Colors.DarkGray,
+                                              //                        Desaturation = 0.5,
+                                              //                        Toned = 1.0
+                                              //                    };
 
-                                          // TODO : Freeze as much as possible
-                                          BitmapImage first =
-                                              new BitmapImage(new Uri(t.Result.First(), UriKind.RelativeOrAbsolute));
-                                          BitmapImage second =
-                                              new BitmapImage(new Uri(t.Result.Skip(1).First(), UriKind.RelativeOrAbsolute));
-                                          first.Freeze();
-                                          second.Freeze();
+                                              // TODO : Freeze as much as possible
+                                              BitmapImage first =
+                                                  new BitmapImage(new Uri(t.Result.First(), UriKind.RelativeOrAbsolute));
+                                              BitmapImage second =
+                                                  new BitmapImage(new Uri(t.Result.Skip(1).First(), UriKind.RelativeOrAbsolute));
+                                              first.Freeze();
+                                              second.Freeze();
 
-                                          var firstInput = new ImageBrush(first) {Stretch = Stretch.Fill};
-                                          var secondInput = new ImageBrush(second) {Stretch = Stretch.Fill};
-                                          firstInput.Freeze();
-                                          secondInput.Freeze();
+                                              var firstInput = new ImageBrush(first) {Stretch = Stretch.Fill};
+                                              var secondInput = new ImageBrush(second) {Stretch = Stretch.Fill};
+                                              firstInput.Freeze();
+                                              secondInput.Freeze();
 
-                                          _tileData.Effect = new FadeTransitionShaderEffect
-                                                             {
-                                                                 Input = firstInput,
-                                                                 SecondInput = secondInput,
-                                                             };
+                                              _tileData.Effect = new FadeTransitionShaderEffect
+                                              {
+                                                  Input = firstInput,
+                                                  SecondInput = secondInput,
+                                              };
 
-                                          DoubleAnimation da = new DoubleAnimation(0.0, 1.0,
-                                                                                   new Duration(TimeSpan.FromSeconds(5)));
-                                          da.AccelerationRatio = 0.5;
-                                          da.DecelerationRatio = 0.5;
-                                          da.RepeatBehavior = RepeatBehavior.Forever;
-                                          da.AutoReverse = true;
+                                              DoubleAnimation da = new DoubleAnimation(0.0, 1.0,
+                                                                                       new Duration(TimeSpan.FromSeconds(5)));
+                                              da.AccelerationRatio = 0.5;
+                                              da.DecelerationRatio = 0.5;
+                                              da.RepeatBehavior = RepeatBehavior.Forever;
+                                              da.AutoReverse = true;
 
-                                          _tileData.Effect.BeginAnimation(FadeTransitionShaderEffect.ProgressProperty, da);
+                                              _tileData.Effect.BeginAnimation(FadeTransitionShaderEffect.ProgressProperty, da);
+                                          }
+                                          else
+                                          {
+                                              _tileData.Effect = null;
+                                              _tileData.BackgroundImage = new Uri(t.Result.FirstOrDefault(),
+                                                                                  UriKind.RelativeOrAbsolute);
+                                          }
                                       }
-                                      else
+                                      catch (Exception e)
                                       {
-                                          _tileData.Effect = null;
-                                          _tileData.BackgroundImage = new Uri(t.Result.FirstOrDefault(),
-                                                                              UriKind.RelativeOrAbsolute);
+                                          Console.WriteLine(e);
                                       }
                                   }
                               }, _ui);

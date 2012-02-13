@@ -10,6 +10,7 @@
     xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    xmlns:UI="clr-namespace:Torshify.Radio.Core.Views.NowPlaying.UI"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -20,6 +21,8 @@
             x:Key="BooleanToVisibilityConverter" />
         <Converters:ImageLoaderConverter
             x:Key="ImageLoaderConverter" />
+        <UI:UpcomingTracksToVisibilityConverter
+            x:Key="UpcomingTracksToVisibilityConverter" />
     </UserControl.Resources>
     <Border
         Background="#DD000000"
@@ -36,9 +39,9 @@
                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
                 FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}"
                 Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
-            <StackPanel
-                Orientation="Horizontal">
+            <DockPanel>
                 <Image
+                    DockPanel.Dock="Left"
                     Source="{Binding Source={x:Static Framework:AppIcons.Folder}, Mode=OneTime, Converter={StaticResource ImageLoaderConverter}}"
                     Height="24"
                     VerticalAlignment="Center"
@@ -49,23 +52,36 @@
                     FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}"
                     FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
                     Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
-            </StackPanel>
+            </DockPanel>
             <TextBlock
                 Margin="0,4,0,4"
                 Text="Upcoming tracks"
                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
                 FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}"
-                Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}">
+                <TextBlock.Visibility>
+                    <MultiBinding
+                        Converter="{StaticResource UpcomingTracksToVisibilityConverter}">
+                        <Binding
+                            Path="HasItems"
+                            ElementName="tracksList" />
+                        <Binding
+                            Path="HasItems"
+                            ElementName="trackStreamList" />
+                    </MultiBinding>
+                </TextBlock.Visibility>
+            </TextBlock>
             <ScrollViewer
                 HorizontalScrollBarVisibility="Disabled"
+                PanningMode="VerticalOnly"
                 MaxHeight="400">
                 <StackPanel>
                     <ItemsControl
+                        Name="tracksList"
                         ItemsSource="{Binding UpcomingTracks, ElementName=Root}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         Visibility="{Binding HasItems, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                        AlternationCount="2"
-                        Width="350">
+                        AlternationCount="2">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel
@@ -105,18 +121,18 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                     <ItemsControl
+                        Name="trackStreamList"
                         ItemsSource="{Binding UpcomingTrackStreams, ElementName=Root}"
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                         Visibility="{Binding HasItems, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}"
-                        AlternationCount="2"
-                        Width="350">
+                        AlternationCount="2">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel
+                                <DockPanel
                                     Name="Panel"
-                                    Margin="0,4,0,4"
-                                    Orientation="Horizontal">
+                                    Margin="0,4,0,4">
                                     <Image
+                                        DockPanel.Dock="Left"
                                         Source="{Binding Source={x:Static Framework:AppIcons.Folder}, Mode=OneTime, Converter={StaticResource ImageLoaderConverter}}"
                                         Height="24"
                                         VerticalAlignment="Center"
@@ -126,7 +142,7 @@
                                         TextTrimming="CharacterEllipsis"
                                         FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
                                         FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMediumLarge}}" />
-                                </StackPanel>
+                                </DockPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
