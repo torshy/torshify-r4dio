@@ -136,10 +136,9 @@ namespace Torshify.Radio.Core.Startables
                                               //                    };
 
                                               // TODO : Freeze as much as possible
-                                              BitmapImage first =
-                                                  new BitmapImage(new Uri(t.Result.First(), UriKind.RelativeOrAbsolute));
-                                              BitmapImage second =
-                                                  new BitmapImage(new Uri(t.Result.Skip(1).First(), UriKind.RelativeOrAbsolute));
+                                              BitmapImage first = LoadImage(t.Result.First(), 128);
+                                              BitmapImage second = LoadImage(t.Result.Skip(1).First(), 128);
+
                                               first.Freeze();
                                               second.Freeze();
 
@@ -176,6 +175,17 @@ namespace Torshify.Radio.Core.Startables
                                       }
                                   }
                               }, _ui);
+        }
+
+        private BitmapImage LoadImage(string location, int width)
+        {
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            image.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
+            image.UriSource = new Uri(location, UriKind.RelativeOrAbsolute);
+            image.DecodePixelWidth = width;
+            image.EndInit();
+            return image;
         }
 
         #endregion Methods

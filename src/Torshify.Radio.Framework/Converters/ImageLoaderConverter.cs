@@ -20,6 +20,7 @@ namespace Torshify.Radio.Framework.Converters
 
             BitmapImage image = new BitmapImage();
             image.BeginInit();
+            image.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
             image.UriSource = new Uri(value.ToString(), UriKind.RelativeOrAbsolute);
 
             if (DecodePixelHeight.HasValue)

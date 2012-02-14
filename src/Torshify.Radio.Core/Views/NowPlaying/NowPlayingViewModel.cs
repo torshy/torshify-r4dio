@@ -166,6 +166,7 @@ namespace Torshify.Radio.Core.Views.NowPlaying
             {
                 imageSource.BeginInit();
                 imageSource.CacheOption = BitmapCacheOption.None;
+                imageSource.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
                 imageSource.UriSource = new Uri(imageUrl, UriKind.Absolute);
                 imageSource.EndInit();
 
