@@ -19,6 +19,8 @@
             x:Key="DateDifferenceConverter" />
         <Converters:ListContainsItemToBoolConverter
             x:Key="ListContainsItemToBoolConverter" />
+        <Converters:MixToTrackStreamDataConverter
+            x:Key="MixToTrackStreamDataConverter" />
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter" />
         <Geometry
@@ -112,14 +114,14 @@
                                                     Source="pack://siteoforigin:,,,/Resources/Icons/add.png" />
                                             </Button>
                                             <Button
-                                                Command="{Binding DataContext.AddToFavoritesCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                                CommandParameter="{Binding}"
+                                                Command="{x:Static Framework:AppCommands.AddTrackStreamDataToFavoriteCommand}"
+                                                CommandParameter="{Binding Converter={StaticResource MixToTrackStreamDataConverter}}"
                                                 BorderThickness="0"
                                                 Padding="0"
                                                 ToolTip="{lex:LocText Key=Add_To_Favorites, Dict=Strings, Assembly=Torshify.Radio.EightTracks}">
                                                 <Image
                                                     Height="24"
-                                                    Source="pack://siteoforigin:,,,/Resources/Icons/favs.png" />
+                                                    Source="pack://siteoforigin:,,,/Resources/Icons/favs.addto.png" />
                                             </Button>
                                         </StackPanel>
                                     </StackPanel>

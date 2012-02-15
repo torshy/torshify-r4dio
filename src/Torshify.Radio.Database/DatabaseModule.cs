@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 
 using Raven.Client;
+using Raven.Client.Document;
 using Raven.Client.Embedded;
 
 using Torshify.Radio.Framework;
@@ -24,12 +26,28 @@ namespace Torshify.Radio.Database
 
         public DatabaseModule()
         {
+            var documentConvention =
+                new DocumentConvention
+                {
+                    FindTypeTagName =
+                        type =>
+                        {
+                            if (typeof(Favorite).IsAssignableFrom(type))
+                            {
+                                return "favorites";
+                            }
+
+                            return DocumentConvention.DefaultTypeTagName(type);
+                        }
+                };
+
             _documentStore = new EmbeddableDocumentStore();
+            _documentStore.Conventions = documentConvention;
             _documentStore.DataDirectory = Path.Combine(AppConstants.AppDataFolder, "Database");
 
-#if DEBUG
+            #if DEBUG
             _documentStore.UseEmbeddedHttpServer = true;
-#endif
+            #endif
         }
 
         #endregion Constructors
@@ -48,7 +66,16 @@ namespace Torshify.Radio.Database
 
         public void Initialize()
         {
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
             DocumentStore.Initialize();
+        }
+
+        private void CurrentDomainOnProcessExit(object sender, EventArgs eventArgs)
+        {
+            if (DocumentStore != null)
+            {
+                DocumentStore.Dispose();
+            }
         }
 
         #endregion Methods

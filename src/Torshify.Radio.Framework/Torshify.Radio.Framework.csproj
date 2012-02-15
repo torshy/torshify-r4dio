@@ -166,6 +166,7 @@
     <Compile Include="Converters\StringToUpperConverter.cs" />
     <Compile Include="Events\ApplicationInactivityEvent.cs" />
     <Compile Include="Events\SystemInactivityEvent.cs" />
+    <Compile Include="Favorite.cs" />
     <Compile Include="HeaderInfo.cs" />
     <Compile Include="IBackdropService.cs" />
     <Compile Include="Behaviors\IgnoreMouseWheelBehavior.cs" />
@@ -212,12 +213,17 @@
     <Compile Include="TrackChangedEventArgs.cs" />
     <Compile Include="TrackContainer.cs" />
     <Compile Include="Track.cs" />
+    <Compile Include="TrackContainerFavorite.cs" />
     <Compile Include="TrackContainerOwner.cs" />
     <Compile Include="TrackEventArgs.cs" />
+    <Compile Include="TrackFavorite.cs" />
     <Compile Include="TrackLink.cs" />
     <Compile Include="TrackLinkBuilder.cs" />
+    <Compile Include="TrackListStreamData.cs" />
     <Compile Include="TrackProgressEventArgs.cs" />
     <Compile Include="TrackStream.cs" />
+    <Compile Include="TrackStreamData.cs" />
+    <Compile Include="TrackStreamFavorite.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

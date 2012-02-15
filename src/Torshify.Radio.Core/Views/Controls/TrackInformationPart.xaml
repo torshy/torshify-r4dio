@@ -70,7 +70,7 @@
                 <Button
                     BorderThickness="0"
                     Padding="0"
-                    Command="{x:Static Framework:AppCommands.AddToLikeCommand}"
+                    Command="{x:Static Framework:AppCommands.LikeTrackCommand}"
                     CommandParameter="{Binding CurrentTrack}"
                     ToolTip="{lex:LocText Key=Add_To_Likes, Dict=Strings, Assembly=Torshify.Radio.Core}"
                     ToolTipService.ShowOnDisabled="True">

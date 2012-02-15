@@ -51,13 +51,11 @@ namespace Torshify.Radio.EightTracks
                     return new Track[0];
                 }
 
-                var imageUrlConverter = new MixToImageConverter();
-
                 return new[]
                 {
                     new EightTracksTrack
                     {
-                        AlbumArt = (string)imageUrlConverter.Convert(_currentMix, null, null, null),
+                        AlbumArt = (string)new MixToImageConverter().Convert(_currentMix, null, null, null),
                         Album = _currentMix.Name,
                         Artist = _currentPlayResponse.Set.Track.Performer,
                         Name = _currentPlayResponse.Set.Track.Name,
@@ -85,6 +83,20 @@ namespace Torshify.Radio.EightTracks
                     _description = value;
                     RaisePropertyChanged("Description");
                 }
+            }
+        }
+
+        public TrackStreamData Data
+        {
+            get
+            {
+                return new EightTracksMixTrackStreamData
+                {
+                    Name = "8tracks",
+                    Image = (string)new MixToImageConverter().Convert(_startMix, null, null, null),
+                    Description = _startMix.Description,
+                    MixId = _startMix.ID
+                };
             }
         }
 

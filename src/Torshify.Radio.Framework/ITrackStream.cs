@@ -13,5 +13,10 @@ namespace Torshify.Radio.Framework
         {
             get;
         }
+
+        TrackStreamData Data
+        {
+            get;
+        }
     }
 }

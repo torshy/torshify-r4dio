@@ -47,6 +47,20 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             get; set;
         }
 
+        public TrackStreamData Data
+        {
+            get
+            {
+                return new SimilarArtistsTrackStreamData
+                {
+                    Name = "Similar artists playlist",
+                    Description = string.Join(", ", _similarArtists),
+                    Image = null,
+                    Artists = _similarArtists.ToArray()
+                };
+            }
+        }
+
         object IEnumerator.Current
         {
             get { return Current; }

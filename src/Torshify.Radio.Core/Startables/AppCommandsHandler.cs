@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Input;
 
 using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
+
 using Raven.Client;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
@@ -17,10 +18,11 @@ namespace Torshify.Radio.Core.Startables
     {
         #region Fields
 
-        private StaticCommand<object> _addTrackContainerToFavoritesCommand;
-        private StaticCommand<object> _addTrackContainerToLikesCommand;
-        private StaticCommand<object> _addTrackToFavoritesCommand;
-        private StaticCommand<object> _addTrackToLikesCommand;
+        private readonly StaticCommand<object> _addTrackContainerToFavoritesCommand;
+        private readonly StaticCommand<object> _addTrackStreamDataToFavoritesCommand;
+        private readonly StaticCommand<object> _addTrackStreamToFavoritesCommand;
+        private readonly StaticCommand<object> _addTrackToFavoritesCommand;
+        private readonly StaticCommand<object> _addTrackToLikesCommand;
 
         #endregion Fields
 
@@ -28,10 +30,11 @@ namespace Torshify.Radio.Core.Startables
 
         public AppCommandsHandler()
         {
+            _addTrackStreamDataToFavoritesCommand = new StaticCommand<object>(ExecuteAddTrackStreamDataToFavorites);
+            _addTrackStreamToFavoritesCommand = new StaticCommand<object>(ExecuteAddTrackStreamToFavorites);
             _addTrackToFavoritesCommand = new StaticCommand<object>(ExecuteAddTrackToFavorites);
             _addTrackContainerToFavoritesCommand = new StaticCommand<object>(ExecuteAddTrackContainerToFavorites);
             _addTrackToLikesCommand = new StaticCommand<object>(ExecuteAddTrackToLikes);
-            _addTrackContainerToLikesCommand = new StaticCommand<object>(ExecuteAddTrackContainerToLikes);
         }
 
         #endregion Constructors
@@ -66,6 +69,20 @@ namespace Torshify.Radio.Core.Startables
             set;
         }
 
+        [Import]
+        public IToastService ToastService
+        {
+            get;
+            set;
+        }
+
+        [Import]
+        public ILoggerFacade Logger
+        {
+            get;
+            set;
+        }
+
         #endregion Properties
 
         #region Methods
@@ -83,13 +100,12 @@ namespace Torshify.Radio.Core.Startables
 
             AppCommands.AddToFavoriteCommand.RegisterCommand(_addTrackToFavoritesCommand);
             AppCommands.AddToFavoriteCommand.RegisterCommand(_addTrackContainerToFavoritesCommand);
-            AppCommands.AddToLikeCommand.RegisterCommand(_addTrackToLikesCommand);
-            AppCommands.AddToLikeCommand.RegisterCommand(_addTrackContainerToLikesCommand);
-
             AppCommands.AddTrackContainerToFavoriteCommand.RegisterCommand(_addTrackContainerToFavoritesCommand);
-            AppCommands.AddTrackContainerToLikesCommand.RegisterCommand(_addTrackContainerToLikesCommand);
-            AppCommands.AddTrackToLikeCommand.RegisterCommand(_addTrackToLikesCommand);
             AppCommands.AddTrackToFavoriteCommand.RegisterCommand(_addTrackToFavoritesCommand);
+            AppCommands.AddTrackStreamToFavoriteCommand.RegisterCommand(_addTrackStreamToFavoritesCommand);
+            AppCommands.AddTrackStreamDataToFavoriteCommand.RegisterCommand(_addTrackStreamDataToFavoritesCommand);
+
+            AppCommands.LikeTrackCommand.RegisterCommand(_addTrackToLikesCommand);
 
             Application.Current.MainWindow.InputBindings.Add(
                 new MouseBinding(
@@ -102,16 +118,6 @@ namespace Torshify.Radio.Core.Startables
                     new ExtendedMouseGesture(MouseButton.XButton2)));
         }
 
-        private void ExecuteAddTrackContainerToLikes(object parameter)
-        {
-            TrackContainer container = parameter as TrackContainer;
-
-            if (container != null)
-            {
-
-            }
-        }
-
         private void ExecuteAddTrackToLikes(object parameter)
         {
             Track track = parameter as Track;
@@ -122,18 +128,72 @@ namespace Torshify.Radio.Core.Startables
             }
         }
 
+        private void ExecuteAddTrackStreamToFavorites(object parameter)
+        {
+            ITrackStream trackStream = parameter as ITrackStream;
+
+            if (trackStream != null)
+            {
+                ExecuteAddTrackStreamDataToFavorites(trackStream.Data);
+            }
+        }
+
+        private void ExecuteAddTrackStreamDataToFavorites(object parameter)
+        {
+            TrackStreamData streamData = parameter as TrackStreamData;
+
+            if (streamData != null)
+            {
+                try
+                {
+                    using (var session = DocumentStore.OpenSession())
+                    {
+                        TrackStreamFavorite fav = new TrackStreamFavorite();
+                        fav.StreamData = streamData;
+                        session.Store(fav);
+                        session.SaveChanges();
+                    }
+
+                    ToastService.Show(new ToastData
+                    {
+                        Icon = AppIcons.Save,
+                        Message = "Favorite added"
+                    });
+                }
+                catch (Exception e)
+                {
+                    ToastService.Show("Unable to save favorite. " + e.Message);
+                    Logger.Log("Error while saving favorite. " + e, Category.Exception, Priority.High);
+                }
+            }
+        }
+
         private void ExecuteAddTrackContainerToFavorites(object parameter)
         {
             TrackContainer container = parameter as TrackContainer;
 
             if (container != null)
             {
-                using (var session = DocumentStore.OpenSession())
+                try
                 {
-                    TrackContainerFavorite fav = new TrackContainerFavorite();
-                    fav.TrackContainer = container;
-                    session.Store((Favorite)fav);
-                    session.SaveChanges();
+                    using (var session = DocumentStore.OpenSession())
+                    {
+                        TrackContainerFavorite fav = new TrackContainerFavorite();
+                        fav.TrackContainer = container;
+                        session.Store(fav);
+                        session.SaveChanges();
+                    }
+
+                    ToastService.Show(new ToastData
+                    {
+                        Icon = AppIcons.Save,
+                        Message = "Favorite added"
+                    });
+                }
+                catch (Exception e)
+                {
+                    ToastService.Show("Unable to save favorite. " + e.Message);
+                    Logger.Log("Error while saving favorite. " + e, Category.Exception, Priority.High);
                 }
             }
         }
@@ -144,12 +204,26 @@ namespace Torshify.Radio.Core.Startables
 
             if (track != null)
             {
-                using (var session = DocumentStore.OpenSession())
+                try
                 {
-                    TrackFavorite fav = new TrackFavorite();
-                    fav.Track = track;
-                    session.Store((Favorite)fav);
-                    session.SaveChanges();
+                    using (var session = DocumentStore.OpenSession())
+                    {
+                        TrackFavorite fav = new TrackFavorite();
+                        fav.Track = track;
+                        session.Store(fav);
+                        session.SaveChanges();
+                    }
+
+                    ToastService.Show(new ToastData
+                    {
+                        Icon = AppIcons.Save,
+                        Message = "Favorite added"
+                    });
+                }
+                catch (Exception e)
+                {
+                    ToastService.Show("Unable to save favorite. " + e.Message);
+                    Logger.Log("Error while saving favorite. " + e, Category.Exception, Priority.High);
                 }
             }
         }
@@ -217,33 +291,5 @@ namespace Torshify.Radio.Core.Startables
         }
 
         #endregion Methods
-    }
-
-
-    public class Favorite
-    {
-        public string Id
-        {
-            get;
-            set;
-        }
-    }
-
-    public class TrackFavorite : Favorite
-    {
-        public Track Track
-        {
-            get;
-            set;
-        }
-    }
-
-    public class TrackContainerFavorite : Favorite
-    {
-        public TrackContainer TrackContainer
-        {
-            get;
-            set;
-        }
     }
 }

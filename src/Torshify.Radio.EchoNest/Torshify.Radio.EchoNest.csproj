@@ -135,6 +135,7 @@
     <Compile Include="Views\Similar\Tabs\RecentViewModel.cs" />
     <Compile Include="Views\Similar\Tabs\SimilarArtistModel.cs" />
     <Compile Include="Views\Similar\Tabs\SimilarArtistsTrackStream.cs" />
+    <Compile Include="Views\Similar\Tabs\SimilarArtistsTrackStreamData.cs" />
     <Compile Include="Views\Similar\Tabs\SimilarView.xaml.cs">
       <DependentUpon>SimilarView.xaml</DependentUpon>
     </Compile>

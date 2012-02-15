@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using Microsoft.Practices.Prism.ViewModel;
+using System.Linq;
 
 namespace Torshify.Radio.Framework
 {
@@ -23,6 +24,8 @@ namespace Torshify.Radio.Framework
             _tracks = new List<IEnumerable<Track>>(new[] { tracks });
             _enumerator = _tracks.GetEnumerator();
 
+
+
             SupportsTrackSkipping = true;
         }
 
@@ -32,7 +35,10 @@ namespace Torshify.Radio.Framework
 
         public IEnumerable<Track> Current
         {
-            get { return _enumerator.Current as IEnumerable<Track>; }
+            get
+            {
+                return _enumerator.Current as IEnumerable<Track>;
+            }
         }
 
         public bool SupportsTrackSkipping
@@ -43,7 +49,10 @@ namespace Torshify.Radio.Framework
 
         public string Description
         {
-            get { return _description; }
+            get
+            {
+                return _description;
+            }
             set
             {
                 if (_description != value)
@@ -54,9 +63,28 @@ namespace Torshify.Radio.Framework
             }
         }
 
+        public TrackStreamData Data
+        {
+            get
+            {
+                var track = Current.FirstOrDefault(i => !string.IsNullOrEmpty(i.AlbumArt));
+
+                return new TrackListStreamData()
+                {
+                    Name = "Playlist",
+                    Image = track != null ? track.AlbumArt : null,
+                    Description = Description,
+                    Tracks = Current.ToArray()
+                };
+            }
+        }
+
         object IEnumerator.Current
         {
-            get { return Current; }
+            get
+            {
+                return Current;
+            }
         }
 
         #endregion Properties
@@ -86,7 +114,10 @@ namespace Torshify.Radio.Framework
 
         public static ITrackStream ToTrackStream(this IEnumerable<Track> tracks, string description = null)
         {
-            return new TrackStream(tracks) { Description = description };
+            return new TrackStream(tracks)
+            {
+                Description = description
+            };
         }
 
         #endregion Methods
