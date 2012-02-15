@@ -3,25 +3,110 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
-    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework">
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
+    Engine:LocalizeDictionary.DesignCulture="en-US"
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension">
     <UserControl.Resources>
         <Converters:StringToUpperConverter
             x:Key="StringToUpperConverter" />
     </UserControl.Resources>
     <DockPanel>
         <Border
+            Name="Bd"
             DockPanel.Dock="Left"
-            Margin="4"
+            Margin="4,4,0,4"
             Width="60"
             BorderThickness="1"
             BorderBrush="{DynamicResource {x:Static Framework:AppTheme.ContrastBackgroundKey}}">
             <Image
                 RenderOptions.BitmapScalingMode="HighQuality"
-                Source="{Binding CurrentTrack.AlbumArt, FallbackValue='pack://siteoforigin:,,,/Resources/Icons/questionmark.png'}" 
+                Source="{Binding CurrentTrack.AlbumArt, FallbackValue='pack://siteoforigin:,,,/Resources/Icons/questionmark.png'}"
                 Stretch="UniformToFill" />
         </Border>
         <DockPanel>
-            <StackPanel>
+            <UniformGrid
+                DockPanel.Dock="Left"
+                Rows="2"
+                Columns="1"
+                Width="24">
+                <Button
+                    BorderThickness="0"
+                    Padding="0"
+                    Command="{x:Static Framework:AppCommands.AddToFavoriteCommand}"
+                    CommandParameter="{Binding CurrentTrack}"
+                    ToolTip="{lex:LocText Key=Add_To_Favorites, Dict=Strings, Assembly=Torshify.Radio.Core}"
+                    ToolTipService.ShowOnDisabled="True">
+                    <Image
+                        Stretch="Uniform"
+                        Source="pack://siteoforigin:,,,/Resources/Icons/favs.addto.png"
+                        Opacity="0.3">
+                        <Image.Triggers>
+                            <EventTrigger
+                                RoutedEvent="UIElement.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1.0"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger
+                                RoutedEvent="UIElement.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0.3"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
+                </Button>
+                <Button
+                    BorderThickness="0"
+                    Padding="0"
+                    Command="{x:Static Framework:AppCommands.AddToLikeCommand}"
+                    CommandParameter="{Binding CurrentTrack}"
+                    ToolTip="{lex:LocText Key=Add_To_Likes, Dict=Strings, Assembly=Torshify.Radio.Core}"
+                    ToolTipService.ShowOnDisabled="True">
+                    <Image
+                        Stretch="Uniform"
+                        Source="pack://siteoforigin:,,,/Resources/Icons/heart.png"
+                        Opacity="0.3">
+                        <Image.Triggers>
+                            <EventTrigger
+                                RoutedEvent="UIElement.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1.0"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger
+                                RoutedEvent="UIElement.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0.3"
+                                            Duration="0:0:0.2" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
+                </Button>
+            </UniformGrid>
+            <StackPanel
+                VerticalAlignment="Center">
                 <TextBlock
                     Text="{Binding CurrentTrack.Artist, Converter={StaticResource StringToUpperConverter}}"
                     TextTrimming="CharacterEllipsis"
@@ -34,7 +119,7 @@
                 <TextBlock
                     Text="{Binding CurrentTrack.Name}"
                     TextTrimming="CharacterEllipsis"
-                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyNormal}}"/>
+                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyNormal}}" />
             </StackPanel>
         </DockPanel>
     </DockPanel>

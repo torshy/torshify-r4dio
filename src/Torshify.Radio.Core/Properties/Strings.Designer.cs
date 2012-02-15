@@ -61,6 +61,24 @@ namespace Torshify.Radio.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @Add_To_Favorites.
+        /// </summary>
+        internal static string Add_To_Favorites {
+            get {
+                return ResourceManager.GetString("Add_To_Favorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Add_To_Likes.
+        /// </summary>
+        internal static string Add_To_Likes {
+            get {
+                return ResourceManager.GetString("Add_To_Likes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @Button_Back_ToolTip.
         /// </summary>
         internal static string Button_Back_ToolTip {

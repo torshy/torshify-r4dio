@@ -7,6 +7,7 @@ using Raven.Client;
 
 using Torshify.Radio.Core.Models;
 using Torshify.Radio.Framework;
+using WPFLocalizeExtension.Engine;
 
 namespace Torshify.Radio.Core.Startables
 {
@@ -31,7 +32,7 @@ namespace Torshify.Radio.Core.Startables
 
             using (var session = DocumentStore.OpenSession())
             {
-                var settings = session.Query<ShellSettings>().FirstOrDefault();
+                var settings = session.Query<ApplicationSettings>().FirstOrDefault();
 
                 if (settings != null)
                 {
@@ -50,11 +51,11 @@ namespace Torshify.Radio.Core.Startables
         {
             using (var session = DocumentStore.OpenSession())
             {
-                var settings = session.Query<ShellSettings>().FirstOrDefault();
+                var settings = session.Query<ApplicationSettings>().FirstOrDefault();
 
                 if (settings == null)
                 {
-                    settings = new ShellSettings();
+                    settings = new ApplicationSettings();
                 }
 
                 var mainWindow = Application.Current.MainWindow;
@@ -62,6 +63,7 @@ namespace Torshify.Radio.Core.Startables
                 settings.WindowWidth = mainWindow.ActualWidth;
                 settings.WindowLeft = mainWindow.Left;
                 settings.WindowTop = mainWindow.Top;
+                settings.Culture = LocalizeDictionary.Instance.Culture.ToString();
                 session.Store(settings);
                 session.SaveChanges();
             }

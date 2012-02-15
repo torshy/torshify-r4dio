@@ -111,7 +111,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Models\ShellSettings.cs" />
+    <Compile Include="Models\ApplicationSettings.cs" />
     <Compile Include="Resources\R4dioIcon.xaml.cs">
       <DependentUpon>R4dioIcon.xaml</DependentUpon>
     </Compile>
@@ -238,7 +238,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Strings.en-US.resx" />
+    <EmbeddedResource Include="Properties\Strings.en.resx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

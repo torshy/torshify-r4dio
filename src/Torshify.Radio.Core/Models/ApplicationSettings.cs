@@ -1,6 +1,6 @@
 namespace Torshify.Radio.Core.Models
 {
-    public class ShellSettings
+    public class ApplicationSettings
     {
         #region Properties
 
@@ -30,6 +30,12 @@ namespace Torshify.Radio.Core.Models
         {
             get; 
             set;
+        }
+
+        public string Culture
+        {
+            get; 
+            set; 
         }
 
         #endregion Properties

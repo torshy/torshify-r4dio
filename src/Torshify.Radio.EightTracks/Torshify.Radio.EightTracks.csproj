@@ -118,6 +118,7 @@
       <DependentUpon>TagsTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tabs\TagsTabViewModel.cs" />
+    <EmbeddedResource Include="Properties\Strings.no.resx" />
     <EmbeddedResource Include="Properties\Strings.en.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

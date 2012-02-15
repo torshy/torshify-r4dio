@@ -2570,6 +2570,9 @@
         <Setter
             Property="OverridesDefaultStyle"
             Value="True" />
+        <Setter
+            Property="PanningMode"
+            Value="VerticalOnly" />
     </Style>
 
     <Style

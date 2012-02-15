@@ -118,21 +118,30 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add_To_Favorites" xml:space="preserve">
-    <value>@Add_To_Favorites</value>
+    <value>Legg til favoritter</value>
   </data>
-  <data name="Add_To_Queue" xml:space="preserve">
-    <value>@Add_To_Queue</value>
+  <data name="Number_Liked" xml:space="preserve">
+    <value>Antall som liker</value>
   </data>
-  <data name="Play_Album" xml:space="preserve">
-    <value>@Play_Album</value>
+  <data name="Number_Played" xml:space="preserve">
+    <value>Antall avspillinger</value>
   </data>
-  <data name="Search_For_Similar_Artist" xml:space="preserve">
-    <value>@Search_For_Similar_Artist</value>
+  <data name="Queue" xml:space="preserve">
+    <value>Legg til spillkø</value>
   </data>
-  <data name="Search_For_Similar_Artist_Watermark" xml:space="preserve">
-    <value>@Search_For_Similar_Artist_Watermark</value>
+  <data name="Search_By_Artist" xml:space="preserve">
+    <value>Søk 8tracks etter artist</value>
   </data>
-  <data name="Search_For_Song_Or_Artist" xml:space="preserve">
-    <value>@Search_For_Song_Or_Artist</value>
+  <data name="Search_By_Artist_Watermark" xml:space="preserve">
+    <value>Finn mixer med artist</value>
+  </data>
+  <data name="Search_By_Tag" xml:space="preserve">
+    <value>Søk 8tracks etter tag</value>
+  </data>
+  <data name="Search_By_Tag_Watermark" xml:space="preserve">
+    <value>Finn mixer med tag</value>
+  </data>
+  <data name="TimeSincePublished" xml:space="preserve">
+    <value>Lagt ut</value>
   </data>
 </root>

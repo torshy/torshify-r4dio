@@ -118,21 +118,30 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add_To_Favorites" xml:space="preserve">
-    <value>@Add_To_Favorites</value>
+    <value>Add to favorites</value>
   </data>
-  <data name="Add_To_Queue" xml:space="preserve">
-    <value>@Add_To_Queue</value>
+  <data name="Add_To_Likes" xml:space="preserve">
+    <value>Like</value>
   </data>
-  <data name="Play_Album" xml:space="preserve">
-    <value>@Play_Album</value>
+  <data name="Button_Back_ToolTip" xml:space="preserve">
+    <value>Go back</value>
   </data>
-  <data name="Search_For_Similar_Artist" xml:space="preserve">
-    <value>@Search_For_Similar_Artist</value>
+  <data name="Button_Back_Unable_ToolTip" xml:space="preserve">
+    <value>You can't go back from where you are right now</value>
   </data>
-  <data name="Search_For_Similar_Artist_Watermark" xml:space="preserve">
-    <value>@Search_For_Similar_Artist_Watermark</value>
+  <data name="Button_Forward_ToolTip" xml:space="preserve">
+    <value>Go forward</value>
   </data>
-  <data name="Search_For_Song_Or_Artist" xml:space="preserve">
-    <value>@Search_For_Song_Or_Artist</value>
+  <data name="Button_Forward_Unable_ToolTip" xml:space="preserve">
+    <value>You can't go forward from where you are right now</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
   </data>
 </root>

@@ -87,8 +87,8 @@ namespace Torshify.Radio.EchoNest
 
                 SearchBarService.Add<Views.Browse.MainStationView>(new SearchBarData
                 {
-                    Category = "Search for song or artist",
-                    WatermarkText = "Search for song or artist",
+                    Category = "Search_For_Song_Or_Artist",
+                    WatermarkText = "Search_For_Song_Or_Artist",
                     AutoCompleteProvider = SuggestArtists
                 });
 
@@ -112,8 +112,8 @@ namespace Torshify.Radio.EchoNest
 
                 SearchBarService.Add<Views.Similar.MainStationView>(new SearchBarData
                 {
-                    Category = "Similar artists",
-                    WatermarkText = "Find similar artists",
+                    Category = "Search_For_Similar_Artist",
+                    WatermarkText = "Search_For_Similar_Artist_Watermark",
                     AutoCompleteProvider = SuggestArtists
                 });
 

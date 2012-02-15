@@ -129,4 +129,10 @@
   <data name="Search_For_Similar_Artist" xml:space="preserve">
     <value>Search for similar artists</value>
   </data>
+  <data name="Search_For_Similar_Artist_Watermark" xml:space="preserve">
+    <value>Find similar artists</value>
+  </data>
+  <data name="Search_For_Song_Or_Artist" xml:space="preserve">
+    <value>Search for song or artist</value>
+  </data>
 </root>

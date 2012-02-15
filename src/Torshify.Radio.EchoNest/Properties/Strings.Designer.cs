@@ -95,5 +95,23 @@ namespace Torshify.Radio.EchoNest.Properties {
                 return ResourceManager.GetString("Search_For_Similar_Artist", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Search_For_Similar_Artist_Watermark.
+        /// </summary>
+        internal static string Search_For_Similar_Artist_Watermark {
+            get {
+                return ResourceManager.GetString("Search_For_Similar_Artist_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Search_For_Song_Or_Artist.
+        /// </summary>
+        internal static string Search_For_Song_Or_Artist {
+            get {
+                return ResourceManager.GetString("Search_For_Song_Or_Artist", resourceCulture);
+            }
+        }
     }
 }

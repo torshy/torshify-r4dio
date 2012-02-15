@@ -7,6 +7,8 @@
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     xmlns:NowPlaying="clr-namespace:Torshify.Radio.Core.Views.NowPlaying"
     xmlns:UI="clr-namespace:Torshify.Radio.Core.Views.NowPlaying.UI"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -26,6 +28,9 @@
             Height="60"
             Width="60"
             Command="{Binding NavigateBackCommand}">
+            <i:Interaction.Behaviors>
+                <Behaviors:InactivityFadeBehavior />
+            </i:Interaction.Behaviors>
             <NowPlaying:BackArrow />
         </Controls:CircleButton>
         <Grid

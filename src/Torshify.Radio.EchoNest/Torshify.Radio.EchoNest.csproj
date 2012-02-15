@@ -139,6 +139,7 @@
       <DependentUpon>SimilarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Similar\Tabs\SimilarViewModel.cs" />
+    <EmbeddedResource Include="Properties\Strings.no.resx" />
     <EmbeddedResource Include="Properties\Strings.en.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

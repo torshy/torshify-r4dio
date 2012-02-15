@@ -14,5 +14,13 @@ namespace Torshify.Radio.Framework
 
         public static readonly CompositeCommand NavigateBackCommand = new CompositeCommand();
         public static readonly CompositeCommand NavigateForwardCommand = new CompositeCommand();
+
+        public static readonly CompositeCommand AddToFavoriteCommand = new CompositeCommand();
+        public static readonly CompositeCommand AddTrackToFavoriteCommand = new CompositeCommand();
+        public static readonly CompositeCommand AddTrackContainerToFavoriteCommand = new CompositeCommand();
+
+        public static readonly CompositeCommand AddToLikeCommand = new CompositeCommand();
+        public static readonly CompositeCommand AddTrackToLikeCommand = new CompositeCommand();
+        public static readonly CompositeCommand AddTrackContainerToLikesCommand = new CompositeCommand();
     }
 }

@@ -91,11 +91,11 @@ namespace Torshify.Radio.Core.Views.FirstTime
             {
                 using (var session = DocumentStore.OpenSession())
                 {
-                    var settings = session.Query<ShellSettings>().FirstOrDefault();
+                    var settings = session.Query<ApplicationSettings>().FirstOrDefault();
 
                     if (settings == null)
                     {
-                        settings = new ShellSettings();
+                        settings = new ApplicationSettings();
                     }
 
                     settings.FirstTimeWizardRun = true;
