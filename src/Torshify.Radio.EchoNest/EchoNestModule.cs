@@ -71,18 +71,16 @@ namespace Torshify.Radio.EchoNest
         {
             _dispatcher.BeginInvoke(new Action(() =>
             {
-                RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof (Views.Browse.Tabs.AlbumView));
-                RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof (Views.Browse.Tabs.ArtistView));
+                RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof(Views.Browse.Tabs.AlbumView));
+                RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof(Views.Browse.Tabs.ArtistView));
 
                 RegionManager.RegisterViewWithRegion(Views.Browse.MainStationView.TabViewRegion,
-                                                     typeof (Views.Browse.Tabs.SearchResultsView));
+                                                     typeof(Views.Browse.Tabs.SearchResultsView));
 
                 TileService.Add<Views.Browse.MainStationView>(new TileData
                 {
                     Title = "Search",
-                    BackgroundImage =
-                    new Uri(
-                    "pack://siteoforigin:,,,/Resources/Tiles/MB_0029_programs.png")
+                    BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0029_programs.png")
                 });
 
                 SearchBarService.Add<Views.Browse.MainStationView>(new SearchBarData
@@ -92,22 +90,22 @@ namespace Torshify.Radio.EchoNest
                     AutoCompleteProvider = SuggestArtists
                 });
 
-                SearchBarService.SetActive(sbar => sbar.NavigationUri.OriginalString == typeof (Views.Browse.MainStationView).FullName);
-            }), DispatcherPriority.Background);
+                SearchBarService.SetActive(
+                    sbar => sbar.NavigationUri.OriginalString == typeof(Views.Browse.MainStationView).FullName);
+            }),
+            DispatcherPriority.Background);
 
             _dispatcher.BeginInvoke(new Action(() =>
             {
                 RegionManager.RegisterViewWithRegion(Views.Similar.MainStationView.TabViewRegion,
-                                                     typeof (Views.Similar.Tabs.SimilarView));
+                                                     typeof(Views.Similar.Tabs.SimilarView));
                 RegionManager.RegisterViewWithRegion(Views.Similar.MainStationView.TabViewRegion,
-                                                     typeof (Views.Similar.Tabs.RecentView));
+                                                     typeof(Views.Similar.Tabs.RecentView));
 
                 TileService.Add<Views.Similar.MainStationView>(new TileData
                 {
                     Title = "Similar artists",
-                    BackgroundImage =
-                    new Uri(
-                    "pack://siteoforigin:,,,/Resources/Tiles/MS_0000s_0031_net3.png")
+                    BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MS_0000s_0031_net3.png")
                 });
 
                 SearchBarService.Add<Views.Similar.MainStationView>(new SearchBarData
@@ -117,7 +115,21 @@ namespace Torshify.Radio.EchoNest
                     AutoCompleteProvider = SuggestArtists
                 });
 
-            }), DispatcherPriority.Background);
+            }),
+            DispatcherPriority.Background);
+
+            _dispatcher.BeginInvoke(new Action(() =>
+            {
+                RegionManager.RegisterViewWithRegion(Views.Favorites.MainStationView.TabViewRegion,
+                                        typeof(Views.Favorites.Tabs.FavoritesView));
+
+                TileService.Add<Views.Favorites.MainStationView>(new TileData
+                {
+                    Title = "Favorites",
+                    BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0004_favs2.png")
+                });
+            }),
+            DispatcherPriority.Background);
         }
 
         private IEnumerable<string> SuggestArtists(string query)
@@ -126,7 +138,7 @@ namespace Torshify.Radio.EchoNest
             {
                 return SuggestArtistsService.GetSimilarArtists(query);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }

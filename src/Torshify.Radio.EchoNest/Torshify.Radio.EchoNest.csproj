@@ -125,6 +125,14 @@
       <DependentUpon>SearchResultsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Browse\Tabs\SearchResultsViewModel.cs" />
+    <Compile Include="Views\Favorites\MainStationView.xaml.cs">
+      <DependentUpon>MainStationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Favorites\MainStationViewModel.cs" />
+    <Compile Include="Views\Favorites\Tabs\FavoritesView.xaml.cs">
+      <DependentUpon>FavoritesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Favorites\Tabs\FavoritesViewModel.cs" />
     <Compile Include="Views\Similar\MainStationView.xaml.cs">
       <DependentUpon>MainStationView.xaml</DependentUpon>
     </Compile>
@@ -186,6 +194,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Browse\Tabs\SearchResultsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Favorites\MainStationView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Favorites\Tabs\FavoritesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
