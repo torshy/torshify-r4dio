@@ -50,7 +50,7 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\..\packages\RavenDB-Embedded.1.0.573\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB-Embedded.1.0.616\lib\net40\Raven.Client.Lightweight.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />

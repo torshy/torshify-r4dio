@@ -2,7 +2,7 @@
 
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-
+using Torshify.Radio.EchoNest.Views.Favorites.Tabs;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Views.Favorites
@@ -43,7 +43,7 @@ namespace Torshify.Radio.EchoNest.Views.Favorites
         public void OnTuneIn(NavigationContext context)
         {
             SearchBarService.SetActive(bar => bar.NavigationUri.OriginalString.StartsWith(context.Uri.OriginalString));
-            //RegionManager.RequestNavigate(MainStationView.TabViewRegion, typeof(SearchResultsView).FullName + context.Parameters);
+            RegionManager.RequestNavigate(MainStationView.TabViewRegion, typeof(FavoritesView).FullName + context.Parameters);
         }
 
         public void OnTuneAway(NavigationContext context)

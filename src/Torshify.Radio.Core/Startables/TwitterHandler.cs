@@ -101,12 +101,7 @@ namespace Torshify.Radio.Core.Startables
 
         private void RadioOnCurrentTrackChanged(object sender, TrackChangedEventArgs e)
         {
-            if (e.CurrentTrack != null)
-            {
-                var link = e.CurrentTrack.ToLink();
-                var linkAsString = link.Uri;
-                Console.WriteLine(linkAsString);
-            }
+
         }
 
         public void Tweet()

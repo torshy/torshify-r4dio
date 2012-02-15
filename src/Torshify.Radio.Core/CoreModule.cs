@@ -10,7 +10,6 @@ using Microsoft.Practices.Prism.Regions;
 using Raven.Client;
 
 using Torshify.Radio.Core.Models;
-using Torshify.Radio.Core.Startables;
 using Torshify.Radio.Core.Views;
 using Torshify.Radio.Core.Views.Controls;
 using Torshify.Radio.Core.Views.FirstTime;
@@ -69,7 +68,15 @@ namespace Torshify.Radio.Core
                 if (settings != null)
                 {
                     displayWizard = !settings.FirstTimeWizardRun;
-                    LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo(settings.Culture);
+
+                    if (!string.IsNullOrEmpty(settings.Culture))
+                    {
+                        LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo(settings.Culture);
+                    }
+                    else
+                    {
+                        LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo("en");    
+                    }
                 }
                 else
                 {

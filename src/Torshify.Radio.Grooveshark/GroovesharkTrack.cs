@@ -7,6 +7,11 @@ namespace Torshify.Radio.Grooveshark
     {
         #region Constructors
 
+        public GroovesharkTrack()
+        {
+
+        }
+
         public GroovesharkTrack(int songID, int artistID)
         {
             SongID = songID;
@@ -20,13 +25,13 @@ namespace Torshify.Radio.Grooveshark
         public int SongID
         {
             get;
-            private set;
+            set;
         }
 
         public int ArtistID
         {
             get;
-            private set;
+            set;
         }
 
         #endregion Properties

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Runtime.Serialization.Formatters;
 
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
+
+using Newtonsoft.Json;
 
 using Raven.Client;
 using Raven.Client.Document;
@@ -38,6 +41,15 @@ namespace Torshify.Radio.Database
                             }
 
                             return DocumentConvention.DefaultTypeTagName(type);
+                        },
+                    FindClrTypeName =
+                        type => type.AssemblyQualifiedName,
+                    CustomizeJsonSerializer =
+                        serializer =>
+                        {
+                            serializer.Binder = new CustomSerializationBinder();
+                            serializer.TypeNameHandling = TypeNameHandling.All;
+                            serializer.TypeNameAssemblyFormat = FormatterAssemblyStyle.Full;
                         }
                 };
 
