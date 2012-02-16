@@ -98,6 +98,9 @@
     <Compile Include="CoreModule.cs" />
     <Compile Include="CorePlayer.cs" />
     <Compile Include="CoreRadio.cs" />
+    <Compile Include="FavoriteHandlers\TrackContainerFavoriteHandler.cs" />
+    <Compile Include="FavoriteHandlers\TrackFavoriteHandler.cs" />
+    <Compile Include="FavoriteHandlers\TrackListFavoriteHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

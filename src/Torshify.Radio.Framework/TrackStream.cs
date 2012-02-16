@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.Practices.Prism.ViewModel;
-using System.Linq;
 
 namespace Torshify.Radio.Framework
 {
@@ -11,22 +12,44 @@ namespace Torshify.Radio.Framework
         #region Fields
 
         private readonly IEnumerator _enumerator;
+        private readonly List<IEnumerable<Track>> _tracks;
 
         private string _description;
-        private List<IEnumerable<Track>> _tracks;
+        private Func<TrackStreamData> _streamData;
 
         #endregion Fields
 
         #region Constructors
 
-        public TrackStream(IEnumerable<Track> tracks)
+        public TrackStream(IEnumerable<Track> tracks, string description)
+            : this(tracks, description, null)
+        {
+        }
+
+        public TrackStream(IEnumerable<Track> tracks, string description, Func<TrackStreamData> streamData)
         {
             _tracks = new List<IEnumerable<Track>>(new[] { tracks });
             _enumerator = _tracks.GetEnumerator();
-
-
+            _description = description;
+            _streamData = streamData;
 
             SupportsTrackSkipping = true;
+
+            if (_streamData == null)
+            {
+                _streamData = () =>
+                {
+                    var track = Current.FirstOrDefault(i => !string.IsNullOrEmpty(i.AlbumArt));
+
+                    return new TrackListStreamData
+                    {
+                        Name = "Playlist",
+                        Image = track != null ? track.AlbumArt : null,
+                        Description = Description,
+                        Tracks = Current.ToArray()
+                    };
+                };
+            }
         }
 
         #endregion Constructors
@@ -67,15 +90,19 @@ namespace Torshify.Radio.Framework
         {
             get
             {
-                var track = Current.FirstOrDefault(i => !string.IsNullOrEmpty(i.AlbumArt));
+                return _streamData();
+            }
+        }
 
-                return new TrackListStreamData()
-                {
-                    Name = "Playlist",
-                    Image = track != null ? track.AlbumArt : null,
-                    Description = Description,
-                    Tracks = Current.ToArray()
-                };
+        public Func<TrackStreamData> DataGenerator
+        {
+            get
+            {
+                return _streamData;
+            }
+            set
+            {
+                _streamData = value;
             }
         }
 
@@ -112,12 +139,14 @@ namespace Torshify.Radio.Framework
     {
         #region Methods
 
+        public static ITrackStream ToTrackStream(this Track track, string description)
+        {
+            return new TrackStream(new[] { track }, description);
+        }
+
         public static ITrackStream ToTrackStream(this IEnumerable<Track> tracks, string description = null)
         {
-            return new TrackStream(tracks)
-            {
-                Description = description
-            };
+            return new TrackStream(tracks, description);
         }
 
         #endregion Methods

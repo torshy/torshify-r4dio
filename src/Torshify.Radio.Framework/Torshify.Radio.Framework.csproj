@@ -167,10 +167,12 @@
     <Compile Include="Events\ApplicationInactivityEvent.cs" />
     <Compile Include="Events\SystemInactivityEvent.cs" />
     <Compile Include="Favorite.cs" />
+    <Compile Include="FavoriteHandler.cs" />
     <Compile Include="HeaderInfo.cs" />
     <Compile Include="IBackdropService.cs" />
     <Compile Include="Behaviors\IgnoreMouseWheelBehavior.cs" />
     <Compile Include="ICommandBar.cs" />
+    <Compile Include="IFavoriteHandler.cs" />
     <Compile Include="IHeaderInfoProvider.cs" />
     <Compile Include="ILoadingIndicatorService.cs" />
     <Compile Include="Input\ExtendedMouseBinding.cs" />

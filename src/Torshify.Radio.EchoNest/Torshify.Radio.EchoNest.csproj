@@ -76,6 +76,7 @@
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="EchoNestModule.cs" />
+    <Compile Include="FavoriteHandlers\SimilarArtistsFavoriteHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

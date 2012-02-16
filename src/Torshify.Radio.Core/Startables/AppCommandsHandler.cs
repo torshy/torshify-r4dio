@@ -98,8 +98,13 @@ namespace Torshify.Radio.Core.Startables
             AppCommands.NavigateBackCommand.RegisterCommand(new AutomaticCommand(ExecuteNavigateBack, CanNavigateBack));
             AppCommands.NavigateForwardCommand.RegisterCommand(new AutomaticCommand(ExecuteNavigateForward, CanNavigateForward));
 
+            AppCommands.PlayTracksCommand.RegisterCommand(new StaticCommand<object>(ExecutePlayTrackStream));
+            AppCommands.QueueTracksCommand.RegisterCommand(new StaticCommand<object>(ExecuteQueueTrackStream));
+
             AppCommands.AddToFavoriteCommand.RegisterCommand(_addTrackToFavoritesCommand);
             AppCommands.AddToFavoriteCommand.RegisterCommand(_addTrackContainerToFavoritesCommand);
+            AppCommands.AddToFavoriteCommand.RegisterCommand(_addTrackStreamToFavoritesCommand);
+            AppCommands.AddToFavoriteCommand.RegisterCommand(_addTrackStreamDataToFavoritesCommand);
             AppCommands.AddTrackContainerToFavoriteCommand.RegisterCommand(_addTrackContainerToFavoritesCommand);
             AppCommands.AddTrackToFavoriteCommand.RegisterCommand(_addTrackToFavoritesCommand);
             AppCommands.AddTrackStreamToFavoriteCommand.RegisterCommand(_addTrackStreamToFavoritesCommand);
@@ -118,13 +123,33 @@ namespace Torshify.Radio.Core.Startables
                     new ExtendedMouseGesture(MouseButton.XButton2)));
         }
 
+        private void ExecuteQueueTrackStream(object parameter)
+        {
+            ITrackStream trackStream = parameter as ITrackStream;
+
+            if (trackStream != null)
+            {
+                Radio.Queue(trackStream);
+            }
+        }
+
+        private void ExecutePlayTrackStream(object parameter)
+        {
+            ITrackStream trackStream = parameter as ITrackStream;
+
+            if (trackStream != null)
+            {
+                Radio.Play(trackStream);
+            }
+        }
+
         private void ExecuteAddTrackToLikes(object parameter)
         {
             Track track = parameter as Track;
 
             if (track != null)
             {
-
+                ToastService.Show("Not implemented");
             }
         }
 
