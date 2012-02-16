@@ -6,6 +6,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
@@ -19,6 +20,8 @@ namespace Torshify.Radio.Core
         #region Fields
 
         private readonly ILoadingIndicatorService _loadingIndicatorService;
+        private readonly IToastService _toastService;
+        private readonly ILoggerFacade _logger;
         private readonly Dispatcher _dispatcher;
         private readonly ConcurrentQueue<ITrackStream> _trackStreamQueue;
 
@@ -36,8 +39,10 @@ namespace Torshify.Radio.Core
 
         [ImportingConstructor]
         public CoreRadio(
-            [Import("CorePlayer")]ITrackPlayer corePlayer, 
+            [Import("CorePlayer")]ITrackPlayer corePlayer,
             ILoadingIndicatorService loadingIndicatorService,
+            IToastService toastService,
+            ILoggerFacade logger,
             Dispatcher dispatcher)
         {
             _trackQueuePublic = new ObservableCollection<Track>();
@@ -46,6 +51,8 @@ namespace Torshify.Radio.Core
             _trackQueue = new ConcurrentQueue<Track>();
             _corePlayer = corePlayer;
             _loadingIndicatorService = loadingIndicatorService;
+            _toastService = toastService;
+            _logger = logger;
             _dispatcher = dispatcher;
             _corePlayer.Volume = 0.2;
             _corePlayer.TrackComplete += OnTrackComplete;
@@ -68,7 +75,10 @@ namespace Torshify.Radio.Core
 
         public Track CurrentTrack
         {
-            get { return _currentTrack; }
+            get
+            {
+                return _currentTrack;
+            }
             private set
             {
                 if (_currentTrack != value)
@@ -83,7 +93,10 @@ namespace Torshify.Radio.Core
 
         public Track UpcomingTrack
         {
-            get { return _upcomingTrack; }
+            get
+            {
+                return _upcomingTrack;
+            }
             private set
             {
                 if (_upcomingTrack != value)
@@ -126,7 +139,10 @@ namespace Torshify.Radio.Core
 
         public ITrackStream CurrentTrackStream
         {
-            get { return _currentTrackStream; }
+            get
+            {
+                return _currentTrackStream;
+            }
             set
             {
                 if (_currentTrackStream != value)
@@ -194,20 +210,34 @@ namespace Torshify.Radio.Core
 
         public void Play(ITrackStream trackStream)
         {
-            Task.Factory.StartNew(() =>
-                                  {
-                                      _loadingIndicatorService.Push();
-                                      _trackQueue = new ConcurrentQueue<Track>();
-                                      _dispatcher.BeginInvoke(new Action(_trackQueuePublic.Clear));
-                                      CurrentTrackStream = trackStream;
-                                      GetNextBatch();
+            Task
+                .Factory
+                .StartNew(() =>
+                {
+                    _loadingIndicatorService.Push();
+                    _trackQueue = new ConcurrentQueue<Track>();
+                    _dispatcher.BeginInvoke(new Action(_trackQueuePublic.Clear));
+                    CurrentTrackStream = trackStream;
+                    GetNextBatch();
 
-                                      _corePlayer.Stop();
+                    _corePlayer.Stop();
 
-                                      MoveToNextTrack();
-                                      PeekToNextTrack();
-                                      _loadingIndicatorService.Pop();
-                                  });
+                    MoveToNextTrack();
+                    PeekToNextTrack();
+                    _loadingIndicatorService.Pop();
+                })
+                .ContinueWith(task =>
+                {
+                    if (task.Exception != null)
+                    {
+                        task.Exception.Handle(e =>
+                        {
+                            _toastService.Show("Error while playing track. " + e.Message);
+                            _logger.Log(e.ToString(), Category.Exception, Priority.High);
+                            return true;
+                        });
+                    }
+                });
         }
 
         public void Queue(ITrackStream trackStream)
@@ -225,21 +255,35 @@ namespace Torshify.Radio.Core
 
         public void NextTrack()
         {
-            Task.Factory.StartNew(() =>
-                                  {
-                                      _loadingIndicatorService.Push();
-                                      _corePlayer.Stop();
+            Task
+                .Factory
+                .StartNew(() =>
+                {
+                    _loadingIndicatorService.Push();
+                    _corePlayer.Stop();
 
-                                      if (_trackQueue.IsEmpty)
-                                      {
-                                          GetNextBatch();
-                                      }
+                    if (_trackQueue.IsEmpty)
+                    {
+                        GetNextBatch();
+                    }
 
-                                      MoveToNextTrack();
-                                      PeekToNextTrack();
+                    MoveToNextTrack();
+                    PeekToNextTrack();
 
-                                      _loadingIndicatorService.Pop();
-                                  });
+                    _loadingIndicatorService.Pop();
+                })
+                .ContinueWith(task =>
+                {
+                    if (task.Exception != null)
+                    {
+                        task.Exception.Handle(e =>
+                        {
+                            _toastService.Show("Error while playing track. " + e.Message);
+                            _logger.Log(e.ToString(), Category.Exception, Priority.High);
+                            return true;
+                        });
+                    }
+                });
         }
 
         public bool SupportsLink(TrackLink trackLink)
@@ -307,18 +351,32 @@ namespace Torshify.Radio.Core
 
         private void OnTrackComplete(object sender, TrackEventArgs e)
         {
-            Task.Factory.StartNew(() =>
-                                  {
-                                      _loadingIndicatorService.Push();
-                                      if (_trackQueue.IsEmpty)
-                                      {
-                                          GetNextBatch();
-                                      }
+            Task
+                .Factory
+                .StartNew(() =>
+                {
+                    _loadingIndicatorService.Push();
+                    if (_trackQueue.IsEmpty)
+                    {
+                        GetNextBatch();
+                    }
 
-                                      MoveToNextTrack();
-                                      PeekToNextTrack();
-                                      _loadingIndicatorService.Pop();
-                                  });
+                    MoveToNextTrack();
+                    PeekToNextTrack();
+                    _loadingIndicatorService.Pop();
+                })
+                .ContinueWith(task =>
+                {
+                    if (task.Exception != null)
+                    {
+                        task.Exception.Handle(ex =>
+                        {
+                            _toastService.Show("Error while playing track. " + ex.Message);
+                            _logger.Log(ex.ToString(), Category.Exception, Priority.High);
+                            return true;
+                        });
+                    }
+                });
         }
 
         private void OnCurrentTrackStreamChanged()

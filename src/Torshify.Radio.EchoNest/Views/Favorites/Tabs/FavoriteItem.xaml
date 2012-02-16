@@ -8,9 +8,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
+    Engine:LocalizeDictionary.DesignCulture="en-US"
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="300">
+    d:DesignWidth="300"
+    Margin="0,0,4,0">
     <DockPanel.Resources>
         <Converters:StringToUpperConverter
             x:Key="StringToUpperConverter" />
@@ -67,6 +71,19 @@
                 RenderOptions.BitmapScalingMode="HighQuality"
                 Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
+    </Button>
+    <Button
+        DockPanel.Dock="Right"
+        BorderThickness="0"
+        Padding="0"
+        Command="{Binding DataContext.DeleteFavoriteCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+        CommandParameter="{Binding}"
+        VerticalAlignment="Center"
+        Height="24"
+        Width="24"
+        ToolTip="{lex:LocText Key=Remove, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
+        <Image
+            Source="{Binding Source={x:Static Framework:AppIcons.DeleteWithCircle}}" />
     </Button>
     <StackPanel
         VerticalAlignment="Center">

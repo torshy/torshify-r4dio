@@ -126,6 +126,9 @@
   <data name="Play_Album" xml:space="preserve">
     <value>Play album</value>
   </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
   <data name="Search_For_Similar_Artist" xml:space="preserve">
     <value>Search for similar artists</value>
   </data>
