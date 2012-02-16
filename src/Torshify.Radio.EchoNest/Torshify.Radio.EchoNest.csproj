@@ -130,6 +130,9 @@
       <DependentUpon>MainStationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Favorites\MainStationViewModel.cs" />
+    <Compile Include="Views\Favorites\Tabs\FavoriteItem.xaml.cs">
+      <DependentUpon>FavoriteItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Favorites\Tabs\FavoritesView.xaml.cs">
       <DependentUpon>FavoritesView.xaml</DependentUpon>
     </Compile>
@@ -201,6 +204,10 @@
     <Page Include="Views\Favorites\MainStationView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Favorites\Tabs\FavoriteItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Favorites\Tabs\FavoritesView.xaml">
       <SubType>Designer</SubType>

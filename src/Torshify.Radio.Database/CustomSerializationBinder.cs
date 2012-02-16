@@ -42,7 +42,7 @@ namespace Torshify.Radio.Database
                 return Type.GetType(typeName);
             }
 
-            Assembly assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.FullName == assemblyName);
+            Assembly assembly = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == assemblyName);
             //Assembly assembly = Assembly.Load(assemblyName);
             if (assembly == null)
             {

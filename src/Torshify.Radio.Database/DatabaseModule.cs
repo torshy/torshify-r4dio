@@ -48,8 +48,6 @@ namespace Torshify.Radio.Database
                         serializer =>
                         {
                             serializer.Binder = new CustomSerializationBinder();
-                            serializer.TypeNameHandling = TypeNameHandling.All;
-                            serializer.TypeNameAssemblyFormat = FormatterAssemblyStyle.Full;
                         }
                 };
 

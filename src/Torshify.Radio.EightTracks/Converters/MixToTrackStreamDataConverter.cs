@@ -15,10 +15,11 @@ namespace Torshify.Radio.EightTracks.Converters
             {
                 return new EightTracksMixTrackStreamData
                 {
-                    Name = "8tracks",
+                    Name = mix.Name,
                     Image = (string)new MixToImageConverter().Convert(mix, null, null, null),
-                    Description = mix.Description,
-                    MixId = mix.ID
+                    Description = mix.TagListCache,
+                    MixId = mix.ID,
+                    Source = "8tracks"
                 };
             }
 

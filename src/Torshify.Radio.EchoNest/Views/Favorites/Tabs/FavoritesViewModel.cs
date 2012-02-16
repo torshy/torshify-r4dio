@@ -34,7 +34,6 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
             };
 
             PlayFavoriteCommand = new StaticCommand<Favorite>(ExecutePlayFavorite);
-            PlayTrackCommand = new StaticCommand<Track>(ExecutePlayTrack);
         }
 
         #endregion Constructors
@@ -48,12 +47,6 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
         }
 
         public StaticCommand<Favorite> PlayFavoriteCommand
-        {
-            get;
-            private set;
-        }
-
-        public StaticCommand<Track> PlayTrackCommand
         {
             get;
             private set;
@@ -118,10 +111,6 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
         }
 
         void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
-        {
-        }
-
-        private void ExecutePlayTrack(Track favorite)
         {
         }
 

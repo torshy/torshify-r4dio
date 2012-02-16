@@ -5,54 +5,98 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Tabs="clr-namespace:Torshify.Radio.EchoNest.Views.Favorites.Tabs"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter
-            x:Key="BooleanToVisibilityConverter" />
         <DataTemplate
             DataType="{x:Type Framework:TrackFavorite}">
-            <DockPanel>
-                <Button
-                    Content="{Binding Track.Name}"
-                    Command="{Binding DataContext.PlayFavoriteCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                    CommandParameter="{Binding}"
-                    BorderThickness="1"
-                    Padding="0">
-                </Button>
-            </DockPanel>
+            <Tabs:FavoriteItem
+                x:Name="Panel"
+                Title="{Binding Track.Name}"
+                SubTitle="{Binding Track.Artist}"
+                Description="{Binding Track.Album}"
+                ImageUri="{Binding Track.AlbumArt}" />
+            <DataTemplate.Triggers>
+                <Trigger
+                    Property="ItemsControl.AlternationIndex"
+                    Value="0">
+                    <Setter
+                        Property="Background"
+                        Value="{DynamicResource {x:Static Framework:AppTheme.DataGridRowAlternate1BrushKey}}"
+                        TargetName="Panel" />
+                </Trigger>
+                <Trigger
+                    Property="ItemsControl.AlternationIndex"
+                    Value="1">
+                    <Setter
+                        Property="Background"
+                        Value="{DynamicResource {x:Static Framework:AppTheme.DataGridRowAlternate2BrushKey}}"
+                        TargetName="Panel" />
+                </Trigger>
+            </DataTemplate.Triggers>
         </DataTemplate>
         <DataTemplate
             DataType="{x:Type Framework:TrackContainerFavorite}">
-            <DockPanel>
-                <Button
-                    Content="{Binding TrackContainer.Name}"
-                    Command="{Binding DataContext.PlayFavoriteCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                    CommandParameter="{Binding}"
-                    BorderThickness="1"
-                    Padding="0">
-                </Button>
-            </DockPanel>
+            <Tabs:FavoriteItem
+                x:Name="Panel"
+                Title="{Binding TrackContainer.Name}"
+                SubTitle="{Binding TrackContainer.Owner.Name}"
+                Description="{Binding TrackContainer.Year}"
+                ImageUri="{Binding TrackContainer.Image}" />
+            <DataTemplate.Triggers>
+                <Trigger
+                    Property="ItemsControl.AlternationIndex"
+                    Value="0">
+                    <Setter
+                        Property="Background"
+                        Value="{DynamicResource {x:Static Framework:AppTheme.DataGridRowAlternate1BrushKey}}"
+                        TargetName="Panel" />
+                </Trigger>
+                <Trigger
+                    Property="ItemsControl.AlternationIndex"
+                    Value="1">
+                    <Setter
+                        Property="Background"
+                        Value="{DynamicResource {x:Static Framework:AppTheme.DataGridRowAlternate2BrushKey}}"
+                        TargetName="Panel" />
+                </Trigger>
+            </DataTemplate.Triggers>
         </DataTemplate>
         <DataTemplate
             DataType="{x:Type Framework:TrackStreamFavorite}">
-            <DockPanel>
-                <Button
-                    Content="{Binding StreamData.Name}"
-                    Command="{Binding DataContext.PlayFavoriteCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                    CommandParameter="{Binding}"
-                    BorderThickness="1"
-                    Padding="0">
-                </Button>
-            </DockPanel>
+            <Tabs:FavoriteItem
+                x:Name="Panel"
+                Title="{Binding StreamData.Name}"
+                SubTitle="{Binding StreamData.Source}"
+                Description="{Binding StreamData.Description}"
+                ImageUri="{Binding StreamData.Image}" />
+            <DataTemplate.Triggers>
+                <Trigger
+                    Property="ItemsControl.AlternationIndex"
+                    Value="0">
+                    <Setter
+                        Property="Background"
+                        Value="{DynamicResource {x:Static Framework:AppTheme.DataGridRowAlternate1BrushKey}}"
+                        TargetName="Panel" />
+                </Trigger>
+                <Trigger
+                    Property="ItemsControl.AlternationIndex"
+                    Value="1">
+                    <Setter
+                        Property="Background"
+                        Value="{DynamicResource {x:Static Framework:AppTheme.DataGridRowAlternate2BrushKey}}"
+                        TargetName="Panel" />
+                </Trigger>
+            </DataTemplate.Triggers>
         </DataTemplate>
     </UserControl.Resources>
     <ScrollViewer
         HorizontalScrollBarVisibility="Disabled">
         <ItemsControl
+            AlternationCount="2"
             ItemsSource="{Binding FavoriteList}">
-
         </ItemsControl>
     </ScrollViewer>
 </UserControl>

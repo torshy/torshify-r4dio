@@ -14,6 +14,12 @@ namespace Torshify.Radio.Framework
             set;
         }
 
+        public string Source
+        {
+            get; 
+            set;
+        }
+
         public string Description
         {
             get; 
