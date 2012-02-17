@@ -19,6 +19,7 @@ namespace Torshify.Radio.Grooveshark
         private bool _isPlaying;
         private GrooveSharkTrackPlayerHandler _trackPlayer;
         private double _volume = 0.5f;
+        private object _trackPlayerLock = new object();
 
         #endregion Fields
 
@@ -126,34 +127,37 @@ namespace Torshify.Radio.Grooveshark
 
             if (currentTrack != null)
             {
-                try
+                lock (_trackPlayerLock)
                 {
-                    if (_trackPlayer != null)
+                    try
                     {
-                        _trackPlayer.Stop();
+                        if (_trackPlayer != null)
+                        {
+                            _trackPlayer.Stop();
+                        }
                     }
+                    catch (Exception e)
+                    {
+                        _log.Log("While disposing old trackplayer: " + e.Message, Category.Warn, Priority.Medium);
+                    }
+
+                    var client = GroovesharkModule.GetClient();
+                    var stream = client.GetMusicStream(currentTrack.SongID, currentTrack.ArtistID);
+
+                    Action<Track> trackComplete = OnTrackComplete;
+                    Action<bool> isPlaying = parameter => IsPlaying = parameter;
+                    Action<bool> isBuffering = parameter => IsBuffering = parameter;
+                    Action<double, double> trackProgress = OnTrackProgress;
+                    _trackPlayer = new GrooveSharkTrackPlayerHandler(
+                        _log,
+                        currentTrack,
+                        trackComplete,
+                        isPlaying,
+                        isBuffering,
+                        trackProgress);
+
+                    _trackPlayer.Initialize(stream.Stream);
                 }
-                catch (Exception e)
-                {
-                    _log.Log("While disposing old trackplayer: " + e.Message, Category.Warn, Priority.Medium);
-                }
-
-                var client = GroovesharkModule.GetClient();
-                var stream = client.GetMusicStream(currentTrack.SongID, currentTrack.ArtistID);
-
-                Action<Track> trackComplete = OnTrackComplete;
-                Action<bool> isPlaying = parameter => IsPlaying = parameter;
-                Action<bool> isBuffering = parameter => IsBuffering = parameter;
-                Action<double, double> trackProgress = OnTrackProgress;
-                _trackPlayer = new GrooveSharkTrackPlayerHandler(
-                    _log,
-                    currentTrack,
-                    trackComplete,
-                    isPlaying,
-                    isBuffering,
-                    trackProgress);
-
-                _trackPlayer.Initialize(stream.Stream);
             }
         }
 
