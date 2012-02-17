@@ -92,11 +92,9 @@
             </DataTemplate.Triggers>
         </DataTemplate>
     </UserControl.Resources>
-    <ScrollViewer
-        HorizontalScrollBarVisibility="Disabled">
-        <ItemsControl
-            AlternationCount="2"
-            ItemsSource="{Binding FavoriteList}">
-        </ItemsControl>
-    </ScrollViewer>
+    <ListBox
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        AlternationCount="2"
+        ItemsSource="{Binding FavoriteList}">
+    </ListBox>
 </UserControl>

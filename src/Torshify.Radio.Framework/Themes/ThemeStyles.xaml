@@ -3074,6 +3074,57 @@
     </Style>
 
     <Style
+        TargetType="{x:Type ListBox}">
+        <Setter
+            Property="AlternationCount"
+            Value="2" />
+        <Setter
+            Property="HorizontalContentAlignment"
+            Value="Stretch" />
+        <Setter
+            Property="Background"
+            Value="Transparent" />
+        <Setter
+            Property="BorderThickness"
+            Value="0" />
+        <Setter
+            Property="SelectionMode"
+            Value="Extended" />
+        <Setter
+            Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style
+                    TargetType="ListBoxItem">
+                    <Setter
+                        Property="VerticalContentAlignment"
+                        Value="Center" />
+                    <Style.Triggers>
+                        <Trigger
+                            Property="ItemsControl.AlternationIndex"
+                            Value="0">
+                            <Setter
+                                Property="Background"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.DataGridRowAlternate1BrushKey}}" />
+                        </Trigger>
+                        <Trigger
+                            Property="ItemsControl.AlternationIndex"
+                            Value="1">
+                            <Setter
+                                Property="Background"
+                                Value="{DynamicResource {x:Static Framework:AppTheme.DataGridRowAlternate2BrushKey}}" />
+                        </Trigger>
+                    </Style.Triggers>
+                    <Style.Resources>
+                        <SolidColorBrush
+                            x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                            Color="{DynamicResource AccentColorKey}" />
+                    </Style.Resources>
+                </Style>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
         TargetType="{x:Type TreeView}">
         <Setter
             Property="Background"
@@ -3130,5 +3181,5 @@
             Property="Foreground"
             Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
     </Style>
-    
+
 </ResourceDictionary>

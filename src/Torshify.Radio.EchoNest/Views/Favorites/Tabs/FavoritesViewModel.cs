@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Threading.Tasks;
+
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
@@ -11,7 +13,6 @@ using Raven.Client;
 
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
-using System.Threading.Tasks;
 
 namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
 {
@@ -78,7 +79,7 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
         [Import]
         public ILoadingIndicatorService LoadingIndicatorService
         {
-            get; 
+            get;
             set;
         }
 
@@ -178,6 +179,12 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
             if (favoriteHandler != null)
             {
                 favoriteHandler.Queue(favorite);
+                
+                ToastService.Show(new ToastData
+                {
+                    Message = "Favorite queued",
+                    Icon = AppIcons.Add
+                });
             }
             else
             {

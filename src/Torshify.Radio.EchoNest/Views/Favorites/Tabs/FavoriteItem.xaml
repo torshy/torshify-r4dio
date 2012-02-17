@@ -20,6 +20,9 @@
             x:Key="StringToUpperConverter" />
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter" />
+        <Converters:BoolToVisibleOrHidden
+            x:Key="BooleanToHiddenConverter"
+            Collapse="False" />
     </DockPanel.Resources>
     <Button
         Name="playButton"
@@ -29,8 +32,7 @@
         BorderThickness="1"
         Padding="0"
         Height="64"
-        Width="64"
-        Margin="0,0,4,0">
+        Width="64">
         <Grid>
             <Image
                 Name="playImageBackground"
@@ -72,28 +74,47 @@
                 Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
     </Button>
-    <Button
-        DockPanel.Dock="Right"
-        BorderThickness="0"
-        Padding="0"
-        Command="{Binding DataContext.DeleteFavoriteCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-        CommandParameter="{Binding}"
-        VerticalAlignment="Center"
-        Height="24"
-        Width="24"
-        ToolTip="{lex:LocText Key=Remove, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
-        <Image
-            Source="{Binding Source={x:Static Framework:AppIcons.DeleteWithCircle}}" />
-    </Button>
+    <StackPanel
+        DockPanel.Dock="Left"
+        Visibility="{Binding IsMouseOver, ElementName=Root, Converter={StaticResource BooleanToHiddenConverter}}">
+        <Button
+            BorderThickness="0"
+            Padding="0"
+            Command="{Binding DataContext.QueueFavoriteCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+            CommandParameter="{Binding}"
+            VerticalAlignment="Center"
+            Height="24"
+            Width="24"
+            ToolTip="{lex:LocText Key=Add_To_Queue, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
+            <Image
+                Source="{Binding Source={x:Static Framework:AppIcons.Add}}" />
+        </Button>
+        <Button
+            BorderThickness="0"
+            Padding="0"
+            Command="{Binding DataContext.DeleteFavoriteCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+            CommandParameter="{Binding}"
+            VerticalAlignment="Center"
+            Height="24"
+            Width="24"
+            ToolTip="{lex:LocText Key=Remove, Dict=Strings, Assembly=Torshify.Radio.EchoNest}"
+            Visibility="{Binding IsMouseOver, ElementName=Root, Converter={StaticResource BooleanToHiddenConverter}}">
+            <Image
+                Source="{Binding Source={x:Static Framework:AppIcons.Delete}}" />
+        </Button>
+    </StackPanel>
+
     <StackPanel
         VerticalAlignment="Center">
         <TextBlock
             Text="{Binding Title, ElementName=Root}"
-            FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
+            FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
+            Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
         <TextBlock
             Text="{Binding SubTitle, ElementName=Root,Converter={StaticResource StringToUpperConverter}}"
             Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
         <TextBlock
-            Text="{Binding Description, ElementName=Root}" />
+            Text="{Binding Description, ElementName=Root}"
+            Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
     </StackPanel>
 </DockPanel>
