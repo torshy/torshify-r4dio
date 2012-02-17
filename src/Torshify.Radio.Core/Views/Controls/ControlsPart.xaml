@@ -6,6 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Resources="clr-namespace:Torshify.Radio.Core.Resources"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -22,7 +24,11 @@
                 Minimum="0.0"
                 Maximum="1.0"
                 SmallChange="0.1"
-                LargeChange="0.33" />
+                LargeChange="0.33">
+                <i:Interaction.Behaviors>
+                    <Behaviors:EnableSliderMouseWheel />
+                </i:Interaction.Behaviors>
+            </Controls:DragSlider>
             <StackPanel
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">

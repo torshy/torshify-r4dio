@@ -83,6 +83,8 @@
     <Compile Include="AppRegions.cs" />
     <Compile Include="Behaviors\DataGridRowActionBehavior.cs" />
     <Compile Include="Behaviors\DataGridTriStateSortingBehavior.cs" />
+    <Compile Include="Behaviors\EnableMouseWheel.cs" />
+    <Compile Include="Behaviors\EnableSliderMouseWheel.cs" />
     <Compile Include="Behaviors\InactivityBehavior of T.cs" />
     <Compile Include="Behaviors\InactivityFadeBehavior.cs" />
     <Compile Include="Behaviors\InactivityScaleBehavior.cs" />

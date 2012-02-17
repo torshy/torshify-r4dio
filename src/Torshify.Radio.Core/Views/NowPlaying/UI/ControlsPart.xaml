@@ -46,7 +46,11 @@
                     Minimum="0.0"
                     Maximum="1.0"
                     SmallChange="0.1"
-                    LargeChange="0.33" />
+                    LargeChange="0.33">
+                    <i:Interaction.Behaviors>
+                        <Behaviors:EnableSliderMouseWheel />
+                    </i:Interaction.Behaviors>
+                </Controls:DragSlider>
                 <StackPanel
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
