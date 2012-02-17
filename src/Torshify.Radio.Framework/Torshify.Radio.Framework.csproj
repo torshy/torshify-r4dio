@@ -164,6 +164,7 @@
     <Compile Include="Converters\NegateValueConverter.cs" />
     <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />
     <Compile Include="Converters\StringToUpperConverter.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Events\ApplicationInactivityEvent.cs" />
     <Compile Include="Events\SystemInactivityEvent.cs" />
     <Compile Include="Favorite.cs" />

@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
@@ -36,6 +36,7 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
                 Title = "Favorites"
             };
 
+            CommandBar = new CommandBar();
             PlayFavoriteCommand = new StaticCommand<Favorite>(ExecutePlayFavorite);
             QueueFavoriteCommand = new StaticCommand<Favorite>(ExecuteQueueFavorite);
             DeleteFavoriteCommand = new StaticCommand<Favorite>(ExecuteDeleteFavorite);
@@ -104,6 +105,12 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
             set;
         }
 
+        public ICommandBar CommandBar
+        {
+            get;
+            private set;
+        }
+
         public ObservableCollection<Favorite> FavoriteList
         {
             get
@@ -120,6 +127,34 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
         #endregion Properties
 
         #region Methods
+
+        public void UpdateCommandBar(IEnumerable<Favorite> selectedFavorites)
+        {
+            CommandBar.Clear();
+            CommandBar
+                .AddCommand(new CommandModel
+                {
+                    Content = "Play",
+                    Icon = AppIcons.Play.ToImage(),
+                    Command = PlayFavoriteCommand,
+                    CommandParameter = selectedFavorites.LastOrDefault()
+                })
+                .AddCommand(new CommandModel
+                {
+                    Content = "Queue",
+                    Icon = AppIcons.Add.ToImage(),
+                    Command = new DelegateCommand<IEnumerable<Favorite>>(favorites => favorites.ForEach(f => QueueFavoriteCommand.Execute(f))),
+                    CommandParameter = selectedFavorites
+                })
+                .AddSeparator()
+                .AddCommand(new CommandModel
+                {
+                    Content = "Remove",
+                    Icon = AppIcons.Delete.ToImage(),
+                    Command = new DelegateCommand<IEnumerable<Favorite>>(favorites => favorites.ForEach(f => DeleteFavoriteCommand.Execute(f))),
+                    CommandParameter = selectedFavorites
+                });
+        }
 
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
@@ -179,7 +214,7 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
             if (favoriteHandler != null)
             {
                 favoriteHandler.Queue(favorite);
-                
+
                 ToastService.Show(new ToastData
                 {
                     Message = "Favorite queued",
@@ -211,7 +246,7 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
                 {
                     ToastService.Show("An error occurred during deletion of your favorite");
 
-                    task.Exception.Handle(e=>
+                    task.Exception.Handle(e =>
                     {
                         Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
                         return true;

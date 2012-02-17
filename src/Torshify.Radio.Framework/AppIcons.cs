@@ -1,4 +1,6 @@
 using System;
+using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace Torshify.Radio.Framework
 {
@@ -89,5 +91,32 @@ namespace Torshify.Radio.Framework
         public static readonly Uri VideoWithCircle= new Uri("pack://siteoforigin:,,,/Resources/Icons/video_circle.png", UriKind.RelativeOrAbsolute);
 
         public static readonly Uri Volume = new Uri("pack://siteoforigin:,,,/Resources/Icons/volume.png", UriKind.RelativeOrAbsolute);
+    }
+
+    public static class UriExtensions
+    {
+        public static Image ToImage(this Uri uri, int? height = null, int? width = null)
+        {
+            BitmapImage source = new BitmapImage();
+            source.BeginInit();
+            source.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
+            source.UriSource = uri;
+
+            if (height.HasValue)
+            {
+                source.DecodePixelHeight = height.GetValueOrDefault();
+            }
+
+            if (height.HasValue)
+            {
+                source.DecodePixelWidth = height.GetValueOrDefault();
+            }
+
+            source.EndInit();
+
+            Image image = new Image();
+            image.Source = source;
+            return image;
+        }
     }
 }

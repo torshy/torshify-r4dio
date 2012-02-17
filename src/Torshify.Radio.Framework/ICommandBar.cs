@@ -18,6 +18,8 @@ namespace Torshify.Radio.Framework
 
         ICommandBar AddSubmenu(string displayName);
 
+        ICommandBar Clear();
+
         #endregion Methods
     }
 }

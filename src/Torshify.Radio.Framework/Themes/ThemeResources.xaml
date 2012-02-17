@@ -5,6 +5,8 @@
     xmlns:System="clr-namespace:System;assembly=mscorlib">
     <Color
         x:Key="AccentColorKey">#FF1BA1E2</Color>
+    <Color
+        x:Key="SubtleColorKey">#99FFFFFF</Color>
     <SolidColorBrush
         x:Key="{x:Static SystemColors.HighlightBrushKey}"
         Color="#FF1BA1E2" />

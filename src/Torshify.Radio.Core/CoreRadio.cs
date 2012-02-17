@@ -214,17 +214,18 @@ namespace Torshify.Radio.Core
                 .Factory
                 .StartNew(() =>
                 {
-                    _loadingIndicatorService.Push();
-                    _trackQueue = new ConcurrentQueue<Track>();
-                    _dispatcher.BeginInvoke(new Action(_trackQueuePublic.Clear));
-                    CurrentTrackStream = trackStream;
-                    GetNextBatch();
+                    using(_loadingIndicatorService.EnterLoadingBlock())
+                    {
+                        _trackQueue = new ConcurrentQueue<Track>();
+                        _dispatcher.BeginInvoke(new Action(_trackQueuePublic.Clear));
+                        CurrentTrackStream = trackStream;
+                        GetNextBatch();
 
-                    _corePlayer.Stop();
+                        _corePlayer.Stop();
 
-                    MoveToNextTrack();
-                    PeekToNextTrack();
-                    _loadingIndicatorService.Pop();
+                        MoveToNextTrack();
+                        PeekToNextTrack();
+                    }
                 })
                 .ContinueWith(task =>
                 {
@@ -259,18 +260,18 @@ namespace Torshify.Radio.Core
                 .Factory
                 .StartNew(() =>
                 {
-                    _loadingIndicatorService.Push();
-                    _corePlayer.Stop();
-
-                    if (_trackQueue.IsEmpty)
+                    using (_loadingIndicatorService.EnterLoadingBlock())
                     {
-                        GetNextBatch();
+                        _corePlayer.Stop();
+
+                        if (_trackQueue.IsEmpty)
+                        {
+                            GetNextBatch();
+                        }
+
+                        MoveToNextTrack();
+                        PeekToNextTrack();
                     }
-
-                    MoveToNextTrack();
-                    PeekToNextTrack();
-
-                    _loadingIndicatorService.Pop();
                 })
                 .ContinueWith(task =>
                 {
@@ -355,15 +356,16 @@ namespace Torshify.Radio.Core
                 .Factory
                 .StartNew(() =>
                 {
-                    _loadingIndicatorService.Push();
-                    if (_trackQueue.IsEmpty)
+                    using(_loadingIndicatorService.EnterLoadingBlock())
                     {
-                        GetNextBatch();
-                    }
+                        if (_trackQueue.IsEmpty)
+                        {
+                            GetNextBatch();
+                        }
 
-                    MoveToNextTrack();
-                    PeekToNextTrack();
-                    _loadingIndicatorService.Pop();
+                        MoveToNextTrack();
+                        PeekToNextTrack();
+                    }
                 })
                 .ContinueWith(task =>
                 {

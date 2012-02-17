@@ -3118,6 +3118,9 @@
                         <SolidColorBrush
                             x:Key="{x:Static SystemColors.HighlightBrushKey}"
                             Color="{DynamicResource AccentColorKey}" />
+                        <SolidColorBrush
+                            x:Key="{x:Static SystemColors.ControlBrushKey}"
+                            Color="{DynamicResource SubtleColorKey}" />
                     </Style.Resources>
                 </Style>
             </Setter.Value>

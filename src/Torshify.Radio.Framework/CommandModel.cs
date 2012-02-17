@@ -77,6 +77,12 @@ namespace Torshify.Radio.Framework
             return submenuCommandHoster;
         }
 
+        public ICommandBar Clear()
+        {
+            _items.Clear();
+            return this;
+        }
+
         #endregion Methods
     }
 
@@ -265,6 +271,11 @@ namespace Torshify.Radio.Framework
         public ICommandBar AddSubmenu(string displayName)
         {
             return _commandBar.AddSubmenu(displayName);
+        }
+
+        public ICommandBar Clear()
+        {
+            return _commandBar.Clear();
         }
 
         #endregion Methods

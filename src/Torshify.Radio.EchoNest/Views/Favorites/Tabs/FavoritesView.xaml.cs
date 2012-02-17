@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel.Composition;
+using System.Linq;
 using System.Windows.Controls;
 
 using Microsoft.Practices.Prism.Regions;
+
+using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
 {
@@ -35,5 +38,15 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
         }
 
         #endregion Properties
+
+        #region Methods
+
+        private void ListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox selector = (ListBox)sender;
+            Model.UpdateCommandBar(selector.SelectedItems.OfType<Favorite>());
+        }
+
+        #endregion Methods
     }
 }
