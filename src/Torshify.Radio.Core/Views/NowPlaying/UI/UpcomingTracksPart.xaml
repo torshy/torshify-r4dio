@@ -11,6 +11,7 @@
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     xmlns:UI="clr-namespace:Torshify.Radio.Core.Views.NowPlaying.UI"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -34,25 +35,34 @@
                 InDuration="0:0:0.1" />
         </i:Interaction.Behaviors>
         <StackPanel>
-            <TextBlock
-                Text="Current track stream"
-                FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
-                FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}"
-                Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
-            <DockPanel>
-                <Image
-                    DockPanel.Dock="Left"
-                    Source="{Binding Source={x:Static Framework:AppIcons.Folder}, Mode=OneTime, Converter={StaticResource ImageLoaderConverter}}"
-                    Height="24"
-                    VerticalAlignment="Center"
-                    Margin="0,0,4,0" />
-                <TextBlock
-                    Text="{Binding Radio.CurrentTrackStream.Description, Converter={StaticResource StringToUpperConverter}}"
-                    TextTrimming="CharacterEllipsis"
-                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}"
-                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
-                    Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
-            </DockPanel>
+            <Controls:TransitioningContentControl
+                Content="{Binding Radio.CurrentTrackStream}"
+                Transition="UpTransition">
+                <Controls:TransitioningContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <TextBlock
+                                DockPanel.Dock="Top"
+                                Text="Current track stream"
+                                FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                                FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}"
+                                Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
+                            <Image
+                                DockPanel.Dock="Left"
+                                Source="{Binding Source={x:Static Framework:AppIcons.Folder}, Mode=OneTime, Converter={StaticResource ImageLoaderConverter}}"
+                                Height="24"
+                                VerticalAlignment="Center"
+                                Margin="0,0,4,0" />
+                            <TextBlock
+                                Text="{Binding Description, Converter={StaticResource StringToUpperConverter}}"
+                                TextTrimming="CharacterEllipsis"
+                                FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}"
+                                FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
+                                Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
+                        </DockPanel>
+                    </DataTemplate>
+                </Controls:TransitioningContentControl.ContentTemplate>
+            </Controls:TransitioningContentControl>
             <TextBlock
                 Margin="0,4,0,4"
                 Text="Upcoming tracks"
