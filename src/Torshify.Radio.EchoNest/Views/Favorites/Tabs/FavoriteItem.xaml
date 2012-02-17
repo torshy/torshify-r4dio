@@ -11,6 +11,7 @@
     xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
     Engine:LocalizeDictionary.DesignCulture="en-US"
     xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300"
@@ -103,7 +104,14 @@
                 Source="{Binding Source={x:Static Framework:AppIcons.Delete}}" />
         </Button>
     </StackPanel>
-
+    <Image
+        Cursor="Hand"
+        Controls:ReorderListBox.IsDragElement="True"
+        DockPanel.Dock="Right"
+        Source="{Binding Source={x:Static Framework:AppIcons.OverflowDots}}"
+        Stretch="Uniform"
+        VerticalAlignment="Bottom"
+        Width="24 " />
     <StackPanel
         VerticalAlignment="Center">
         <TextBlock

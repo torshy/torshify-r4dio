@@ -7,5 +7,11 @@
             get;
             set;
         }
+
+        public int Index
+        {
+            get; 
+            set;
+        }
     }
 }

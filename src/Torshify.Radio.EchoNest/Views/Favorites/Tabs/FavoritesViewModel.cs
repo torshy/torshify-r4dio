@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
@@ -24,6 +25,7 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
         #region Fields
 
         private ObservableCollection<Favorite> _favoriteList;
+        private IDocumentSession _session;
 
         #endregion Fields
 
@@ -156,16 +158,50 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
                 });
         }
 
+        public void MoveItem(Favorite item1, Favorite item2)
+        {
+            var ui = TaskScheduler.FromCurrentSynchronizationContext();
+            Task.Factory.StartNew(() =>
+            {
+                var tmp = item1.Index;
+                item1.Index = item2.Index;
+                item2.Index = tmp;
+                _session.Store(item1);
+                _session.Store(item2);
+                _session.SaveChanges();
+            })
+            .ContinueWith(task =>
+            {
+                if (task.Exception != null)
+                {
+                    ToastService.Show("An error occurred during moving of your favorite");
+
+                    task.Exception.Handle(e =>
+                    {
+                        Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+                        return true;
+                    });
+                }
+                else
+                {
+                    int index1 = _favoriteList.IndexOf(item1);
+                    int index2 = _favoriteList.IndexOf(item2);
+                    _favoriteList.Move(index1, index2);
+                }
+            }, ui);
+        }
+
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
             Task.Factory.StartNew(() =>
             {
+                Logger.Log("Opening db-session", Category.Debug, Priority.Medium);
+
+                _session = DocumentStore.OpenSession();
+
                 using (LoadingIndicatorService.EnterLoadingBlock())
                 {
-                    using (var session = DocumentStore.OpenSession())
-                    {
-                        FavoriteList = new ObservableCollection<Favorite>(session.Query<Favorite>().ToList());
-                    }
+                    FavoriteList = new ObservableCollection<Favorite>(_session.Query<Favorite>().OrderBy(f => f.Index).ToList());
                 }
             })
             .ContinueWith(task =>
@@ -190,6 +226,18 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
 
         void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
+            try
+            {
+                if (_session != null)
+                {
+                    Logger.Log("Disposing db-session", Category.Debug, Priority.Medium);
+                    _session.Dispose();
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+            }
         }
 
         private void ExecutePlayFavorite(Favorite favorite)
@@ -233,12 +281,8 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
             var ui = TaskScheduler.FromCurrentSynchronizationContext();
             Task.Factory.StartNew(() =>
             {
-                using (var session = DocumentStore.OpenSession())
-                {
-                    var favoriteToDelete = session.Load<Favorite>(favorite.Id);
-                    session.Delete(favoriteToDelete);
-                    session.SaveChanges();
-                }
+                _session.Delete(favorite);
+                _session.SaveChanges();
             })
             .ContinueWith(task =>
             {

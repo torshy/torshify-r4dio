@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 
@@ -11,6 +14,318 @@ namespace Torshify.Radio.Framework
     public static class EnumerableExtensions
     {
         #region Methods
+
+        [Pure]
+        public static IEnumerable<TTarget> CountSelect<TSource, TTarget>(this IEnumerable<TSource> source, Func<TSource, int, TTarget> func)
+        {
+            int i = 0;
+            foreach (var item in source)
+            {
+                yield return func(item, i++);
+            }
+        }
+
+        /// <summary>
+        ///     Returns true if all items in the list are unique using
+        ///     <see cref="EqualityComparer{T}.Default">EqualityComparer&lt;T&gt;.Default</see>.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">if <param name="source"/> is null.</exception>
+        [Pure]
+        public static bool AllUnique<T>(this IList<T> source)
+        {
+            EqualityComparer<T> comparer = EqualityComparer<T>.Default;
+
+            return source.TrueForAllPairs((a, b) => !comparer.Equals(a, b));
+        }
+
+        /// <summary>
+        ///     Returns true if <paramref name="compare"/> returns
+        ///     true for every pair of items in <paramref name="source"/>.
+        /// </summary>
+        [Pure]
+        public static bool TrueForAllPairs<T>(this IList<T> source, Func<T, T, bool> compare)
+        {
+            for (int i = 0; i < source.Count; i++)
+            {
+                for (int j = i + 1; j < source.Count; j++)
+                {
+                    if (!compare(source[i], source[j]))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        ///     Returns true if <paramref name="compare"/> returns true of every
+        ///     adjacent pair of items in the <paramref name="source"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        ///     If there are n items in the collection, n-1 comparisons are done.
+        /// </para>
+        /// <para>
+        ///     Every valid [i] and [i+1] pair are passed into <paramref name="compare"/>.
+        /// </para>
+        /// <para>
+        ///     If <paramref name="source"/> has 0 or 1 items, true is returned.
+        /// </para>
+        /// </remarks>
+        [Pure]
+        public static bool TrueForAllAdjacentPairs<T>(this IEnumerable<T> source, Func<T, T, bool> compare)
+        {
+            return source.SelectAdjacentPairs().All(t => compare(t.Item1, t.Item2));
+        }
+
+        public static IEnumerable<Tuple<T, T>> SelectAdjacentPairs<T>(this IEnumerable<T> source)
+        {
+            bool hasPrevious = false;
+            T previous = default(T);
+
+            foreach (var item in source)
+            {
+                if (!hasPrevious)
+                {
+                    previous = item;
+                    hasPrevious = true;
+                }
+                else
+                {
+                    yield return Tuple.Create(previous, item);
+                    previous = item;
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Returns true if all of the items in <paramref name="source"/> are not
+        ///     null or empty.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">if <param name="source"/> is null.</exception>
+        [Pure]
+        public static bool AllNotNullOrEmpty(this IEnumerable<string> source)
+        {
+            return source.All(item => !string.IsNullOrEmpty(item));
+        }
+
+        /// <summary>
+        ///     Returns true if all items in <paramref name="source"/> exist
+        ///     in <paramref name="set"/>.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">if <param name="source"/> or <param name="set"/> are null.</exception>
+        [Pure]
+        public static bool AllExistIn<TSource>(this IEnumerable<TSource> source, IEnumerable<TSource> set)
+        {
+            return source.All(set.Contains);
+        }
+
+        /// <summary>
+        ///     Returns true if <paramref name="source"/> has no items in it; otherwise, false.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        ///     If an <see cref="ICollection{TSource}"/> is provided,
+        ///     <see cref="ICollection{TSource}.Count"/> is used.
+        /// </para>
+        /// <para>
+        ///     Yes, this does basically the same thing as the
+        ///     <see cref="System.Linq.Enumerable.Any{TSource}(IEnumerable{TSource})"/>
+        ///     extention. The differences: 'IsEmpty' is easier to remember and it leverages
+        ///     <see cref="ICollection{TSource}.Count">ICollection.Count</see> if it exists.
+        /// </para>
+        /// </remarks>
+        [Pure]
+        public static bool IsEmpty<TSource>(this IEnumerable<TSource> source)
+        {
+            if (source is ICollection<TSource>)
+            {
+                return ((ICollection<TSource>)source).Count == 0;
+            }
+            else
+            {
+                using (IEnumerator<TSource> enumerator = source.GetEnumerator())
+                {
+                    return !enumerator.MoveNext();
+                }
+            }
+        }
+
+        /// <summary>
+        ///     Returns the index of the first item in <paramref name="source"/>
+        ///     for which <paramref name="predicate"/> returns true. If none, -1.
+        /// </summary>
+        /// <param name="source">The source enumerable.</param>
+        /// <param name="predicate">The function to evaluate on each element.</param>
+        [Pure]
+        public static int IndexOf<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            int index = 0;
+            foreach (TSource item in source)
+            {
+                if (predicate(item))
+                {
+                    return index;
+                }
+                index++;
+            }
+            return -1;
+        }
+
+        /// <summary>
+        ///     Returns a new <see cref="ReadOnlyCollection{T}"/> using the
+        ///     contents of <paramref name="source"/>.
+        /// </summary>
+        /// <remarks>
+        ///     The contents of <paramref name="source"/> are copied to
+        ///     an array to ensure the contents of the returned value
+        ///     don't mutate.
+        /// </remarks>
+        public static ReadOnlyCollection<TSource> ToReadOnlyCollection<TSource>(this IEnumerable<TSource> source)
+        {
+            return new ReadOnlyCollection<TSource>(source.ToArray());
+        }
+
+        /// <summary>
+        ///     Removes the last element from <paramref name="source"/>.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">The list from which to remove the last element.</param>
+        /// <returns>The last element.</returns>
+        /// <remarks><paramref name="source"/> must have at least one element and allow changes.</remarks>
+        public static TSource RemoveLast<TSource>(this IList<TSource> source)
+        {
+            TSource item = source[source.Count - 1];
+            source.RemoveAt(source.Count - 1);
+            return item;
+        }
+
+        /// <summary>
+        ///     If <paramref name="source"/> is null, return an empty <see cref="IEnumerable{TSource}"/>;
+        ///     otherwise, return <paramref name="source"/>.
+        /// </summary>
+        public static IEnumerable<TSource> EmptyIfNull<TSource>(this IEnumerable<TSource> source)
+        {
+            return source ?? Enumerable.Empty<TSource>();
+        }
+
+        /// <summary>
+        ///     Recursively projects each nested element to an <see cref="IEnumerable{TSource}"/>
+        ///     and flattens the resulting sequences into one sequence.
+        /// </summary>
+        /// <typeparam name="TSource">The type of the elements of <paramref name="source"/>.</typeparam>
+        /// <param name="source">A sequence of values to project.</param>
+        /// <param name="recursiveSelector">A transform to apply to each element.</param>
+        /// <returns>
+        ///     An <see cref="IEnumerable{TSource}"/> whose elements are the
+        ///     result of recursively invoking the recursive transform function
+        ///     on each element and nested element of the input sequence.
+        /// </returns>
+        /// <remarks>This is a depth-first traversal. Be careful if you're using this to find something
+        /// shallow in a deep tree.</remarks>
+        public static IEnumerable<TSource> SelectRecursive<TSource>(
+            this IEnumerable<TSource> source,
+            Func<TSource, IEnumerable<TSource>> recursiveSelector)
+        {
+            Stack<IEnumerator<TSource>> stack = new Stack<IEnumerator<TSource>>();
+            stack.Push(source.GetEnumerator());
+
+            try
+            {
+                while (stack.Count > 0)
+                {
+                    if (stack.Peek().MoveNext())
+                    {
+                        TSource current = stack.Peek().Current;
+
+                        yield return current;
+
+                        stack.Push(recursiveSelector(current).GetEnumerator());
+                    }
+                    else
+                    {
+                        stack.Pop().Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                while (stack.Count > 0)
+                {
+                    stack.Pop().Dispose();
+                }
+            }
+        }
+
+        public static IEnumerable<T> Concat<T>(this IEnumerable<T> source, params T[] items)
+        {
+            return source.Concat(items.AsEnumerable());
+        }
+
+        [Pure]
+        public static bool Contains<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        {
+            return dictionary.Contains(new KeyValuePair<TKey, TValue>(key, value));
+        }
+
+        [Pure]
+        public static bool CountAtLeast<T>(this IEnumerable<T> source, int count)
+        {
+            if (source is ICollection<T>)
+            {
+                return ((ICollection<T>)source).Count >= count;
+            }
+            else
+            {
+                using (var enumerator = source.GetEnumerator())
+                {
+                    while (count > 0)
+                    {
+                        if (enumerator.MoveNext())
+                        {
+                            count--;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+
+        public static IEnumerable<TSource> Except<TSource, TOther>(this IEnumerable<TSource> source, IEnumerable<TOther> other, Func<TSource, TOther, bool> comparer)
+        {
+            return from item in source
+                   where !other.Any(x => comparer(item, x))
+                   select item;
+        }
+
+        public static IEnumerable<TSource> Intersect<TSource, TOther>(this IEnumerable<TSource> source, IEnumerable<TOther> other, Func<TSource, TOther, bool> comparer)
+        {
+            return from item in source
+                   where other.Any(x => comparer(item, x))
+                   select item;
+        }
+
+        public static INotifyCollectionChanged AsINPC<T>(this ReadOnlyObservableCollection<T> source)
+        {
+            return (INotifyCollectionChanged)source;
+        }
+
+        /// <summary>
+        /// Creates an <see cref="ObservableCollection{T}"/> from the <see cref="IEnumerable"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the source elements.</typeparam>
+        /// <param name="source">The <see cref="IEnumerable"/> to create the <see cref="ObservableCollection{T}"/> from.</param>
+        /// <returns>An <see cref="ObservableCollection{T}"/> that contains elements from the input sequence.</returns>
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> source)
+        {
+            return new ObservableCollection<T>(source);
+        }
 
         /// <summary>
         /// 	Performs an action for each item in the enumerable

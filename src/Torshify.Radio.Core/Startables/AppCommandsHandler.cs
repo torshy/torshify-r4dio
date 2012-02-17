@@ -11,6 +11,7 @@ using Raven.Client;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 using Torshify.Radio.Framework.Input;
+using System.Linq;
 
 namespace Torshify.Radio.Core.Startables
 {
@@ -175,6 +176,7 @@ namespace Torshify.Radio.Core.Startables
                     {
                         TrackStreamFavorite fav = new TrackStreamFavorite();
                         fav.StreamData = streamData;
+                        fav.Index = session.Query<Favorite>().Count();
                         session.Store(fav);
                         session.SaveChanges();
                     }
@@ -205,6 +207,7 @@ namespace Torshify.Radio.Core.Startables
                     {
                         TrackContainerFavorite fav = new TrackContainerFavorite();
                         fav.TrackContainer = container;
+                        fav.Index = session.Query<Favorite>().Count();
                         session.Store(fav);
                         session.SaveChanges();
                     }
@@ -235,6 +238,7 @@ namespace Torshify.Radio.Core.Startables
                     {
                         TrackFavorite fav = new TrackFavorite();
                         fav.Track = track;
+                        fav.Index = session.Query<Favorite>().Count();
                         session.Store(fav);
                         session.SaveChanges();
                     }

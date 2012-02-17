@@ -3074,7 +3074,8 @@
     </Style>
 
     <Style
-        TargetType="{x:Type ListBox}">
+        TargetType="{x:Type ListBox}"
+        BasedOn="{StaticResource {x:Type ListBox}}">
         <Setter
             Property="AlternationCount"
             Value="2" />
@@ -3127,6 +3128,10 @@
         </Setter>
     </Style>
 
+    <Style
+        TargetType="{x:Type Controls:ReorderListBox}"
+        BasedOn="{StaticResource {x:Type ListBox}}" />
+    
     <Style
         TargetType="{x:Type TreeView}">
         <Setter

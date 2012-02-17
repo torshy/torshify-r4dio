@@ -36,15 +36,16 @@
                 ImageUri="{Binding StreamData.Image}" />
         </DataTemplate>
     </UserControl.Resources>
-    <ListBox
+    <Controls:ReorderListBox
         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
         AlternationCount="2"
         ItemsSource="{Binding FavoriteList}"
-        SelectionChanged="ListBoxSelectionChanged">
+        SelectionChanged="ListBoxSelectionChanged"
+        ReorderRequested="ListBoxReorderRequested">
         <ListBox.ContextMenu>
             <Controls:CommandBarContextMenu
                 Tag="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}"
                 DataContext="{Binding Tag.DataContext.CommandBar, RelativeSource={RelativeSource Self}}" />
         </ListBox.ContextMenu>
-    </ListBox>
+    </Controls:ReorderListBox>
 </UserControl>

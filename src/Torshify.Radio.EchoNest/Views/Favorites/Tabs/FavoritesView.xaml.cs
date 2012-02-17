@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Controls;
-
+using System.Windows.Media;
 using Microsoft.Practices.Prism.Regions;
 
 using Torshify.Radio.Framework;
+using Torshify.Radio.Framework.Controls;
 
 namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
 {
@@ -45,6 +46,15 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
         {
             ListBox selector = (ListBox)sender;
             Model.UpdateCommandBar(selector.SelectedItems.OfType<Favorite>());
+        }
+
+        private void ListBoxReorderRequested(object sender, ReorderEventArgs e)
+        {
+            var reorderListBox = (ReorderListBox)e.OriginalSource;
+            var dragginItem = (Favorite)reorderListBox.ItemContainerGenerator.ItemFromContainer(e.ItemContainer);
+            var toItem = (Favorite)reorderListBox.ItemContainerGenerator.ItemFromContainer(e.ToContainer);
+
+            Model.MoveItem(dragginItem, toItem);
         }
 
         #endregion Methods
