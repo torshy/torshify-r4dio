@@ -6,6 +6,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Practices.Prism;
+using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
@@ -36,9 +37,11 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
                              Title = "Results"
                          };
 
+            CommandBar = new CommandBar();
             GoToAlbumCommand = new StaticCommand<Track>(ExecuteGoToAlbum);
             GoToArtistCommand = new StaticCommand<string>(ExecuteGoToArtist);
             PlayTracksCommand = new StaticCommand<IEnumerable>(ExecutePlayTracks);
+            QueueTracksCommand = new StaticCommand<IEnumerable>(ExecuteQueueTracks);
         }
 
         #endregion Constructors
@@ -94,7 +97,19 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             set;
         }
 
+        public ICommandBar CommandBar
+        {
+            get; 
+            private set;
+        }
+
         public StaticCommand<IEnumerable> PlayTracksCommand
+        {
+            get;
+            private set;
+        }
+
+        public StaticCommand<IEnumerable> QueueTracksCommand
         {
             get;
             private set;
@@ -115,6 +130,26 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
         #endregion Properties
 
         #region Methods
+
+        public void UpdateCommandBar(IEnumerable<Track> selectedItems)
+        {
+            CommandBar.Clear()
+                .AddCommand(new CommandModel
+                {
+                    Content = "Play",
+                    Icon = AppIcons.Play.ToImage(),
+                    Command = PlayTracksCommand,
+                    CommandParameter = selectedItems
+                })
+                .AddCommand(new CommandModel
+                {
+                    Content = "Queue",
+                    Icon = AppIcons.Add.ToImage(),
+                    Command = QueueTracksCommand,
+                    CommandParameter = selectedItems
+                })
+                .AddSeparator();
+        }
 
         void INavigationAware.OnNavigatedTo(NavigationContext context)
         {
@@ -185,8 +220,23 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             if (tracks == null)
                 return;
 
-            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(string.Empty);
+            ITrackStream stream = tracks.OfType<Track>().ToTrackStream("Browsing");
             Radio.Play(stream);
+        }
+
+        private void ExecuteQueueTracks(IEnumerable tracks)
+        {
+            if (tracks == null)
+                return;
+
+            ITrackStream stream = tracks.OfType<Track>().ToTrackStream("Browsing");
+            Radio.Queue(stream);
+
+            ToastService.Show(new ToastData
+            {
+                Message = "Tracks queued",
+                Icon = AppIcons.Add
+            });
         }
 
         #endregion Methods

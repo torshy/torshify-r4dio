@@ -1,4 +1,8 @@
 ﻿using System.ComponentModel.Composition;
+using System.Linq;
+using System.Windows.Controls;
+
+using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 {
@@ -25,5 +29,15 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
         }
 
         #endregion Properties
+
+        #region Methods
+
+        private void ListSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataGrid dataGrid = (DataGrid) sender;
+            Model.UpdateCommandBar(dataGrid.SelectedItems.OfType<Track>());
+        }
+
+        #endregion Methods
     }
 }
