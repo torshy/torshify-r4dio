@@ -9,10 +9,10 @@
         x:Key="SubtleColorKey">#99FFFFFF</Color>
     <SolidColorBrush
         x:Key="{x:Static SystemColors.HighlightBrushKey}"
-        Color="#FF1BA1E2" />
+        Color="{StaticResource AccentColorKey}" />
     <SolidColorBrush
         x:Key="{x:Static Framework:AppTheme.AccentBrushKey}"
-        Color="#FF1BA1E2" />
+        Color="{StaticResource AccentColorKey}" />
     <SolidColorBrush
         x:Key="{x:Static Framework:AppTheme.BackgroundBrushKey}"
         Color="#FF000000" />
@@ -39,7 +39,7 @@
         Color="#FF000000" />
     <SolidColorBrush
         x:Key="{x:Static Framework:AppTheme.TextBoxEditSelectionBrushKey}"
-        Color="#FF1BA1E2" />
+        Color="{StaticResource AccentColorKey}" />
     <SolidColorBrush
         x:Key="{x:Static Framework:AppTheme.TextBoxEditReadOnlyBrushKey}"
         Color="#77000000" />
@@ -51,7 +51,7 @@
         Color="#FFFFFFFF" />
     <SolidColorBrush
         x:Key="{x:Static Framework:AppTheme.SubtleBrushKey}"
-        Color="#99FFFFFF" />
+        Color="{StaticResource SubtleColorKey}" />
     <SolidColorBrush
         x:Key="{x:Static Framework:AppTheme.RadioCheckBoxBrushKey}"
         Color="#BFFFFFFF" />
