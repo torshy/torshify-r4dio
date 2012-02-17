@@ -224,13 +224,12 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             Radio.Play(stream);
         }
 
-        private int counter = 0;
         private void ExecuteQueueTracks(IEnumerable tracks)
         {
             if (tracks == null)
                 return;
 
-            ITrackStream stream = tracks.OfType<Track>().ToTrackStream("Browsing " + counter++);
+            ITrackStream stream = tracks.OfType<Track>().ToTrackStream("Browsing");
             Radio.Queue(stream);
 
             foreach (Track track in tracks)
