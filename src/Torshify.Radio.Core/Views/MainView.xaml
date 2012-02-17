@@ -142,7 +142,7 @@
                         <Image
                             Name="Img"
                             Height="24"
-                            Source="{Binding Source={x:Static Framework:AppIcons.Parent}, Converter={StaticResource ImageLoaderConverter}}" />
+                            Source="{Binding Source={x:Static Framework:AppIcons.Home}, Converter={StaticResource ImageLoaderConverter}}" />
                         <DataTemplate.Triggers>
                             <Trigger
                                 Property="IsEnabled"

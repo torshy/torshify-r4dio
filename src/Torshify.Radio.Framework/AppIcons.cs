@@ -6,6 +6,8 @@ namespace Torshify.Radio.Framework
 {
     public class AppIcons
     {
+        public static readonly Uri Home = new Uri("pack://siteoforigin:,,,/Resources/Icons/home.png", UriKind.RelativeOrAbsolute);
+
         public static readonly Uri Add = new Uri("pack://siteoforigin:,,,/Resources/Icons/add.png", UriKind.RelativeOrAbsolute);
         public static readonly Uri AddWithCircle= new Uri("pack://siteoforigin:,,,/Resources/Icons/add_circle.png", UriKind.RelativeOrAbsolute);
 
