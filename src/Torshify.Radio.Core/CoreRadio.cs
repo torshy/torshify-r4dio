@@ -6,6 +6,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -19,10 +20,10 @@ namespace Torshify.Radio.Core
     {
         #region Fields
 
-        private readonly ILoadingIndicatorService _loadingIndicatorService;
-        private readonly IToastService _toastService;
-        private readonly ILoggerFacade _logger;
         private readonly Dispatcher _dispatcher;
+        private readonly ILoadingIndicatorService _loadingIndicatorService;
+        private readonly ILoggerFacade _logger;
+        private readonly IToastService _toastService;
         private readonly ConcurrentQueue<ITrackStream> _trackStreamQueue;
 
         private ITrackPlayer _corePlayer;
@@ -186,6 +187,8 @@ namespace Torshify.Radio.Core
 
         public IEnumerable<TrackContainer> GetAlbumsByArtist(string artist)
         {
+            _logger.Log("Getting albums by artist [" + artist + "]", Category.Info, Priority.Low);
+
             List<TrackContainer> albums = new List<TrackContainer>();
 
             foreach (var source in TrackSources)
@@ -198,6 +201,8 @@ namespace Torshify.Radio.Core
 
         public IEnumerable<Track> GetTracksByName(string name)
         {
+            _logger.Log("Getting tracks by name [" + name + "]", Category.Info, Priority.Low);
+
             List<Track> tracks = new List<Track>();
 
             foreach (var source in TrackSources)
@@ -210,6 +215,9 @@ namespace Torshify.Radio.Core
 
         public void Play(ITrackStream trackStream)
         {
+            _trackQueue = new ConcurrentQueue<Track>();
+            _dispatcher.BeginInvoke(new Action(_trackQueuePublic.Clear));
+
             CurrentTrackStream = trackStream;
 
             Task
@@ -218,9 +226,6 @@ namespace Torshify.Radio.Core
                 {
                     using(_loadingIndicatorService.EnterLoadingBlock())
                     {
-                        _trackQueue = new ConcurrentQueue<Track>();
-                        _dispatcher.BeginInvoke(new Action(_trackQueuePublic.Clear));
-
                         GetNextBatch();
 
                         _corePlayer.Stop();
@@ -247,11 +252,13 @@ namespace Torshify.Radio.Core
         {
             if (CurrentTrackStream == null)
             {
+                _logger.Log("No track stream is already playing. Starting " + trackStream.Description, Category.Debug, Priority.Low);
                 Play(trackStream);
             }
             else
             {
                 _trackStreamQueue.Enqueue(trackStream);
+                _logger.Log("Queued track stream " + trackStream.Description, Category.Debug, Priority.Low);
                 _dispatcher.BeginInvoke(new Action<ITrackStream>(_trackStreamQueuePublic.Add), trackStream);
             }
         }
@@ -268,6 +275,7 @@ namespace Torshify.Radio.Core
 
                         if (_trackQueue.IsEmpty)
                         {
+                            _logger.Log("Current track stream is empty. Trying to move on", Category.Debug, Priority.Low);
                             GetNextBatch();
                         }
 
@@ -302,6 +310,7 @@ namespace Torshify.Radio.Core
 
                 foreach (var track in tracks)
                 {
+                    _logger.Log("Adding " + track.Name + " - " + track.Artist + " to playlist", Category.Debug, Priority.Low);
                     _trackQueue.Enqueue(track);
                     _dispatcher.BeginInvoke(new Action<Track>(_trackQueuePublic.Add), track);
                 }
@@ -311,12 +320,14 @@ namespace Torshify.Radio.Core
                 ITrackStream nextTrackStream;
                 if (_trackStreamQueue.TryDequeue(out nextTrackStream))
                 {
+                    _logger.Log("Changing current track stream to " + nextTrackStream.Description, Category.Debug, Priority.Low);
                     _dispatcher.BeginInvoke(new Func<ITrackStream, bool>(_trackStreamQueuePublic.Remove), nextTrackStream);
                     CurrentTrackStream = nextTrackStream;
                     GetNextBatch();
                 }
                 else
                 {
+                    _logger.Log("No more track streams to play", Category.Debug, Priority.Low);
                     CurrentTrackStream = null;
                 }
             }

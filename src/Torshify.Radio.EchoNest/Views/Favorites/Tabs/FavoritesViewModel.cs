@@ -146,7 +146,7 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
                     Content = "Queue",
                     Icon = AppIcons.Add.ToImage(),
                     Command = new DelegateCommand<IEnumerable<Favorite>>(favorites => favorites.ForEach(f => QueueFavoriteCommand.Execute(f))),
-                    CommandParameter = selectedFavorites
+                    CommandParameter = selectedFavorites.ToArray()
                 })
                 .AddSeparator()
                 .AddCommand(new CommandModel
@@ -154,7 +154,7 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
                     Content = "Remove",
                     Icon = AppIcons.Delete.ToImage(),
                     Command = new DelegateCommand<IEnumerable<Favorite>>(favorites => favorites.ForEach(f => DeleteFavoriteCommand.Execute(f))),
-                    CommandParameter = selectedFavorites
+                    CommandParameter = selectedFavorites.ToArray()
                 });
         }
 

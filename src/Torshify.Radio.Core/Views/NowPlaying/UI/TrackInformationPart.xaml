@@ -8,6 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -23,17 +24,25 @@
                 ShadowDepth="0"
                 BlurRadius="40" />
         </DockPanel.Effect>
-        <Border
+        <Controls:TransitioningContentControl
             DockPanel.Dock="Left"
             HorizontalAlignment="Left"
             Width="{Binding AlbumArtSize, ElementName=Root, Mode=OneWay}"
             Height="{Binding AlbumArtSize, ElementName=Root, Mode=OneWay}"
-            Background="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
-            Padding="4">
-            <Image
-                Stretch="UniformToFill"
-                Source="{Binding AlbumArt, ElementName=Root, Converter={StaticResource ImageLoaderConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-        </Border>
+            Content="{Binding AlbumArt, ElementName=Root, Converter={StaticResource ImageLoaderConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            Transition="RightTransition">
+            <Controls:TransitioningContentControl.ContentTemplate>
+                <DataTemplate>
+                    <Border
+                        Background="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                        Padding="4">
+                        <Image
+                            Stretch="UniformToFill"
+                            Source="{Binding}" />
+                    </Border>
+                </DataTemplate>
+            </Controls:TransitioningContentControl.ContentTemplate>
+        </Controls:TransitioningContentControl>
         <StackPanel
             Margin="8,0,0,0"
             VerticalAlignment="Center">

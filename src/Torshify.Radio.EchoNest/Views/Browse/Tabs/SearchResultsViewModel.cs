@@ -139,14 +139,14 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
                     Content = "Play",
                     Icon = AppIcons.Play.ToImage(),
                     Command = PlayTracksCommand,
-                    CommandParameter = selectedItems
+                    CommandParameter = selectedItems.ToArray()
                 })
                 .AddCommand(new CommandModel
                 {
                     Content = "Queue",
                     Icon = AppIcons.Add.ToImage(),
                     Command = QueueTracksCommand,
-                    CommandParameter = selectedItems
+                    CommandParameter = selectedItems.ToArray()
                 })
                 .AddSeparator();
         }
@@ -224,13 +224,19 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             Radio.Play(stream);
         }
 
+        private int counter = 0;
         private void ExecuteQueueTracks(IEnumerable tracks)
         {
             if (tracks == null)
                 return;
 
-            ITrackStream stream = tracks.OfType<Track>().ToTrackStream("Browsing");
+            ITrackStream stream = tracks.OfType<Track>().ToTrackStream("Browsing " + counter++);
             Radio.Queue(stream);
+
+            foreach (Track track in tracks)
+            {
+                Logger.Log("Queued " + track.Name, Category.Debug, Priority.Low);
+            }
 
             ToastService.Show(new ToastData
             {
