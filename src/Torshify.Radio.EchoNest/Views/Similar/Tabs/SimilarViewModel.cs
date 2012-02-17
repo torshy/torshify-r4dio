@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using EchoNest;
 using EchoNest.Artist;
-
+using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
@@ -38,6 +38,7 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             _similarArtists = new ObservableCollection<SimilarArtistModel>();
 
             HeaderInfo = new HeaderInfo { Title = "Similar artists" };
+            CommandBar = new CommandBar();
             PlayArtistCommand = new StaticCommand<SimilarArtistModel>(ExecutePlaySimilarArtist);
             QueueArtistCommand = new StaticCommand<SimilarArtistModel>(ExecuteQueueSimilarArtist);
             AddFavoriteArtistCommand = new StaticCommand<SimilarArtistModel>(ExecuteAddFavoriteArtist);
@@ -80,6 +81,12 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
         {
             get;
             set;
+        }
+
+        public ICommandBar CommandBar
+        {
+            get; 
+            private set;
         }
 
         public StaticCommand<SimilarArtistModel> PlayArtistCommand
@@ -142,6 +149,26 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 
         void INavigationAware.OnNavigatedFrom(NavigationContext context)
         {
+        }
+
+        public void UpdateCommandBar(IEnumerable<SimilarArtistModel> selectedItems)
+        {
+            CommandBar.Clear();
+            CommandBar
+                .AddCommand(new CommandModel
+                {
+                    Content = "Play",
+                    Icon = AppIcons.Play.ToImage(),
+                    Command = PlayArtistCommand,
+                    CommandParameter = selectedItems.LastOrDefault()
+                })
+                .AddCommand(new CommandModel
+                {
+                    Content = "Queue",
+                    Icon = AppIcons.Add.ToImage(),
+                    Command = new DelegateCommand<IEnumerable<SimilarArtistModel>>(a => a.ForEach(f => QueueArtistCommand.Execute(f))),
+                    CommandParameter = selectedItems
+                });
         }
 
         private static ArtistBucketItem GetArtistInformation(string query)
@@ -260,7 +287,11 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
                 Description = "Similar artists of " + _currentMainArtist
             });
 
-            ToastService.Show("Queued " + artist.Name);
+            ToastService.Show(new ToastData
+            {
+                Message = "Queued " + artist.Name,
+                Icon = AppIcons.Add
+            });
         }
 
         private void ExecuteGetSimilarArtists(string artistName)

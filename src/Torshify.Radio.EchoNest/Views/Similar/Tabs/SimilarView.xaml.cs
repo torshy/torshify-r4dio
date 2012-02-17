@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.Composition;
+using System.Linq;
 using System.Windows.Controls;
 
 namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
@@ -26,5 +27,15 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
         }
 
         #endregion Properties
+
+        #region Methods
+
+        private void ListBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox selector = (ListBox)sender;
+            Model.UpdateCommandBar(selector.SelectedItems.OfType<SimilarArtistModel>());
+        }
+
+        #endregion Methods
     }
 }

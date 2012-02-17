@@ -210,6 +210,8 @@ namespace Torshify.Radio.Core
 
         public void Play(ITrackStream trackStream)
         {
+            CurrentTrackStream = trackStream;
+
             Task
                 .Factory
                 .StartNew(() =>
@@ -218,7 +220,7 @@ namespace Torshify.Radio.Core
                     {
                         _trackQueue = new ConcurrentQueue<Track>();
                         _dispatcher.BeginInvoke(new Action(_trackQueuePublic.Clear));
-                        CurrentTrackStream = trackStream;
+
                         GetNextBatch();
 
                         _corePlayer.Stop();
