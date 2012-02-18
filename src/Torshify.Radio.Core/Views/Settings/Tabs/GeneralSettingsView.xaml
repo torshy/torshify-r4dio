@@ -18,9 +18,9 @@
         <extToolkit:ColorPicker
             SelectedColor="{Binding CurrentAccentColor}" />
         <TextBlock
-            Text="Save" />
+            Text="" />
         <Button
-            Content="Do it"
+            Content="Save"
             Click="ButtonClick" />
     </local:FormPanel>
 </UserControl>
