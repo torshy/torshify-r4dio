@@ -100,15 +100,20 @@
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <TextBlock>
-                                <Hyperlink
+                            <Hyperlink
                                 Command="{Binding DataContext.GoToArtistCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                 CommandParameter="{Binding Artist}">
-                                    <TextBlock
+                                <TextBlock
                                     Margin="4,0,0,0"
                                     Text="{Binding Artist}"
-                                    TextTrimming="CharacterEllipsis" />
-                                </Hyperlink>
-                            </TextBlock>
+                                    TextTrimming="CharacterEllipsis">
+                                    <i:Interaction.Behaviors>
+                                        <Behaviors:ArtistRelatedCommandBarBehavior
+                                            ArtistName="{Binding Artist}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBlock>
+                            </Hyperlink>
+                        </TextBlock>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
@@ -123,15 +128,21 @@
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <TextBlock>
-                                <Hyperlink
+                            <Hyperlink
                                 Command="{Binding DataContext.GoToAlbumCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
                                 CommandParameter="{Binding}">
                                     <TextBlock
                                     Margin="4,0,0,0"
                                     Text="{Binding Album}"
-                                    TextTrimming="CharacterEllipsis" />
-                                </Hyperlink>
-                            </TextBlock>
+                                    TextTrimming="CharacterEllipsis">
+                                        <i:Interaction.Behaviors>
+                                            <Behaviors:AlbumRelatedCommandBarBehavior
+                                                ArtistName="{Binding Artist}"
+                                                AlbumName="{Binding Album}" />
+                                        </i:Interaction.Behaviors>
+                                    </TextBlock>
+                            </Hyperlink>
+                        </TextBlock>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>

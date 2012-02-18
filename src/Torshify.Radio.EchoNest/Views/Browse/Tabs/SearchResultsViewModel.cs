@@ -7,12 +7,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Commands;
+using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
+using Torshify.Radio.Framework.Events;
 
 namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 {
@@ -48,24 +50,17 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 
         #region Properties
 
-        public HeaderInfo HeaderInfo
+        [Import]
+        public IEventAggregator EventAggregator
         {
             get;
-            private set;
-        }
-
-        public ObservableCollection<Track> Results
-        {
-            get
-            {
-                return _results;
-            }
+            set;
         }
 
         [Import]
         public IRegionManager RegionManager
         {
-            get; 
+            get;
             set;
         }
 
@@ -95,6 +90,20 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
         {
             get;
             set;
+        }
+
+        public HeaderInfo HeaderInfo
+        {
+            get;
+            private set;
+        }
+
+        public ObservableCollection<Track> Results
+        {
+            get
+            {
+                return _results;
+            }
         }
 
         public ICommandBar CommandBar
@@ -149,6 +158,13 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
                     CommandParameter = selectedItems.ToArray()
                 })
                 .AddSeparator();
+
+            var lastItem = selectedItems.LastOrDefault();
+            if (lastItem != null)
+            {
+                var payload = new ArtistRelatedCommandBarPayload(lastItem.Artist, CommandBar);
+                EventAggregator.GetEvent<BuildArtistRelatedCommandBarEvent>().Publish(payload);
+            }
         }
 
         void INavigationAware.OnNavigatedTo(NavigationContext context)

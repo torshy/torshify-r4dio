@@ -81,6 +81,8 @@
     <Compile Include="AppTheme.cs" />
     <Compile Include="AppConstants.cs" />
     <Compile Include="AppRegions.cs" />
+    <Compile Include="Behaviors\AlbumRelatedCommandBarBehavior.cs" />
+    <Compile Include="Behaviors\ArtistRelatedCommandBarBehavior.cs" />
     <Compile Include="Behaviors\DataGridRowActionBehavior.cs" />
     <Compile Include="Behaviors\DataGridTriStateSortingBehavior.cs" />
     <Compile Include="Behaviors\EnableMouseWheel.cs" />
@@ -172,6 +174,8 @@
     <Compile Include="Converters\StringToUpperConverter.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Events\ApplicationInactivityEvent.cs" />
+    <Compile Include="Events\BuildAlbumRelatedCommandBarEvent.cs" />
+    <Compile Include="Events\BuildArtistRelatedCommandBarEvent.cs" />
     <Compile Include="Events\SystemInactivityEvent.cs" />
     <Compile Include="Favorite.cs" />
     <Compile Include="FavoriteHandler.cs" />
