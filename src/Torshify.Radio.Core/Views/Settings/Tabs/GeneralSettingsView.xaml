@@ -5,22 +5,38 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
-    xmlns:local="clr-namespace:Torshify.Radio.Core.Views.Settings"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
-    <local:FormPanel
-        VerticalAlignment="Top"
-        HorizontalAlignment="Stretch"
-        Columns="1">
-        <TextBlock
-            Text="Accent color" />
-        <extToolkit:ColorPicker
-            SelectedColor="{Binding CurrentAccentColor}" />
-        <TextBlock
-            Text="" />
-        <Button
-            Content="Save"
-            Click="ButtonClick" />
-    </local:FormPanel>
+    <ScrollViewer
+        HorizontalScrollBarVisibility="Disabled">
+        <Controls:FormGroupHost
+            VerticalAlignment="Top"
+            HorizontalAlignment="Stretch">
+            <Controls:FormGroup
+                Header="Theme">
+                <TextBlock
+                    Text="Accent color" />
+                <extToolkit:ColorPicker
+                    SelectedColor="{Binding CurrentAccentColor}" />
+                <TextBlock
+                    Text="" />
+                <DockPanel>
+                    <Button
+                        DockPanel.Dock="Right"
+                        Content="Save"
+                        HorizontalAlignment="Right"
+                        Click="ButtonClick" />
+                    <TextBlock
+                        Text="* Requires a restart of r4dio"
+                        Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                </DockPanel>
+            </Controls:FormGroup>
+            <Controls:FormGroup
+                Header="Global hotkeys">
+            </Controls:FormGroup>
+        </Controls:FormGroupHost>
+    </ScrollViewer>
 </UserControl>

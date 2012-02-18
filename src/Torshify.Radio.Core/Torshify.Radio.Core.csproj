@@ -224,10 +224,6 @@
     <Compile Include="Views\NowPlaying\UI\UpcomingTracksPart.xaml.cs">
       <DependentUpon>UpcomingTracksPart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Settings\FormGroup.cs" />
-    <Compile Include="Views\Settings\FormGroupHost.cs" />
-    <Compile Include="Views\Settings\FormPanel.cs" />
-    <Compile Include="Views\Settings\IFormPanelCoordinator.cs" />
     <Compile Include="Views\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>

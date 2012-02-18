@@ -1,66 +1,80 @@
 ﻿using System;
-using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls;
 
-namespace Torshify.Radio.Core.Views.Settings
+namespace Torshify.Radio.Framework.Controls
 {
     public class FormPanel : Panel
     {
-        public static readonly DependencyProperty ColumnsProperty =
+        #region Fields
+
+        public static readonly DependencyProperty ColumnSpacingProperty = 
+            DependencyProperty.Register("ColumnSpacing", typeof(double), typeof(FormPanel),
+            new FrameworkPropertyMetadata(15.0, FrameworkPropertyMetadataOptions.AffectsMeasure));
+        public static readonly DependencyProperty ColumnsProperty = 
             DependencyProperty.Register("Columns", typeof(int), typeof(FormPanel),
             new FrameworkPropertyMetadata(2, FrameworkPropertyMetadataOptions.AffectsMeasure));
+        public static readonly DependencyProperty ControlSizeProperty = 
+            DependencyProperty.Register("ControlSize",typeof(Size),typeof(FormPanel));
+        public static readonly DependencyProperty LabelControlSpacingProperty = 
+            DependencyProperty.Register("LabelControlSpacing", typeof(double), typeof(FormPanel),
+            new FrameworkPropertyMetadata(5.0, FrameworkPropertyMetadataOptions.AffectsMeasure));
+        public static readonly DependencyProperty LabelSizeProperty = 
+            DependencyProperty.Register("LabelSize", typeof(Size), typeof(FormPanel));
+        public static readonly DependencyProperty RowSpacingProperty = 
+            DependencyProperty.Register("RowSpacing", typeof(double), typeof(FormPanel),
+            new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.AffectsMeasure));
+
+        #endregion Fields
+
+        #region Properties
+
         public int Columns
         {
             get { return (int)GetValue(ColumnsProperty); }
             set { SetValue(ColumnsProperty, value); }
         }
 
-        public static readonly DependencyProperty LabelSizeProperty =
-            DependencyProperty.Register("LabelSize", typeof(Size), typeof(FormPanel));
         public Size LabelSize
         {
             get { return (Size)GetValue(LabelSizeProperty); }
             set { SetValue(LabelSizeProperty, value); }
         }
 
-        public static readonly DependencyProperty ControlSizeProperty =
-            DependencyProperty.Register("ControlSize",typeof(Size),typeof(FormPanel));
         public Size ControlSize
         {
             get { return (Size)GetValue(ControlSizeProperty); }
             set { SetValue(ControlSizeProperty, value); }
         }
 
-        public static readonly DependencyProperty ColumnSpacingProperty =
-            DependencyProperty.Register("ColumnSpacing", typeof(double), typeof(FormPanel),
-            new FrameworkPropertyMetadata(15.0, FrameworkPropertyMetadataOptions.AffectsMeasure));
         public double ColumnSpacing
         {
             get { return (double)GetValue(ColumnSpacingProperty); }
             set { SetValue(ColumnSpacingProperty, value); }
         }
 
-        public static readonly DependencyProperty RowSpacingProperty =
-            DependencyProperty.Register("RowSpacing", typeof(double), typeof(FormPanel),
-            new FrameworkPropertyMetadata(10.0, FrameworkPropertyMetadataOptions.AffectsMeasure));
         public double RowSpacing
         {
             get { return (double)GetValue(RowSpacingProperty); }
             set { SetValue(RowSpacingProperty, value); }
         }
 
-        public static readonly DependencyProperty LabelControlSpacingProperty =
-            DependencyProperty.Register("LabelControlSpacing", typeof(double), typeof(FormPanel),
-            new FrameworkPropertyMetadata(5.0, FrameworkPropertyMetadataOptions.AffectsMeasure));
         public double LabelControlSpacing
         {
             get { return (double)GetValue(LabelControlSpacingProperty); }
             set { SetValue(LabelControlSpacingProperty, value); }
         }
 
-        public IFormPanelCoordinator Coordinator { get; set; }
+        public IFormPanelCoordinator Coordinator
+        {
+            get; set;
+        }
 
-        protected override System.Windows.Size MeasureOverride(System.Windows.Size availableSize)
+        #endregion Properties
+
+        #region Methods
+
+        protected override Size MeasureOverride(Size availableSize)
         {
             double labelMaxWidth = 0;
             double labelMaxHeight = 0;
@@ -106,7 +120,7 @@ namespace Torshify.Radio.Core.Views.Settings
                     LabelSize.Width, rowHeight - RowSpacing);
                 Children[i].Arrange(
                     new Rect(
-                        labelRect.Left, 
+                        labelRect.Left,
                         labelRect.Top+(labelRect.Height-Children[i].DesiredSize.Height)/2,
                         Children[i].DesiredSize.Width,Children[i].DesiredSize.Height));
                 Children[i + 1].Arrange(new Rect(
@@ -116,5 +130,6 @@ namespace Torshify.Radio.Core.Views.Settings
             return new Size(finalSize.Width, rowHeight * ((Children.Count/2) / Columns + 1));
         }
 
+        #endregion Methods
     }
 }

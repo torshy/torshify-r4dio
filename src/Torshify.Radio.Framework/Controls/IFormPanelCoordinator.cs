@@ -1,4 +1,4 @@
-﻿namespace Torshify.Radio.Core.Views.Settings
+﻿namespace Torshify.Radio.Framework.Controls
 {
     public interface IFormPanelCoordinator
     {

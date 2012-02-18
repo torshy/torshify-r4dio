@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Torshify.Radio.Core.Views.Settings
+namespace Torshify.Radio.Framework.Controls
 {
     public class FormGroupHost : ItemsControl, IFormPanelCoordinator
     {
+        #region Methods
+
+        void IFormPanelCoordinator.ControlOrLabelSizeChanged(FormPanel sender)
+        {
+            DoSizing();
+        }
+
         protected override Size MeasureOverride(Size constraint)
         {
             Size result = base.MeasureOverride(constraint);
@@ -56,13 +63,6 @@ namespace Torshify.Radio.Core.Views.Settings
             }
         }
 
-        #region IFormPanelCoordinator Members
-
-        void IFormPanelCoordinator.ControlOrLabelSizeChanged(FormPanel sender)
-        {
-            DoSizing();
-        }
-
-        #endregion
+        #endregion Methods
     }
 }

@@ -22,7 +22,8 @@
                     Property="HeaderTemplate">
                     <Setter.Value>
                         <DataTemplate>
-                            <DockPanel>
+                            <DockPanel
+                                Margin="0,0,8,0">
                                 <Image
                                     Source="{Binding IconUri}"
                                     Height="24" />
