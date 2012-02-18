@@ -147,7 +147,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             if (tracks == null)
                 return;
 
-            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(string.Empty);
+            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(CurrentArtist.Name);
             Radio.Queue(stream);
         }
 
@@ -156,7 +156,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             if (tracks == null)
                 return;
 
-            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(string.Empty);
+            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(CurrentArtist.Name);
             Radio.Play(stream);
         }
 
