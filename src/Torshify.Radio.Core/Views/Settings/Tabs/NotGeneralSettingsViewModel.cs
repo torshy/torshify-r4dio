@@ -7,6 +7,7 @@ using Torshify.Radio.Framework;
 namespace Torshify.Radio.Core.Views.Settings.Tabs
 {
     [Export]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class NotGeneralSettingsViewModel : NotificationObject, IHeaderInfoProvider<HeaderInfo>
     {
         public NotGeneralSettingsViewModel()

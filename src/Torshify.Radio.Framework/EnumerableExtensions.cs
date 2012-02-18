@@ -647,15 +647,6 @@ namespace Torshify.Radio.Framework
         }
 
         /// <summary>
-        /// Returns the first item or the <paramref name="defaultValue"/> if the <paramref name="source"/>
-        /// does not contain any item.
-        /// </summary>
-        public static T FirstOrDefault<T>(this IEnumerable<T> source, T defaultValue)
-        {
-            return (source.IsNotEmpty() ? source.First() : defaultValue);
-        }
-
-        /// <summary>
         ///     Appends an element to the end of the current collection and returns the new collection.
         /// </summary>
         /// <typeparam name="T">The enumerable data type</typeparam>

@@ -5,6 +5,7 @@ using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core.Views.Settings.Tabs
 {
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class GeneralSettingsView : UserControl, ISettingsPage
     {
         #region Constructors

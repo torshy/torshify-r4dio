@@ -8,11 +8,13 @@ using Microsoft.Practices.Prism.ViewModel;
 using Raven.Client;
 
 using Torshify.Radio.Core.Models;
+using Torshify.Radio.Core.Services;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core.Views.Settings.Tabs
 {
     [Export]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class GeneralSettingsViewModel : NotificationObject, IHeaderInfoProvider<HeaderInfo>
     {
         #region Fields
@@ -42,6 +44,13 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
         public IDocumentStore DocumentStore
         {
             get; set;
+        }
+
+        [Import]
+        public IHotkeyService HotkeyService
+        {
+            get; 
+            set;
         }
 
         public HeaderInfo HeaderInfo

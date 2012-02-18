@@ -7,8 +7,7 @@
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls"
     xmlns:Icons="clr-namespace:Torshify.Radio.Framework.Resources.Icons"
     xmlns:coreConverters="clr-namespace:Microsoft.Windows.Controls.Core.Converters;assembly=WPFToolkit.Extended"
-    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters"
-    xmlns:chrome="clr-namespace:Microsoft.Windows.Controls.Chromes;assembly=WPFToolkit.Extended">
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters">
 
     <Converters:StringToUpperConverter
         x:Key="StringToUpperConverter" />

@@ -34,9 +34,93 @@
                         Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
                 </DockPanel>
             </Controls:FormGroup>
-            <Controls:FormGroup
-                Header="Global hotkeys">
-            </Controls:FormGroup>
+            <GroupBox
+                BorderThickness="0"
+                Padding="2">
+                <GroupBox.Header>
+                    <TextBlock
+                        Text="Global hotkeys"
+                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                        FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
+                </GroupBox.Header>
+                <StackPanel>
+                    <TextBlock
+                        Text="Global hotkeys are keyboard shortcuts you can use from within any running application."
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
+                        Margin="0,0,0,8" />
+                    <CheckBox
+                        Content="Enabled" />
+                    <Grid
+                        Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition
+                                Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="Auto" />
+                            <RowDefinition
+                                Height="Auto" />
+                            <RowDefinition
+                                Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="Hotkeys"
+                            Margin="0,0,8,0" />
+                        <DataGrid
+                            Name="HotkeyList"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            ItemsSource="{Binding HotkeyService.ConfiguredHotkeys}"
+                            Margin="0,0,0,4">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn
+                                    Header="Action"
+                                    Binding="{Binding Definition.Description}"
+                                    Width="*" />
+                                <DataGridTextColumn
+                                    Header="Hotkey"
+                                    Binding="{Binding Keys}"
+                                    Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Text="Action" />
+                        <ComboBox
+                            Name="AvailableHotkeyList"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            ItemsSource="{Binding HotkeyService.AvailableHotkeys}"
+                            DisplayMemberPath="DefinitionId"
+                            Margin="0,0,0,4" />
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Text="Hotkey" />
+                        <DockPanel
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="0,0,0,4">
+                            <StackPanel
+                                DockPanel.Dock="Right"
+                                Orientation="Horizontal"
+                                Margin="4,0,0,0">
+                                <Button
+                                    Content="Add" />
+                                <Button
+                                    Content="Remove" />
+                            </StackPanel>
+                            <TextBox />
+                        </DockPanel>
+                    </Grid>
+                </StackPanel>
+            </GroupBox>
         </Controls:FormGroupHost>
     </ScrollViewer>
 </UserControl>
