@@ -2,6 +2,10 @@ namespace Torshify.Radio.Framework
 {
     public class AppTheme
     {
+        // Colors
+        public const string AccentColorKey = "AccentColorKey";
+        public const string SubtleColorKey = "SubtleColorKey";
+
         // Brushes
         public const string AppBackgroundBrush = "AppBackgroundBrush";
         public const string AccentBrushKey = "AccentBrushKey";

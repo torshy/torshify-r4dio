@@ -68,6 +68,13 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             set;
         }
 
+        [Import]
+        public IToastService ToastService
+        {
+            get; 
+            set;
+        }
+
         public StaticCommand<IEnumerable> QueueTracksCommand
         {
             get;
@@ -132,6 +139,15 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
                 {
                     albumsContainingArtist.Add(album);
                 }
+            }
+
+            if (!albums.Any())
+            {
+                ToastService.Show(new ToastData
+                {
+                    Message = "No search results found for " + artist.Name,
+                    Icon = AppIcons.Information
+                });
             }
 
             return albumsByArtist

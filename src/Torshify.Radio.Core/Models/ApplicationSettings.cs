@@ -1,3 +1,5 @@
+using System.Windows.Media;
+
 namespace Torshify.Radio.Core.Models
 {
     public class ApplicationSettings
@@ -36,6 +38,12 @@ namespace Torshify.Radio.Core.Models
         {
             get; 
             set; 
+        }
+
+        public Color? AccentColor
+        {
+            get; 
+            set;
         }
 
         #endregion Properties

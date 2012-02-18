@@ -192,6 +192,7 @@
     <Compile Include="IRadio.cs" />
     <Compile Include="IRadioStation.cs" />
     <Compile Include="ISearchBarService.cs" />
+    <Compile Include="ISettingsPage.cs" />
     <Compile Include="ITileService.cs" />
     <Compile Include="IToastService.cs" />
     <Compile Include="ITrackPlayerMetadata.cs" />

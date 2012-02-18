@@ -220,10 +220,22 @@
     <Compile Include="Views\NowPlaying\UI\UpcomingTracksPart.xaml.cs">
       <DependentUpon>UpcomingTracksPart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Settings\FormGroup.cs" />
+    <Compile Include="Views\Settings\FormGroupHost.cs" />
+    <Compile Include="Views\Settings\FormPanel.cs" />
+    <Compile Include="Views\Settings\IFormPanelCoordinator.cs" />
     <Compile Include="Views\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\SettingsViewModel.cs" />
+    <Compile Include="Views\Settings\Tabs\NotGeneralSettingsView.xaml.cs">
+      <DependentUpon>NotGeneralSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Tabs\NotGeneralSettingsViewModel.cs" />
+    <Compile Include="Views\Settings\Tabs\GeneralSettingsView.xaml.cs">
+      <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Tabs\GeneralSettingsViewModel.cs" />
     <Compile Include="Views\Stations\StationsView.xaml.cs">
       <DependentUpon>StationsView.xaml</DependentUpon>
     </Compile>
@@ -327,6 +339,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Tabs\NotGeneralSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Settings\Tabs\GeneralSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

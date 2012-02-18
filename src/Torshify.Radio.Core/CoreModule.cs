@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Globalization;
 using System.Linq;
+using System.Windows;
+using System.Windows.Media;
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
@@ -75,7 +77,13 @@ namespace Torshify.Radio.Core
                     }
                     else
                     {
-                        LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo("en");    
+                        LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo("en");
+                    }
+
+                    if  (settings.AccentColor.HasValue)
+                    {
+                        Application.Current.Resources[AppTheme.AccentColorKey] = settings.AccentColor.GetValueOrDefault();
+                        Application.Current.Resources[AppTheme.AccentBrushKey] = new SolidColorBrush(settings.AccentColor.GetValueOrDefault());
                     }
                 }
                 else

@@ -1996,13 +1996,13 @@
                                     Property="TabStripPlacement"
                                     Value="Left" />
                             </MultiTrigger.Conditions>
-                            <Setter
+                            <!--<Setter
                                 Property="Margin"
                                 Value="-2,-2,-1,-2" />
                             <Setter
                                 Property="Margin"
                                 TargetName="Content"
-                                Value="0,0,1,0" />
+                                Value="0,0,1,0" />-->
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
