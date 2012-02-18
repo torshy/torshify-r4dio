@@ -5,6 +5,7 @@ using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
 using Torshify.Radio.EchoNest.Views.Browse.Tabs;
+using Torshify.Radio.EchoNest.Views.Similar;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Events;
 
@@ -45,6 +46,14 @@ namespace Torshify.Radio.EchoNest
                     CommandParameter = payload.ArtistName,
                     Icon = AppIcons.Search.ToImage()
                 });
+
+            payload.CommandBar.AddCommand(
+                new CommandModel
+                {
+                    Content = "Find similar artists",
+                    Command = new DelegateCommand<string>(ExecuteBrowseForSimilarArtists),
+                    CommandParameter = payload.ArtistName
+                });
         }
 
         private void OnBuildAlbumRelatedCommandBar(AlbumRelatedCommandBarPayload payload)
@@ -64,6 +73,14 @@ namespace Torshify.Radio.EchoNest
             UriQuery query = new UriQuery();
             query.Add("artistName", artistName);
             RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(ArtistView).FullName + query);
+        }
+
+        private void ExecuteBrowseForSimilarArtists(string artistName)
+        {
+            UriQuery query = new UriQuery();
+            query.Add(SearchBar.IsFromSearchBarParameter, "true");
+            query.Add(SearchBar.ValueParameter, artistName);
+            RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(MainStationView).FullName + query);
         }
 
         private void ExecuteBrowseForAlbum(Tuple<string, string> parameter)

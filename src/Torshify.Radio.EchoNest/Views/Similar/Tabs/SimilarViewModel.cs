@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using EchoNest;
 using EchoNest.Artist;
+
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
@@ -14,9 +15,10 @@ using Microsoft.Practices.Prism.ViewModel;
 
 using Raven.Client;
 using Raven.Client.Linq;
-
+using Torshify.Radio.EchoNest.Views.Browse.Tabs;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
+using UriQuery = Microsoft.Practices.Prism.UriQuery;
 
 namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 {
@@ -37,11 +39,15 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
         {
             _similarArtists = new ObservableCollection<SimilarArtistModel>();
 
-            HeaderInfo = new HeaderInfo { Title = "Similar artists" };
+            HeaderInfo = new HeaderInfo
+            {
+                Title = "Similar artists"
+            };
             CommandBar = new CommandBar();
             PlayArtistCommand = new StaticCommand<SimilarArtistModel>(ExecutePlaySimilarArtist);
             QueueArtistCommand = new StaticCommand<SimilarArtistModel>(ExecuteQueueSimilarArtist);
             AddFavoriteArtistCommand = new StaticCommand<SimilarArtistModel>(ExecuteAddFavoriteArtist);
+            GoToArtistCommand = new StaticCommand<SimilarArtistModel>(ExecuteGoToArtist);
         }
 
         #endregion Constructors
@@ -83,9 +89,16 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             set;
         }
 
+        [Import]
+        public IRegionManager RegionManager
+        {
+            get;
+            set;
+        }
+
         public ICommandBar CommandBar
         {
-            get; 
+            get;
             private set;
         }
 
@@ -102,6 +115,12 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
         }
 
         public StaticCommand<SimilarArtistModel> AddFavoriteArtistCommand
+        {
+            get;
+            private set;
+        }
+
+        public StaticCommand<SimilarArtistModel> GoToArtistCommand
         {
             get;
             private set;
@@ -209,6 +228,13 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
                        Image = image != null ? image.Url : null,
                        Terms = terms != null ? terms.Select(t => t.Name) : null
                    };
+        }
+
+        private void ExecuteGoToArtist(SimilarArtistModel artist)
+        {
+            UriQuery query = new UriQuery();
+            query.Add("artistName", artist.Name);
+            RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(ArtistView).FullName + query);
         }
 
         private void ExecuteStoreRecentSimilarArtist(string query)
