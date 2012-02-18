@@ -191,7 +191,7 @@ namespace Torshify.Radio.EightTracks
                 Player.Stop();
                 CurrentTrack = null;
                 CurrentTrackElapsed = TimeSpan.Zero;
-
+                IsPlaying = false;
                 _mediaElementProgressTimer.Stop();
             }
             else
