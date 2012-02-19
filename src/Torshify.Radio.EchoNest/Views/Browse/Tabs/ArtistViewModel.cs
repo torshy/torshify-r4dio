@@ -100,6 +100,13 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             set;
         }
 
+        [Import]
+        public ILoggerFacade Logger
+        {
+            get; 
+            set;
+        }
+
         public StaticCommand<IEnumerable> QueueTracksCommand
         {
             get;
@@ -135,7 +142,18 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
                   {
                       artist.Albums = GetAlbums(artist);
                   }
-              }, CurrentArtist);
+              }, CurrentArtist)
+              .ContinueWith(task =>
+              {
+                  if (task.Exception != null)
+                  {
+                      task.Exception.Handle(e=>
+                      {
+                          Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+                          return true;
+                      });
+                  }
+              });
         }
 
         bool INavigationAware.IsNavigationTarget(NavigationContext navigationContext)
