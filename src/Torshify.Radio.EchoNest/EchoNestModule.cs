@@ -7,6 +7,7 @@ using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
 
 using Torshify.Radio.EchoNest.Services;
+using Torshify.Radio.EchoNest.Views.LoveHate;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest
@@ -113,7 +114,6 @@ namespace Torshify.Radio.EchoNest
                     WatermarkText = "Search_For_Similar_Artist_Watermark",
                     AutoCompleteProvider = SuggestArtists
                 });
-
             }),
             DispatcherPriority.Background);
 
@@ -128,6 +128,13 @@ namespace Torshify.Radio.EchoNest
                     BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0004_favs2.png")
                 });
             }),
+            DispatcherPriority.Background);
+
+            _dispatcher.BeginInvoke(new Action(() => TileService.Add<LoveHateView>(new TileData
+            {
+                Title = "Love or hate",
+                BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0003_Favs1.png")
+            })),
             DispatcherPriority.Background);
         }
 

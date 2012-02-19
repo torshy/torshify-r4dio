@@ -1,0 +1,67 @@
+﻿<UserControl
+    x:Name="Root"
+    x:FieldModifier="private"
+    x:Class="Torshify.Radio.EchoNest.Views.LoveHate.TrackInformationPart"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:ImageLoaderConverter
+            x:Key="ImageLoaderConverter" />
+        <Converters:StringToUpperConverter
+            x:Key="StringToUpperConverter" />
+    </UserControl.Resources>
+    <DockPanel>
+        <DockPanel.Effect>
+            <DropShadowEffect
+                ShadowDepth="0"
+                BlurRadius="40" />
+        </DockPanel.Effect>
+        <Controls:TransitioningContentControl
+            DockPanel.Dock="Left"
+            HorizontalAlignment="Left"
+            Width="{Binding AlbumArtSize, ElementName=Root, Mode=OneWay}"
+            Height="{Binding AlbumArtSize, ElementName=Root, Mode=OneWay}"
+            Content="{Binding AlbumArt, ElementName=Root, Converter={StaticResource ImageLoaderConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            Transition="DefaultTransition">
+            <Controls:TransitioningContentControl.ContentTemplate>
+                <DataTemplate>
+                    <Border
+                        Background="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                        Padding="4">
+                        <Image
+                            Stretch="UniformToFill"
+                            Source="{Binding}" />
+                    </Border>
+                </DataTemplate>
+            </Controls:TransitioningContentControl.ContentTemplate>
+        </Controls:TransitioningContentControl>
+        <StackPanel
+            Margin="8,0,0,0"
+            VerticalAlignment="Center">
+            <TextBlock
+                Text="{Binding TrackName, ElementName=Root, Mode=OneWay}"
+                TextTrimming="CharacterEllipsis"
+                TextOptions.TextFormattingMode="Ideal"
+                FontSize="{Binding TrackNameFontSize, ElementName=Root, Mode=OneWay}"
+                Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+            <TextBlock
+                Text="{Binding ArtistName, ElementName=Root, Mode=OneWay, Converter={StaticResource StringToUpperConverter}}"
+                TextTrimming="CharacterEllipsis"
+                TextOptions.TextFormattingMode="Ideal"
+                FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}"
+                FontSize="{Binding AlbumNameFontSize, ElementName=Root, Mode=OneWay}"
+                Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}">
+            </TextBlock>
+            <ContentControl
+                Content="{Binding SubContent, ElementName=Root}" />
+        </StackPanel>
+    </DockPanel>
+</UserControl>

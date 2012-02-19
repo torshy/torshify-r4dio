@@ -123,6 +123,12 @@
   <data name="Add_To_Queue" xml:space="preserve">
     <value>Add to queue</value>
   </data>
+  <data name="Love_Or_Hate" xml:space="preserve">
+    <value>Start love/hate station</value>
+  </data>
+  <data name="Love_Or_Hate_Watermark" xml:space="preserve">
+    <value>Enter artist to start love/hate station</value>
+  </data>
   <data name="Play_Album" xml:space="preserve">
     <value>Play album</value>
   </data>

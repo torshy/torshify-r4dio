@@ -30,6 +30,12 @@ namespace Torshify.Radio.Framework
 
         void Add<T>(SearchBarData searchBarData, params Tuple<string, string>[] parameters);
 
+        void Remove(SearchBar searchBar);
+
+        void Remove(Predicate<SearchBar> predicate);
+
+        void SetActive(SearchBar searchBar);
+
         void SetActive(Predicate<SearchBar> predicate);
 
         #endregion Methods

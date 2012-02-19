@@ -123,6 +123,12 @@
   <data name="Add_To_Queue" xml:space="preserve">
     <value>@Add_To_Queue</value>
   </data>
+  <data name="Love_Or_Hate" xml:space="preserve">
+    <value>@Love_Or_Hate</value>
+  </data>
+  <data name="Love_Or_Hate_Watermark" xml:space="preserve">
+    <value>@Love_Or_Hate_Watermark</value>
+  </data>
   <data name="Play_Album" xml:space="preserve">
     <value>@Play_Album</value>
   </data>

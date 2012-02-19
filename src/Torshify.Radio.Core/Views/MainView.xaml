@@ -103,7 +103,7 @@
                         Style="{DynamicResource ComboBox_SelectedItemInvisibleStyle}" />
                     <Controls:SearchTextBox
                         x:Name="InputBox"
-                        Width="200"
+                        Width="275"
                         Margin="0,0,24,0"
                         ToolTip="{Binding SearchBarService.Current.Data.WatermarkText}"
                         Watermark="{Binding SearchBarService.Current.Data.WatermarkText}"

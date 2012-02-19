@@ -48,12 +48,25 @@
       <HintPath>..\..\packages\Prism.MEFExtensions.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.MefExtensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.5.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\..\packages\RavenDB-Embedded.1.0.616\lib\net40\Raven.Client.Lightweight.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\EchoNestSharp\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Controls.Input.Toolkit, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\WpfToolkit\System.Windows.Controls.Input.Toolkit.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\lib\Blend\System.Windows.Interactivity.dll</HintPath>
       <Private>False</Private>
@@ -138,6 +151,13 @@
       <DependentUpon>FavoritesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Favorites\Tabs\FavoritesViewModel.cs" />
+    <Compile Include="Views\LoveHate\LoveHateView.xaml.cs">
+      <DependentUpon>LoveHateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoveHate\LoveHateViewModel.cs" />
+    <Compile Include="Views\LoveHate\TrackInformationPart.xaml.cs">
+      <DependentUpon>TrackInformationPart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Similar\MainStationView.xaml.cs">
       <DependentUpon>MainStationView.xaml</DependentUpon>
     </Compile>
@@ -213,6 +233,14 @@
     <Page Include="Views\Favorites\Tabs\FavoritesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoveHate\LoveHateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LoveHate\TrackInformationPart.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Similar\MainStationView.xaml">
       <SubType>Designer</SubType>

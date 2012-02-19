@@ -19,6 +19,7 @@ namespace Torshify.Radio.Core.Services
 
         private ObservableCollection<SearchBar> _bars;
         private SearchBar _current;
+        private SearchBar _previous;
 
         #endregion Fields
 
@@ -46,6 +47,7 @@ namespace Torshify.Radio.Core.Services
             {
                 if (_current != value)
                 {
+                    _previous = _current;
                     _current = value;
                     RaisePropertyChanged("Current");
                     OnCurrentChanged();
@@ -81,6 +83,27 @@ namespace Torshify.Radio.Core.Services
             {
                 Current = _bars.FirstOrDefault();
             }
+        }
+
+        public void Remove(SearchBar searchBar)
+        {
+            if (searchBar == Current)
+            {
+                Current = _previous;
+            }
+
+            _bars.Remove(searchBar);
+        }
+
+        public void Remove(Predicate<SearchBar> predicate)
+        {
+            List<SearchBar> results = SearchBars.Where(searchBar => predicate(searchBar)).ToList();
+            results.ForEach(Remove);
+        }
+
+        public void SetActive(SearchBar searchBar)
+        {
+            Current = searchBar;
         }
 
         public void SetActive(Predicate<SearchBar> predicate)

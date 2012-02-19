@@ -123,6 +123,12 @@
   <data name="Add_To_Queue" xml:space="preserve">
     <value>Legg til spillekø</value>
   </data>
+  <data name="Love_Or_Hate" xml:space="preserve">
+    <value>Liker/ikke liker artist-radio</value>
+  </data>
+  <data name="Love_Or_Hate_Watermark" xml:space="preserve">
+    <value>Navn for å starte Liker/Ikke liker artist-radio</value>
+  </data>
   <data name="Play_Album" xml:space="preserve">
     <value>Spill album</value>
   </data>
