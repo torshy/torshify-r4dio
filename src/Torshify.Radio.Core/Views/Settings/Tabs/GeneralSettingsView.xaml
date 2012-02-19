@@ -7,6 +7,8 @@
     xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -18,17 +20,12 @@
             <Controls:FormGroup
                 Header="Theme">
                 <TextBlock
-                    Text="Accent color" />
+                    Text="Accent color *" />
                 <extToolkit:ColorPicker
                     SelectedColor="{Binding CurrentAccentColor}" />
                 <TextBlock
                     Text="" />
                 <DockPanel>
-                    <Button
-                        DockPanel.Dock="Right"
-                        Content="Save"
-                        HorizontalAlignment="Right"
-                        Click="ButtonClick" />
                     <TextBlock
                         Text="* Requires a restart of r4dio"
                         Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
@@ -49,8 +46,15 @@
                         TextWrapping="Wrap"
                         Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
                         Margin="0,0,0,8" />
-                    <CheckBox
-                        Content="Enabled" />
+                    <DockPanel>
+                        <CheckBox
+                            DockPanel.Dock="Left"
+                            Content="Enabled" />
+                        <Button
+                            Content="Restore defaults"
+                            HorizontalAlignment="Right"
+                            Command="{Binding RestoreDefaultHotkeysCommand}" />
+                    </DockPanel>
                     <Grid
                         Margin="0,8,0,0">
                         <Grid.ColumnDefinitions>
@@ -59,6 +63,8 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="Auto" />
                             <RowDefinition
                                 Height="Auto" />
                             <RowDefinition
@@ -76,7 +82,12 @@
                             Grid.Row="0"
                             Grid.Column="1"
                             ItemsSource="{Binding HotkeyService.ConfiguredHotkeys}"
-                            Margin="0,0,0,4">
+                            Margin="0,0,0,4"
+                            SelectionMode="Single"
+                            SelectionUnit="FullRow">
+                            <i:Interaction.Behaviors>
+                                <Behaviors:DataGridTriStateSortingBehavior />
+                            </i:Interaction.Behaviors>
                             <DataGrid.Columns>
                                 <DataGridTextColumn
                                     Header="Action"
@@ -97,6 +108,7 @@
                             Grid.Row="1"
                             Grid.Column="1"
                             ItemsSource="{Binding HotkeyService.AvailableHotkeys}"
+                            SelectedValue="{Binding SelectedItem.Definition, ElementName=HotkeyList}"
                             DisplayMemberPath="DefinitionId"
                             Margin="0,0,0,4" />
                         <TextBlock
@@ -112,11 +124,17 @@
                                 Orientation="Horizontal"
                                 Margin="4,0,0,0">
                                 <Button
-                                    Content="Add" />
+                                    Content="Add"
+                                    Margin="0,0,2,0"
+                                    Command="{Binding AddHotkeyCommand}" />
                                 <Button
-                                    Content="Remove" />
+                                    Content="Remove"
+                                    Command="{Binding RemoveHotkeyCommand}"
+                                    CommandParameter="{Binding SelectedItem, ElementName=HotkeyList}" />
                             </StackPanel>
-                            <TextBox />
+                            <TextBox
+                                Text="{Binding SelectedItem.Keys, ElementName=HotkeyList}"
+                                PreviewKeyDown="HotkeyTextBloxPreviewKeyDown" />
                         </DockPanel>
                     </Grid>
                 </StackPanel>

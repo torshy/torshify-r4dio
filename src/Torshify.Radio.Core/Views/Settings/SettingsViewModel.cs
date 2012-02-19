@@ -37,6 +37,7 @@ namespace Torshify.Radio.Core.Views.Settings
 
         void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
+            SettingPages.ForEach(page => page.Save());
         }
 
         #endregion Methods

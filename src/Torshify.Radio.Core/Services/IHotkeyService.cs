@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
+using Microsoft.Practices.Prism.ViewModel;
+
 namespace Torshify.Radio.Core.Services
 {
     public interface IHotkeyService
@@ -17,11 +19,26 @@ namespace Torshify.Radio.Core.Services
             get;
         }
 
+        void Add(GlobalHotkey hotkey);
+
+        void Remove(string id);
+
+        void Save();
+
+        void RestoreDefaults();
+
         #endregion Properties
     }
 
-    public class GlobalHotkey
+    public class GlobalHotkey : NotificationObject
     {
+        #region Fields
+
+        private GlobalHotkeyDefinition _definition;
+        private Keys _keys;
+
+        #endregion Fields
+
         #region Properties
 
         public string Id
@@ -32,14 +49,22 @@ namespace Torshify.Radio.Core.Services
 
         public GlobalHotkeyDefinition Definition
         {
-            get;
-            set;
+            get { return _definition; }
+            set
+            {
+                _definition = value;
+                RaisePropertyChanged("Definition");
+            }
         }
 
         public Keys Keys
         {
-            get;
-            set;
+            get { return _keys; }
+            set
+            {
+                _keys = value;
+                RaisePropertyChanged("Keys");
+            }
         }
 
         #endregion Properties

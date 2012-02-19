@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Raven.Client;
@@ -10,6 +12,7 @@ using Raven.Client;
 using Torshify.Radio.Core.Models;
 using Torshify.Radio.Core.Services;
 using Torshify.Radio.Framework;
+using Torshify.Radio.Framework.Commands;
 
 namespace Torshify.Radio.Core.Views.Settings.Tabs
 {
@@ -34,6 +37,9 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
             };
 
             _currentAccentColor = (Color)Application.Current.TryFindResource(AppTheme.AccentColorKey);
+            AddHotkeyCommand = new StaticCommand(ExecuteAddHotkey);
+            RemoveHotkeyCommand = new AutomaticCommand<GlobalHotkey>(ExecuteRemoveHotkey, CanExecuteRemoveHotkey);
+            RestoreDefaultHotkeysCommand = new StaticCommand(ExecuteRestoreDefaultHotkeys);
         }
 
         #endregion Constructors
@@ -43,14 +49,47 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
         [Import]
         public IDocumentStore DocumentStore
         {
-            get; set;
+            get;
+            set;
         }
 
         [Import]
         public IHotkeyService HotkeyService
         {
-            get; 
+            get;
             set;
+        }
+
+        [Import]
+        public IToastService ToastService
+        {
+            get;
+            set;
+        }
+
+        [Import]
+        public ILoggerFacade Logger
+        {
+            get;
+            set;
+        }
+
+        public StaticCommand RestoreDefaultHotkeysCommand
+        {
+            get;
+            private set;
+        }
+
+        public StaticCommand AddHotkeyCommand
+        {
+            get;
+            private set;
+        }
+
+        public AutomaticCommand<GlobalHotkey> RemoveHotkeyCommand
+        {
+            get;
+            private set;
         }
 
         public HeaderInfo HeaderInfo
@@ -61,7 +100,10 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
 
         public Color CurrentAccentColor
         {
-            get { return _currentAccentColor; }
+            get
+            {
+                return _currentAccentColor;
+            }
             set
             {
                 if (_currentAccentColor != value)
@@ -82,18 +124,52 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
 
         public void Save()
         {
-            using (var session = DocumentStore.OpenSession())
+            try
             {
-                var settings = session.Query<ApplicationSettings>().FirstOrDefault();
-
-                if (settings != null)
+                using (var session = DocumentStore.OpenSession())
                 {
-                    settings.AccentColor = CurrentAccentColor;
+                    var settings = session.Query<ApplicationSettings>().FirstOrDefault();
+
+                    if (settings != null)
+                    {
+                        settings.AccentColor = CurrentAccentColor;
+                    }
+
+                    session.Store(settings);
+                    session.SaveChanges();
                 }
 
-                session.Store(settings);
-                session.SaveChanges();
+                HotkeyService.Save();
             }
+            catch (Exception e)
+            {
+                ToastService.Show(new ToastData
+                {
+                    Message = "Error while saving general settings"
+                });
+
+                Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+            }
+        }
+
+        private void ExecuteRestoreDefaultHotkeys()
+        {
+            HotkeyService.RestoreDefaults();
+        }
+
+        private bool CanExecuteRemoveHotkey(GlobalHotkey hotkey)
+        {
+            return hotkey != null && HotkeyService.ConfiguredHotkeys.Contains(hotkey);
+        }
+
+        private void ExecuteRemoveHotkey(GlobalHotkey hotkey)
+        {
+            HotkeyService.Remove(hotkey.Id);
+        }
+
+        private void ExecuteAddHotkey()
+        {
+            HotkeyService.Add(new GlobalHotkey());
         }
 
         #endregion Methods

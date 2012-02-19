@@ -35,7 +35,7 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
 
         #region Methods
 
-        public void Apply()
+        public void Save()
         {
         }
 

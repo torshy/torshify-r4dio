@@ -3660,4 +3660,36 @@
         </Setter>
     </Style>
 
+    <Style
+        TargetType="{x:Type GroupBox}">
+        <Setter
+            Property="Template">
+            <Setter.Value>
+                <ControlTemplate
+                    TargetType="GroupBox">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="Auto" />
+                            <RowDefinition
+                                Height="*" />
+                        </Grid.RowDefinitions>
+                        <Border
+                            Grid.Row="0">
+                            <ContentPresenter
+                                Margin="4"
+                                ContentSource="Header"
+                                RecognizesAccessKey="True" />
+                        </Border>
+                        <Border
+                            Grid.Row="1">
+                            <ContentPresenter
+                                Margin="4" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

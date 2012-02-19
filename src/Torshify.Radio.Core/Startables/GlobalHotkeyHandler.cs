@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
 using Raven.Client;
 
@@ -27,7 +30,7 @@ namespace Torshify.Radio.Core.Startables
 
         private List<GlobalHotkeyDefinition> _availableHotkeys;
         private KeyboardHookListener _globalKeyboardHook;
-        private IEnumerable<GlobalHotkey> _hotkeys;
+        private ObservableCollection<GlobalHotkey> _hotkeys;
 
         #endregion Fields
 
@@ -53,14 +56,162 @@ namespace Torshify.Radio.Core.Startables
             set;
         }
 
+        [Import]
+        public ILoggerFacade Logger
+        {
+            get;
+            set;
+        }
+
+        [Import]
+        public IToastService ToastService
+        {
+            get;
+            set;
+        }
+
         public IEnumerable<GlobalHotkeyDefinition> AvailableHotkeys
         {
-            get { return _availableHotkeys; }
+            get
+            {
+                return _availableHotkeys;
+            }
         }
 
         public IEnumerable<GlobalHotkey> ConfiguredHotkeys
         {
-            get { return _hotkeys; }
+            get
+            {
+                return _hotkeys;
+            }
+        }
+
+        public void Add(GlobalHotkey hotkey)
+        {
+            try
+            {
+                using (var session = DocumentStore.OpenSession())
+                {
+                    session.Store(hotkey);
+                    session.SaveChanges();
+                }
+
+                _hotkeys.Add(hotkey);
+            }
+            catch (Exception e)
+            {
+                ToastService.Show(new ToastData
+                {
+                    Message = "Unexpected error while adding hotkey. " + e.Message
+                });
+
+                Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+            }
+        }
+
+        public void Remove(string id)
+        {
+            try
+            {
+                using (var session = DocumentStore.OpenSession())
+                {
+                    var hotkey = session.Load<GlobalHotkey>(id);
+                    if (hotkey != null)
+                    {
+                        session.Delete(hotkey);
+                        session.SaveChanges();
+                    }
+                }
+
+                _hotkeys
+                    .Where(h => h.Id == id)
+                    .ToArray()
+                    .ForEach(h => _hotkeys.Remove(h));
+            }
+            catch (Exception e)
+            {
+                ToastService.Show(new ToastData
+                {
+                    Message = "Unexpected error while removing hotkey. " + e.Message
+                });
+
+                Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+            }
+        }
+
+        public void Save()
+        {
+            if (_hotkeys == null)
+            {
+                return;
+            }
+
+            try
+            {
+                using (var session = DocumentStore.OpenSession())
+                {
+                    foreach (var configuredHotkey in ConfiguredHotkeys)
+                    {
+                        session.Store(configuredHotkey);
+                    }
+
+                    session.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                ToastService.Show(new ToastData
+                {
+                    Message = "Unexpected error while removing hotkey. " + e.Message
+                });
+
+                Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+            }
+        }
+
+        public void RestoreDefaults()
+        {
+            try
+            {
+                using (var session = DocumentStore.OpenSession())
+                {
+                    var hotkeys = session.Query<GlobalHotkey>();
+
+                    if (hotkeys == null || !hotkeys.Any())
+                    {
+                        _hotkeys = GetDefaultHotKeys().ToObservableCollection();
+
+                        foreach (var globalHotkey in _hotkeys)
+                        {
+                            session.Store(globalHotkey);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var globalHotkey in hotkeys)
+                        {
+                            session.Delete(globalHotkey);
+                        }
+
+                        _hotkeys = GetDefaultHotKeys().ToObservableCollection();
+
+                        foreach (var globalHotkey in _hotkeys)
+                        {
+                            session.Store(globalHotkey);
+                        }
+                    }
+
+                    session.SaveChanges();
+                }
+        
+            }
+            catch (Exception e)
+            {
+                ToastService.Show("Error occurred while restoring hotkey defaults");
+                Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+            }
+
+            RaisePropertyChanged("ConfiguredHotkeys", "AvailableHotkeys");
         }
 
         #endregion Properties
@@ -71,11 +222,11 @@ namespace Torshify.Radio.Core.Startables
         {
             using (var session = DocumentStore.OpenSession())
             {
-                _hotkeys = session.Query<GlobalHotkey>();
+                var hotkeys = session.Query<GlobalHotkey>();
 
-                if (_hotkeys == null || !_hotkeys.Any())
+                if (hotkeys == null || !hotkeys.Any())
                 {
-                    _hotkeys = GetDefaultHotKeys().ToArray();
+                    _hotkeys = GetDefaultHotKeys().ToObservableCollection();
 
                     foreach (var globalHotkey in _hotkeys)
                     {
@@ -83,6 +234,10 @@ namespace Torshify.Radio.Core.Startables
                     }
 
                     session.SaveChanges();
+                }
+                else
+                {
+                    _hotkeys = hotkeys.ToObservableCollection();
                 }
             }
 
