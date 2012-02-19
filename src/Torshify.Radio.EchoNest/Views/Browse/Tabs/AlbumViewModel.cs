@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 
 using EchoNest;
 using EchoNest.Artist;
-
+using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
+using Torshify.Radio.Framework.Events;
 
 namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 {
@@ -33,6 +35,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
         {
             PlayTracksCommand = new StaticCommand<IEnumerable>(ExecutePlayTracks);
             QueueTracksCommand = new StaticCommand<IEnumerable>(ExecuteQueueTracks);
+            CommandBar = new CommandBar();
         }
 
         #endregion Constructors
@@ -78,6 +81,19 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             set;
         }
 
+        [Import]
+        public IEventAggregator EventAggregator
+        {
+            get; 
+            set;
+        }
+
+        public ICommandBar CommandBar
+        {
+            get; 
+            private set;
+        }
+
         public TrackContainer CurrentTrackContainer
         {
             get
@@ -115,6 +131,35 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
         {
             CurrentTrackContainer = null;
         }
+        
+        public void UpdateCommandBar(IEnumerable<Track> selectedTracks)
+        {
+            var tracks = selectedTracks.ToArray();
+
+            CommandBar.Clear()
+                .AddCommand(new CommandModel
+                {
+                    Content = "Play",
+                    Icon = AppIcons.Play.ToImage(),
+                    Command = PlayTracksCommand,
+                    CommandParameter = tracks
+                })
+                .AddCommand(new CommandModel
+                {
+                    Content = "Queue",
+                    Icon = AppIcons.Add.ToImage(),
+                    Command = QueueTracksCommand,
+                    CommandParameter = tracks
+                })
+                .AddSeparator();
+
+            var lastItem = tracks.LastOrDefault();
+            if (lastItem != null)
+            {
+                var payload = new ArtistRelatedCommandBarPayload(lastItem.Artist, CommandBar);
+                EventAggregator.GetEvent<BuildArtistRelatedCommandBarEvent>().Publish(payload);
+            }
+        }
 
         private void ExecuteQueueTracks(IEnumerable tracks)
         {
@@ -123,6 +168,12 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 
             ITrackStream stream = tracks.OfType<Track>().ToTrackStream(CurrentTrackContainer.Name + " by " + CurrentTrackContainer.Owner.Name);
             Radio.Queue(stream);
+
+            ToastService.Show(new ToastData
+            {
+                Message = "Tracks queued",
+                Icon = AppIcons.Add
+            });
         }
 
         private void ExecutePlayTracks(IEnumerable tracks)
