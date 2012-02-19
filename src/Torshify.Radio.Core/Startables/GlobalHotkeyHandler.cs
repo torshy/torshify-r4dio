@@ -27,6 +27,7 @@ namespace Torshify.Radio.Core.Startables
         private const string PlayPauseId = "Play/pause";
         private const string VolumeDownId = "Volume down";
         private const string VolumeUpId = "Volume up";
+        private const string NextTrackId = "Next track";
 
         private List<GlobalHotkeyDefinition> _availableHotkeys;
         private KeyboardHookListener _globalKeyboardHook;
@@ -43,6 +44,7 @@ namespace Torshify.Radio.Core.Startables
             _availableHotkeys.Add(new GlobalHotkeyDefinition(PlayPauseId, "Play/pause"));
             _availableHotkeys.Add(new GlobalHotkeyDefinition(VolumeDownId, "Volume down"));
             _availableHotkeys.Add(new GlobalHotkeyDefinition(VolumeUpId, "Volume up"));
+            _availableHotkeys.Add(new GlobalHotkeyDefinition(NextTrackId, "Next track"));
         }
 
         #endregion Constructors
@@ -242,7 +244,7 @@ namespace Torshify.Radio.Core.Startables
 
                     session.SaveChanges();
                 }
-        
+
             }
             catch (Exception e)
             {
@@ -279,7 +281,7 @@ namespace Torshify.Radio.Core.Startables
                     _hotkeys = hotkeys.ToObservableCollection();
                 }
             }
-            
+
             _globalKeyboardHook = new KeyboardHookListener(new GlobalHooker());
             _globalKeyboardHook.KeyDown += GlobalKeyboardHookOnKeyDown;
             _globalKeyboardHook.Enabled = true;
@@ -312,6 +314,12 @@ namespace Torshify.Radio.Core.Startables
                 Definition = AvailableHotkeys.FirstOrDefault(d => d.DefinitionId == MuteId),
                 Keys = Keys.VolumeMute
             };
+
+            yield return new GlobalHotkey
+            {
+                Definition = AvailableHotkeys.FirstOrDefault(d => d.DefinitionId == NextTrackId),
+                Keys = Keys.MediaNextTrack
+            };
         }
 
         private void GlobalKeyboardHookOnKeyDown(object sender, KeyEventArgs e)
@@ -323,16 +331,39 @@ namespace Torshify.Radio.Core.Startables
                 switch (hotKey.Definition.DefinitionId)
                 {
                     case PlayPauseId:
-                        AppCommands.TogglePlayCommand.Execute(null);
+                        if (AppCommands.TogglePlayCommand.CanExecute(null))
+                        {
+                            AppCommands.TogglePlayCommand.Execute(null);
+                        }
+
                         break;
                     case VolumeUpId:
-                        AppCommands.IncreaseVolumeCommand.Execute(null);
+                        if (AppCommands.IncreaseVolumeCommand.CanExecute(null))
+                        {
+                            AppCommands.IncreaseVolumeCommand.Execute(null);
+                        }
+
                         break;
                     case VolumeDownId:
-                        AppCommands.DecreaseVolumeCommand.Execute(null);
+                        if (AppCommands.DecreaseVolumeCommand.CanExecute(null))
+                        {
+                            AppCommands.DecreaseVolumeCommand.Execute(null);
+                        }
+
                         break;
                     case MuteId:
-                        AppCommands.ToggleMuteCommand.Execute(null);
+                        if (AppCommands.ToggleMuteCommand.CanExecute(null))
+                        {
+                            AppCommands.ToggleMuteCommand.Execute(null);
+                        }
+
+                        break;
+                    case NextTrackId:
+                        if (AppCommands.NextTrackCommand.CanExecute(null))
+                        {
+                            AppCommands.NextTrackCommand.Execute(null);
+                        }
+
                         break;
                 }
             }
