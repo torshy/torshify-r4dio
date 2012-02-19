@@ -19,6 +19,8 @@
             x:Key="ImageLoaderConverter" />
         <Converters:StringToUpperConverter
             x:Key="StringToUpperConverter" />
+        <LoveHate:NullableBoolToInvertedConverter
+            x:Key="NullableBoolToInvertedConverter" />
     </UserControl.Resources>
     <DockPanel>
         <TextBlock
@@ -37,107 +39,108 @@
                 Text="songs to make your station more you." />
         </TextBlock>
         <DockPanel
-            Margin="0,12,0,0">
-            <StackPanel
-                DockPanel.Dock="Left">
-                <LoveHate:TrackInformationPart
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Bottom"
-                    TrackName="{Binding Radio.CurrentTrack.Name, Mode=OneWay}"
-                    TrackNameFontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeExtraLarge}}"
-                    ArtistName="{Binding Radio.CurrentTrack.Artist, Mode=OneWay}"
-                    AlbumNameFontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
-                    AlbumArt="{Binding Radio.CurrentTrack.AlbumArt, Mode=OneWay}"
-                    AlbumArtSize="128">
-                    <LoveHate:TrackInformationPart.SubContent>
-                        <StackPanel>
-                            <StackPanel
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <Button
-                                    Height="32"
-                                    Width="32"
-                                    BorderThickness="0"
-                                    Padding="0">
-                                    <Viewbox>
-                                        <Canvas
-                                            Width="48"
-                                            Height="48"
-                                            Canvas.Left="0"
-                                            Canvas.Top="0">
-                                            <Path
-                                                Width="25.4782"
-                                                Height="23.2349"
-                                                Canvas.Left="11.2609"
-                                                Canvas.Top="12.3484"
-                                                Stretch="Fill"
-                                                Stroke="LimeGreen"
-                                                StrokeThickness="1"
-                                                Fill="Green"
-                                                Data="F1 M 11.5,20.5834C 10.3333,16.25 13.6667,12.9167 16.5,12.4167C 19.3334,11.9167 21.6667,14.25 24,16.5833C 26.3334,14.25 28.6667,11.9167 31.5,12.4167C 34.3333,12.9167 37.6666,16.25 36.5,20.5833C 35.3333,24.9167 29.6667,30.25 24,35.5833C 18.3334,30.25 12.6667,24.9167 11.5,20.5834 Z " />
-                                        </Canvas>
-                                    </Viewbox>
-                                </Button>
-                                <Button
-                                    Height="32"
-                                    Width="32"
-                                    BorderThickness="0"
-                                    Padding="0">
-                                    <Viewbox>
-                                        <Canvas
-                                            Width="48"
-                                            Height="48"
-                                            Canvas.Left="0"
-                                            Canvas.Top="0">
-                                            <Path
-                                                Width="25.4782"
-                                                Height="23.2349"
-                                                Canvas.Left="11.2609"
-                                                Canvas.Top="12.3484"
-                                                Stretch="Fill"
-                                                Stroke="Red"
-                                                StrokeThickness="1"
-                                                Fill="DarkRed"
-                                                Data="F1 M 11.5,20.5834C 10.3334,16.25 13.6667,12.9167 16.5,12.4167C 18.8708,11.9983 20.8915,13.5637 22.8551,15.4529L 21,25.5833L 24,24.5833L 24,35.5833C 18.3334,30.25 12.6667,24.9167 11.5,20.5834 Z M 31.5,12.4167C 34.3333,12.9167 37.6666,16.25 36.5,20.5833C 35.3333,24.9167 29.6667,30.25 24,35.5833L 28,20.5833L 25,21.5833L 26.7035,14.066C 28.1901,12.8802 29.7496,12.1078 31.5,12.4167 Z " />
-                                        </Canvas>
-                                    </Viewbox>
-                                </Button>
-                                <Button
-                                    Height="32"
-                                    Width="32"
-                                    BorderThickness="0"
-                                    Padding="0">
-                                    <Viewbox>
-                                        <Canvas
-                                            Width="48"
-                                            Height="48"
-                                            Clip="F1 M 0,0L 48,0L 48,48L 0,48L 0,0"
-                                            UseLayoutRounding="False">
-                                            <Path
-                                                Width="25"
-                                                Height="18"
-                                                Canvas.Left="12"
-                                                Canvas.Top="15"
-                                                Stretch="Fill"
-                                                Fill="Orange"
-                                                Stroke="Yellow"
-                                                StrokeThickness="1"
-                                                Data="F1 M 12,22L 12,26L 28.25,26L 21,33L 27.5,33L 37,24L 27.5,15L 21,15L 28.25,22L 12,22 Z " />
-                                        </Canvas>
-                                    </Viewbox>
-                                </Button>
-                            </StackPanel>
-                            <Controls:Rating
-                                Value="{Binding CurrentTrackRating}"
-                                ItemCount="5"
-                                HorizontalAlignment="Left"
-                                Background="Transparent"
-                                Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
+            Margin="0,12,0,0"
+            Visibility="{Binding HasTrack, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <LoveHate:TrackInformationPart
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                TrackName="{Binding Radio.CurrentTrack.Name, Mode=OneWay}"
+                TrackNameFontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeExtraLarge}}"
+                ArtistName="{Binding Radio.CurrentTrack.Artist, Mode=OneWay}"
+                AlbumNameFontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
+                AlbumArt="{Binding Radio.CurrentTrack.AlbumArt, Mode=OneWay}"
+                AlbumArtSize="128">
+                <LoveHate:TrackInformationPart.SubContent>
+                    <StackPanel>
+                        <StackPanel
+                            HorizontalAlignment="Left"
+                            Orientation="Horizontal">
+                            <ToggleButton
+                                Height="32"
+                                Width="32"
+                                BorderThickness="0"
+                                Padding="0"
+                                IsChecked="{Binding LikeCurrentTrack}">
+                                <Viewbox>
+                                    <Canvas
+                                        Width="48"
+                                        Height="48"
+                                        Canvas.Left="0"
+                                        Canvas.Top="0">
+                                        <Path
+                                            Width="25.4782"
+                                            Height="23.2349"
+                                            Canvas.Left="11.2609"
+                                            Canvas.Top="12.3484"
+                                            Stretch="Fill"
+                                            Stroke="LimeGreen"
+                                            StrokeThickness="1"
+                                            Fill="Green"
+                                            Data="F1 M 11.5,20.5834C 10.3333,16.25 13.6667,12.9167 16.5,12.4167C 19.3334,11.9167 21.6667,14.25 24,16.5833C 26.3334,14.25 28.6667,11.9167 31.5,12.4167C 34.3333,12.9167 37.6666,16.25 36.5,20.5833C 35.3333,24.9167 29.6667,30.25 24,35.5833C 18.3334,30.25 12.6667,24.9167 11.5,20.5834 Z " />
+                                    </Canvas>
+                                </Viewbox>
+                            </ToggleButton>
+                            <ToggleButton
+                                Height="32"
+                                Width="32"
+                                BorderThickness="0"
+                                Padding="0"
+                                IsChecked="{Binding DislikeCurrentTrack}">
+                                <Viewbox>
+                                    <Canvas
+                                        Width="48"
+                                        Height="48"
+                                        Canvas.Left="0"
+                                        Canvas.Top="0">
+                                        <Path
+                                            Width="25.4782"
+                                            Height="23.2349"
+                                            Canvas.Left="11.2609"
+                                            Canvas.Top="12.3484"
+                                            Stretch="Fill"
+                                            Stroke="Red"
+                                            StrokeThickness="1"
+                                            Fill="DarkRed"
+                                            Data="F1 M 11.5,20.5834C 10.3334,16.25 13.6667,12.9167 16.5,12.4167C 18.8708,11.9983 20.8915,13.5637 22.8551,15.4529L 21,25.5833L 24,24.5833L 24,35.5833C 18.3334,30.25 12.6667,24.9167 11.5,20.5834 Z M 31.5,12.4167C 34.3333,12.9167 37.6666,16.25 36.5,20.5833C 35.3333,24.9167 29.6667,30.25 24,35.5833L 28,20.5833L 25,21.5833L 26.7035,14.066C 28.1901,12.8802 29.7496,12.1078 31.5,12.4167 Z " />
+                                    </Canvas>
+                                </Viewbox>
+                            </ToggleButton>
+                            <Button
+                                Height="32"
+                                Width="32"
+                                BorderThickness="0"
+                                Padding="0"
+                                Command="{Binding SkipCurrentTrackCommand}">
+                                <Viewbox>
+                                    <Canvas
+                                        Width="48"
+                                        Height="48"
+                                        Clip="F1 M 0,0L 48,0L 48,48L 0,48L 0,0"
+                                        UseLayoutRounding="False">
+                                        <Path
+                                            Width="25"
+                                            Height="18"
+                                            Canvas.Left="12"
+                                            Canvas.Top="15"
+                                            Stretch="Fill"
+                                            Fill="Orange"
+                                            Stroke="Yellow"
+                                            StrokeThickness="1"
+                                            Data="F1 M 12,22L 12,26L 28.25,26L 21,33L 27.5,33L 37,24L 27.5,15L 21,15L 28.25,22L 12,22 Z " />
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
                         </StackPanel>
-                    </LoveHate:TrackInformationPart.SubContent>
-                </LoveHate:TrackInformationPart>
-            </StackPanel>
-            <DockPanel />
+                        <Controls:Rating
+                            Value="{Binding CurrentTrackRating, UpdateSourceTrigger=PropertyChanged}"
+                            ValueChanged="RatingValueChanged"
+                            ItemCount="5"
+                            HorizontalAlignment="Left"
+                            Background="Transparent"
+                            Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
+                    </StackPanel>
+                </LoveHate:TrackInformationPart.SubContent>
+            </LoveHate:TrackInformationPart>
         </DockPanel>
     </DockPanel>
 </UserControl>

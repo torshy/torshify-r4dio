@@ -143,6 +143,12 @@ namespace Torshify.Radio
             {
                 Exception exception = e.Exception;
                 Logger.Log(exception.ToString(), Category.Exception, Priority.High);
+
+                // Some images throw this exception. Lets try and handle it to prevent the application from crashing
+                if (exception is NotSupportedException)
+                {
+                    e.Handled = true;
+                }
             };
         }
 

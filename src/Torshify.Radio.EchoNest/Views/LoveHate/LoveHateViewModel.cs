@@ -1,6 +1,9 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 using EchoNest;
 using EchoNest.Playlist;
@@ -10,7 +13,7 @@ using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
-using System.Linq;
+using Torshify.Radio.Framework.Commands;
 
 namespace Torshify.Radio.EchoNest.Views.LoveHate
 {
@@ -22,10 +25,31 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
         #region Fields
 
         private double? _currentTrackRating;
+        private bool? _dislikeCurrentTrack;
+        private bool _hasTrack;
+        private bool? _likeCurrentTrack;
+        private LoveHateTrackStream _loveHateTrackStream;
 
         #endregion Fields
 
+        #region Constructors
+
+        public LoveHateViewModel()
+        {
+            _dislikeCurrentTrack = false;
+            _likeCurrentTrack = false;
+            SkipCurrentTrackCommand = new StaticCommand(ExecuteSkipCurrentTrack);
+        }
+
+        #endregion Constructors
+
         #region Properties
+
+        public StaticCommand SkipCurrentTrackCommand
+        {
+            get;
+            private set;
+        }
 
         [Import]
         public IToastService ToastService
@@ -62,6 +86,57 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
             set;
         }
 
+        public bool? LikeCurrentTrack
+        {
+            get { return _likeCurrentTrack; }
+            set
+            {
+                if (_likeCurrentTrack != value)
+                {
+                    _likeCurrentTrack = value;
+
+                    if (_loveHateTrackStream != null && _likeCurrentTrack.HasValue)
+                    {
+                        if (_likeCurrentTrack.Value)
+                        {
+                            _loveHateTrackStream.LikeCurrentTrack();
+                        }
+                            
+                        _dislikeCurrentTrack = false;
+                    }
+
+                    RaisePropertyChanged("LikeCurrentTrack", "DislikeCurrentTrack");
+                }
+            }
+        }
+
+        public bool? DislikeCurrentTrack
+        {
+            get
+            {
+                return _dislikeCurrentTrack;
+            }
+            set
+            {
+                if (_dislikeCurrentTrack != value)
+                {
+                    _dislikeCurrentTrack = value;
+
+                    if (_loveHateTrackStream != null && _dislikeCurrentTrack.HasValue)
+                    {
+                        if (_dislikeCurrentTrack.Value)
+                        {
+                            _loveHateTrackStream.DislikeCurrentTrack();
+                        }
+                           
+                        _likeCurrentTrack = false;
+                    }
+                    
+                    RaisePropertyChanged("LikeCurrentTrack", "DislikeCurrentTrack");
+                }
+            }
+        }
+
         public double? CurrentTrackRating
         {
             get
@@ -74,6 +149,30 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                 {
                     _currentTrackRating = value;
                     RaisePropertyChanged("CurrentTrackRating");
+
+                    if (_loveHateTrackStream != null)
+                    {
+                        if (_currentTrackRating.HasValue)
+                        {
+                            _loveHateTrackStream.SetCurrentTrackRating(_currentTrackRating.Value * 5);
+                        }
+                    }
+                }
+            }
+        }
+
+        public bool HasTrack
+        {
+            get
+            {
+                return _hasTrack;
+            }
+            set
+            {
+                if (_hasTrack != value)
+                {
+                    _hasTrack = value;
+                    RaisePropertyChanged("HasTrack");
                 }
             }
         }
@@ -97,6 +196,15 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                 var artistName = navigationContext.Parameters[SearchBar.ValueParameter];
                 Execute(artistName);
             }
+
+            Radio.CurrentTrackChanged += OnCurrentTrackChanged;
+
+            if (Radio.CurrentTrack != null)
+            {
+                HasTrack = true;
+            }
+
+            _loveHateTrackStream = Radio.CurrentTrackStream as LoveHateTrackStream;
         }
 
         bool INavigationAware.IsNavigationTarget(NavigationContext navigationContext)
@@ -106,55 +214,75 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
 
         void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
+            Radio.CurrentTrackChanged -= OnCurrentTrackChanged;
+
             SearchBarService.Remove(
                 searchBar => searchBar.NavigationUri.OriginalString.StartsWith(typeof(LoveHateView).FullName));
         }
 
+        private void ExecuteSkipCurrentTrack()
+        {
+            if (Radio.CanGoToNextTrack)
+            {
+                Radio.NextTrack();
+            }
+        }
+
+        private void OnCurrentTrackChanged(object sender, TrackChangedEventArgs e)
+        {
+            if (e.PreviousTrack != null)
+            {
+                CurrentTrackRating = null;
+                LikeCurrentTrack = null;
+                DislikeCurrentTrack = null;
+            }
+
+            if (e.CurrentTrack == null)
+            {
+                HasTrack = false;
+            }
+            else
+            {
+                HasTrack = true;
+            }
+        }
+
         private void Execute(string artistName)
         {
-            Task.Factory.StartNew(state =>
+            _loveHateTrackStream = new LoveHateTrackStream(artistName, Radio, Logger, ToastService, LoadingIndicatorService);
+
+            Radio.Play(_loveHateTrackStream);
+        }
+
+        #endregion Methods
+    }
+
+    public class NullableBoolToInvertedConverter : IValueConverter
+    {
+        #region Methods
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Nullable<bool> boolValue = (Nullable<bool>)value;
+
+            if (boolValue.HasValue)
             {
-                LoadingIndicatorService.Push();
-                    using (var session = new EchoNestSession(EchoNestModule.ApiKey))
-                    {
-                        DynamicArgument argument = new DynamicArgument();
-                        argument.Type = "artist-radio";
-                        argument.Artist.Add(state.ToString());
-                        return session.Query<Dynamic>().Execute(argument);
-                    }
-            },
-            artistName)
-            .ContinueWith(task =>
+                return !boolValue.Value;
+            }
+
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Nullable<bool> boolValue = (Nullable<bool>)value;
+
+            if (boolValue.HasValue)
             {
-                if (task.Exception != null)
-                {
-                    Logger.Log(task.Exception.ToString(), Category.Exception, Priority.Medium);
-                    ToastService.Show("Error while fetching playlist");
-                }
-                else
-                {
-                    if (task.Result.Status.Code == ResponseCode.Success)
-                    {
-                        var song = task.Result.Songs.FirstOrDefault();
+                return !boolValue.Value;
+            }
 
-                        if (song != null)
-                        {
-                            var tracks = Radio.GetTracksByName(song.ArtistName + " " + song.Title);
-
-                            if (tracks.Any())
-                            {
-                                Radio.Play(tracks.ToTrackStream("Love/hate"));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        ToastService.Show(task.Result.Status.Message);
-                    }
-                }
-
-                LoadingIndicatorService.Pop();
-            });
+            return value;
         }
 
         #endregion Methods

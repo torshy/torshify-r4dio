@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.Composition;
+using System.Windows;
 using System.Windows.Controls;
+
 using Microsoft.Practices.Prism.Regions;
 
 namespace Torshify.Radio.EchoNest.Views.LoveHate
@@ -34,5 +36,14 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
         }
 
         #endregion Properties
+
+        #region Methods
+
+        private void RatingValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
+        {
+            Model.CurrentTrackRating = e.NewValue;
+        }
+
+        #endregion Methods
     }
 }

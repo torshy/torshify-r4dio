@@ -151,6 +151,8 @@
       <DependentUpon>FavoritesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Favorites\Tabs\FavoritesViewModel.cs" />
+    <Compile Include="Views\LoveHate\LoveHateTrackStream.cs" />
+    <Compile Include="Views\LoveHate\LoveHateTrackStreamData.cs" />
     <Compile Include="Views\LoveHate\LoveHateView.xaml.cs">
       <DependentUpon>LoveHateView.xaml</DependentUpon>
     </Compile>
