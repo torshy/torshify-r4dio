@@ -121,7 +121,7 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                             {
                                 _currentTracks =
                                     _radio
-                                        .GetTracksByName(song.ArtistName + " " + song.Title)
+                                        .GetTracksByName(_initialArtistName + " " + song.Title)
                                         .Take(1)
                                         .ToArray();
 
@@ -193,6 +193,12 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                                 if (!_currentTracks.Any())
                                 {
                                     _toastService.Show("Unable to find any tracks matching the query");
+
+                                    if (response.Songs.Any())
+                                    {
+                                        return MoveNext();
+                                    }
+
                                     return false;
                                 }
 
