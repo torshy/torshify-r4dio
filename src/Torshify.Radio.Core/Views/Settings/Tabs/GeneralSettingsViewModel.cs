@@ -109,10 +109,7 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
                 if (_currentAccentColor != value)
                 {
                     _currentAccentColor = value;
-
-                    Application.Current.Resources[AppTheme.AccentColorKey] = value;
-                    Application.Current.Resources[AppTheme.AccentBrushKey] = new SolidColorBrush(value);
-
+                    CoreModule.ModifyAccentColor(value);
                     RaisePropertyChanged("CurrentAccentColor");
                 }
             }

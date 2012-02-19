@@ -34,7 +34,7 @@ namespace Torshify.Radio.Core.Startables
             {
                 var settings = session.Query<ApplicationSettings>().FirstOrDefault();
 
-                if (settings != null)
+                if (settings != null && settings.FirstTimeWizardRun)
                 {
                     mainWindow.Width = settings.WindowWidth;
                     mainWindow.Height = settings.WindowHeight;

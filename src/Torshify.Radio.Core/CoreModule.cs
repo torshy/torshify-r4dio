@@ -88,8 +88,7 @@ namespace Torshify.Radio.Core
 
                 if (settings.AccentColor.HasValue)
                 {
-                    Application.Current.Resources[AppTheme.AccentColorKey] = settings.AccentColor.GetValueOrDefault();
-                    Application.Current.Resources[AppTheme.AccentBrushKey] = new SolidColorBrush(settings.AccentColor.GetValueOrDefault());
+                    ModifyAccentColor(settings.AccentColor.GetValueOrDefault());
                 }
             }
 
@@ -121,6 +120,27 @@ namespace Torshify.Radio.Core
             if (Player != null)
             {
                 Player.Dispose();
+            }
+        }
+
+        public static void ModifyAccentColor(Color color)
+        {
+            bool foundIt = false;
+            foreach (var rd in Application.Current.Resources.MergedDictionaries)
+            {
+                if (rd.Contains(AppTheme.AccentColorKey))
+                {
+                    foundIt = true;
+                    rd[AppTheme.AccentColorKey] = color;
+                    rd[AppTheme.AccentBrushKey] = new SolidColorBrush(color);
+                }
+            }
+
+            if (!foundIt)
+            {
+                ResourceDictionary rd = Application.Current.Resources;
+                rd[AppTheme.AccentColorKey] = color;
+                rd[AppTheme.AccentBrushKey] = new SolidColorBrush(color);
             }
         }
 
