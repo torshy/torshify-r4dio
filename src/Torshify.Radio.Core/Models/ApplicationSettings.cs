@@ -4,6 +4,16 @@ namespace Torshify.Radio.Core.Models
 {
     public class ApplicationSettings
     {
+        #region Constructors
+
+        public ApplicationSettings()
+        {
+            HotkeysEnabled = true;
+            Culture = "en";
+        }
+
+        #endregion Constructors
+
         #region Properties
 
         public double WindowHeight
@@ -18,31 +28,37 @@ namespace Torshify.Radio.Core.Models
 
         public double WindowLeft
         {
-            get; 
+            get;
             set;
         }
 
         public double WindowTop
         {
-            get; 
+            get;
             set;
         }
 
         public bool FirstTimeWizardRun
         {
-            get; 
+            get;
             set;
         }
 
         public string Culture
         {
-            get; 
-            set; 
+            get;
+            set;
+        }
+
+        public bool HotkeysEnabled
+        {
+            get;
+            set;
         }
 
         public Color? AccentColor
         {
-            get; 
+            get;
             set;
         }
 

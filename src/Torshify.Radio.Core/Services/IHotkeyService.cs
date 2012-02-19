@@ -9,6 +9,11 @@ namespace Torshify.Radio.Core.Services
     {
         #region Properties
 
+        bool IsEnabled
+        {
+            get; set;
+        }
+
         IEnumerable<GlobalHotkeyDefinition> AvailableHotkeys
         {
             get;
@@ -19,6 +24,10 @@ namespace Torshify.Radio.Core.Services
             get;
         }
 
+        #endregion Properties
+
+        #region Methods
+
         void Add(GlobalHotkey hotkey);
 
         void Remove(string id);
@@ -27,7 +36,7 @@ namespace Torshify.Radio.Core.Services
 
         void RestoreDefaults();
 
-        #endregion Properties
+        #endregion Methods
     }
 
     public class GlobalHotkey : NotificationObject

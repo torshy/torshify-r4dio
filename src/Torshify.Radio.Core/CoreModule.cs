@@ -62,33 +62,34 @@ namespace Torshify.Radio.Core
 
         public void Initialize()
         {
-            bool displayWizard = true;
-            using(var session = DocumentStore.OpenSession())
+            bool displayWizard;
+
+            using (var session = DocumentStore.OpenSession())
             {
                 var settings = session.Query<ApplicationSettings>().FirstOrDefault();
 
-                if (settings != null)
+                if (settings == null)
                 {
-                    displayWizard = !settings.FirstTimeWizardRun;
+                    settings = new ApplicationSettings();
+                    session.Store(settings);
+                    session.SaveChanges();
+                }
 
-                    if (!string.IsNullOrEmpty(settings.Culture))
-                    {
-                        LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo(settings.Culture);
-                    }
-                    else
-                    {
-                        LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo("en");
-                    }
+                displayWizard = !settings.FirstTimeWizardRun;
 
-                    if  (settings.AccentColor.HasValue)
-                    {
-                        Application.Current.Resources[AppTheme.AccentColorKey] = settings.AccentColor.GetValueOrDefault();
-                        Application.Current.Resources[AppTheme.AccentBrushKey] = new SolidColorBrush(settings.AccentColor.GetValueOrDefault());
-                    }
+                if (!string.IsNullOrEmpty(settings.Culture))
+                {
+                    LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo(settings.Culture);
                 }
                 else
                 {
                     LocalizeDictionary.Instance.Culture = CultureInfo.GetCultureInfo("en");
+                }
+
+                if (settings.AccentColor.HasValue)
+                {
+                    Application.Current.Resources[AppTheme.AccentColorKey] = settings.AccentColor.GetValueOrDefault();
+                    Application.Current.Resources[AppTheme.AccentBrushKey] = new SolidColorBrush(settings.AccentColor.GetValueOrDefault());
                 }
             }
 
@@ -103,15 +104,15 @@ namespace Torshify.Radio.Core
             }
             else
             {
-                RegionManager.RequestNavigate(AppRegions.MainRegion, typeof (MainView).FullName);
-                RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof (StationsView).FullName);
+                RegionManager.RequestNavigate(AppRegions.MainRegion, typeof(MainView).FullName);
+                RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(StationsView).FullName);
             }
 
             foreach (var startable in Startables)
             {
                 startable.Start();
             }
-            
+
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
         }
 

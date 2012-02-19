@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
 using Raven.Client;
-
+using Torshify.Radio.Core.Models;
 using Torshify.Radio.Core.Services;
 using Torshify.Radio.Core.Utilities.Hooks;
 using Torshify.Radio.Core.Utilities.Hooks.WinApi;
@@ -68,6 +68,45 @@ namespace Torshify.Radio.Core.Startables
         {
             get;
             set;
+        }
+
+        public bool IsEnabled
+        {
+            get
+            {
+                if (_globalKeyboardHook != null)
+                {
+                    return _globalKeyboardHook.Enabled;
+                }
+
+                return true;
+            }
+            set
+            {
+                try
+                {
+                    using (var session = DocumentStore.OpenSession())
+                    {
+                        var settings = session.Query<ApplicationSettings>().FirstOrDefault();
+
+                        if (settings != null)
+                        {
+                            settings.HotkeysEnabled = value;
+                            session.Store(settings);
+                            session.SaveChanges();
+                        }
+                    }
+
+                    _globalKeyboardHook.Enabled = value;
+                }
+                catch (Exception e)
+                {
+                    ToastService.Show("Error while enabling/disabling hotkeys");
+                    Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+                }
+
+                RaisePropertyChanged("IsEnabled");
+            }
         }
 
         public IEnumerable<GlobalHotkeyDefinition> AvailableHotkeys
@@ -211,7 +250,7 @@ namespace Torshify.Radio.Core.Startables
                 Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
             }
 
-            RaisePropertyChanged("ConfiguredHotkeys", "AvailableHotkeys");
+            RaisePropertyChanged(string.Empty);
         }
 
         #endregion Properties
@@ -240,7 +279,7 @@ namespace Torshify.Radio.Core.Startables
                     _hotkeys = hotkeys.ToObservableCollection();
                 }
             }
-
+            
             _globalKeyboardHook = new KeyboardHookListener(new GlobalHooker());
             _globalKeyboardHook.KeyDown += GlobalKeyboardHookOnKeyDown;
             _globalKeyboardHook.Enabled = true;

@@ -49,7 +49,8 @@
                     <DockPanel>
                         <CheckBox
                             DockPanel.Dock="Left"
-                            Content="Enabled" />
+                            Content="Enabled"
+                            IsChecked="{Binding HotkeyService.IsEnabled}" />
                         <Button
                             Content="Restore defaults"
                             HorizontalAlignment="Right"
