@@ -11,7 +11,7 @@
     Engine:LocalizeDictionary.DesignCulture="en-US"
     xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
-    mc:Ignorable="d"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework" mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
@@ -22,6 +22,7 @@
     </UserControl.Resources>
     <Grid>
         <TreeView
+            x:Name="_albumsTreeView"
             ItemsSource="{Binding CurrentArtist.Albums}"
             VirtualizingStackPanel.IsVirtualizing="True"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -113,6 +114,15 @@
                                         Height="24"
                                         Source="{Binding Source={x:Static Framework:AppIcons.Add}, Converter={StaticResource ImageLoaderConverter}}" />
                                 </Button>
+                                <Button
+                                    BorderThickness="0"
+                                    Command="{x:Static Framework:AppCommands.AddTrackContainerToFavoriteCommand}"
+                                    CommandParameter="{Binding Mode=OneTime}"
+                                    ToolTip="{lex:LocText Key=Add_To_Favorites, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
+                                    <Image
+                                        Height="24"
+                                        Source="{Binding Source={x:Static Framework:AppIcons.AddToFavorites}, Converter={StaticResource ImageLoaderConverter}}" />
+                                </Button>
                             </StackPanel>
                         </StackPanel>
                         <TextBlock
@@ -125,7 +135,13 @@
                                         TextTrimming="CharacterEllipsis"
                                         FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
                                         FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
-                                        Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+                                        Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}">
+                                        <i:Interaction.Behaviors>
+                                            <Behaviors:AlbumRelatedCommandBarBehavior
+                                                AlbumName="{Binding Name}"
+                                                ArtistName="{Binding Owner.Name}" />
+                                        </i:Interaction.Behaviors>
+                                    </TextBlock>
                                 </Hyperlink>
                             </TextBlock>
                         <DataGrid
@@ -134,13 +150,19 @@
                             ScrollViewer.VerticalScrollBarVisibility="Disabled"
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                             HeadersVisibility="None"
-                            SelectionChanged="SelectionChanged">
+                            SelectionChanged="SelectionChanged"
+                            Tag="{Binding DataContext.CommandBar, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}">
                             <i:Interaction.Behaviors>
                                 <Behaviors:IgnoreMouseWheelBehavior />
                                 <Behaviors:DataGridRowActionBehavior
                                     Command="{Binding DataContext.PlayTracksCommand, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Mode=OneTime}"
                                     CommandParameter="{Binding SelectedItems, ElementName=Dg}" />
                             </i:Interaction.Behaviors>
+                            <DataGrid.ContextMenu>
+                                <Controls:CommandBarContextMenu
+                                    Tag="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}"
+                                    DataContext="{Binding Tag.Tag, RelativeSource={RelativeSource Self}}" />
+                            </DataGrid.ContextMenu>
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn
                                     Width="*">

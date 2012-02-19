@@ -4,13 +4,17 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.Practices.Prism;
+using Microsoft.Practices.Prism.Events;
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.EchoNest.Views.Browse.Tabs.Models;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
+using Torshify.Radio.Framework.Events;
 
 namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 {
@@ -25,18 +29,32 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 
         #endregion Fields
 
+        #region Constructors
+
         public ArtistViewModel()
         {
             PlayTracksCommand = new StaticCommand<IEnumerable>(ExecutePlayTracks);
             QueueTracksCommand = new StaticCommand<IEnumerable>(ExecuteQueueTracks);
             GoToAlbumCommand = new StaticCommand<TrackContainer>(ExecuteGoToAlbum);
+            CommandBar = new CommandBar();
         }
+
+        #endregion Constructors
 
         #region Properties
 
+        public ICommandBar CommandBar
+        {
+            get;
+            private set;
+        }
+
         public ArtistModel CurrentArtist
         {
-            get { return _currentArtist; }
+            get
+            {
+                return _currentArtist;
+            }
             set
             {
                 if (_currentArtist != value)
@@ -64,14 +82,21 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
         [Import]
         public IRegionManager RegionManager
         {
-            get; 
+            get;
             set;
         }
 
         [Import]
         public IToastService ToastService
         {
-            get; 
+            get;
+            set;
+        }
+
+        [Import]
+        public IEventAggregator EventAggregator
+        {
+            get;
             set;
         }
 
@@ -123,6 +148,35 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             CurrentArtist = null;
         }
 
+        public void UpdateCommandBar(IEnumerable<Track> selectedTracks)
+        {
+            var tracks = selectedTracks.ToArray();
+
+            CommandBar.Clear()
+                .AddCommand(new CommandModel
+                {
+                    Content = "Play",
+                    Icon = AppIcons.Play.ToImage(),
+                    Command = PlayTracksCommand,
+                    CommandParameter = tracks
+                })
+                .AddCommand(new CommandModel
+                {
+                    Content = "Queue",
+                    Icon = AppIcons.Add.ToImage(),
+                    Command = QueueTracksCommand,
+                    CommandParameter = tracks
+                })
+                .AddSeparator();
+
+            var lastItem = tracks.LastOrDefault();
+            if (lastItem != null)
+            {
+                var payload = new ArtistRelatedCommandBarPayload(lastItem.Artist, CommandBar);
+                EventAggregator.GetEvent<BuildArtistRelatedCommandBarEvent>().Publish(payload);
+            }
+        }
+
         private IEnumerable<TrackContainer> GetAlbums(ArtistModel artist)
         {
             var albumsByArtist = new List<TrackContainer>();
@@ -165,6 +219,12 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 
             ITrackStream stream = tracks.OfType<Track>().ToTrackStream(CurrentArtist.Name);
             Radio.Queue(stream);
+
+            ToastService.Show(new ToastData
+            {
+                Message = "Tracks queued",
+                Icon = AppIcons.Add
+            });
         }
 
         private void ExecutePlayTracks(IEnumerable tracks)
