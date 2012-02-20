@@ -115,13 +115,26 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                         {
                             _sessionId = response.SessionId;
 
-                            var song = response.Songs.FirstOrDefault();
+                            var song = response
+                                .Songs
+                                .FirstOrDefault(s => s.ArtistName.Equals(_initialArtistName, StringComparison.InvariantCultureIgnoreCase));
+
+                            if (song == null)
+                            {
+                                song = response.Songs.FirstOrDefault();
+                            }
 
                             if (song != null)
                             {
+                                var queryResult = _radio.GetTracksByName(_initialArtistName + " " + song.Title);
+
+                                if (!queryResult.Any())
+                                {
+                                    queryResult = _radio.GetTracksByName(_initialArtistName);
+                                }
+
                                 _currentTracks =
-                                    _radio
-                                        .GetTracksByName(_initialArtistName + " " + song.Title)
+                                    queryResult
                                         .Take(1)
                                         .ToArray();
 
@@ -184,9 +197,15 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
 
                             if (song != null)
                             {
+                                var queryResult = _radio.GetTracksByName(song.ArtistName + " " + song.Title);
+
+                                if (!queryResult.Any())
+                                {
+                                    queryResult = _radio.GetTracksByName(song.ArtistName);
+                                }
+
                                 _currentTracks =
-                                    _radio
-                                        .GetTracksByName(song.ArtistName + " " + song.Title)
+                                    queryResult
                                         .Take(1)
                                         .ToArray();
 

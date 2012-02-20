@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
-
+using System.Windows;
 using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
@@ -12,6 +12,7 @@ using Torshify.Radio.Core.Views.Settings;
 using Torshify.Radio.Core.Views.Stations;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
+using System.Linq;
 
 namespace Torshify.Radio.Core.Views
 {
@@ -231,6 +232,43 @@ namespace Torshify.Radio.Core.Views
                 query.Add(SearchBar.ValueParameter, phrase);
                 query.Add(SearchBar.IsFromSearchBarParameter, "true");
 
+                IRegion viewRegion = RegionManager.Regions[AppRegions.ViewRegion];
+                IRegionNavigationService navigation = viewRegion.NavigationService;
+
+                if (navigation.Journal.CurrentEntry != null)
+                {
+                    if (navigation.Journal.CurrentEntry.Uri.OriginalString.StartsWith(searchBar.NavigationUri.OriginalString))
+                    {
+                        INavigationAware navAware = null;
+                        var activeView = viewRegion.ActiveViews.FirstOrDefault();
+
+                        if (activeView is INavigationAware)
+                        {
+                            navAware = activeView as INavigationAware;
+                        }
+                        else
+                        {
+                            FrameworkElement element = activeView as FrameworkElement;
+
+                            if (element != null && element.DataContext is INavigationAware)
+                            {
+                                navAware = element.DataContext as INavigationAware;
+                            }
+                        }
+
+                        if (navAware != null)
+                        {
+                            navAware.OnNavigatedFrom(new NavigationContext(navigation,
+                                                                           navigation.Journal.CurrentEntry.Uri));
+                            navAware.OnNavigatedTo(new NavigationContext(navigation,
+                                                                         new Uri(
+                                                                             searchBar.NavigationUri.ToString() + query,
+                                                                             UriKind.RelativeOrAbsolute)));
+                            return;
+                        }
+                    }
+                }
+                
                 RegionManager.RequestNavigate(AppRegions.ViewRegion, searchBar.NavigationUri.ToString() + query);
             }
         }

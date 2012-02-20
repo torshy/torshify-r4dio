@@ -33,6 +33,7 @@ namespace Torshify.Radio.Core.Views.NowPlaying
         private bool _initializeÌmageMap;
         private IRegionNavigationService _navigationService;
         private Random _random;
+        private TaskScheduler _taskScheduler;
 
         #endregion Fields
 
@@ -45,6 +46,7 @@ namespace Torshify.Radio.Core.Views.NowPlaying
             _player = player;
             _dispatcher = dispatcher;
             _random = new Random();
+            _taskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
 
             NavigateBackCommand = new AutomaticCommand(ExecuteNavigateBack, CanExecuteNavigateBack);
             NextTrackCommand = new ManualCommand(ExecuteNextTrack, CanExecuteNextTrack);
@@ -229,7 +231,6 @@ namespace Torshify.Radio.Core.Views.NowPlaying
 
         private void QueryForBackdrop(string artist)
         {
-            var ui = TaskScheduler.FromCurrentSynchronizationContext();
             BackdropService
                 .Query(artist)
                 .ContinueWith(task =>
@@ -268,7 +269,7 @@ namespace Torshify.Radio.Core.Views.NowPlaying
                             InitializeÌmageMap = true;
                         }
                     }
-                }, ui);
+                }, _taskScheduler);
         }
 
         private bool CanExecuteNavigateBack()

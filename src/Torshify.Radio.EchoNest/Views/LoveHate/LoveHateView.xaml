@@ -6,8 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
-    xmlns:Controls1="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
-    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     xmlns:LoveHate="clr-namespace:Torshify.Radio.EchoNest.Views.LoveHate"
     mc:Ignorable="d"
     d:DesignHeight="300"
@@ -15,12 +13,6 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter" />
-        <Converters:ImageLoaderConverter
-            x:Key="ImageLoaderConverter" />
-        <Converters:StringToUpperConverter
-            x:Key="StringToUpperConverter" />
-        <LoveHate:NullableBoolToInvertedConverter
-            x:Key="NullableBoolToInvertedConverter" />
     </UserControl.Resources>
     <DockPanel>
         <TextBlock

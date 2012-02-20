@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Globalization;
 using System.Linq;
@@ -11,7 +12,7 @@ using EchoNest.Playlist;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-
+using Torshify.Radio.EchoNest.Services;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 
@@ -49,6 +50,13 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
         {
             get;
             private set;
+        }
+
+        [Import]
+        public ISuggestArtistsService SuggestArtistsService
+        {
+            get; 
+            set;
         }
 
         [Import]
@@ -186,7 +194,8 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
             SearchBarService.Add<LoveHateView>(new SearchBarData
             {
                 Category = "Love_Or_Hate",
-                WatermarkText = "Love_Or_Hate_Watermark"
+                WatermarkText = "Love_Or_Hate_Watermark",
+                AutoCompleteProvider = SuggestArtists
             });
 
             SearchBarService.SetActive(searchBar => searchBar.NavigationUri.OriginalString.StartsWith(typeof(LoveHateView).FullName));
@@ -254,35 +263,18 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
             Radio.Play(_loveHateTrackStream);
         }
 
-        #endregion Methods
-    }
-
-    public class NullableBoolToInvertedConverter : IValueConverter
-    {
-        #region Methods
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        private IEnumerable<string> SuggestArtists(string query)
         {
-            Nullable<bool> boolValue = (Nullable<bool>)value;
-
-            if (boolValue.HasValue)
+            try
             {
-                return !boolValue.Value;
+                return SuggestArtistsService.GetSimilarArtists(query);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
 
-            return value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            Nullable<bool> boolValue = (Nullable<bool>)value;
-
-            if (boolValue.HasValue)
-            {
-                return !boolValue.Value;
-            }
-
-            return value;
+            return new string[0];
         }
 
         #endregion Methods
