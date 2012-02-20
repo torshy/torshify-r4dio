@@ -9,6 +9,8 @@
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -58,7 +60,12 @@
                 TextOptions.TextFormattingMode="Ideal"
                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}"
                 FontSize="{Binding AlbumNameFontSize, ElementName=Root, Mode=OneWay}"
-                Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}">
+                Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                Cursor="Hand">
+                <i:Interaction.Behaviors>
+                    <Behaviors:ArtistRelatedCommandBarBehavior
+                        ArtistName="{Binding ArtistName, ElementName=Root, Mode=OneWay}" />
+                </i:Interaction.Behaviors>
             </TextBlock>
             <ContentControl
                 Content="{Binding SubContent, ElementName=Root}" />

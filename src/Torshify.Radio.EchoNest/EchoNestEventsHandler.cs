@@ -70,25 +70,34 @@ namespace Torshify.Radio.EchoNest
 
         private void ExecuteBrowseForArtist(string artistName)
         {
-            UriQuery query = new UriQuery();
-            query.Add("artistName", artistName);
-            RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(ArtistView).FullName + query);
+            if (!string.IsNullOrEmpty(artistName))
+            {
+                UriQuery query = new UriQuery();
+                query.Add("artistName", artistName);
+                RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof (ArtistView).FullName + query);
+            }
         }
 
         private void ExecuteBrowseForSimilarArtists(string artistName)
         {
-            UriQuery query = new UriQuery();
-            query.Add(SearchBar.IsFromSearchBarParameter, "true");
-            query.Add(SearchBar.ValueParameter, artistName);
-            RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(MainStationView).FullName + query);
+            if (!string.IsNullOrEmpty(artistName))
+            {
+                UriQuery query = new UriQuery();
+                query.Add(SearchBar.IsFromSearchBarParameter, "true");
+                query.Add(SearchBar.ValueParameter, artistName);
+                RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof (MainStationView).FullName + query);
+            }
         }
 
         private void ExecuteBrowseForAlbum(Tuple<string, string> parameter)
         {
-            UriQuery query = new UriQuery();
-            query.Add("artistName", parameter.Item1);
-            query.Add("albumName", parameter.Item2);
-            RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof(AlbumView).FullName + query);
+            if (!string.IsNullOrEmpty(parameter.Item1) && !string.IsNullOrEmpty(parameter.Item2))
+            {
+                UriQuery query = new UriQuery();
+                query.Add("artistName", parameter.Item1);
+                query.Add("albumName", parameter.Item2);
+                RegionManager.RequestNavigate(AppRegions.ViewRegion, typeof (AlbumView).FullName + query);
+            }
         }
 
         #endregion Methods
