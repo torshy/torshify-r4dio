@@ -12,6 +12,7 @@ using EchoNest.Playlist;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+
 using Torshify.Radio.EchoNest.Services;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
@@ -55,7 +56,7 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
         [Import]
         public ISuggestArtistsService SuggestArtistsService
         {
-            get; 
+            get;
             set;
         }
 
@@ -103,13 +104,15 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                 {
                     _likeCurrentTrack = value;
 
+                    EnsureTrackStreamExists();
+
                     if (_loveHateTrackStream != null && _likeCurrentTrack.HasValue)
                     {
                         if (_likeCurrentTrack.Value)
                         {
                             _loveHateTrackStream.LikeCurrentTrack();
                         }
-                            
+
                         _dislikeCurrentTrack = false;
                     }
 
@@ -130,16 +133,18 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                 {
                     _dislikeCurrentTrack = value;
 
+                    EnsureTrackStreamExists();
+
                     if (_loveHateTrackStream != null && _dislikeCurrentTrack.HasValue)
                     {
                         if (_dislikeCurrentTrack.Value)
                         {
                             _loveHateTrackStream.DislikeCurrentTrack();
                         }
-                           
+
                         _likeCurrentTrack = false;
                     }
-                    
+
                     RaisePropertyChanged("LikeCurrentTrack", "DislikeCurrentTrack");
                 }
             }
@@ -157,6 +162,8 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                 {
                     _currentTrackRating = value;
                     RaisePropertyChanged("CurrentTrackRating");
+
+                    EnsureTrackStreamExists();
 
                     if (_loveHateTrackStream != null)
                     {
@@ -229,11 +236,32 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                 searchBar => searchBar.NavigationUri.OriginalString.StartsWith(typeof(LoveHateView).FullName));
         }
 
+        private void EnsureTrackStreamExists()
+        {
+            if (_loveHateTrackStream == null && Radio.CurrentTrack != null)
+            {
+                _loveHateTrackStream = new LoveHateTrackStream(Radio.CurrentTrack.Artist,
+                                                               Radio,
+                                                               Logger,
+                                                               ToastService,
+                                                               LoadingIndicatorService);
+            }
+        }
+
         private void ExecuteSkipCurrentTrack()
         {
-            if (Radio.CanGoToNextTrack)
+            EnsureTrackStreamExists();
+
+            if (_loveHateTrackStream != null && Radio.CurrentTrackStream != _loveHateTrackStream)
             {
-                Radio.NextTrack();
+                Radio.Play(_loveHateTrackStream);
+            }
+            else
+            {
+                if (Radio.CanGoToNextTrack)
+                {
+                    Radio.NextTrack();
+                }
             }
         }
 
@@ -241,9 +269,11 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
         {
             if (e.PreviousTrack != null)
             {
+                _likeCurrentTrack = false;
+                _dislikeCurrentTrack = false;
                 CurrentTrackRating = null;
-                LikeCurrentTrack = null;
-                DislikeCurrentTrack = null;
+
+                RaisePropertyChanged("LikeCurrentTrack", "DislikeCurrentTrack");
             }
 
             if (e.CurrentTrack == null)
@@ -252,6 +282,11 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
             }
             else
             {
+                if (_loveHateTrackStream != null && Radio.CurrentTrackStream != _loveHateTrackStream)
+                {
+                    Radio.Play(_loveHateTrackStream);
+                }
+
                 HasTrack = true;
             }
         }

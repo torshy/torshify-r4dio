@@ -11,7 +11,7 @@ namespace Torshify.Radio.Framework.Controls
     {
         #region Fields
 
-        public static readonly DependencyProperty ImageUriProperty = 
+        public static readonly DependencyProperty ImageUriProperty =
             DependencyProperty.Register(
                 "ImageUri",
                 typeof(Uri),
@@ -66,7 +66,7 @@ namespace Torshify.Radio.Framework.Controls
 
         private static void OnImageUriChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((ImageWithPlaceholder) d).OnImageUriChanged(e);
+            ((ImageWithPlaceholder)d).OnImageUriChanged(e);
         }
 
         private void OnImageUriChanged(DependencyPropertyChangedEventArgs e)
@@ -110,13 +110,23 @@ namespace Torshify.Radio.Framework.Controls
 
         private void OnDownloadFailed(object sender, ExceptionEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(LoadFailedImage))
+            string imageToUse = null;
+            if (!string.IsNullOrEmpty(LoadFailedImage))
+            {
+                imageToUse = LoadFailedImage;
+            }
+            else if (!string.IsNullOrEmpty(InitialImage))
+            {
+                imageToUse = InitialImage;
+            }
+
+            if (!string.IsNullOrEmpty(imageToUse))
             {
                 BitmapImage failedImage = new BitmapImage();
 
                 // Load the initial bitmap from the local resource
                 failedImage.BeginInit();
-                failedImage.UriSource = new Uri(LoadFailedImage, UriKind.RelativeOrAbsolute);
+                failedImage.UriSource = new Uri(imageToUse, UriKind.RelativeOrAbsolute);
                 failedImage.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                 failedImage.EndInit();
                 Source = failedImage;

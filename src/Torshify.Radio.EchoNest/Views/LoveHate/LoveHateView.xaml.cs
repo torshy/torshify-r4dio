@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 
 using Microsoft.Practices.Prism.Regions;
+using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Views.LoveHate
 {

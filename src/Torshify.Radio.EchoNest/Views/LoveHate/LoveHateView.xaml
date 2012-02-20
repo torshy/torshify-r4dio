@@ -7,6 +7,9 @@
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
     xmlns:LoveHate="clr-namespace:Torshify.Radio.EchoNest.Views.LoveHate"
+    xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
+    Engine:LocalizeDictionary.DesignCulture="en-US"
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -55,7 +58,8 @@
                                 Width="32"
                                 BorderThickness="0"
                                 Padding="0"
-                                IsChecked="{Binding LikeCurrentTrack}">
+                                IsChecked="{Binding LikeCurrentTrack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ToolTip="{lex:LocText Key=Love, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
                                 <Viewbox>
                                     <Canvas
                                         Width="48"
@@ -80,7 +84,8 @@
                                 Width="32"
                                 BorderThickness="0"
                                 Padding="0"
-                                IsChecked="{Binding DislikeCurrentTrack}">
+                                IsChecked="{Binding DislikeCurrentTrack, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                ToolTip="{lex:LocText Key=Hate, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
                                 <Viewbox>
                                     <Canvas
                                         Width="48"
@@ -105,7 +110,8 @@
                                 Width="32"
                                 BorderThickness="0"
                                 Padding="0"
-                                Command="{Binding SkipCurrentTrackCommand}">
+                                Command="{Binding SkipCurrentTrackCommand}"
+                                ToolTip="{lex:LocText Key=Skip_Track, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
                                 <Viewbox>
                                     <Canvas
                                         Width="48"
@@ -127,7 +133,7 @@
                             </Button>
                         </StackPanel>
                         <Controls:Rating
-                            Value="{Binding CurrentTrackRating, UpdateSourceTrigger=PropertyChanged}"
+                            Value="{Binding CurrentTrackRating, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                             ValueChanged="RatingValueChanged"
                             ItemCount="5"
                             HorizontalAlignment="Left"

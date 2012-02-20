@@ -123,6 +123,12 @@
   <data name="Add_To_Queue" xml:space="preserve">
     <value>Legg til spillekø</value>
   </data>
+  <data name="Hate" xml:space="preserve">
+    <value>Hater</value>
+  </data>
+  <data name="Love" xml:space="preserve">
+    <value>Liker</value>
+  </data>
   <data name="Love_Or_Hate" xml:space="preserve">
     <value>Liker/ikke liker artist-radio</value>
   </data>
@@ -143,5 +149,8 @@
   </data>
   <data name="Search_For_Song_Or_Artist" xml:space="preserve">
     <value>Søk etter sang eller artist</value>
+  </data>
+  <data name="Skip_Track" xml:space="preserve">
+    <value>Gå til neste</value>
   </data>
 </root>

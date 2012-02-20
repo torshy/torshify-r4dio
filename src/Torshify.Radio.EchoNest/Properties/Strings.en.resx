@@ -123,6 +123,12 @@
   <data name="Add_To_Queue" xml:space="preserve">
     <value>Add to queue</value>
   </data>
+  <data name="Hate" xml:space="preserve">
+    <value>Hate</value>
+  </data>
+  <data name="Love" xml:space="preserve">
+    <value>Love</value>
+  </data>
   <data name="Love_Or_Hate" xml:space="preserve">
     <value>Start love/hate station</value>
   </data>
@@ -143,5 +149,8 @@
   </data>
   <data name="Search_For_Song_Or_Artist" xml:space="preserve">
     <value>Search for song or artist</value>
+  </data>
+  <data name="Skip_Track" xml:space="preserve">
+    <value>Skip track</value>
   </data>
 </root>
