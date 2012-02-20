@@ -105,6 +105,8 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Controls\FaderFrame.cs" />
+    <Compile Include="Regions\TransitionContentControlRegionAdapter.cs" />
+    <Compile Include="Regions\TransitionSingleActiveRegion.cs" />
     <Compile Include="Utilities\ConsoleManager.cs" />
     <Compile Include="Utilities\SingleInstance.cs" />
     <Page Include="Shell.xaml">

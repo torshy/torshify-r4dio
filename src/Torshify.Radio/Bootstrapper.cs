@@ -6,7 +6,11 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-
+using Microsoft.Practices.Prism.Regions;
+using Microsoft.Practices.ServiceLocation;
+using Torshify.Radio.Framework.Controls;
+using Torshify.Radio.Properties;
+using Torshify.Radio.Regions;
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -150,6 +154,14 @@ namespace Torshify.Radio
                     e.Handled = true;
                 }
             };
+        }
+
+        protected override RegionAdapterMappings ConfigureRegionAdapterMappings()
+        {
+            
+            RegionAdapterMappings mappings = base.ConfigureRegionAdapterMappings();
+            mappings.RegisterMapping(typeof(TransitioningContentControl), ServiceLocator.Current.GetInstance<TransitionContentControlRegionAdapter>());
+            return mappings;
         }
 
         #endregion Methods
