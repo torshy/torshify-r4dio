@@ -6,7 +6,8 @@
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
     Engine:LocalizeDictionary.DesignCulture="en-US"
-    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension">
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework">
     <UserControl.Resources>
         <Converters:StringToUpperConverter
             x:Key="StringToUpperConverter" />
@@ -16,13 +17,15 @@
             Name="Bd"
             DockPanel.Dock="Left"
             Margin="4,4,0,4"
-            Width="60"
+            Width="52"
+            Background="{DynamicResource {x:Static Framework:AppTheme.ContrastBackgroundKey}}"
             BorderThickness="1"
-            BorderBrush="{DynamicResource {x:Static Framework:AppTheme.ContrastBackgroundKey}}">
-            <Image
+            BorderBrush="{DynamicResource {x:Static Framework:AppTheme.ContrastForegroundKey}}">
+            <Controls:ImageWithPlaceholder
                 RenderOptions.BitmapScalingMode="HighQuality"
-                Source="{Binding CurrentTrack.AlbumArt, FallbackValue='pack://siteoforigin:,,,/Resources/Icons/questionmark.png'}"
-                Stretch="UniformToFill" />
+                Stretch="Uniform"
+                ImageUri="{Binding CurrentTrack.AlbumArt}"
+                InitialImage="pack://siteoforigin:,,,/Resources/no-cover.png" />
         </Border>
         <DockPanel>
             <UniformGrid

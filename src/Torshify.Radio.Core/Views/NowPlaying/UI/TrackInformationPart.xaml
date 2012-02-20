@@ -13,8 +13,6 @@
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
-        <Converters:ImageLoaderConverter
-            x:Key="ImageLoaderConverter" />
         <Converters:StringToUpperConverter
             x:Key="StringToUpperConverter" />
     </UserControl.Resources>
@@ -29,16 +27,18 @@
             HorizontalAlignment="Left"
             Width="{Binding AlbumArtSize, ElementName=Root, Mode=OneWay}"
             Height="{Binding AlbumArtSize, ElementName=Root, Mode=OneWay}"
-            Content="{Binding AlbumArt, ElementName=Root, Converter={StaticResource ImageLoaderConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+            Content="{Binding AlbumArt, ElementName=Root, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             Transition="RightTransition">
             <Controls:TransitioningContentControl.ContentTemplate>
                 <DataTemplate>
                     <Border
                         Background="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
                         Padding="4">
-                        <Image
-                            Stretch="UniformToFill"
-                            Source="{Binding}" />
+                        <Controls:ImageWithPlaceholder
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Stretch="Uniform"
+                            ImageUri="{Binding}"
+                            InitialImage="pack://siteoforigin:,,,/Resources/no-cover.png" />
                     </Border>
                 </DataTemplate>
             </Controls:TransitioningContentControl.ContentTemplate>

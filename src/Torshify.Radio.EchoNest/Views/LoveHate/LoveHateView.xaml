@@ -16,16 +16,19 @@
     </UserControl.Resources>
     <DockPanel>
         <TextBlock
-            DockPanel.Dock="Top"
-            FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}"
+            DockPanel.Dock="Bottom"
+            HorizontalAlignment="Center"
+            FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
             FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}">
             <Run
                 Text="Love"
+                FontWeight="Bold"
                 Foreground="Green" />
             <Run
                 Text="or" />
             <Run
                 Text="hate"
+                FontWeight="Bold"
                 Foreground="Red" />
             <Run
                 Text="songs to make your station more you." />

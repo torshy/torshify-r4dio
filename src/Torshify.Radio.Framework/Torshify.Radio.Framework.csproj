@@ -124,6 +124,7 @@
     <Compile Include="Controls\FormGroupHost.cs" />
     <Compile Include="Controls\FormPanel.cs" />
     <Compile Include="Controls\IFormPanelCoordinator.cs" />
+    <Compile Include="Controls\ImageWithPlaceholder.cs" />
     <Compile Include="Controls\MetroProgressBar.cs" />
     <Compile Include="Controls\MetroWindow.cs" />
     <Compile Include="Controls\Panorama.cs" />
