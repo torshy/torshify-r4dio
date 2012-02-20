@@ -101,6 +101,7 @@ namespace Torshify.Radio.Core.Startables
 
             AppCommands.PlayTracksCommand.RegisterCommand(new StaticCommand<object>(ExecutePlayTrackStream));
             AppCommands.QueueTracksCommand.RegisterCommand(new StaticCommand<object>(ExecuteQueueTrackStream));
+            AppCommands.NextTrackCommand.RegisterCommand(new AutomaticCommand(ExecuteNextTrack, CanExecuteNextTrack));
 
             AppCommands.AddToFavoriteCommand.RegisterCommand(_addTrackToFavoritesCommand);
             AppCommands.AddToFavoriteCommand.RegisterCommand(_addTrackContainerToFavoritesCommand);
@@ -277,6 +278,16 @@ namespace Torshify.Radio.Core.Startables
             {
                 Player.Play();
             }
+        }
+
+        private bool CanExecuteNextTrack()
+        {
+            return Radio.CanGoToNextTrack;
+        }
+
+        private void ExecuteNextTrack()
+        {
+            Radio.NextTrack();
         }
 
         private bool CanNavigateForward()
