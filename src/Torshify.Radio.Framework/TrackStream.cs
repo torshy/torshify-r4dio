@@ -21,9 +21,24 @@ namespace Torshify.Radio.Framework
 
         #region Constructors
 
-        public TrackStream(IEnumerable<Track> tracks, string description)
-            : this(tracks, description, null)
+        public TrackStream(IEnumerable<Track> tracks, string description, string source)
+            : this(tracks, description, () => null)
         {
+            _streamData = () =>
+            {
+                _enumerator.Reset();
+
+                var track = Current.FirstOrDefault(i => !string.IsNullOrEmpty(i.AlbumArt));
+
+                return new TrackListStreamData
+                {
+                    Name = "Playlist",
+                    Image = track != null ? track.AlbumArt : null,
+                    Source = source,
+                    Description = Description,
+                    Tracks = Current.ToArray()
+                };
+            };
         }
 
         public TrackStream(IEnumerable<Track> tracks, string description, Func<TrackStreamData> streamData)
@@ -36,24 +51,6 @@ namespace Torshify.Radio.Framework
             _streamData = streamData;
 
             SupportsTrackSkipping = true;
-
-            if (_streamData == null)
-            {
-                _streamData = () =>
-                {
-                    _enumerator.Reset();
-
-                    var track = Current.FirstOrDefault(i => !string.IsNullOrEmpty(i.AlbumArt));
-
-                    return new TrackListStreamData
-                    {
-                        Name = "Playlist",
-                        Image = track != null ? track.AlbumArt : null,
-                        Description = Description,
-                        Tracks = Current.ToArray()
-                    };
-                };
-            }
         }
 
         #endregion Constructors
@@ -149,14 +146,14 @@ namespace Torshify.Radio.Framework
     {
         #region Methods
 
-        public static ITrackStream ToTrackStream(this Track track, string description)
+        public static ITrackStream ToTrackStream(this Track track, string description, string source)
         {
-            return new TrackStream(new[] { track }, description);
+            return new TrackStream(new[] { track }, description, source);
         }
 
-        public static ITrackStream ToTrackStream(this IEnumerable<Track> tracks, string description = null)
+        public static ITrackStream ToTrackStream(this IEnumerable<Track> tracks, string description = null, string source = null)
         {
-            return new TrackStream(tracks.ToArray(), description);
+            return new TrackStream(tracks.ToArray(), description, source);
         }
 
         #endregion Methods

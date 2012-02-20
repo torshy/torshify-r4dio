@@ -166,7 +166,9 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             if (tracks == null)
                 return;
 
-            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(CurrentTrackContainer.Name + " by " + CurrentTrackContainer.Owner.Name);
+            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(
+                CurrentTrackContainer.Name + " by " + CurrentTrackContainer.Owner.Name,
+                "Albums");
             Radio.Queue(stream);
 
             ToastService.Show(new ToastData
@@ -181,7 +183,9 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             if (tracks == null)
                 return;
 
-            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(CurrentTrackContainer.Name + " by " + CurrentTrackContainer.Owner.Name);
+            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(
+                CurrentTrackContainer.Name + " by " + CurrentTrackContainer.Owner.Name,
+                "Albums");
             Radio.Play(stream);
         }
 

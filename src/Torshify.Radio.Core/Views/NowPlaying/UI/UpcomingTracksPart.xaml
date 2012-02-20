@@ -12,6 +12,9 @@
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     xmlns:UI="clr-namespace:Torshify.Radio.Core.Views.NowPlaying.UI"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
+    xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
+    Engine:LocalizeDictionary.DesignCulture="en-US"
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -47,6 +50,46 @@
                                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
                                 FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}"
                                 Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
+                            <Button
+                                Controls:WindowChrome.IsHitTestVisibleInChrome="True"
+                                DockPanel.Dock="Right"
+                                BorderThickness="0"
+                                Padding="0"
+                                Command="{x:Static Framework:AppCommands.AddTrackStreamToFavoriteCommand}"
+                                CommandParameter="{Binding}"
+                                ToolTip="{lex:LocText Key=Add_To_Favorites, Dict=Strings, Assembly=Torshify.Radio.Core}"
+                                ToolTipService.ShowOnDisabled="True"
+                                Height="24">
+                                <Image
+                                    Stretch="Uniform"
+                                    Source="pack://siteoforigin:,,,/Resources/Icons/favs.addto.png"
+                                    Opacity="0.3">
+                                    <Image.Triggers>
+                                        <EventTrigger
+                                            RoutedEvent="UIElement.MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        To="1.0"
+                                                        Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger
+                                            RoutedEvent="UIElement.MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        To="0.3"
+                                                        Duration="0:0:0.2" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Image.Triggers>
+                                </Image>
+                            </Button>
                             <Image
                                 DockPanel.Dock="Left"
                                 Source="{Binding Source={x:Static Framework:AppIcons.Folder}, Mode=OneTime, Converter={StaticResource ImageLoaderConverter}}"
