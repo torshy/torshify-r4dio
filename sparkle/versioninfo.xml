@@ -11,11 +11,11 @@
 
             <pubDate>Mon, 21 Feb 2012 10:21:11 +0000</pubDate>
             <enclosure
-                url="https://github.com/downloads/torshy/torshify-r4dio/r4dio_setup_0.5.exe"
+                url="https://github.com/downloads/torshy/torshify-r4dio/r4dio_setup_0_5_0_0.exe"
                 length="5120"
                 type="application/octet-stream"
                 sparkle:version="0.5.0"
-                sparkle:dsaSignature="5XRehCz8vQjrcuiC5my2GAn4YfyIb2wSuc1DR83Hm5yhr5QBn2O1Xw=="
+                sparkle:dsaSignature="5l3wKDGVKGwN4sQhaSRN/ghaV4JeYlTnNzenEtkhNTv+MtL7SwRsNQ=="
             />
         </item>
     </channel>
