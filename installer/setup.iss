@@ -46,7 +46,7 @@ Source: "..\src\Torshify.Radio\bin\Release\Modules\8tracks\*.*"; Excludes: "*.pd
 Source: "..\src\Torshify.Radio\bin\Release\Modules\Core\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Core"; Components: main; Flags: ignoreversion recursesubdirs
 Source: "..\src\Torshify.Radio\bin\Release\Modules\Database\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Database"; Components: main; Flags: ignoreversion recursesubdirs
 Source: "..\src\Torshify.Radio\bin\Release\Modules\EchoNest\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\EchoNest"; Components: main; Flags: ignoreversion recursesubdirs
-Source: "..\src\Torshify.Radio\bin\Release\Modules\Grooveshark\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Grooveshark"; Components: main; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\Grooveshark\*.*"; Excludes: "*.pdb"; DestDir: "{app}\Modules\Grooveshark"; Components: main; Flags: ignoreversion recursesubdirs
 ;Source: "..\src\Torshify.Radio\bin\Release\Modules\Spotify\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Spotify"; Components: spotify; Flags: ignoreversion recursesubdirs
 
 [Icons]

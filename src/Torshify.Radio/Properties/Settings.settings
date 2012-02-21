@@ -1,7 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Torshify.Radio.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="VersionInfoUri" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://raw.github.com/torshy/torshify-r4dio/master/sparkle/versioninfo.xml</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

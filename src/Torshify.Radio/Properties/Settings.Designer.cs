@@ -22,5 +22,17 @@ namespace Torshify.Radio.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://raw.github.com/torshy/torshify-r4dio/master/sparkle/versioninfo.xml")]
+        public string VersionInfoUri {
+            get {
+                return ((string)(this["VersionInfoUri"]));
+            }
+            set {
+                this["VersionInfoUri"] = value;
+            }
+        }
     }
 }
