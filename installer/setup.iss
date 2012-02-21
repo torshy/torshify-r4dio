@@ -1,8 +1,8 @@
 #define MyAppName "r4dio"
-#define MyAppVersion "0.1"
+#define MyAppVersion "0.5"
 #define MyAppPublisher "Torstein Auensen"
 #define MyAppURL "http://www.torsh.net/blog"
-#define MyAppExeName "Torshify.Radio.exe"
+#define MyAppExeName "r4dio.exe"
 
 #include "dotnet4.iss"
 
@@ -15,6 +15,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
+SetupIconFile=..\src\Torshify.Radio\Resources\r4dio_app.ico
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
@@ -22,6 +23,7 @@ OutputBaseFilename=setup
 Compression=lzma
 SolidCompression=yes
 PrivilegesRequired=poweruser
+UninstallDisplayIcon={app}\r4dio.exe
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -30,28 +32,28 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
-[Dirs]
-Name: "{app}\Modules"
-Name: "{app}\Modules\EchoNest"
-Name: "{app}\Modules\EightTracks"
-Name: "{app}\Modules\Grooveshark"
-Name: "{app}\Modules\Spotify"
+[Components]
+Name: "main"; Description: "Main Files"; Types: full compact custom; Flags: fixed
+;Name: "spotify"; Description: "Spotify support"; Types: full
 
 [Files]
-Source: "..\src\Torshify.Radio\bin\Release\Torshify.Radio.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Radio\bin\Release\Torshify.Radio.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Radio\bin\Release\*.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\Torshify.Radio\bin\Release\Resources\LargeIcons\*.*"; DestDir: "{app}\Resources\LargeIcons"; Flags: ignoreversion recursesubdirs
-Source: "..\src\Torshify.Radio\bin\Release\Modules\EchoNest\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\EchoNest"; Flags: ignoreversion recursesubdirs
-Source: "..\src\Torshify.Radio\bin\Release\Modules\EightTracks\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\EightTracks"; Flags: ignoreversion recursesubdirs
-Source: "..\src\Torshify.Radio\bin\Release\Modules\Grooveshark\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Grooveshark"; Flags: ignoreversion recursesubdirs
-Source: "..\src\Torshify.Radio\bin\Release\Modules\Spotify\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Spotify"; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\r4dio.exe"; DestDir: "{app}"; Components: main; Flags: ignoreversion
+Source: "..\src\Torshify.Radio\bin\Release\r4dio.exe.config"; DestDir: "{app}"; Components: main; Flags: ignoreversion
+Source: "..\src\Torshify.Radio\bin\Release\*.dll"; DestDir: "{app}"; Components: main; Flags: ignoreversion
+Source: "..\src\Torshify.Radio\bin\Release\Resources\*.*"; DestDir: "{app}\Resources\"; Components: main; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\Resources\*.ico"; DestDir: "{app}\Resources\"; Components: main; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\8tracks\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\8tracks"; Components: main; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\Core\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Core"; Components: main; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\Database\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Database"; Components: main; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\EchoNest\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\EchoNest"; Components: main; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\Grooveshark\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Grooveshark"; Components: main; Flags: ignoreversion recursesubdirs
+;Source: "..\src\Torshify.Radio\bin\Release\Modules\Spotify\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Spotify"; Components: spotify; Flags: ignoreversion recursesubdirs
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: quicklaunchicon
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\Resources\r4dio_app.ico"
+Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; IconFilename: "{app}\Resources\r4dio_app.ico"; Filename: "{uninstallexe}"
+Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\Resources\r4dio_app.ico"; Tasks: desktopicon
+Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\Resources\r4dio_app.ico"; Tasks: quicklaunchicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, "&", "&&")}}"; Flags: nowait postinstall skipifsilent runascurrentuser

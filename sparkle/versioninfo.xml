@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"  xmlns:dc="http://purl.org/dc/elements/1.1/">   
+	<channel>      
+		<title>r4dio</title>      
+		<link>https://raw.github.com/torshy/torshify-r4dio/master/sparkle/versioninfo.xml</link>     
+		<description></description>      
+		<language>en</language>               
+		<item>            
+			<title>Version 1.0.0</title>
+			<sparkle:releaseNotesLink>https://raw.github.com/torshy/torshify-r4dio/master/sparkle/1.0.0/releasenotes.html</sparkle:releaseNotesLink>
+
+			<pubDate>Mon, 20 Feb 2012 10:21:11 +0000</pubDate>
+			<enclosure 
+				url="http://update.applimit.com/netsparkle/1.0.1/NetSparklTestApp-1.0.1.exe"
+				length="5120" 
+				type="application/octet-stream"
+				sparkle:version="1.0.1" 
+				sparkle:dsaSignature="ngnGYS1ELmGWlhWp0FAzwjmc8VdAFkyIuoybSUwPkpmt+HusArTINQ=="
+			/>
+		</item>		
+	</channel>
+</rss>

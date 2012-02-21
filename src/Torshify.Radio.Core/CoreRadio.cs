@@ -240,7 +240,7 @@ namespace Torshify.Radio.Core
                     {
                         task.Exception.Handle(e =>
                         {
-                            _toastService.Show("Error while playing track. " + e.Message);
+                            _toastService.Show("Error while playing track.");
                             _logger.Log(e.ToString(), Category.Exception, Priority.High);
                             return true;
                         });
@@ -289,7 +289,7 @@ namespace Torshify.Radio.Core
                     {
                         task.Exception.Handle(e =>
                         {
-                            _toastService.Show("Error while playing track. " + e.Message);
+                            _toastService.Show("Error while playing track.");
                             _logger.Log(e.ToString(), Category.Exception, Priority.High);
                             return true;
                         });
@@ -386,7 +386,7 @@ namespace Torshify.Radio.Core
                     {
                         task.Exception.Handle(ex =>
                         {
-                            _toastService.Show("Error while playing track. " + ex.Message);
+                            _toastService.Show("Error while playing track.");
                             _logger.Log(ex.ToString(), Category.Exception, Priority.High);
                             return true;
                         });
