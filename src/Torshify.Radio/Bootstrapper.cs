@@ -6,11 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using Microsoft.Practices.Prism.Regions;
-using Microsoft.Practices.ServiceLocation;
-using Torshify.Radio.Framework.Controls;
-using Torshify.Radio.Properties;
-using Torshify.Radio.Regions;
+
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -19,10 +15,14 @@ using log4net.Repository.Hierarchy;
 
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.MefExtensions;
+using Microsoft.Practices.Prism.Regions;
+using Microsoft.Practices.ServiceLocation;
 
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
+using Torshify.Radio.Framework.Controls;
 using Torshify.Radio.Logging;
+using Torshify.Radio.Regions;
 using Torshify.Radio.Utilities;
 
 namespace Torshify.Radio
@@ -76,6 +76,13 @@ namespace Torshify.Radio
             base.InitializeShell();
             Application.Current.MainWindow = (Shell)Shell;
             Application.Current.MainWindow.InputBindings.Add(new KeyBinding(new StaticCommand(ConsoleManager.Toggle), Key.D0, ModifierKeys.Alt));
+        }
+
+        protected override RegionAdapterMappings ConfigureRegionAdapterMappings()
+        {
+            RegionAdapterMappings mappings = base.ConfigureRegionAdapterMappings();
+            mappings.RegisterMapping(typeof(TransitioningContentControl), ServiceLocator.Current.GetInstance<TransitionContentControlRegionAdapter>());
+            return mappings;
         }
 
         private void InitializeLogging()
@@ -150,14 +157,6 @@ namespace Torshify.Radio
                     e.Handled = true;
                 }
             };
-        }
-
-        protected override RegionAdapterMappings ConfigureRegionAdapterMappings()
-        {
-            
-            RegionAdapterMappings mappings = base.ConfigureRegionAdapterMappings();
-            mappings.RegisterMapping(typeof(TransitioningContentControl), ServiceLocator.Current.GetInstance<TransitionContentControlRegionAdapter>());
-            return mappings;
         }
 
         #endregion Methods

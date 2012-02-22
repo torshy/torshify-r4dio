@@ -160,6 +160,7 @@ namespace Torshify.Radio.Core.Views.NowPlaying
         {
             _radio.CurrentTrackChanged -= RadioOnCurrentTrackChanged;
             _radio.UpcomingTrackChanged -= RadioOnUpcomingTrackChanged;
+            _radio.TrackStreamQueued -= RadioOnTrackStreamQueued;
         }
 
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
@@ -168,6 +169,7 @@ namespace Torshify.Radio.Core.Views.NowPlaying
 
             _radio.CurrentTrackChanged += RadioOnCurrentTrackChanged;
             _radio.UpcomingTrackChanged += RadioOnUpcomingTrackChanged;
+            _radio.TrackStreamQueued += RadioOnTrackStreamQueued;
 
             if (_radio.CurrentTrack != null)
             {
@@ -201,6 +203,11 @@ namespace Torshify.Radio.Core.Views.NowPlaying
             }
 
             return imageSource;
+        }
+
+        private void RadioOnTrackStreamQueued(object sender, EventArgs eventArgs)
+        {
+            RefreshCommands();
         }
 
         private void RadioOnUpcomingTrackChanged(object sender, EventArgs eventArgs)
@@ -310,12 +317,19 @@ namespace Torshify.Radio.Core.Views.NowPlaying
 
         private bool CanExecuteNextTrack()
         {
-            return _radio.CanGoToNextTrack;
+            return _radio.CanGoToNextTrack || _radio.CanGoToNextTrackStream;
         }
 
         private void ExecuteNextTrack()
         {
-            _radio.NextTrack();
+            if (_radio.CanGoToNextTrack)
+            {
+                _radio.NextTrack();
+            }
+            else if (_radio.CanGoToNextTrackStream)
+            {
+                _radio.NextTrackStream();
+            }
         }
 
         private void RefreshCommands()

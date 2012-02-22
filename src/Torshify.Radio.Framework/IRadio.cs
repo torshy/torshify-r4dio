@@ -11,6 +11,8 @@ namespace Torshify.Radio.Framework
 
         event EventHandler UpcomingTrackChanged;
 
+        event EventHandler TrackStreamQueued;
+
         IEnumerable<Lazy<ITrackSource, ITrackSourceMetadata>> TrackSources
         {
             get;
@@ -51,10 +53,17 @@ namespace Torshify.Radio.Framework
             get;
         }
 
+        bool CanGoToNextTrackStream
+        {
+            get;
+        }
+
         void Play(ITrackStream trackStream);
 
         void Queue(ITrackStream trackStream);
 
         void NextTrack();
+
+        void NextTrackStream();
     }
 }

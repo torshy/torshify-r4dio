@@ -29,6 +29,7 @@ namespace Torshify.Radio.Core.Views.Controls
             _radio.CurrentTrackChanged += RadioOnCurrentTrackChanged;
             _radio.UpcomingTrackChanged += RadioOnUpcomingTrackChanged;
             _radio.CurrentTrackStreamChanged += RadioOnCurrentTrackStreamChanged;
+            _radio.TrackStreamQueued += RadioOnTrackStreamQueued;
             _player = player;
             _dispatcher = dispatcher;
             _player.IsPlayingChanged += (sender, args) =>
@@ -112,6 +113,14 @@ namespace Torshify.Radio.Core.Views.Controls
             }
         }
 
+        public IRadio Radio
+        {
+            get
+            {
+                return _radio;
+            }
+        }
+
         public ITrackPlayer Player
         {
             get
@@ -123,6 +132,11 @@ namespace Torshify.Radio.Core.Views.Controls
         #endregion Properties
 
         #region Methods
+
+        private void RadioOnTrackStreamQueued(object sender, EventArgs eventArgs)
+        {
+            RefreshCommands();
+        }
 
         private bool CanExecuteShareTrack(Track track)
         {
@@ -152,12 +166,19 @@ namespace Torshify.Radio.Core.Views.Controls
 
         private bool CanExecuteNextTrack()
         {
-            return _radio.CanGoToNextTrack;
+            return _radio.CanGoToNextTrack || _radio.CanGoToNextTrackStream;
         }
 
         private void ExecuteNextTrack()
         {
-            _radio.NextTrack();
+            if (_radio.CanGoToNextTrack)
+            {
+                _radio.NextTrack();
+            }
+            else if (_radio.CanGoToNextTrackStream)
+            {
+                _radio.NextTrackStream();
+            }
         }
 
         private void RadioOnCurrentTrackStreamChanged(object sender, EventArgs eventArgs)

@@ -70,6 +70,8 @@ namespace Torshify.Radio.Core
 
         public event EventHandler UpcomingTrackChanged;
 
+        public event EventHandler TrackStreamQueued;
+
         #endregion Events
 
         #region Properties
@@ -135,6 +137,14 @@ namespace Torshify.Radio.Core
                 }
 
                 return false;
+            }
+        }
+
+        public bool CanGoToNextTrackStream
+        {
+            get
+            {
+                return !_trackStreamQueue.IsEmpty;
             }
         }
 
@@ -224,7 +234,7 @@ namespace Torshify.Radio.Core
                 .Factory
                 .StartNew(() =>
                 {
-                    using(_loadingIndicatorService.EnterLoadingBlock())
+                    using (_loadingIndicatorService.EnterLoadingBlock())
                     {
                         GetNextBatch();
 
@@ -259,8 +269,14 @@ namespace Torshify.Radio.Core
             {
                 _trackStreamQueue.Enqueue(trackStream);
                 _logger.Log("Queued track stream " + trackStream.Description, Category.Debug, Priority.Low);
-                _dispatcher.BeginInvoke(new Action<ITrackStream>(_trackStreamQueuePublic.Add), trackStream);
+                _dispatcher.BeginInvoke(new Action<ITrackStream>(q=>
+                {
+                    _trackStreamQueuePublic.Add(q);
+                    OnTrackStreamQueued();
+                }), trackStream);
             }
+
+            RaisePropertyChanged("CanGoToNextTrackStream");
         }
 
         public void NextTrack()
@@ -297,6 +313,47 @@ namespace Torshify.Radio.Core
                 });
         }
 
+        public void NextTrackStream()
+        {
+            if (CanGoToNextTrackStream)
+            {
+                Task
+                    .Factory
+                    .StartNew(() =>
+                    {
+                        _trackQueue = new ConcurrentQueue<Track>();
+                        _dispatcher.BeginInvoke(new Action(_trackQueuePublic.Clear));
+                        UpcomingTrack = null;
+
+                        ITrackStream nextTrackStream;
+                        if (_trackStreamQueue.TryDequeue(out nextTrackStream))
+                        {
+                            _logger.Log("Changing current track stream to " + nextTrackStream.Description, Category.Debug, Priority.Low);
+                            _dispatcher.BeginInvoke(new Func<ITrackStream, bool>(_trackStreamQueuePublic.Remove), nextTrackStream);
+
+                            CurrentTrackStream = nextTrackStream;
+                            GetNextBatch();
+                            MoveToNextTrack();
+                            PeekToNextTrack();
+                        }
+                    })
+                    .ContinueWith(task =>
+                    {
+                        if (task.Exception != null)
+                        {
+                            task.Exception.Handle(e =>
+                            {
+                                _toastService.Show("Error while playing track.");
+                                _logger.Log(e.ToString(), Category.Exception, Priority.High);
+                                return true;
+                            });
+                        }
+
+                        RaisePropertyChanged("CanGoToNextTrackStream");
+                    });
+            }
+        }
+
         public bool SupportsLink(TrackLink trackLink)
         {
             return TrackSources.Any(s => s.Value.SupportsLink(trackLink));
@@ -330,6 +387,8 @@ namespace Torshify.Radio.Core
                     _logger.Log("No more track streams to play", Category.Debug, Priority.Low);
                     CurrentTrackStream = null;
                 }
+
+                RaisePropertyChanged("CanGoToNextTrackStream");
             }
         }
 
@@ -369,7 +428,7 @@ namespace Torshify.Radio.Core
                 .Factory
                 .StartNew(() =>
                 {
-                    using(_loadingIndicatorService.EnterLoadingBlock())
+                    using (_loadingIndicatorService.EnterLoadingBlock())
                     {
                         if (_trackQueue.IsEmpty)
                         {
@@ -417,6 +476,16 @@ namespace Torshify.Radio.Core
         private void OnUpcomingTrackChanged()
         {
             var handler = UpcomingTrackChanged;
+
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        private void OnTrackStreamQueued()
+        {
+            var handler = TrackStreamQueued;
 
             if (handler != null)
             {

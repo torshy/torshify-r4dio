@@ -15,7 +15,6 @@ namespace Torshify.Radio.Regions
         [ImportingConstructor]
         public TransitionContentControlRegionAdapter(IRegionBehaviorFactory regionBehaviorFactory) : base(regionBehaviorFactory)
         {
-
         }
 
         protected override void Adapt(IRegion region, TransitioningContentControl regionTarget)
@@ -24,14 +23,17 @@ namespace Torshify.Radio.Regions
             {
                 throw new ArgumentNullException("regionTarget");
             }
+
             if ((regionTarget.Content != null) || (BindingOperations.GetBinding(regionTarget, ContentControl.ContentProperty) != null))
             {
                 throw new InvalidOperationException("ContentControlHasContentException");
             }
+
             region.ActiveViews.CollectionChanged += delegate
             {
                 regionTarget.Content = region.ActiveViews.FirstOrDefault<object>();
             };
+
             region.Views.CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs e)
             {
                 if ((e.Action == NotifyCollectionChangedAction.Add) && (region.ActiveViews.Count<object>() == 0))
@@ -45,6 +47,5 @@ namespace Torshify.Radio.Regions
         {
             return new TransitionSingleActiveRegion();
         }
-
     }
 }

@@ -13,7 +13,7 @@ namespace Torshify.Radio.Regions
 
             if (currentActiveView != null && currentActiveView != view && Views.Contains(currentActiveView))
             {
-                base.Deactivate(currentActiveView);
+                Deactivate(currentActiveView);
             }
         }
     }

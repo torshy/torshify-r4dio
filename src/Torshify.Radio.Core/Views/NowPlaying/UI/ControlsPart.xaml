@@ -103,6 +103,20 @@
                                     Name="img"
                                     Source="pack://siteoforigin:,,,/Resources/Icons/ff.png" />
                                 <DataTemplate.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition
+                                                Binding="{Binding Radio.CanGoToNextTrackStream}"
+                                                Value="True" />
+                                            <Condition
+                                                Binding="{Binding Radio.CanGoToNextTrack}"
+                                                Value="False" />
+                                        </MultiDataTrigger.Conditions>
+                                        <Setter
+                                            Property="Source"
+                                            Value="pack://siteoforigin:,,,/Resources/Icons/fff.png"
+                                            TargetName="img" />
+                                    </MultiDataTrigger>
                                     <DataTrigger
                                         Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
                                         Value="False">
