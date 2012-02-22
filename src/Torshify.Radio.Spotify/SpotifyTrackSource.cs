@@ -13,7 +13,7 @@ using Torshify.Radio.Spotify.QueryService;
 
 namespace Torshify.Radio.Spotify
 {
-    //[TrackSourceMetadata(Name = "Spotify", IconUri = "pack://application:,,,/Torstify.Radio.Spotify;component/Resources/Spotify_Logo.png")]
+    [TrackSourceMetadata(Name = "Spotify", IconUri = "pack://application:,,,/Torstify.Radio.Spotify;component/Resources/Spotify_Logo.png")]
     public class SpotifyTrackSource : ITrackSource
     {
         #region Fields
@@ -94,6 +94,50 @@ namespace Torshify.Radio.Spotify
             if (!IsLoggedIn())
             {
                 return containers;
+            }
+
+            QueryServiceClient query = new QueryServiceClient();
+
+            try
+            {
+                var queryResult = query.Query(artist, 0, 0, 0, 0, 0, 10);
+                var result =
+                    queryResult.Artists.FirstOrDefault(
+                        a => a.Name.Equals(artist, StringComparison.InvariantCultureIgnoreCase));
+
+                if (result == null && queryResult.Artists.Any())
+                {
+                    result = queryResult.Artists.FirstOrDefault();
+                }
+
+                if (result != null)
+                {
+                    var browse = query.ArtistBrowse(result.ID, ArtistBrowsingType.Full);
+                    var albumGroups = browse.Tracks.Where(t => t.IsAvailable).GroupBy(t => t.Album.ID);
+
+                    foreach (var albumGroup in albumGroups)
+                    {
+                        TrackContainer container = new TrackContainer();
+                        container.Owner = new TrackContainerOwner(artist);
+                        container.Tracks = albumGroup.Select(SpotifyRadioTrackPlayer.ConvertTrack).ToArray();
+
+                        var firstOrDefault = container.Tracks.FirstOrDefault();
+                        if (firstOrDefault != null)
+                        {
+                            container.Name = firstOrDefault.Album;
+                            container.Image = container.Image = firstOrDefault.AlbumArt;
+                        }
+
+                        containers.Add(container);
+                    }
+                }
+
+                query.Close();
+            }
+            catch (Exception e)
+            {
+                _logger.Log(e.Message, Category.Exception, Priority.Medium);
+                query.Abort();
             }
 
             return containers;
