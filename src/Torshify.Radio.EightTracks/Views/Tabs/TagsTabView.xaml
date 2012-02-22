@@ -19,6 +19,8 @@
             x:Key="DateDifferenceConverter" />
         <Converters:ListContainsItemToBoolConverter
             x:Key="ListContainsItemToBoolConverter" />
+        <Converters:MixToTrackStreamDataConverter
+            x:Key="MixToTrackStreamDataConverter" />
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter" />
         <Geometry
@@ -99,17 +101,30 @@
                                                     Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
                                             </Grid>
                                         </Button>
-                                        <Button
-                                            Command="{Binding DataContext.QueueMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                            CommandParameter="{Binding}"
-                                            BorderThickness="0"
-                                            Padding="0"
-                                            ToolTip="{lex:LocText Key=Queue, Dict=Strings, Assembly=Torshify.Radio.EightTracks}"
-                                            HorizontalAlignment="Left">
-                                            <Image
-                                                Height="20"
-                                                Source="pack://siteoforigin:,,,/Resources/Icons/add.png" />
-                                        </Button>
+                                        <StackPanel
+                                            Orientation="Horizontal">
+                                            <Button
+                                                Command="{Binding DataContext.QueueMixCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                CommandParameter="{Binding}"
+                                                BorderThickness="0"
+                                                Padding="0"
+                                                ToolTip="{lex:LocText Key=Queue, Dict=Strings, Assembly=Torshify.Radio.EightTracks}"
+                                                HorizontalAlignment="Left">
+                                                <Image
+                                                    Height="24"
+                                                    Source="pack://siteoforigin:,,,/Resources/Icons/add.png" />
+                                            </Button>
+                                            <Button
+                                                Command="{x:Static Framework:AppCommands.AddTrackStreamDataToFavoriteCommand}"
+                                                CommandParameter="{Binding Converter={StaticResource MixToTrackStreamDataConverter}}"
+                                                BorderThickness="0"
+                                                Padding="0"
+                                                ToolTip="{lex:LocText Key=Add_To_Favorites, Dict=Strings, Assembly=Torshify.Radio.EightTracks}">
+                                                <Image
+                                                    Height="24"
+                                                    Source="pack://siteoforigin:,,,/Resources/Icons/favs.addto.png" />
+                                            </Button>
+                                        </StackPanel>
                                     </StackPanel>
                                     <StackPanel
                                         Margin="4">

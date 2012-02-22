@@ -34,7 +34,8 @@ namespace Torshify.Radio.Grooveshark
         {
             if (_client == null)
             {
-                _client = new GroovesharkClient();
+                _client = new GroovesharkClient(true, null, true, null);
+                _client.UseGZip = true;
             }
 
             return _client;

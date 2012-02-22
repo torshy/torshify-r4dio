@@ -124,11 +124,7 @@ namespace Torshify.Radio
                     Level = Level.Info
                 });
             consoleAppender.Layout = new PatternLayout("%date{dd MM HH:mm} %-5level - %message%newline");
-            #if DEBUG
             consoleAppender.Threshold = Level.All;
-            #else
-            consoleAppender.Threshold = Level.Info;
-            #endif
             consoleAppender.ActivateOptions();
 
             Logger root;

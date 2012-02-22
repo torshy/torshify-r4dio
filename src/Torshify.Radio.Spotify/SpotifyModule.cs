@@ -13,7 +13,7 @@ using Torshify.Radio.Spotify.LoginService;
 
 namespace Torshify.Radio.Spotify
 {
-    [ModuleExport(typeof(SpotifyModule), DependsOnModuleNames = new[] { "Core" })]
+    //[ModuleExport(typeof(SpotifyModule), DependsOnModuleNames = new[] { "Core" })]
     public class SpotifyModule : MarshalByRefObject, IModule
     {
         #region Properties

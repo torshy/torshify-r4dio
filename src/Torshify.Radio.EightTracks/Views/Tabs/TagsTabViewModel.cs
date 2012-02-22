@@ -51,15 +51,25 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             _selectedTags = new ObservableCollection<Tag>();
             _ui = TaskScheduler.FromCurrentSynchronizationContext();
             ToggleTagCommand = new StaticCommand<Tag>(ExecuteToggleTag);
+            ToggleTagFilterCommand = new StaticCommand<string>(ExecuteToggleTagFilter);
             GoToNextPageCommand = new ManualCommand(ExecuteGoToNextPage, CanExecuteGoToNextPage);
             GoToPreviousPageCommand = new ManualCommand(ExecuteGoToPreviousPage, CanExecuteGoToPreviousPage);
             GoToNextTagPageCommand = new ManualCommand(ExecutGoToNextTagPage, CanExecuteGoToNextTagPage);
             GoToPreviousTagPageCommand = new ManualCommand(ExecuteGoToPreviousTagPage, CanExecuteGoToPreviousTagPage);
+            PlayMixCommand = new StaticCommand<Mix>(ExecutePlayMix);
+            QueueMixCommand = new StaticCommand<Mix>(ExecuteQueueMix);
         }
 
         #endregion Constructors
 
         #region Properties
+
+        [Import]
+        public IRadio Radio
+        {
+            get; 
+            set;
+        }
 
         [Import]
         public ILoggerFacade Logger
@@ -106,6 +116,18 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             private set;
         }
 
+        public StaticCommand<Mix> PlayMixCommand
+        {
+            get;
+            private set;
+        }
+
+        public StaticCommand<Mix> QueueMixCommand
+        {
+            get;
+            private set;
+        }
+
         public HeaderInfo HeaderInfo
         {
             get;
@@ -113,6 +135,12 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
         }
 
         public StaticCommand<Tag> ToggleTagCommand
+        {
+            get;
+            private set;
+        }
+
+        public StaticCommand<string> ToggleTagFilterCommand
         {
             get;
             private set;
@@ -133,7 +161,7 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
             get { return _selectedTags; }
         }
 
-        public IEnumerable<string>  TagStringFilterList
+        public IEnumerable<string> TagStringFilterList
         {
             get { return _selectedTags.Select(x => x.Name); }
         }
@@ -219,6 +247,11 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                 filter: string.Join("+", TagFilterList.Select(x => x.Name)));
         }
 
+        private void ExecuteToggleTagFilter(string tagFilter)
+        {
+
+        }
+
         private void AddOrRemoveFromSelectedList(Tag tag)
         {
             if (_selectedTags.Contains(tag))
@@ -300,6 +333,21 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
         private void ExecuteGoToPreviousPage()
         {
             GetMixes(_currentMixPage.GetValueOrDefault() - 1, string.Join("+", TagFilterList.Select(x => x.Name)));
+        }
+
+        private void ExecutePlayMix(Mix mix)
+        {
+            Radio.Play(new EightTracksMixTrackStream(mix, ToastService));
+        }
+
+        private void ExecuteQueueMix(Mix mix)
+        {
+            Radio.Queue(new EightTracksMixTrackStream(mix, ToastService));
+            ToastService.Show(new ToastData
+            {
+                Message = "Queued " + mix.Name,
+                Icon = AppIcons.Add
+            });
         }
 
         private void RefreshCommands()
