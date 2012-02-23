@@ -10,6 +10,8 @@
     xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
     Engine:LocalizeDictionary.DesignCulture="en-US"
     xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -55,17 +57,20 @@
                 HorizontalAlignment="Center"
                 FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}">
-            <Run
+                <i:Interaction.Behaviors>
+                    <Behaviors:InactivityFadeBehavior />
+                </i:Interaction.Behaviors>
+                <Run
                     Text="Love"
                     FontWeight="Bold"
                     Foreground="Green" />
-            <Run
+                <Run
                     Text="or" />
-            <Run
+                <Run
                     Text="hate"
                     FontWeight="Bold"
                     Foreground="Red" />
-            <Run
+                <Run
                     Text="songs to make your station more you." />
             </TextBlock>
             <DockPanel

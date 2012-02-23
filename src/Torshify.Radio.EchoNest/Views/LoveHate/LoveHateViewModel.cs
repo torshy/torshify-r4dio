@@ -349,8 +349,14 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                     {
                         SessionInfo = null;
                     }
-                },
-                stream);
+                }, stream)
+                .ContinueWith(task =>
+                {
+                    if (task.Exception != null)
+                    {
+                        Logger.Log(task.Exception.ToString(), Category.Exception, Priority.Medium);
+                    }
+                });
         }
 
         #endregion Methods
