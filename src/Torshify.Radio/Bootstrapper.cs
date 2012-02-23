@@ -152,7 +152,7 @@ namespace Torshify.Radio
                 Logger.Log(exception.ToString(), Category.Exception, Priority.High);
 
                 // Some images throw this exception. Lets try and handle it to prevent the application from crashing
-                if (exception is NotSupportedException)
+                if (exception is NotSupportedException || exception is AccessViolationException)
                 {
                     e.Handled = true;
                 }

@@ -48,23 +48,20 @@ namespace Torshify.Radio.Spotify
         {
             if (!IsLoaded)
             {
-                Task.Factory.StartNew(() =>
-                                      {
-                                          lock (_lock)
-                                          {
-                                              try
-                                              {
-                                                  if (!IsLoaded)
-                                                  {
-                                                      StartOrigo();
-                                                  }
-                                              }
-                                              catch (Exception ex)
-                                              {
-                                                  Console.WriteLine(ex.Message);
-                                              }
-                                          }
-                                      });
+                lock (_lock)
+                {
+                    try
+                    {
+                        if (!IsLoaded)
+                        {
+                            StartOrigo();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
             }
         }
 
