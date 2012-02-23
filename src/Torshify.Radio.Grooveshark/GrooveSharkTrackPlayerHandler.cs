@@ -281,12 +281,14 @@ namespace Torshify.Radio.Grooveshark
                             catch (WebException e)
                             {
                                 _log.Log(e.Message, Category.Warn, Priority.Medium);
+                                _fullyDownloaded = true;
                                 // probably we have aborted download from the GUI thread
                                 break;
                             }
                             catch (Exception e)
                             {
                                 _log.Log(e.Message, Category.Exception, Priority.High);
+                                _fullyDownloaded = true;
                                 break;
                             }
 

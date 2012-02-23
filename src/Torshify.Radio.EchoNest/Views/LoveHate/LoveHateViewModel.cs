@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Data;
 
-using EchoNest;
 using EchoNest.Playlist;
 
 using Microsoft.Practices.Prism.Logging;
@@ -31,6 +27,7 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
         private bool _hasTrack;
         private bool? _likeCurrentTrack;
         private LoveHateTrackStream _loveHateTrackStream;
+        private SessionInfoResponse _sessionInfo;
 
         #endregion Fields
 
@@ -97,7 +94,10 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
 
         public bool? LikeCurrentTrack
         {
-            get { return _likeCurrentTrack; }
+            get
+            {
+                return _likeCurrentTrack;
+            }
             set
             {
                 if (_likeCurrentTrack != value)
@@ -192,6 +192,19 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
             }
         }
 
+        public SessionInfoResponse SessionInfo
+        {
+            get { return _sessionInfo; }
+            set
+            {
+                if (_sessionInfo != value)
+                {
+                    _sessionInfo = value;
+                    RaisePropertyChanged("SessionInfo");
+                }
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -221,6 +234,11 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
             }
 
             _loveHateTrackStream = Radio.CurrentTrackStream as LoveHateTrackStream;
+
+            if (_loveHateTrackStream != null)
+            {
+                GetSessionInfo(_loveHateTrackStream);
+            }
         }
 
         bool INavigationAware.IsNavigationTarget(NavigationContext navigationContext)
@@ -288,6 +306,8 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                 }
 
                 HasTrack = true;
+
+                GetSessionInfo(_loveHateTrackStream);
             }
         }
 
@@ -310,6 +330,27 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
             }
 
             return new string[0];
+        }
+
+        private void GetSessionInfo(LoveHateTrackStream stream)
+        {
+            Task
+                .Factory
+                .StartNew(state =>
+                {
+                    var s = (LoveHateTrackStream) state;
+
+                    SessionInfoResponse response;
+                    if (s.TryGetSessionInfo(out response))
+                    {
+                        SessionInfo = response;
+                    }
+                    else
+                    {
+                        SessionInfo = null;
+                    }
+                },
+                stream);
         }
 
         #endregion Methods

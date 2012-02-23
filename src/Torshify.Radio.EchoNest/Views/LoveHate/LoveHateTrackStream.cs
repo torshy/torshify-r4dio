@@ -257,6 +257,30 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
             _currentTrackRating = rating;
         }
 
+        public bool TryGetSessionInfo(out SessionInfoResponse response)
+        {
+            if (string.IsNullOrEmpty(_sessionId))
+            {
+                response = null;
+                return false;
+            }
+
+            using (var session = new EchoNestSession(EchoNestModule.ApiKey))
+            {
+                response = session.Query<SessionInfo>().Execute(new SessionInfoArgument
+                {
+                    SessionId = _sessionId
+                });
+
+                if (response.Status.Code == ResponseCode.Success)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         #endregion Methods
     }
 }
