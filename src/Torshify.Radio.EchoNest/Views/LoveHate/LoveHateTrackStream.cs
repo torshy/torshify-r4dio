@@ -109,6 +109,8 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                         var argument = new DynamicArgument();
                         argument.Type = "artist-radio";
                         argument.Artist.Add(_initialArtistName);
+                        argument.Dmca = true;
+
                         var response = session.Query<Dynamic>().Execute(argument);
 
                         if (response.Status.Code == ResponseCode.Success)
@@ -164,18 +166,7 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
 
                         if (_likesCurrentTrack.HasValue)
                         {
-                            if (_likesCurrentTrack.Value)
-                            {
-                                var currentTrack = _currentTracks.FirstOrDefault();
-
-                                if (currentTrack != null)
-                                {
-                                    argument.Artist.Add(currentTrack.Artist);
-                                }
-
-                                argument.Ban = "song";
-                            }
-                            else
+                            if (!_likesCurrentTrack.Value)
                             {
                                 argument.Ban = "artist";
                             }
