@@ -8,6 +8,8 @@ namespace Torshify.Radio.Framework
 
         event EventHandler IsPlayingChanged;
 
+        event EventHandler IsBufferingChanged;
+
         event EventHandler<TrackBufferingEventArgs> BufferingProgressChanged;
 
         event EventHandler<TrackEventArgs> TrackComplete;

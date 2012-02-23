@@ -238,6 +238,8 @@ namespace Torshify.Radio.Grooveshark
 
         private void StreamMp3(object state)
         {
+            _isBuffering(true);
+
             ThrottledStream responseStream = (ThrottledStream)state;
             byte[] buffer = new byte[16384 * 4]; // needs to be big enough to hold a decompressed frame
 

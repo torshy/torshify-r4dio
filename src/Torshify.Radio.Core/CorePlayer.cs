@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
+
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core
@@ -13,6 +16,7 @@ namespace Torshify.Radio.Core
     {
         #region Fields
 
+        private readonly ILoggerFacade _logger;
         private readonly Dictionary<string, double> _volumeMap;
 
         private bool _isMuted;
@@ -21,14 +25,18 @@ namespace Torshify.Radio.Core
 
         #region Constructors
 
-        public CorePlayer()
+        [ImportingConstructor]
+        public CorePlayer(ILoggerFacade logger)
         {
+            _logger = logger;
             _volumeMap = new Dictionary<string, double>();
         }
 
         #endregion Constructors
 
         #region Events
+
+        public event EventHandler IsBufferingChanged;
 
         public event EventHandler<TrackBufferingEventArgs> BufferingProgressChanged;
 
@@ -194,6 +202,7 @@ namespace Torshify.Radio.Core
             {
                 _volumeMap[player.Metadata.Name] = 0.5;
 
+                player.Value.IsBufferingChanged += PlayerIsBufferingChanged;
                 player.Value.BufferingProgressChanged += PlayerBufferingProgressChanged;
                 player.Value.IsPlayingChanged += PlayerIsPlayingChanged;
                 player.Value.TrackComplete += PlayerTrackComplete;
@@ -242,14 +251,32 @@ namespace Torshify.Radio.Core
             }
         }
 
+        private void PlayerIsBufferingChanged(object sender, EventArgs e)
+        {
+            _logger.Log("IsBuffering [" + ((ITrackPlayer)sender).IsBuffering + "]", Category.Info, Priority.Low);
+
+            var handler = IsBufferingChanged;
+
+            if (handler != null)
+            {
+                handler(sender, e);
+            }
+
+            RaisePropertyChanged("IsBuffering");
+        }
+
         private void PlayerBufferingProgressChanged(object sender, TrackBufferingEventArgs e)
         {
+            _logger.Log("Buffering [" + ((ITrackPlayer)sender).IsBuffering + "] " + e.Progress, Category.Info, Priority.Low);
+
             var handler = BufferingProgressChanged;
 
             if (handler != null)
             {
                 handler(sender, e);
             }
+
+            RaisePropertyChanged("BufferingProgress");
         }
 
         private void PlayerIsPlayingChanged(object sender, EventArgs e)

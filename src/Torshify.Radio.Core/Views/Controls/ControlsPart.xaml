@@ -38,28 +38,24 @@
                     Content="{Binding}">
                     <Button.ContentTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <Image
-                                    Name="pause"
-                                    Source="pack://siteoforigin:,,,/Resources/Icons/pause.png"
-                                    Visibility="Visible" />
-                                <Image
-                                    Name="play"
-                                    Source="pack://siteoforigin:,,,/Resources/Icons/play.png"
-                                    Visibility="Collapsed" />
-                            </Grid>
+                            <Image
+                                Name="img"
+                                Source="pack://siteoforigin:,,,/Resources/Icons/pause.png"
+                                Visibility="Visible"
+                                RenderTransformOrigin="0.5,0.5">
+                                <Image.RenderTransform>
+                                    <RotateTransform
+                                        Angle="0" />
+                                </Image.RenderTransform>
+                            </Image>
                             <DataTemplate.Triggers>
                                 <DataTrigger
                                     Binding="{Binding IsPlaying}"
                                     Value="False">
                                     <Setter
-                                        Property="Visibility"
-                                        Value="Visible"
-                                        TargetName="play" />
-                                    <Setter
-                                        Property="Visibility"
-                                        Value="Collapsed"
-                                        TargetName="pause" />
+                                        Property="Source"
+                                        Value="pack://siteoforigin:,,,/Resources/Icons/play.png"
+                                        TargetName="img" />
                                 </DataTrigger>
                                 <DataTrigger
                                     Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
@@ -67,6 +63,36 @@
                                     <Setter
                                         Property="Opacity"
                                         Value="0.5" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding Player.IsBuffering}"
+                                    Value="True">
+                                    <DataTrigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="img"
+                                                    Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                                    To="360"
+                                                    RepeatBehavior="Forever" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.EnterActions>
+                                    <DataTrigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="img"
+                                                    Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                                    To="0" 
+                                                    Duration="0:0:0"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </DataTrigger.ExitActions>
+                                    <Setter
+                                        Property="Source"
+                                        Value="pack://siteoforigin:,,,/Resources/Icons/refresh.png"
+                                        TargetName="img" />
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
@@ -92,7 +118,7 @@
                                     </MultiDataTrigger.Conditions>
                                     <Setter
                                         Property="Source"
-                                        Value="pack://siteoforigin:,,,/Resources/Icons/fff.png" 
+                                        Value="pack://siteoforigin:,,,/Resources/Icons/fff.png"
                                         TargetName="img" />
                                 </MultiDataTrigger>
                                 <DataTrigger
