@@ -5,6 +5,19 @@
         <link>https://raw.github.com/torshy/torshify-r4dio/master/sparkle/versioninfo.xml</link>
         <description></description>
         <language>en</language>
+		<item>
+            <title>Version 0.5.1</title>
+            <sparkle:releaseNotesLink>https://raw.github.com/torshy/torshify-r4dio/master/sparkle/0.5.1/releasenotes.txt</sparkle:releaseNotesLink>
+
+            <pubDate>Mon, 23 Feb 2012 10:21:11 +0000</pubDate>
+            <enclosure
+                url="https://github.com/downloads/torshy/torshify-r4dio/r4dio_setup_0_5_1_0.exe"
+                length="5120"
+                type="application/octet-stream"
+                sparkle:version="0.5.1"
+                sparkle:dsaSignature="EuDbvtF5nQXwuQl9vz1jGMTqb8yfN90U4EQ0xo+nlfjJrauFWOdBqA=="
+            />
+        </item>
         <item>
             <title>Version 0.5.0</title>
             <sparkle:releaseNotesLink>https://raw.github.com/torshy/torshify-r4dio/master/sparkle/0.5.0/releasenotes.txt</sparkle:releaseNotesLink>

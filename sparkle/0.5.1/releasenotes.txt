@@ -1,0 +1,4 @@
+0.5.1
+-----------------------
+* Updated Grooveshark
+* Added skip-to-next-trackstream functionality
