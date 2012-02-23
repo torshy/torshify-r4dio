@@ -64,12 +64,11 @@ namespace Torshify.Radio.Core.Startables
 
         public void Start()
         {
-            TileService.Add<TwitterView>(new TileData
-            {
-                Title = "Peeps",
-                BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0005_weather1.png")
-            });
-
+            //TileService.Add<TwitterView>(new TileData
+            //{
+            //    Title = "Peeps",
+            //    BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0005_weather1.png")
+            //});
 
             Task.Factory.StartNew(() =>
             {
@@ -132,13 +131,10 @@ namespace Torshify.Radio.Core.Startables
         {
             Task.Factory.StartNew(state =>
                                   {
-                                      var ts = (TwitterStatus) state;
-
                                       try
                                       {
-                                          TrackLink trackLink = TrackLink.FromUri(ts.Text);
-                                          Track track = Radio.FromLink(trackLink);
-                                          ToastService.Show(track.Name + " by " + track.Artist);
+                                          var ts = (TwitterStatus)state;
+                                          ToastService.Show(ts.Text);
                                       }
                                       catch (Exception e)
                                       {
