@@ -39,7 +39,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Components]
 Name: "main"; Description: "Main Files"; Types: full compact custom; Flags: fixed
-;Name: "spotify"; Description: "Spotify support"; Types: full
+Name: "spotify"; Description: "Spotify support"; Types: full
 
 [Files]
 Source: "..\src\Torshify.Radio\bin\Release\r4dio.exe"; DestDir: "{app}"; Components: main; Flags: ignoreversion
@@ -52,7 +52,7 @@ Source: "..\src\Torshify.Radio\bin\Release\Modules\Core\*.*"; Excludes: "*.pdb, 
 Source: "..\src\Torshify.Radio\bin\Release\Modules\Database\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Database"; Components: main; Flags: ignoreversion recursesubdirs
 Source: "..\src\Torshify.Radio\bin\Release\Modules\EchoNest\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\EchoNest"; Components: main; Flags: ignoreversion recursesubdirs
 Source: "..\src\Torshify.Radio\bin\Release\Modules\Grooveshark\*.*"; Excludes: "*.pdb"; DestDir: "{app}\Modules\Grooveshark"; Components: main; Flags: ignoreversion recursesubdirs
-;Source: "..\src\Torshify.Radio\bin\Release\Modules\Spotify\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Spotify"; Components: spotify; Flags: ignoreversion recursesubdirs
+Source: "..\src\Torshify.Radio\bin\Release\Modules\Spotify\*.*"; Excludes: "*.pdb, *.xml"; DestDir: "{app}\Modules\Spotify"; Components: spotify; Flags: ignoreversion recursesubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\Resources\r4dio_app.ico"

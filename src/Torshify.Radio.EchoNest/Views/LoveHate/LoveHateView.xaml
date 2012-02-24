@@ -22,7 +22,7 @@
     <Grid>
         <ItemsControl
             ItemsSource="{Binding SessionInfo.Terms}"
-            Opacity="0.05"
+            Opacity="0.2"
             FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeHuge}}"
             FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
             ScrollViewer.HorizontalScrollBarVisibility="Hidden"

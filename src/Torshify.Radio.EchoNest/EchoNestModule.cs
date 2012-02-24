@@ -136,6 +136,13 @@ namespace Torshify.Radio.EchoNest
                 BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0003_Favs1.png")
             })),
             DispatcherPriority.Background);
+
+            _dispatcher.BeginInvoke(new Action(() => TileService.Add<Views.Style.MainStationView>(new TileData
+            {
+                Title = "Custom",
+                BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0008_touch.png")
+            })),
+            DispatcherPriority.Background);
         }
 
         private IEnumerable<string> SuggestArtists(string query)

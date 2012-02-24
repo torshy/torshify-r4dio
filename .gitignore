@@ -1,7 +1,6 @@
 
 Thumbs.db
 *.obj
-*.exe
 *.pdb
 *.user
 *.aps
@@ -21,6 +20,7 @@ Thumbs.db
 [Dd]ebug*/
 *.lib
 *.sbr
+Output/
 obj/
 [Rr]elease*/
 _ReSharper*/

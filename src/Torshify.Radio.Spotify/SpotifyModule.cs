@@ -1,5 +1,9 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +20,12 @@ namespace Torshify.Radio.Spotify
     [ModuleExport(typeof(SpotifyModule), DependsOnModuleNames = new[] { "Core" })]
     public class SpotifyModule : MarshalByRefObject, IModule
     {
+        #region Fields
+
+        private Process _orgioProcess;
+
+        #endregion Fields
+
         #region Properties
 
         [Import]
@@ -35,7 +45,7 @@ namespace Torshify.Radio.Spotify
         [Import]
         public IToastService ToastService
         {
-            get; 
+            get;
             set;
         }
 
@@ -45,46 +55,86 @@ namespace Torshify.Radio.Spotify
 
         public void Initialize()
         {
-            //TileService.Add<MainStationView>(new TileData
-            //                                 {
-            //                                     Title = "Spotify",
-            //                                     BackgroundImage =
-            //                                         new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0003_Favs1.png")
-            //                                 });
+            var processes = Process.GetProcessesByName("Torshify.Origo.Host");
 
-            if (!SpotifyAppDomainHandler.Instance.IsLoaded)
+            if (!processes.Any())
             {
-                SpotifyAppDomainHandler.Instance.Load();
+                string thisAssemblyLocation = GetType().Assembly.Location;
+                string thisAssemblyDirectory = Path.GetDirectoryName(thisAssemblyLocation);
+                string origoExe = "Torshify.Origo.Host.exe";
+                string origoPath = Path.Combine(thisAssemblyDirectory, origoExe);
+
+                if (File.Exists(origoPath))
+                {
+                    ProcessStartInfo startInfo = new ProcessStartInfo(origoPath);
+                    startInfo.WorkingDirectory = thisAssemblyDirectory;
+                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    _orgioProcess = Process.Start(startInfo);
+                    _orgioProcess.Refresh();
+                }
+            }
+            else
+            {
+                _orgioProcess = processes.FirstOrDefault();
             }
 
             Login();
+
+            AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
+        }
+
+        [DllImport("user32.dll")]
+        static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        private void CurrentDomainOnProcessExit(object sender, EventArgs eventArgs)
+        {
+            if (_orgioProcess != null)
+            {
+                if (!_orgioProcess.HasExited)
+                {
+                    try
+                    {
+                        _orgioProcess.Kill();
+                        _orgioProcess.Dispose();
+                        _orgioProcess = null;
+                    }
+                    catch (Exception)
+                    {
+                        // Ignore
+                    }
+                }
+            }
         }
 
         private void Login()
         {
             Task.Factory.StartNew(() =>
-                                  {
-                                      var client = new LoginServiceClient(new InstanceContext(new NoOpLoginCallback(ToastService)));
+            {
+                Thread.Sleep(5000);
+                var client = new LoginServiceClient(new InstanceContext(new NoOpLoginCallback(ToastService)));
 
-                                      try
-                                      {
-                                          client.Subscribe();
+                try
+                {
+                    client.Subscribe();
 
-                                          var remembered = client.GetRememberedUser();
+                    var remembered = client.GetRememberedUser();
 
-                                          if (!string.IsNullOrEmpty(remembered))
-                                          {
-                                              client.Relogin();
-                                          }
-                                      }
-                                      catch (Exception e)
-                                      {
-                                          client.Abort();
+                    if (!string.IsNullOrEmpty(remembered))
+                    {
+                        client.Relogin();
+                    }
+                }
+                catch (Exception e)
+                {
+                    client.Abort();
 
-                                          Thread.Sleep(1000);
-                                          Login();
-                                      }
-                                  });
+                    Thread.Sleep(1000);
+                    Login();
+                }
+            });
         }
 
         #endregion Methods
@@ -93,12 +143,20 @@ namespace Torshify.Radio.Spotify
 
         private class NoOpLoginCallback : LoginServiceCallback
         {
+            #region Fields
+
             private readonly IToastService _toastService;
+
+            #endregion Fields
+
+            #region Constructors
 
             public NoOpLoginCallback(IToastService toastService)
             {
                 _toastService = toastService;
             }
+
+            #endregion Constructors
 
             #region Methods
 

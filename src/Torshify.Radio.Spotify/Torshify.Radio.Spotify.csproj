@@ -61,6 +61,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\..\packages\RavenDB-Embedded.1.0.616\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -202,7 +203,12 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="..\..\lib\Torshify\Torshify.Origo.Host.exe">
+      <Link>Torshify.Origo.Host.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Views\MainStationView.xaml">
       <SubType>Designer</SubType>

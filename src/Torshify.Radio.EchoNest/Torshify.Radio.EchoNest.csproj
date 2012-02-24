@@ -175,6 +175,11 @@
       <DependentUpon>SimilarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Similar\Tabs\SimilarViewModel.cs" />
+    <Compile Include="Views\Style\MainStationView.xaml.cs">
+      <DependentUpon>MainStationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Style\MainStationViewModel.cs" />
+    <Compile Include="Views\Style\Models\TermModel.cs" />
     <EmbeddedResource Include="Properties\Strings.no.resx" />
     <EmbeddedResource Include="Properties\Strings.en.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -255,6 +260,10 @@
     <Page Include="Views\Similar\Tabs\SimilarView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Style\MainStationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
