@@ -229,14 +229,16 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\SettingsViewModel.cs" />
-    <Compile Include="Views\Settings\Tabs\NotGeneralSettingsView.xaml.cs">
-      <DependentUpon>NotGeneralSettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings\Tabs\NotGeneralSettingsViewModel.cs" />
     <Compile Include="Views\Settings\Tabs\GeneralSettingsView.xaml.cs">
       <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\Tabs\GeneralSettingsViewModel.cs" />
+    <Compile Include="Views\Settings\Tabs\HotkeySectionView.xaml.cs">
+      <DependentUpon>HotkeySectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\Tabs\TrackSourceSectionView.xaml.cs">
+      <DependentUpon>TrackSourceSectionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Stations\StationsView.xaml.cs">
       <DependentUpon>StationsView.xaml</DependentUpon>
     </Compile>
@@ -347,11 +349,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Settings\Tabs\NotGeneralSettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\Settings\Tabs\GeneralSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Tabs\HotkeySectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\Tabs\TrackSourceSectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

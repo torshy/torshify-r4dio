@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
+using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
 
@@ -23,6 +26,7 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
         #region Fields
 
         private Color _currentAccentColor;
+        private ObservableCollection<string> _trackSourcePriority;
 
         #endregion Fields
 
@@ -36,6 +40,7 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
                 IconUri = AppIcons.Settings.ToString()
             };
 
+            _trackSourcePriority = new ObservableCollection<string>();
             _currentAccentColor = (Color)Application.Current.TryFindResource(AppTheme.AccentColorKey);
             AddHotkeyCommand = new StaticCommand(ExecuteAddHotkey);
             RemoveHotkeyCommand = new AutomaticCommand<GlobalHotkey>(ExecuteRemoveHotkey, CanExecuteRemoveHotkey);
@@ -72,6 +77,21 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
         {
             get;
             set;
+        }
+
+        [ImportMany]
+        public IEnumerable<Lazy<ITrackSource, ITrackSourceMetadata>> TrackSources
+        {
+            get;
+            set;
+        }
+
+        public ObservableCollection<string> TrackSourcePriority
+        {
+            get
+            {
+                return _trackSourcePriority;
+            }
         }
 
         public StaticCommand RestoreDefaultHotkeysCommand
@@ -130,6 +150,11 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
                     if (settings != null)
                     {
                         settings.AccentColor = CurrentAccentColor;
+
+                        if (_trackSourcePriority.Any())
+                        {
+                            settings.TrackSourcePriority = _trackSourcePriority.ToList();
+                        }
                     }
 
                     session.Store(settings);
@@ -147,6 +172,46 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
 
                 Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
             }
+        }
+
+        public void Load()
+        {
+            try
+            {
+                using (var session = DocumentStore.OpenSession())
+                {
+                    var settings = session.Query<ApplicationSettings>().FirstOrDefault();
+
+                    if (settings != null)
+                    {
+                        if (settings.TrackSourcePriority != null && settings.TrackSourcePriority.Any())
+                        {
+                            _trackSourcePriority.AddRange(settings.TrackSourcePriority);
+                        }
+                        else
+                        {
+                            foreach (var trackSource in TrackSources)
+                            {
+                                _trackSourcePriority.Add(trackSource.Metadata.Name);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ToastService.Show(new ToastData
+                {
+                    Message = "Error while loading general settings"
+                });
+
+                Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+            }
+        }
+
+        public void ChangeTrackSourcePriority(string draggingItem, string toItem)
+        {
+            _trackSourcePriority.Move(_trackSourcePriority.IndexOf(draggingItem), _trackSourcePriority.IndexOf(toItem));
         }
 
         private void ExecuteRestoreDefaultHotkeys()

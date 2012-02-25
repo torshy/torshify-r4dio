@@ -28,6 +28,7 @@ namespace Torshify.Radio.Core.Views.Settings
 
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
+            SettingPages.ForEach(page => page.Load());
         }
 
         bool INavigationAware.IsNavigationTarget(NavigationContext navigationContext)

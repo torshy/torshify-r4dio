@@ -7,8 +7,7 @@
     xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    xmlns:Tabs="clr-namespace:Torshify.Radio.Core.Views.Settings.Tabs"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -31,115 +30,8 @@
                         Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
                 </DockPanel>
             </Controls:FormGroup>
-            <GroupBox
-                BorderThickness="0"
-                Padding="2">
-                <GroupBox.Header>
-                    <TextBlock
-                        Text="Global hotkeys"
-                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
-                        FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
-                </GroupBox.Header>
-                <StackPanel>
-                    <TextBlock
-                        Text="Global hotkeys are keyboard shortcuts you can use from within any running application."
-                        TextWrapping="Wrap"
-                        Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
-                        Margin="0,0,0,8" />
-                    <DockPanel>
-                        <CheckBox
-                            DockPanel.Dock="Left"
-                            Content="Enabled"
-                            IsChecked="{Binding HotkeyService.IsEnabled}" />
-                        <Button
-                            Content="Restore defaults"
-                            HorizontalAlignment="Right"
-                            Command="{Binding RestoreDefaultHotkeysCommand}" />
-                    </DockPanel>
-                    <Grid
-                        Margin="0,8,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition
-                                Width="Auto" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition
-                                Height="Auto" />
-                            <RowDefinition
-                                Height="Auto" />
-                            <RowDefinition
-                                Height="Auto" />
-                            <RowDefinition
-                                Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <TextBlock
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Text="Hotkeys"
-                            Margin="0,0,8,0" />
-                        <DataGrid
-                            Name="HotkeyList"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            ItemsSource="{Binding HotkeyService.ConfiguredHotkeys}"
-                            Margin="0,0,0,4"
-                            SelectionMode="Single"
-                            SelectionUnit="FullRow">
-                            <i:Interaction.Behaviors>
-                                <Behaviors:DataGridTriStateSortingBehavior />
-                            </i:Interaction.Behaviors>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn
-                                    Header="Action"
-                                    Binding="{Binding Definition.Description}"
-                                    Width="*" />
-                                <DataGridTextColumn
-                                    Header="Hotkey"
-                                    Binding="{Binding Keys}"
-                                    Width="*" />
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <TextBlock
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Text="Action" />
-                        <ComboBox
-                            Name="AvailableHotkeyList"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            ItemsSource="{Binding HotkeyService.AvailableHotkeys}"
-                            SelectedValue="{Binding SelectedItem.Definition, ElementName=HotkeyList}"
-                            DisplayMemberPath="DefinitionId"
-                            Margin="0,0,0,4" />
-                        <TextBlock
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            Text="Hotkey" />
-                        <DockPanel
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            Margin="0,0,0,4">
-                            <StackPanel
-                                DockPanel.Dock="Right"
-                                Orientation="Horizontal"
-                                Margin="4,0,0,0">
-                                <Button
-                                    Content="Add"
-                                    Margin="0,0,2,0"
-                                    Command="{Binding AddHotkeyCommand}" />
-                                <Button
-                                    Content="Remove"
-                                    Command="{Binding RemoveHotkeyCommand}"
-                                    CommandParameter="{Binding SelectedItem, ElementName=HotkeyList}" />
-                            </StackPanel>
-                            <TextBox
-                                Text="{Binding SelectedItem.Keys, ElementName=HotkeyList}"
-                                PreviewKeyDown="HotkeyTextBloxPreviewKeyDown" />
-                        </DockPanel>
-                    </Grid>
-                </StackPanel>
-            </GroupBox>
+            <Tabs:HotkeySectionView />
+            <Tabs:TrackSourceSectionView />
         </Controls:FormGroupHost>
     </ScrollViewer>
 </UserControl>

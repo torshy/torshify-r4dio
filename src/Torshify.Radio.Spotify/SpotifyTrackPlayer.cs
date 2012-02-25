@@ -147,32 +147,7 @@ namespace Torshify.Radio.Spotify
 
         public void Initialize()
         {
-            Task.Factory.StartNew(() =>
-                                  {
-                                      try
-                                      {
-                                          _loginClient = new LoginServiceClient(new InstanceContext(this));
-                                          _loginClient.Subscribe();
-
-                                          if (!_loginClient.IsLoggedIn())
-                                          {
-                                              if (!string.IsNullOrEmpty(_loginClient.GetRememberedUser()))
-                                              {
-                                                  _loginClient.Relogin();
-                                              }
-                                          }
-                                          else
-                                          {
-                                              SubscribeToControlEvents();
-                                          }
-                                      }
-                                      catch
-                                      {
-                                          _loginClient.Abort();
-                                          Thread.Sleep(2000);
-                                          Initialize();
-                                      }
-                                  });
+            SubscribeToControlEvents();
         }
 
         public void Load(Track track)

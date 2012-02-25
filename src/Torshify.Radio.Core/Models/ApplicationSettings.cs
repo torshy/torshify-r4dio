@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Windows.Media;
 
 namespace Torshify.Radio.Core.Models
@@ -10,6 +11,7 @@ namespace Torshify.Radio.Core.Models
         {
             HotkeysEnabled = true;
             Culture = "en";
+            TrackSourcePriority = new List<string>();
         }
 
         #endregion Constructors
@@ -60,6 +62,12 @@ namespace Torshify.Radio.Core.Models
         {
             get;
             set;
+        }
+
+        public List<string> TrackSourcePriority
+        {
+            get; 
+            set; 
         }
 
         #endregion Properties

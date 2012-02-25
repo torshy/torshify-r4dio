@@ -55,7 +55,8 @@ namespace Torshify.Radio.Spotify
 
         public void Initialize()
         {
-            var processes = Process.GetProcessesByName("Torshify.Origo.Host");
+#if !DEBUG
+            var processes = Process.GetProcesses().Where(p => p.ProcessName.StartsWith("Torshify.Origo.Host"));
 
             if (!processes.Any())
             {
@@ -71,23 +72,17 @@ namespace Torshify.Radio.Spotify
                     startInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     _orgioProcess = Process.Start(startInfo);
                     _orgioProcess.Refresh();
+                    AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
                 }
             }
             else
             {
                 _orgioProcess = processes.FirstOrDefault();
             }
+#endif
 
             Login();
-
-            AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
         }
-
-        [DllImport("user32.dll")]
-        static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport("user32.dll")]
-        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
         private void CurrentDomainOnProcessExit(object sender, EventArgs eventArgs)
         {
@@ -113,25 +108,26 @@ namespace Torshify.Radio.Spotify
         {
             Task.Factory.StartNew(() =>
             {
-                Thread.Sleep(5000);
                 var client = new LoginServiceClient(new InstanceContext(new NoOpLoginCallback(ToastService)));
 
                 try
                 {
                     client.Subscribe();
 
-                    var remembered = client.GetRememberedUser();
-
-                    if (!string.IsNullOrEmpty(remembered))
+                    if (!client.IsLoggedIn())
                     {
-                        client.Relogin();
+                        var remembered = client.GetRememberedUser();
+
+                        if (!string.IsNullOrEmpty(remembered))
+                        {
+                            client.Relogin();
+                        }
                     }
                 }
                 catch (Exception e)
                 {
                     client.Abort();
-
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
                     Login();
                 }
             });
