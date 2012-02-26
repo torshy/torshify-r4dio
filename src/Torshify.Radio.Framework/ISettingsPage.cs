@@ -11,16 +11,4 @@ namespace Torshify.Radio.Framework
             get;
         }
     }
-
-    public interface ISettingsSection : IHeaderInfoProvider<HeaderInfo>
-    {
-        object UI
-        {
-            get;
-        }
-
-        void Load();
-
-        void Save();
-    }
 }
