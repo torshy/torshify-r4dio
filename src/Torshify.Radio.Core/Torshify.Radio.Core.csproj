@@ -225,20 +225,27 @@
     <Compile Include="Views\NowPlaying\UI\UpcomingTracksPart.xaml.cs">
       <DependentUpon>UpcomingTracksPart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Settings\General\HotkeySection.cs" />
+    <Compile Include="Views\Settings\General\HotkeySectionView.xaml.cs">
+      <DependentUpon>HotkeySectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\General\ThemeSection.cs" />
+    <Compile Include="Views\Settings\General\ThemeSectionView.xaml.cs">
+      <DependentUpon>ThemeSectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\General\TrackSourceSection.cs" />
+    <Compile Include="Views\Settings\General\TrackSourceSectionView.xaml.cs">
+      <DependentUpon>TrackSourceSectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\SettingsPageTemplateSelector.cs" />
     <Compile Include="Views\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\SettingsViewModel.cs" />
-    <Compile Include="Views\Settings\Tabs\GeneralSettingsView.xaml.cs">
+    <Compile Include="Views\Settings\General\GeneralSettingsView.xaml.cs">
       <DependentUpon>GeneralSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Settings\Tabs\GeneralSettingsViewModel.cs" />
-    <Compile Include="Views\Settings\Tabs\HotkeySectionView.xaml.cs">
-      <DependentUpon>HotkeySectionView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings\Tabs\TrackSourceSectionView.xaml.cs">
-      <DependentUpon>TrackSourceSectionView.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Views\Settings\General\GeneralSettingsViewModel.cs" />
     <Compile Include="Views\Stations\StationsView.xaml.cs">
       <DependentUpon>StationsView.xaml</DependentUpon>
     </Compile>
@@ -345,19 +352,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Settings\General\HotkeySectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\General\ThemeSectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\General\TrackSourceSectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Settings\SettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Settings\Tabs\GeneralSettingsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Settings\Tabs\HotkeySectionView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Settings\Tabs\TrackSourceSectionView.xaml">
+    <Page Include="Views\Settings\General\GeneralSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

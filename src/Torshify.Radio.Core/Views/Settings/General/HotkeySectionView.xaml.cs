@@ -8,7 +8,7 @@ using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace Torshify.Radio.Core.Views.Settings.Tabs
+namespace Torshify.Radio.Core.Views.Settings.General
 {
     public partial class HotkeySectionView : UserControl
     {
@@ -62,8 +62,6 @@ namespace Torshify.Radio.Core.Views.Settings.Tabs
             {
                 modifiers |= Keys.LWin;
             }
-
-            Console.WriteLine(winFormsKey + " --- " + modifiers + " = " + (winFormsKey|modifiers));
 
             if (HotkeyList.SelectedItem != null)
             {

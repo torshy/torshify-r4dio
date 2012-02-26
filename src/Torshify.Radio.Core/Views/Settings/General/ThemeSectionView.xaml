@@ -1,0 +1,27 @@
+﻿<UserControl
+    x:Class="Torshify.Radio.Core.Views.Settings.General.ThemeSectionView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <Controls:FormPanel
+        Columns="1">
+        <TextBlock
+            Text="Accent color *" />
+        <extToolkit:ColorPicker
+            SelectedColor="{Binding CurrentAccentColor}" />
+        <TextBlock
+            Text="" />
+        <DockPanel>
+            <TextBlock
+                Text="* Requires a restart of r4dio"
+                Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+        </DockPanel>
+    </Controls:FormPanel>
+</UserControl>

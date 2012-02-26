@@ -4,45 +4,83 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Settings="clr-namespace:Torshify.Radio.Core.Views.Settings"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
-    <TabControl
-        x:Name="_tabControl"
-        TabStripPlacement="Left"
-        ItemsSource="{Binding SettingPages}">
-        <TabControl.ItemContainerStyle>
-            <Style
-                TargetType="{x:Type TabItem}"
-                BasedOn="{StaticResource {x:Type TabItem}}">
-                <Setter
-                    Property="Header"
-                    Value="{Binding Model.HeaderInfo}" />
-                <Setter
-                    Property="HeaderTemplate">
-                    <Setter.Value>
-                        <DataTemplate>
-                            <DockPanel
-                                Margin="0,0,8,0">
-                                <Image
-                                    Source="{Binding IconUri}"
-                                    Height="24" />
-                                <TextBlock
-                                    Text="{Binding Title}" />
-                            </DockPanel>
-                        </DataTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Setter
-                    Property="HorizontalAlignment"
-                    Value="Left" />
-                <Setter
-                    Property="IsSelected"
-                    Value="{Binding Model.HeaderInfo.IsSelected}" />
-                <Setter
-                    Property="ToolTip"
-                    Value="{Binding Model.HeaderInfo.ToolTip}" />
-            </Style>
-        </TabControl.ItemContainerStyle>
-    </TabControl>
+    <UserControl.Resources>
+        <Settings:SettingsPageTemplateSelector
+            x:Key="settingsTemplateSelector">
+            <Settings:SettingsPageTemplateSelector.PageTemplate>
+                <HierarchicalDataTemplate
+                    ItemsSource="{Binding Sections}">
+                    <TextBlock
+                        Text="{Binding HeaderInfo.Title}"
+                        Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+                </HierarchicalDataTemplate>
+            </Settings:SettingsPageTemplateSelector.PageTemplate>
+            <Settings:SettingsPageTemplateSelector.SectionTemplate>
+                <DataTemplate>
+                    <TextBlock
+                        Text="{Binding HeaderInfo.Title}"
+                        Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+                </DataTemplate>
+            </Settings:SettingsPageTemplateSelector.SectionTemplate>
+        </Settings:SettingsPageTemplateSelector>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <TreeView
+            x:Name="_treeView"
+            Grid.Column="0"
+            SelectedItemChanged="SelectedItemChanged"
+            ItemsSource="{Binding SettingPages}"
+            ItemTemplateSelector="{StaticResource settingsTemplateSelector}">
+            <TreeView.ItemContainerStyle>
+                <Style
+                    TargetType="{x:Type TreeViewItem}">
+                    <Setter
+                        Property="IsExpanded"
+                        Value="True" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+        </TreeView>
+
+        <Controls:TransitioningContentControl
+            x:Name="_content"
+            Grid.Column="1"
+            Content="{Binding CurrentPage}">
+            <Controls:TransitioningContentControl.ContentTemplate>
+                <DataTemplate>
+                    <ScrollViewer
+                        HorizontalScrollBarVisibility="Disabled">
+                        <ItemsControl
+                            ItemsSource="{Binding Sections}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <GroupBox>
+                                        <GroupBox.Header>
+                                            <TextBlock
+                                                Text="{Binding HeaderInfo.Title}"
+                                                FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                                                FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
+                                        </GroupBox.Header>
+                                        <ContentControl
+                                            DataContext="{Binding}"
+                                            Content="{Binding UI}" />
+                                    </GroupBox>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </DataTemplate>
+            </Controls:TransitioningContentControl.ContentTemplate>
+        </Controls:TransitioningContentControl>
+    </Grid>
 </UserControl>
