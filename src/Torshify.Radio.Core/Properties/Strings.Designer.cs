@@ -115,6 +115,15 @@ namespace Torshify.Radio.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @Enable_Disable_TrackSource.
+        /// </summary>
+        internal static string Enable_Disable_TrackSource {
+            get {
+                return ResourceManager.GetString("Enable_Disable_TrackSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @Home.
         /// </summary>
         internal static string Home {

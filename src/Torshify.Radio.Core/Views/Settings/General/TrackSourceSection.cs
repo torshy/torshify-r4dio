@@ -20,7 +20,7 @@ namespace Torshify.Radio.Core.Views.Settings.General
     {
         #region Fields
 
-        private readonly ObservableCollection<string> _trackSourcePriority;
+        private readonly ObservableCollection<TrackSourceConfig> _trackSourcePriority;
 
         [Import]
         private IDocumentStore _documentStore = null;
@@ -47,7 +47,7 @@ namespace Torshify.Radio.Core.Views.Settings.General
                 DataContext = this
             };
 
-            _trackSourcePriority = new ObservableCollection<string>();
+            _trackSourcePriority = new ObservableCollection<TrackSourceConfig>();
         }
 
         #endregion Constructors
@@ -66,7 +66,7 @@ namespace Torshify.Radio.Core.Views.Settings.General
             private set;
         }
 
-        public IEnumerable<string> TrackSourcePriority
+        public IEnumerable<TrackSourceConfig> TrackSourcePriority
         {
             get
             {
@@ -88,15 +88,18 @@ namespace Torshify.Radio.Core.Views.Settings.General
 
                     if (settings != null)
                     {
-                        if (settings.TrackSourcePriority != null && settings.TrackSourcePriority.Any())
+                        if (settings.TrackSources != null && settings.TrackSources.Any())
                         {
-                            _trackSourcePriority.AddRange(settings.TrackSourcePriority);
+                            _trackSourcePriority.AddRange(settings.TrackSources);
                         }
                         else
                         {
                             foreach (var trackSource in _trackSources)
                             {
-                                _trackSourcePriority.Add(trackSource.Metadata.Name);
+                                _trackSourcePriority.Add(new TrackSourceConfig
+                                {
+                                    Name = trackSource.Metadata.Name
+                                });
                             }
                         }
                     }
@@ -125,7 +128,7 @@ namespace Torshify.Radio.Core.Views.Settings.General
                     {
                         if (_trackSourcePriority.Any())
                         {
-                            settings.TrackSourcePriority = _trackSourcePriority.ToList();
+                            settings.TrackSources = _trackSourcePriority.ToList();
                             session.Store(settings);
                             session.SaveChanges();
                         }
@@ -143,7 +146,7 @@ namespace Torshify.Radio.Core.Views.Settings.General
             }
         }
 
-        public void ChangeTrackSourcePriority(string draggingItem, string toItem)
+        public void ChangeTrackSourcePriority(TrackSourceConfig draggingItem, TrackSourceConfig toItem)
         {
             _trackSourcePriority.Move(_trackSourcePriority.IndexOf(draggingItem), _trackSourcePriority.IndexOf(toItem));
         }

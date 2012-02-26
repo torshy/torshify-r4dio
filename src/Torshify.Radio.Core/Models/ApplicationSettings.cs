@@ -11,7 +11,7 @@ namespace Torshify.Radio.Core.Models
         {
             HotkeysEnabled = true;
             Culture = "en";
-            TrackSourcePriority = new List<string>();
+            TrackSources = new List<TrackSourceConfig>();
         }
 
         #endregion Constructors
@@ -64,12 +64,25 @@ namespace Torshify.Radio.Core.Models
             set;
         }
 
-        public List<string> TrackSourcePriority
+        public List<TrackSourceConfig> TrackSources
         {
             get; 
             set; 
         }
 
         #endregion Properties
+    }
+
+    public class TrackSourceConfig
+    {
+        public string Name
+        {
+            get; set;
+        }
+
+        public bool Disabled
+        {
+            get; set;
+        }
     }
 }

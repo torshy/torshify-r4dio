@@ -5,9 +5,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
-    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework" mc:Ignorable="d"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
+    Engine:LocalizeDictionary.DesignCulture="en-US"
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
+    mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:NegateConverter
+            x:Key="NegateConverter" />
+    </UserControl.Resources>
     <StackPanel>
         <TextBlock
             Text="If you have multiple track sources that r4dio will use to find songs from, you can control in what order r4dio will use here"
@@ -20,14 +29,16 @@
             ItemsSource="{Binding TrackSourcePriority}">
             <Controls:ReorderListBox.ItemTemplate>
                 <DataTemplate>
-                    <DockPanel
-                        Controls:ReorderListBox.IsDragElement="True">
+                    <DockPanel>
                         <Image
+                            Controls:ReorderListBox.IsDragElement="True"
                             DockPanel.Dock="Right"
                             Source="{Binding Source={x:Static Framework:AppIcons.Parent}}"
                             Height="24" />
-                        <TextBlock
-                            Text="{Binding}" />
+                        <CheckBox
+                            IsChecked="{Binding Disabled, Converter={StaticResource NegateConverter}}"
+                            Content="{Binding Name}"
+                            ToolTip="{lex:LocText Key=Enable_Disable_TrackSource, Dict=Strings, Assembly=Torshify.Radio.Core}" />
                     </DockPanel>
                 </DataTemplate>
             </Controls:ReorderListBox.ItemTemplate>

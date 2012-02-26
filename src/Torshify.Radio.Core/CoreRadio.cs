@@ -470,11 +470,11 @@ namespace Torshify.Radio.Core
 
                     if (appSettings != null)
                     {
-                        if (appSettings.TrackSourcePriority.Any())
+                        if (appSettings.TrackSources.Any())
                         {
-                            foreach (var sourceName in appSettings.TrackSourcePriority)
+                            foreach (var trackSource in appSettings.TrackSources)
                             {
-                                var source = TrackSources.FirstOrDefault(s => s.Metadata.Name == sourceName);
+                                var source = TrackSources.FirstOrDefault(s => s.Metadata.Name == trackSource.Name && !trackSource.Disabled);
 
                                 if (source != null)
                                 {

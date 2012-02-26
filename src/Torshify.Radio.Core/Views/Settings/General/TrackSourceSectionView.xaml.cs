@@ -1,5 +1,5 @@
 ﻿using System.Windows.Controls;
-
+using Torshify.Radio.Core.Models;
 using Torshify.Radio.Framework.Controls;
 
 namespace Torshify.Radio.Core.Views.Settings.General
@@ -21,10 +21,10 @@ namespace Torshify.Radio.Core.Views.Settings.General
         {
             var model = DataContext as TrackSourceSection;
             var reorderListBox = (ReorderListBox)e.OriginalSource;
-            var dragginItem = (string)reorderListBox.ItemContainerGenerator.ItemFromContainer(e.ItemContainer);
-            var toItem = (string)reorderListBox.ItemContainerGenerator.ItemFromContainer(e.ToContainer);
+            var dragginItem = (TrackSourceConfig)reorderListBox.ItemContainerGenerator.ItemFromContainer(e.ItemContainer);
+            var toItem = (TrackSourceConfig)reorderListBox.ItemContainerGenerator.ItemFromContainer(e.ToContainer);
 
-            if (model != null && !string.IsNullOrEmpty(dragginItem) && !string.IsNullOrEmpty(toItem))
+            if (model != null)
             {
                 model.ChangeTrackSourcePriority(dragginItem, toItem);
             }
