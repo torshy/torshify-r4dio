@@ -10,6 +10,9 @@ using System.Windows.Threading;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
 
+using Raven.Client;
+
+using Torshify.Radio.Core.Models;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Core
@@ -21,6 +24,7 @@ namespace Torshify.Radio.Core
         #region Fields
 
         private readonly Dispatcher _dispatcher;
+        private readonly IDocumentStore _documentStore;
         private readonly ILoadingIndicatorService _loadingIndicatorService;
         private readonly ILoggerFacade _logger;
         private readonly IToastService _toastService;
@@ -41,6 +45,7 @@ namespace Torshify.Radio.Core
         [ImportingConstructor]
         public CoreRadio(
             [Import("CorePlayer")]ITrackPlayer corePlayer,
+            IDocumentStore documentStore,
             ILoadingIndicatorService loadingIndicatorService,
             IToastService toastService,
             ILoggerFacade logger,
@@ -51,6 +56,7 @@ namespace Torshify.Radio.Core
             _trackStreamQueue = new ConcurrentQueue<ITrackStream>();
             _trackQueue = new ConcurrentQueue<Track>();
             _corePlayer = corePlayer;
+            _documentStore = documentStore;
             _loadingIndicatorService = loadingIndicatorService;
             _toastService = toastService;
             _logger = logger;
@@ -68,9 +74,9 @@ namespace Torshify.Radio.Core
 
         public event EventHandler CurrentTrackStreamChanged;
 
-        public event EventHandler UpcomingTrackChanged;
-
         public event EventHandler TrackStreamQueued;
+
+        public event EventHandler UpcomingTrackChanged;
 
         #endregion Events
 
@@ -201,7 +207,7 @@ namespace Torshify.Radio.Core
 
             List<TrackContainer> albums = new List<TrackContainer>();
 
-            foreach (var source in TrackSources)
+            foreach (var source in GetTrackSources())
             {
                 albums.AddRange(source.Value.GetAlbumsByArtist(artist));
             }
@@ -215,7 +221,7 @@ namespace Torshify.Radio.Core
 
             List<Track> tracks = new List<Track>();
 
-            foreach (var source in TrackSources)
+            foreach (var source in GetTrackSources())
             {
                 tracks.AddRange(source.Value.GetTracksByName(name));
             }
@@ -451,6 +457,44 @@ namespace Torshify.Radio.Core
                         });
                     }
                 });
+        }
+
+        private IEnumerable<Lazy<ITrackSource, ITrackSourceMetadata>> GetTrackSources()
+        {
+            try
+            {
+                List<Lazy<ITrackSource, ITrackSourceMetadata>> sources = new List<Lazy<ITrackSource, ITrackSourceMetadata>>();
+                using(var session = _documentStore.OpenSession())
+                {
+                    var appSettings = session.Query<ApplicationSettings>().FirstOrDefault();
+
+                    if (appSettings != null)
+                    {
+                        if (appSettings.TrackSourcePriority.Any())
+                        {
+                            foreach (var sourceName in appSettings.TrackSourcePriority)
+                            {
+                                var source = TrackSources.FirstOrDefault(s => s.Metadata.Name == sourceName);
+
+                                if (source != null)
+                                {
+                                    sources.Add(source);
+                                }
+                            }
+
+                            var except = TrackSources.Except(sources);
+                            sources.AddRange(except);
+                            return sources;
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+            }
+
+            return TrackSources;
         }
 
         private void OnCurrentTrackStreamChanged()
