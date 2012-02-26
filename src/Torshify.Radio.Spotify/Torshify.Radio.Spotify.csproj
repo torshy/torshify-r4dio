@@ -136,6 +136,11 @@
       <DependentUpon>MainStationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainStationViewModel.cs" />
+    <Compile Include="Views\Settings\SpotifyLoginSection.cs" />
+    <Compile Include="Views\Settings\SpotifyLoginSectionView.xaml.cs">
+      <DependentUpon>SpotifyLoginSectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\SpotifySettingsPageModel.cs" />
     <Compile Include="Wizard\SpotifyWizardPage1.xaml.cs">
       <DependentUpon>SpotifyWizardPage1.xaml</DependentUpon>
     </Compile>
@@ -211,6 +216,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\MainStationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\SpotifyLoginSectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

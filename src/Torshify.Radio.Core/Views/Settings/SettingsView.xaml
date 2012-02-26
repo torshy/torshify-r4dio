@@ -126,7 +126,8 @@
                         <Image
                             DockPanel.Dock="Left"
                             Source="{Binding HeaderInfo.IconUri}"
-                            Height="24" />
+                            Height="24"
+                            Width="24" />
                         <TextBlock
                             Text="{Binding HeaderInfo.Title}"
                             FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}"
