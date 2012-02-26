@@ -1,12 +1,14 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 using Microsoft.Practices.Prism.Regions;
+
 using Torshify.Radio.Framework;
-using Raven.Client.Linq.Indexing;
 using Torshify.Radio.Framework.Controls;
-using System.Linq;
 
 namespace Torshify.Radio.Core.Views.Settings
 {
@@ -64,13 +66,23 @@ namespace Torshify.Radio.Core.Views.Settings
 
             if (section != null)
             {
-                ScrollSectionIntoView(section);
+                Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action<ISettingsSection>(ScrollSectionIntoView), section);
             }
         }
 
         private void ScrollSectionIntoView(ISettingsSection section)
         {
-            // TODO
+            var itemsControl = _content.FindVisualDescendantByType<ItemsControl>();
+
+            if (itemsControl != null)
+            {
+                var sectionUI = itemsControl.ItemContainerGenerator.ContainerFromItem(section) as FrameworkElement;
+
+                if (sectionUI != null)
+                {
+                    sectionUI.BringIntoView();
+                }
+            }
         }
 
         #endregion Methods

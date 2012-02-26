@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
-using System.Linq;
 
 namespace Torshify.Radio.Core.Views.Settings
 {
@@ -14,7 +14,11 @@ namespace Torshify.Radio.Core.Views.Settings
     [RegionMemberLifetime(KeepAlive = false)]
     public class SettingsViewModel : NotificationObject, INavigationAware
     {
+        #region Fields
+
         private ISettingsPage _currentPage;
+
+        #endregion Fields
 
         #region Properties
 
