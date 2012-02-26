@@ -6,6 +6,7 @@ using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.Spotify.Views.Settings
 {
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class SpotifySettingsPageModel : ISettingsPage
     {
         #region Fields

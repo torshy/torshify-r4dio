@@ -22,7 +22,7 @@ namespace Torshify.Radio.Core.Views.Settings
 
         #region Properties
 
-        [ImportMany]
+        [ImportMany(RequiredCreationPolicy = CreationPolicy.NonShared)]
         public IEnumerable<ISettingsPage> SettingPages
         {
             get;

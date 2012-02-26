@@ -61,8 +61,6 @@
                         Controls:PasswordBoxMonitor.Watermark="Password"
                         Margin="0,0,0,4"
                         PasswordChanged="PasswordBoxPasswordChanged" />
-                    <Controls:MetroProgressBar
-                        IsIndeterminate="{Binding LoadingIndicator.IsLoading}" />
                     <TextBlock
                         x:Name="_statusText"
                         Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
