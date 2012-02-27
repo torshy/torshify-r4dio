@@ -128,6 +128,11 @@ namespace Torshify.Radio.Core.Views.Settings.General
                     {
                         if (_trackSourcePriority.Any())
                         {
+                            for (int i = 0; i < _trackSourcePriority.Count; i++)
+                            {
+                                _trackSourcePriority[i].Index = i;
+                            }
+
                             settings.TrackSources = _trackSourcePriority.ToList();
                             session.Store(settings);
                             session.SaveChanges();

@@ -72,17 +72,4 @@ namespace Torshify.Radio.Core.Models
 
         #endregion Properties
     }
-
-    public class TrackSourceConfig
-    {
-        public string Name
-        {
-            get; set;
-        }
-
-        public bool Disabled
-        {
-            get; set;
-        }
-    }
 }

@@ -102,6 +102,7 @@
     <Compile Include="FavoriteHandlers\TrackContainerFavoriteHandler.cs" />
     <Compile Include="FavoriteHandlers\TrackFavoriteHandler.cs" />
     <Compile Include="FavoriteHandlers\TrackListFavoriteHandler.cs" />
+    <Compile Include="Models\TrackSourceConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

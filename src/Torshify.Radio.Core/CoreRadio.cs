@@ -209,7 +209,11 @@ namespace Torshify.Radio.Core
 
             foreach (var source in GetTrackSources())
             {
-                albums.AddRange(source.Value.GetAlbumsByArtist(artist));
+                var result = source.Value.GetAlbumsByArtist(artist).ToArray();
+
+                _logger.Log("[" + source.Metadata.Name + "] " + result.Length + " results found", Category.Info, Priority.Low);
+
+                albums.AddRange(result);
             }
 
             return albums;
@@ -223,7 +227,11 @@ namespace Torshify.Radio.Core
 
             foreach (var source in GetTrackSources())
             {
-                tracks.AddRange(source.Value.GetTracksByName(name));
+                var result = source.Value.GetTracksByName(name).ToArray();
+
+                _logger.Log("[" + source.Metadata.Name + "] " + result.Length + " results found", Category.Info, Priority.Low);
+
+                tracks.AddRange(result);
             }
 
             return tracks;
@@ -275,7 +283,7 @@ namespace Torshify.Radio.Core
             {
                 _trackStreamQueue.Enqueue(trackStream);
                 _logger.Log("Queued track stream " + trackStream.Description, Category.Debug, Priority.Low);
-                _dispatcher.BeginInvoke(new Action<ITrackStream>(q=>
+                _dispatcher.BeginInvoke(new Action<ITrackStream>(q =>
                 {
                     _trackStreamQueuePublic.Add(q);
                     OnTrackStreamQueued();
@@ -463,8 +471,8 @@ namespace Torshify.Radio.Core
         {
             try
             {
-                List<Lazy<ITrackSource, ITrackSourceMetadata>> sources = new List<Lazy<ITrackSource, ITrackSourceMetadata>>();
-                using(var session = _documentStore.OpenSession())
+                var sources = new List<Lazy<ITrackSource, ITrackSourceMetadata>>();
+                using (var session = _documentStore.OpenSession())
                 {
                     var appSettings = session.Query<ApplicationSettings>().FirstOrDefault();
 
@@ -472,24 +480,41 @@ namespace Torshify.Radio.Core
                     {
                         if (appSettings.TrackSources.Any())
                         {
-                            foreach (var trackSource in appSettings.TrackSources)
+                            foreach (var sourceConfig in appSettings.TrackSources)
                             {
-                                var source = TrackSources.FirstOrDefault(s => s.Metadata.Name == trackSource.Name && !trackSource.Disabled);
+                                if (sourceConfig.Disabled)
+                                {
+                                    continue;
+                                }
+
+                                var source =
+                                    TrackSources.FirstOrDefault(
+                                        ts =>
+                                        ts.Metadata.Name.Equals(sourceConfig.Name,
+                                                                StringComparison.InvariantCultureIgnoreCase));
 
                                 if (source != null)
                                 {
-                                    sources.Add(source);
+                                    sources.Insert(sourceConfig.Index, source);
                                 }
                             }
 
-                            var except = TrackSources.Except(sources);
-                            sources.AddRange(except);
+                            // TODO : Need to handle a situation where there are new track sources which doesn't exist in db
+                            //var configuredNames = appSettings.TrackSources.Select(tsc => tsc.Name);
+                            //var availableNames = TrackSources.Select(ts => ts.Metadata.Name);
+                            //var mismatch = availableNames.Except(configuredNames);
+
+                            //if (mismatch.Any())
+                            //{
+                                    
+                            //}
+
                             return sources;
                         }
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.Log(e.ToString(), Category.Exception, Priority.Medium);
             }
