@@ -14,5 +14,7 @@
             Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/CommandBarContextMenu.xaml" />
         <ResourceDictionary
             Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/FormGroupHost.xaml" />
+        <ResourceDictionary
+            Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/ToggleContentButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -162,6 +162,7 @@
     <Compile Include="Controls\Standard\WindowExtensions.cs" />
     <Compile Include="Controls\SystemCommands.cs" />
     <Compile Include="Controls\SystemParameters2.cs" />
+    <Compile Include="Controls\ToggleContentButton.cs" />
     <Compile Include="Controls\TransitioningContentControl.cs" />
     <Compile Include="Controls\TreeHelpers.cs" />
     <Compile Include="Controls\UIHelpers.cs" />
@@ -289,6 +290,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\ThemeStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\ToggleContentButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
