@@ -231,6 +231,16 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Expander>
+            <Expander>
+                <Expander.Header>
+                    <TextBlock
+                        DockPanel.Dock="Left"
+                        Text="Metrics"
+                        Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                        FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
+                </Expander.Header>
+            </Expander>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

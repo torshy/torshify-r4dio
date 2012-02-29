@@ -2,13 +2,13 @@
 <GrooveFix>
   <htmlshark>
     <GrooveClient>htmlshark</GrooveClient>
-    <GrooveClientRevision>20120220</GrooveClientRevision>
-    <GrooveStaticRandomizer>:hamburgerAndHotdogs:</GrooveStaticRandomizer>
+    <GrooveClientRevision>20120227</GrooveClientRevision>
+    <GrooveStaticRandomizer>:riceAndChicken:</GrooveStaticRandomizer>
   </htmlshark>
   <jsqueue>
     <GrooveClient>jsqueue</GrooveClient>
-    <GrooveClientRevision>20120220.01</GrooveClientRevision>
-    <GrooveStaticRandomizer>:whereIsAllThePunch:</GrooveStaticRandomizer>
+    <GrooveClientRevision>20120227.01</GrooveClientRevision>
+    <GrooveStaticRandomizer>:spiralLightbulbs:</GrooveStaticRandomizer>
   </jsqueue>
   <mobileshark>
     <GrooveClient>mobileshark</GrooveClient>
