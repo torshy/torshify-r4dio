@@ -1,0 +1,4 @@
+0.6.0
+-----------------------
+* Updated Grooveshark
+* Displaying when track is buffering in the UI
