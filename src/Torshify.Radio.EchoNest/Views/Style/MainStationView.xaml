@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -152,6 +153,10 @@
         </Style>
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter" />
+        <Converters:BoolToVisibleOrHidden
+            x:Key="InvertedBooleanToVisibilityConverter"
+            Reverse="True"
+            Collapse="True" />
     </UserControl.Resources>
     <DockPanel>
         <Button
@@ -161,30 +166,47 @@
         <GroupBox
             MaxWidth="150"
             DockPanel.Dock="Right"
-            Visibility="{Binding HasItems, ElementName=ArtistPreviewList, Converter={StaticResource BooleanToVisibilityConverter}}"
             Margin="8,0,0,0">
             <GroupBox.Header>
-                <TextBlock
-                    DockPanel.Dock="Left"
-                    Text="Artist preview"
-                    Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
-                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
-                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}" />
+                <DockPanel>
+                    <TextBlock
+                        Visibility="{Binding HasItems, ElementName=ArtistPreviewList, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        DockPanel.Dock="Bottom"
+                        Text="This doesn't reflect the actual playlist, only the type of artists matching the criterias"
+                        TextWrapping="Wrap"
+                        Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
+                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                        FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeNormal}}" />
+                    <TextBlock
+                        Text="Artist preview"
+                        Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                        FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}" />
+                </DockPanel>
             </GroupBox.Header>
-            <ScrollViewer
-                HorizontalScrollBarVisibility="Disabled">
-                <ItemsControl
-                    Name="ArtistPreviewList"
-                    ItemsSource="{Binding PreviewArtistList}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock
-                                Text="{Binding Name}"
-                                TextTrimming="CharacterEllipsis" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+            <DockPanel>
+                <TextBlock
+                    Visibility="{Binding HasItems, ElementName=ArtistPreviewList, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"
+                    Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
+                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}"
+                    Text="No artists matching.." />
+                <ScrollViewer
+                    Visibility="{Binding HasItems, ElementName=ArtistPreviewList, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl
+                        Name="ArtistPreviewList"
+                        ItemsSource="{Binding PreviewArtistList}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock
+                                    Text="{Binding Name}"
+                                    TextTrimming="CharacterEllipsis" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
         </GroupBox>
         <ScrollViewer
             HorizontalScrollBarVisibility="Disabled">
@@ -285,7 +307,8 @@
                                 FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
                         </DockPanel>
                     </Expander.Header>
-                    <Controls:FormPanel>
+                    <Controls:FormPanel
+                        Columns="1">
                         <TextBlock
                             Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
                             Text="Tempo (BPM)" />
@@ -342,7 +365,7 @@
                             Value="{Binding Danceability.Minimum}" />
                         <TextBlock
                             Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
-                            Text="Familiarity" />
+                            Text="Artist familiarity" />
                         <Slider
                             VerticalAlignment="Center"
                             Minimum="0"

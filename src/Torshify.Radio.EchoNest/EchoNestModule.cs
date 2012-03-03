@@ -137,14 +137,12 @@ namespace Torshify.Radio.EchoNest
             })),
             DispatcherPriority.Background);
 
-#if DEBUG
             _dispatcher.BeginInvoke(new Action(() => TileService.Add<Views.Style.MainStationView>(new TileData
             {
                 Title = "Custom",
                 BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0008_touch.png")
             })),
             DispatcherPriority.Background);
-#endif
         }
 
         private IEnumerable<string> SuggestArtists(string query)
