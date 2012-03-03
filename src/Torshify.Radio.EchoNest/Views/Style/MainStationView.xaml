@@ -150,12 +150,42 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <DockPanel>
         <Button
             DockPanel.Dock="Bottom"
             Content="Start radio"
             Command="{Binding StartRadioCommand}" />
+        <GroupBox
+            MaxWidth="150"
+            DockPanel.Dock="Right"
+            Visibility="{Binding HasItems, ElementName=ArtistPreviewList, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Margin="8,0,0,0">
+            <GroupBox.Header>
+                <TextBlock
+                    DockPanel.Dock="Left"
+                    Text="Artist preview"
+                    Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}" />
+            </GroupBox.Header>
+            <ScrollViewer
+                HorizontalScrollBarVisibility="Disabled">
+                <ItemsControl
+                    Name="ArtistPreviewList"
+                    ItemsSource="{Binding PreviewArtistList}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Text="{Binding Name}"
+                                TextTrimming="CharacterEllipsis" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </GroupBox>
         <ScrollViewer
             HorizontalScrollBarVisibility="Disabled">
             <StackPanel>
