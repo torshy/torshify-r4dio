@@ -35,10 +35,11 @@
                 Width="0.4*" />
         </Grid.ColumnDefinitions>
         <ScrollViewer
-            PanningMode="VerticalOnly">
+            PanningMode="VerticalOnly"
+            x:Name="MixListScrollViewer">
             <StackPanel>
                 <ItemsControl
-                    Name="MixList"
+                    x:Name="MixList"
                     ItemsSource="{Binding Mixes}"
                     VirtualizingStackPanel.IsVirtualizing="True">
                     <ItemsControl.ItemTemplate>

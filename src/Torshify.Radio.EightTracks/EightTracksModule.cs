@@ -10,7 +10,7 @@ using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.Regions;
-using Torshify.Radio.EightTracks.Properties;
+
 using Torshify.Radio.EightTracks.Views;
 using Torshify.Radio.EightTracks.Views.Tabs;
 using Torshify.Radio.Framework;
@@ -81,7 +81,7 @@ namespace Torshify.Radio.EightTracks
                 RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof (PopularMixListView));
                 RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof (HotMixListView));
                 RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof (TagsTabView));
-                RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof (FavoritesView));
+                //RegionManager.RegisterViewWithRegion(MainStationView.TabViewRegion, typeof (FavoritesView));
 
                 TileService.Add<MainStationView>(new TileData
                 {
