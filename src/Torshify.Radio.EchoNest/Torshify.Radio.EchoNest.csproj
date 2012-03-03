@@ -180,6 +180,8 @@
     </Compile>
     <Compile Include="Views\Style\MainStationViewModel.cs" />
     <Compile Include="Views\Style\Models\TermModel.cs" />
+    <Compile Include="Views\Style\Models\Range.cs" />
+    <Compile Include="Views\Style\StyleTrackStream.cs" />
     <EmbeddedResource Include="Properties\Strings.no.resx" />
     <EmbeddedResource Include="Properties\Strings.en.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -1,17 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Threading.Tasks;
 
 using EchoNest;
 using EchoNest.Artist;
-
+using EchoNest.Playlist;
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.EchoNest.Views.Style.Models;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
+
+using Search = EchoNest.Song.Search;
+
+using SearchArgument = EchoNest.Song.SearchArgument;
 
 namespace Torshify.Radio.EchoNest.Views.Style
 {
@@ -23,21 +29,39 @@ namespace Torshify.Radio.EchoNest.Views.Style
         #region Fields
 
         private readonly ILoadingIndicatorService _loadingIndicatorService;
+        private readonly IRadio _radio;
+        private readonly IToastService _toastService;
+        private readonly ILoggerFacade _logger;
 
+        private Range _artistFamiliarity;
+        private Range _artistHotness;
+        private Range _danceability;
+        private Range _energy;
+        private Range _loudness;
+        private Range _songHotness;
+        private Range _tempo;
+        private string _metricsText;
         private ObservableCollection<TermModel> _moods;
-        private TaskScheduler _scheduler;
+        private ObservableCollection<TermModel> _styles;
         private ObservableCollection<TermModel> _selectedMoods;
         private ObservableCollection<TermModel> _selectedStyles;
-        private ObservableCollection<TermModel> _styles;
+        private TaskScheduler _scheduler;
 
-        #endregion Fields
+            #endregion Fields
 
         #region Constructors
 
         [ImportingConstructor]
-        public MainStationViewModel(ILoadingIndicatorService loadingIndicatorService)
+        public MainStationViewModel(
+            ILoadingIndicatorService loadingIndicatorService,
+            IRadio radio,
+            IToastService toastService,
+            ILoggerFacade logger)
         {
             _loadingIndicatorService = loadingIndicatorService;
+            _radio = radio;
+            _toastService = toastService;
+            _logger = logger;
             _scheduler = TaskScheduler.FromCurrentSynchronizationContext();
             _styles = new ObservableCollection<TermModel>();
             _moods = new ObservableCollection<TermModel>();
@@ -45,13 +69,36 @@ namespace Torshify.Radio.EchoNest.Views.Style
             _selectedMoods.CollectionChanged += (sender, args) => RaisePropertyChanged("SelectedMoodsText");
             _selectedStyles = new ObservableCollection<TermModel>();
             _selectedStyles.CollectionChanged += (sender, args) => RaisePropertyChanged("SelectedStylesText");
+
             ToggleStyleCommand = new StaticCommand<TermModel>(ExecuteToggleStyle);
             ToggleMoodCommand = new StaticCommand<TermModel>(ExecuteToggleMood);
+            StartRadioCommand = new AutomaticCommand(ExecuteStartRadio, CanExecuteStartRadio);
+            Tempo = new Range();
+            Tempo.Rounding = MidpointRounding.ToEven;
+            Tempo.RangeChanged += MetricChanged;
+            Loudness = new Range();
+            Loudness.RangeChanged += MetricChanged;
+            Energy = new Range();
+            Energy.RangeChanged += MetricChanged;
+            ArtistFamiliarity = new Range();
+            ArtistFamiliarity.RangeChanged += MetricChanged;
+            ArtistHotness = new Range();
+            ArtistHotness.RangeChanged += MetricChanged;
+            SongHotness = new Range();
+            SongHotness.RangeChanged += MetricChanged;
+            Danceability = new Range();
+            Danceability.RangeChanged += MetricChanged;
         }
 
         #endregion Constructors
 
         #region Properties
+
+        public AutomaticCommand StartRadioCommand
+        {
+            get;
+            private set;
+        }
 
         public StaticCommand<TermModel> ToggleStyleCommand
         {
@@ -122,6 +169,135 @@ namespace Torshify.Radio.EchoNest.Views.Style
                 return string.Empty;
             }
         }
+
+        public Range Tempo
+        {
+            get
+            {
+                return _tempo;
+            }
+            set
+            {
+                if (_tempo != value)
+                {
+                    _tempo = value;
+                    RaisePropertyChanged("Tempo");
+                }
+            }
+        }
+
+        public Range Loudness
+        {
+            get
+            {
+                return _loudness;
+            }
+            set
+            {
+                if (_loudness != value)
+                {
+                    _loudness = value;
+                    RaisePropertyChanged("Loudness");
+                }
+            }
+        }
+
+        public Range Danceability
+        {
+            get
+            {
+                return _danceability;
+            }
+            set
+            {
+                if (_danceability != value)
+                {
+                    _danceability = value;
+                    RaisePropertyChanged("Danceability");
+                }
+            }
+        }
+
+        public Range Energy
+        {
+            get
+            {
+                return _energy;
+            }
+            set
+            {
+                if (_energy != value)
+                {
+                    _energy = value;
+                    RaisePropertyChanged("Energy");
+                }
+            }
+        }
+
+        public Range ArtistFamiliarity
+        {
+            get
+            {
+                return _artistFamiliarity;
+            }
+            set
+            {
+                if (_artistFamiliarity != value)
+                {
+                    _artistFamiliarity = value;
+                    RaisePropertyChanged("ArtistFamiliarity");
+                }
+            }
+        }
+
+        public Range ArtistHotness
+        {
+            get
+            {
+                return _artistHotness;
+            }
+            set
+            {
+                if (_artistHotness != value)
+                {
+                    _artistHotness = value;
+                    RaisePropertyChanged("ArtistHotness");
+                }
+            }
+        }
+
+        public Range SongHotness
+        {
+            get
+            {
+                return _songHotness;
+            }
+            set
+            {
+                if (_songHotness != value)
+                {
+                    _songHotness = value;
+                    RaisePropertyChanged("SongHotness");
+                }
+            }
+        }
+
+        public string MetricsText
+        {
+            get
+            {
+                return _metricsText;
+            }
+            set
+            {
+                if (_metricsText != value)
+                {
+                    _metricsText = value;
+                    RaisePropertyChanged("MetricsText");
+                }
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -139,6 +315,124 @@ namespace Torshify.Radio.EchoNest.Views.Style
 
         void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
+        }
+
+        private void MetricChanged(object sender, EventArgs e)
+        {
+            string text = string.Empty;
+
+            if (Tempo.Minimum.HasValue)
+            {
+                text += "tempo (" + (int)Tempo.Minimum.Value + "BPM) ";
+            }
+
+            if (Loudness.Minimum.HasValue)
+            {
+                text += "loudness (" + (int)Loudness.Minimum.Value + "dB) ";
+            }
+
+            if (Energy.Minimum.HasValue)
+            {
+                text += string.Format("energy ({0:0.0}) ", Energy.Minimum.Value);
+            }
+
+            if (Danceability.Minimum.HasValue)
+            {
+                text += string.Format("danceability ({0:0.0}) ", Danceability.Minimum.Value);
+            }
+
+            if (ArtistFamiliarity.Minimum.HasValue)
+            {
+                text += string.Format("familiarity ({0:0.0}) ", ArtistFamiliarity.Minimum.Value);
+            }
+
+            if (ArtistHotness.Minimum.HasValue)
+            {
+                text += string.Format("artist hotness ({0:0.0}) ", ArtistHotness.Minimum.Value);
+            }
+
+            if (SongHotness.Minimum.HasValue)
+            {
+                text += string.Format("song hotness ({0:0.0}) ", SongHotness.Minimum.Value);
+            }
+
+            MetricsText = text;
+
+            FetchPreview();
+        }
+
+        private bool CanExecuteStartRadio()
+        {
+            return true;
+        }
+
+        private void ExecuteStartRadio()
+        {
+            Task.Factory.StartNew(() =>
+            {
+                using (_loadingIndicatorService.EnterLoadingBlock())
+                {
+                    using (var session = new EchoNestSession(EchoNestModule.ApiKey))
+                    {
+                        SearchArgument arg = new SearchArgument();
+                        SelectedMoods.ForEach(mood => arg.Moods.Add(mood.Name));
+                        SelectedStyles.ForEach(style => arg.Styles.Add(style.Name));
+                        arg.MinTempo = Tempo.Minimum;
+                        arg.MinLoudness = Loudness.Minimum;
+                        arg.MinDanceability = Danceability.Minimum;
+                        arg.MinEnergy = Energy.Minimum;
+                        arg.ArtistMinFamiliarity = ArtistFamiliarity.Minimum;
+                        arg.ArtistMinHotttnesss = ArtistHotness.Minimum;
+                        arg.SongMinHotttnesss = SongHotness.Minimum;
+
+                        var response = session.Query<Search>().Execute(arg);
+
+                        if (response == null)
+                        {
+                            _toastService.Show("Unable to generate playlist");
+                            return;
+                        }
+
+                        if (response.Status.Code == ResponseCode.Success && response.Songs.Count > 0)
+                        {
+                            StaticArgument arg2 = new StaticArgument();
+                            arg2.Results = 75;
+                            SelectedMoods.ForEach(mood => arg2.Moods.Add(mood.Name));
+                            SelectedStyles.ForEach(style => arg2.Styles.Add(style.Name));
+                            arg2.Type = "artist-radio";
+                            arg2.Artist.Add(response.Songs[0].ArtistName);
+                            arg2.MinTempo = Tempo.Minimum;
+                            arg2.MinLoudness = Loudness.Minimum;
+                            arg2.MinDanceability = Danceability.Minimum;
+                            arg2.MinEnergy = Energy.Minimum;
+                            arg2.ArtistMinFamiliarity = ArtistFamiliarity.Minimum;
+                            arg2.ArtistMinHotttnesss = ArtistHotness.Minimum;
+                            arg2.SongMinHotttnesss = SongHotness.Minimum;
+
+                            _radio.Play(new StyleTrackStream(arg2, _radio, _toastService));
+                        }
+                        else
+                        {
+                            if (response.Songs.Count == 0)
+                            {
+                                // TODO : Localize
+                                _toastService.Show("Unable to find songs matching the current criterias");
+                            }
+                            else
+                            {
+                                _toastService.Show(response.Status.Message);
+                            }
+                        }
+                    }
+                }
+            })
+            .ContinueWith(task =>
+            {
+                if (task.Exception != null)
+                {
+                    _logger.Log(task.Exception.ToString(), Category.Exception, Priority.Medium);
+                }
+            });
         }
 
         private void ExecuteToggleMood(TermModel term)
@@ -227,6 +521,10 @@ namespace Torshify.Radio.EchoNest.Views.Style
 
                 return new ListTermsItem[0];
             }
+        }
+
+        private void FetchPreview()
+        {
         }
 
         #endregion Methods
