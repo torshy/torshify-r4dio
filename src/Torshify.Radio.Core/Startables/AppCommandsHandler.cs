@@ -8,6 +8,7 @@ using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 
 using Raven.Client;
+using Torshify.Radio.Core.Views.NowPlaying;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 using Torshify.Radio.Framework.Input;
@@ -113,6 +114,16 @@ namespace Torshify.Radio.Core.Startables
             AppCommands.AddTrackStreamDataToFavoriteCommand.RegisterCommand(_addTrackStreamDataToFavoritesCommand);
 
             AppCommands.LikeTrackCommand.RegisterCommand(_addTrackToLikesCommand);
+
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding(
+                    AppCommands.NavigateBackCommand,
+                     new KeyGesture(Key.Back)));
+
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding(
+                    AppCommands.NavigateBackCommand,
+                     new KeyGesture(Key.Escape)));
 
             Application.Current.MainWindow.InputBindings.Add(
                 new MouseBinding(
@@ -307,6 +318,11 @@ namespace Torshify.Radio.Core.Startables
 
         private bool CanNavigateBack()
         {
+            if (NowPlayingViewIsActive())
+            {
+                return true;
+            }
+
             if (RegionManager.Regions.ContainsRegionWithName(AppRegions.ViewRegion))
             {
                 return RegionManager.Regions[AppRegions.ViewRegion].NavigationService.Journal.CanGoBack;
@@ -317,7 +333,14 @@ namespace Torshify.Radio.Core.Startables
 
         private void ExecuteNavigateBack()
         {
-            RegionManager.Regions[AppRegions.ViewRegion].NavigationService.Journal.GoBack();
+            if (NowPlayingViewIsActive())
+            {
+                RegionManager.Regions[AppRegions.MainRegion].NavigationService.Journal.GoBack();
+            }
+            else
+            {
+                RegionManager.Regions[AppRegions.ViewRegion].NavigationService.Journal.GoBack();
+            }
         }
 
         private void ExecuteDecreaseVolume()
@@ -328,6 +351,20 @@ namespace Torshify.Radio.Core.Startables
         private void ExecuteIncreaseVolume()
         {
             Player.Volume = Math.Min(1.0f, Player.Volume + 0.01f);
+        }
+
+        private bool NowPlayingViewIsActive()
+        {
+            var region = RegionManager.Regions[AppRegions.MainRegion];
+            var entry = region.NavigationService.Journal.CurrentEntry;
+            if (entry != null)
+            {
+                if (entry.Uri.OriginalString.Contains(typeof (NowPlayingView).FullName))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         #endregion Methods

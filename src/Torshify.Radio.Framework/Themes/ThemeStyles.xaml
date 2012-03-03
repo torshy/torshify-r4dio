@@ -3099,6 +3099,9 @@
                     <Setter
                         Property="VerticalContentAlignment"
                         Value="Center" />
+                    <Setter
+                        Property="FocusVisualStyle"
+                        Value="{x:Null}" />
                     <Style.Triggers>
                         <Trigger
                             Property="ItemsControl.AlternationIndex"
