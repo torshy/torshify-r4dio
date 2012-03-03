@@ -49,8 +49,10 @@
                 <DataTemplate>
                     <DockPanel
                         Margin="0,12,0,0">
-                        <StackPanel>
+                        <StackPanel
+                            Focusable="False">
                             <Button
+                                Focusable="False"
                                 Name="playButton"
                                 DockPanel.Dock="Left"
                                 Command="{Binding DataContext.PlayTracksCommand, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Mode=OneTime}"
@@ -106,6 +108,7 @@
                                 DockPanel.Dock="Left"
                                 Orientation="Horizontal">
                                 <Button
+                                    Focusable="False"
                                     BorderThickness="0"
                                     Command="{Binding DataContext.QueueTracksCommand, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Mode=OneTime}"
                                     CommandParameter="{Binding Tracks, Mode=OneTime}"
@@ -115,6 +118,7 @@
                                         Source="{Binding Source={x:Static Framework:AppIcons.Add}, Converter={StaticResource ImageLoaderConverter}}" />
                                 </Button>
                                 <Button
+                                    Focusable="False"
                                     BorderThickness="0"
                                     Command="{x:Static Framework:AppCommands.AddTrackContainerToFavoriteCommand}"
                                     CommandParameter="{Binding Mode=OneTime}"
@@ -126,8 +130,10 @@
                             </StackPanel>
                         </StackPanel>
                         <TextBlock
-                            DockPanel.Dock="Top">
+                            DockPanel.Dock="Top"
+                            Focusable="False">
                                 <Hyperlink
+                                    Focusable="False"
                                     Command="{Binding DataContext.GoToAlbumCommand, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
                                     CommandParameter="{Binding}">
                                     <TextBlock
@@ -151,6 +157,7 @@
                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                             HeadersVisibility="None"
                             SelectionChanged="SelectionChanged"
+                            PreviewKeyDown="DataGridKeyDown"
                             Tag="{Binding DataContext.CommandBar, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}">
                             <i:Interaction.Behaviors>
                                 <Behaviors:IgnoreMouseWheelBehavior />

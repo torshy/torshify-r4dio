@@ -51,6 +51,64 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             }
         }
 
+        private void DataGridKeyDown(object sender, KeyEventArgs e)
+        {
+            var dataGrid = ((DataGrid)sender);
+
+            if (e.Key == Key.Up)
+            {
+                if (dataGrid.SelectedIndex == 0)
+                {
+                    var parent = dataGrid.FindParent<TreeViewItem>();
+
+                    if (parent != null)
+                    {
+                        int currentIndex = _albumsTreeView.ItemContainerGenerator.IndexFromContainer(parent) - 1;
+
+                        if (currentIndex >= 0)
+                        {
+                            var container = _albumsTreeView.ItemContainerGenerator.ContainerFromIndex(currentIndex) as TreeViewItem;
+                            dataGrid.SelectedItem = null;
+                            var previousDatagrid = container.FindVisualDescendantByType<DataGrid>();
+
+                            if (previousDatagrid != null)
+                            {
+                                previousDatagrid.SelectedIndex = previousDatagrid.Items.Count - 1;
+                            }
+
+                            Keyboard.Focus(container);
+                        }
+                    }
+                }
+            }
+            else if (e.Key == Key.Down)
+            {
+                if (dataGrid.SelectedIndex == dataGrid.Items.Count - 1)
+                {
+                    var parent = dataGrid.FindParent<TreeViewItem>();
+
+                    if (parent != null)
+                    {
+                        int currentIndex = _albumsTreeView.ItemContainerGenerator.IndexFromContainer(parent) + 1;
+
+                        if (currentIndex < _albumsTreeView.Items.Count)
+                        {
+                            var container = _albumsTreeView.ItemContainerGenerator.ContainerFromIndex(currentIndex) as TreeViewItem;
+                            dataGrid.SelectedItem = null;
+                            var nextDatagrid = container.FindVisualDescendantByType<DataGrid>();
+
+                            if (nextDatagrid != null)
+                            {
+                                nextDatagrid.SelectedIndex = 0;
+                            }
+
+                            Keyboard.Focus(container);
+                        }
+                    }
+                }
+            }
+        }
+
         #endregion Methods
     }
 }

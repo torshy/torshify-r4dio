@@ -2969,6 +2969,9 @@
     <Style
         TargetType="{x:Type DataGridCell}">
         <Setter
+            Property="FocusVisualStyle"
+            Value="{x:Null}" />
+        <Setter
             Property="Template">
             <Setter.Value>
                 <ControlTemplate
@@ -2991,6 +2994,9 @@
         <Setter
             Property="Background"
             Value="Transparent" />
+        <Setter
+            Property="FocusVisualStyle"
+            Value="{x:Null}" />
         <Setter
             Property="Template">
             <Setter.Value>
