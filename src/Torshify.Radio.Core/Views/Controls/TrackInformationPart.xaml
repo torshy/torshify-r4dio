@@ -7,7 +7,9 @@
     xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
     Engine:LocalizeDictionary.DesignCulture="en-US"
     xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
-    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework">
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework">
     <UserControl.Resources>
         <Converters:StringToUpperConverter
             x:Key="StringToUpperConverter" />
@@ -113,12 +115,23 @@
                 <TextBlock
                     Text="{Binding CurrentTrack.Artist, Converter={StaticResource StringToUpperConverter}}"
                     TextTrimming="CharacterEllipsis"
-                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}" />
+                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}">
+                    <i:Interaction.Behaviors>
+                        <Behaviors:ArtistRelatedCommandBarBehavior
+                            ArtistName="{Binding CurrentTrack.Artist}" />
+                    </i:Interaction.Behaviors>
+                </TextBlock>
                 <TextBlock
                     Margin="0,-4,0,0"
                     Text="{Binding CurrentTrack.Album, Converter={StaticResource StringToUpperConverter}}"
                     TextTrimming="CharacterEllipsis"
-                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}" />
+                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}">
+                    <i:Interaction.Behaviors>
+                        <Behaviors:AlbumRelatedCommandBarBehavior
+                            ArtistName="{Binding CurrentTrack.Artist}"
+                            AlbumName="{Binding CurrentTrack.Album}" />
+                </i:Interaction.Behaviors>
+                </TextBlock>
                 <TextBlock
                     Text="{Binding CurrentTrack.Name}"
                     TextTrimming="CharacterEllipsis"
