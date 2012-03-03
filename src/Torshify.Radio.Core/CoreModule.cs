@@ -15,6 +15,7 @@ using Torshify.Radio.Core.Models;
 using Torshify.Radio.Core.Views;
 using Torshify.Radio.Core.Views.Controls;
 using Torshify.Radio.Core.Views.FirstTime;
+using Torshify.Radio.Core.Views.NowPlaying;
 using Torshify.Radio.Core.Views.Settings;
 using Torshify.Radio.Core.Views.Stations;
 using Torshify.Radio.Framework;
@@ -97,6 +98,8 @@ namespace Torshify.Radio.Core
             RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof(SettingsView));
             RegionManager.RegisterViewWithRegion(AppRegions.ViewRegion, typeof(StationsView));
 
+            RegionManager.Regions[AppRegions.ViewRegion].NavigationService.Navigating += OnViewRegionNavigating;
+
             if (displayWizard)
             {
                 RegionManager.RequestNavigate(AppRegions.MainRegion, typeof(FirstTimeUseView).FullName);
@@ -113,6 +116,19 @@ namespace Torshify.Radio.Core
             }
 
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
+        }
+
+        private void OnViewRegionNavigating(object sender, RegionNavigationEventArgs e)
+        {
+            var region = RegionManager.Regions[AppRegions.MainRegion];
+            var entry = region.NavigationService.Journal.CurrentEntry;
+            if (entry != null)
+            {
+                if (entry.Uri.OriginalString.Contains(typeof(NowPlayingView).FullName))
+                {
+                    region.NavigationService.Journal.GoBack();
+                }
+            }
         }
 
         private void CurrentDomainOnProcessExit(object sender, EventArgs e)
