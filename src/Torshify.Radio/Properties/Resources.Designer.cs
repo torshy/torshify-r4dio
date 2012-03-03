@@ -59,5 +59,12 @@ namespace Torshify.Radio.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Icon r4dio_app {
+            get {
+                object obj = ResourceManager.GetObject("r4dio_app", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }
