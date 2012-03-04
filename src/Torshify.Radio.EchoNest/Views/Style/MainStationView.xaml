@@ -7,6 +7,8 @@
     xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -17,12 +19,23 @@
             <Border
                 Name="Border"
                 Background="Transparent">
-                <Path
-                    Name="Arrow"
-                    Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Data="M 0 0 L 4 4 L 8 0 Z" />
+                <DockPanel>
+                    <Path
+                        Margin="4,0,4,0"
+                        DockPanel.Dock="Left"
+                        Name="Arrow"
+                        Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Data="M 0 0 L 4 4 L 8 0 Z"
+                        RenderTransformOrigin="0.5,0.5">
+                        <Path.RenderTransform>
+                            <RotateTransform />
+                        </Path.RenderTransform>
+                    </Path>
+                    <ContentPresenter
+                        ContentSource="Content" />
+                </DockPanel>
             </Border>
             <ControlTemplate.Triggers>
                 <Trigger
@@ -31,11 +44,7 @@
                     <Setter
                         TargetName="Border"
                         Property="Background"
-                        Value="{DynamicResource {x:Static Framework:AppTheme.ContrastBackgroundKey}}" />
-                    <Setter
-                        TargetName="Arrow"
-                        Property="Fill"
-                        Value="{DynamicResource {x:Static Framework:AppTheme.ContrastForegroundKey}}" />
+                        Value="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}" />
                 </Trigger>
                 <Trigger
                     Property="IsPressed"
@@ -43,34 +52,33 @@
                     <Setter
                         TargetName="Border"
                         Property="Background"
-                        Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+                        Value="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
                 </Trigger>
                 <Trigger
                     Property="IsChecked"
                     Value="true">
-                    <Setter
-                        TargetName="Arrow"
-                        Property="Data"
-                        Value="M 0 4 L 4 0 L 8 4 Z" />
-                </Trigger>
-                <Trigger
-                    Property="IsEnabled"
-                    Value="False">
-                    <Setter
-                        TargetName="Border"
-                        Property="Background"
-                        Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
-                    <Setter
-                        TargetName="Border"
-                        Property="BorderBrush"
-                        Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
-                    <Setter
-                        Property="Foreground"
-                        Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
-                    <Setter
-                        TargetName="Arrow"
-                        Property="Fill"
-                        Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetName="Arrow"
+                                    Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                    To="180"
+                                    Duration="0:0:0.2" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetName="Arrow"
+                                    Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                    To="0"
+                                    Duration="0:0:0.2" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -93,25 +101,17 @@
                             <Border
                                 Name="Border"
                                 Grid.Row="0">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition
-                                            Width="20" />
-                                        <ColumnDefinition
-                                            Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <ToggleButton
-                                        IsChecked="{Binding Path=IsExpanded,Mode=TwoWay,
-                                    RelativeSource={RelativeSource TemplatedParent}}"
-                                        OverridesDefaultStyle="True"
-                                        Template="{StaticResource ExpanderToggleButton}"
-                                        Background="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+                                <ToggleButton
+                                    IsChecked="{Binding Path=IsExpanded,Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                    OverridesDefaultStyle="True"
+                                    Template="{StaticResource ExpanderToggleButton}"
+                                    Background="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}">
                                     <ContentPresenter
                                         Grid.Column="1"
                                         Margin="4"
                                         ContentSource="Header"
                                         RecognizesAccessKey="True" />
-                                </Grid>
+                                </ToggleButton>
                             </Border>
                             <Border
                                 Name="Content"
@@ -199,9 +199,18 @@
                         ItemsSource="{Binding PreviewArtistList}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock
-                                    Text="{Binding Name}"
-                                    TextTrimming="CharacterEllipsis" />
+                                <TextBlock>
+                                    <Hyperlink>
+                                        <TextBlock
+                                            Text="{Binding Name}"
+                                            TextTrimming="CharacterEllipsis">
+                                            <i:Interaction.Behaviors>
+                                                <Behaviors:ArtistRelatedCommandBarBehavior
+                                                    ArtistName="{Binding Name}" />
+                                            </i:Interaction.Behaviors>
+                                        </TextBlock>
+                                    </Hyperlink>
+                                </TextBlock>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -294,7 +303,7 @@
                         <DockPanel>
                             <TextBlock
                                 DockPanel.Dock="Left"
-                                Text="Metrics"
+                                Text="Parameters"
                                 Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
                                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
                                 FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
