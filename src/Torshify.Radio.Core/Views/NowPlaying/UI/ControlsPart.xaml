@@ -6,14 +6,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:Resources="clr-namespace:Torshify.Radio.Core.Resources"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Controls1="clr-namespace:Torshify.Radio.Core.Views.Controls"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300"
     Height="68">
+    <UserControl.Resources>
+        <Controls1:IsLessOrEqualToConverter
+            x:Key="IsLessOrEqualToConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.Background>
             <LinearGradientBrush
@@ -41,10 +46,64 @@
         <DockPanel
             Margin="0,0,20,8"
             Grid.Column="1">
-            <Resources:VolumeIcon
+            <Viewbox
                 DockPanel.Dock="Left"
-                MaxHeight="14"
-                VerticalAlignment="Bottom" />
+                Height="16"
+                Width="16"
+                Margin="0,0,2,2"
+                VerticalAlignment="Bottom">
+                <ContentControl
+                    Width="25.0035"
+                    Height="17.0299"
+                    Content="{Binding}">
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+                            <Path
+                                Name="VolumePath"
+                                Width="25.0035"
+                                Height="17.0299"
+                                Stretch="Uniform"
+                                HorizontalAlignment="Left"
+                                Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                                Data="{DynamicResource Geometry_Volume2}" />
+                            <DataTemplate.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding Player.Volume, Converter={StaticResource IsLessOrEqualToConverter}, ConverterParameter=1.0}"
+                                    Value="True">
+                                    <Setter
+                                        Property="Data"
+                                        Value="{DynamicResource Geometry_Volume3}"
+                                        TargetName="VolumePath" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding Player.Volume, Converter={StaticResource IsLessOrEqualToConverter}, ConverterParameter=0.66}"
+                                    Value="True">
+                                    <Setter
+                                        Property="Data"
+                                        Value="{DynamicResource Geometry_Volume2}"
+                                        TargetName="VolumePath" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding Player.Volume, Converter={StaticResource IsLessOrEqualToConverter}, ConverterParameter=0.33}"
+                                    Value="True">
+                                    <Setter
+                                        Property="Data"
+                                        Value="{DynamicResource Geometry_Volume1}"
+                                        TargetName="VolumePath" />
+                                </DataTrigger>
+                                <DataTrigger
+                                    Binding="{Binding Player.Volume, Converter={StaticResource IsLessOrEqualToConverter}, ConverterParameter=0.0}"
+                                    Value="True">
+                                    <Setter
+                                        Property="Data"
+                                        Value="{DynamicResource Geometry_Mute}"
+                                        TargetName="VolumePath" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                </ContentControl>
+            </Viewbox>
             <DockPanel>
                 <Controls:DragSlider
                     DockPanel.Dock="Bottom"
