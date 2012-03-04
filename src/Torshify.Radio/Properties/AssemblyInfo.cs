@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("Torshify.Radio")]
+[assembly: AssemblyTitle("r4dio")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
