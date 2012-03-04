@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Input;
@@ -178,7 +179,17 @@ namespace Torshify.Radio.Core.Startables
 
         private void ExecuteAddTrackStreamDataToFavorites(object parameter)
         {
+            IEnumerable<TrackStreamData> streamDataList;
             TrackStreamData streamData = parameter as TrackStreamData;
+
+            if (streamData != null)
+            {
+                streamDataList = new[] { streamData };
+            }
+            else
+            {
+                streamDataList = parameter as IEnumerable<TrackStreamData>;
+            }
 
             if (streamData != null)
             {
@@ -186,10 +197,14 @@ namespace Torshify.Radio.Core.Startables
                 {
                     using (var session = DocumentStore.OpenSession())
                     {
-                        TrackStreamFavorite fav = new TrackStreamFavorite();
-                        fav.StreamData = streamData;
-                        fav.Index = session.Query<Favorite>().Count();
-                        session.Store(fav);
+                        foreach (var trackStreamData in streamDataList)
+                        {
+                            TrackStreamFavorite fav = new TrackStreamFavorite();
+                            fav.StreamData = trackStreamData;
+                            fav.Index = session.Query<Favorite>().Count();
+                            session.Store(fav);
+                        }
+
                         session.SaveChanges();
                     }
 
@@ -209,18 +224,32 @@ namespace Torshify.Radio.Core.Startables
 
         private void ExecuteAddTrackContainerToFavorites(object parameter)
         {
+            IEnumerable<TrackContainer> containers;
             TrackContainer container = parameter as TrackContainer;
 
             if (container != null)
+            {
+                containers = new[] { container };
+            }
+            else
+            {
+                containers = parameter as IEnumerable<TrackContainer>;
+            }
+
+            if (containers != null && containers.Any())
             {
                 try
                 {
                     using (var session = DocumentStore.OpenSession())
                     {
-                        TrackContainerFavorite fav = new TrackContainerFavorite();
-                        fav.TrackContainer = container;
-                        fav.Index = session.Query<Favorite>().Count();
-                        session.Store(fav);
+                        foreach (var trackContainer in containers)
+                        {
+                            TrackContainerFavorite fav = new TrackContainerFavorite();
+                            fav.TrackContainer = trackContainer;
+                            fav.Index = session.Query<Favorite>().Count();
+                            session.Store(fav);
+                        }
+
                         session.SaveChanges();
                     }
 
@@ -240,18 +269,32 @@ namespace Torshify.Radio.Core.Startables
 
         private void ExecuteAddTrackToFavorites(object parameter)
         {
+            IEnumerable<Track> tracks;
             Track track = parameter as Track;
 
             if (track != null)
+            {
+                tracks = new[] { track };
+            }
+            else
+            {
+                tracks = parameter as IEnumerable<Track>;
+            }
+
+            if (tracks != null && tracks.Any())
             {
                 try
                 {
                     using (var session = DocumentStore.OpenSession())
                     {
-                        TrackFavorite fav = new TrackFavorite();
-                        fav.Track = track;
-                        fav.Index = session.Query<Favorite>().Count();
-                        session.Store(fav);
+                        foreach (var trackToFavorite in tracks)
+                        {
+                            TrackFavorite fav = new TrackFavorite();
+                            fav.Track = trackToFavorite;
+                            fav.Index = session.Query<Favorite>().Count();
+                            session.Store(fav);
+                        }
+
                         session.SaveChanges();
                     }
 
@@ -359,7 +402,7 @@ namespace Torshify.Radio.Core.Startables
             var entry = region.NavigationService.Journal.CurrentEntry;
             if (entry != null)
             {
-                if (entry.Uri.OriginalString.Contains(typeof (NowPlayingView).FullName))
+                if (entry.Uri.OriginalString.Contains(typeof(NowPlayingView).FullName))
                 {
                     return true;
                 }

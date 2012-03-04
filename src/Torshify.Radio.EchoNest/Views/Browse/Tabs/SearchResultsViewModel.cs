@@ -157,6 +157,13 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
                     Command = QueueTracksCommand,
                     CommandParameter = selectedItems.ToArray()
                 })
+                .AddCommand(new CommandModel
+                {
+                    Content = "Add to favorites",
+                    Icon = AppIcons.AddToFavorites.ToImage(),
+                    Command = AppCommands.AddTrackToFavoriteCommand,
+                    CommandParameter = selectedItems.ToArray()
+                })
                 .AddSeparator();
 
             var lastItem = selectedItems.LastOrDefault();
