@@ -4,18 +4,93 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:Resources="clr-namespace:Torshify.Radio.Core.Resources"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Controls1="clr-namespace:Torshify.Radio.Core.Views.Controls"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
+    <UserControl.Resources>
+        <Controls1:IsLessOrEqualToConverter
+            x:Key="IsLessOrEqualToConverter" />
+        <Geometry
+            x:Key="Mute">
+            F1 M 13.0018,21.0029L 17.0024,21.0029L 23.0032,16.0022L 23.0032,33.0046L 17.0024,27.0038L 13.0018,27.0038C 11.8971,27.0038 11.0015,26.1082 11.0015,25.0035L 11.0015,23.0032C 11.0015,21.8985 11.8971,21.0029 13.0018,21.0029 Z M 25.8469,28.0394L 29.3829,24.5034L 25.8469,20.9673L 27.9685,18.8457L 31.5045,22.3818L 35.0404,18.8458L 37.1621,20.9675L 33.6261,24.5034L 37.1621,28.0394L 35.0405,30.161L 31.5045,26.625L 27.9685,30.161L 25.8469,28.0394 Z
+        </Geometry>
+        <Geometry
+            x:Key="Volume1">
+            F1 M 13.0018,21.0029L 17.0024,21.0029L 23.0032,16.0022L 23.0032,33.0046L 17.0024,27.0038L 13.0018,27.0038C 11.8971,27.0038 11.0015,26.1082 11.0015,25.0035L 11.0015,23.0032C 11.0015,21.8985 11.8971,21.0029 13.0018,21.0029 Z M 28.0039,24.0034C 28.0039,25.3369 27.134,26.4672 25.9306,26.8578L 25.0035,25.0035C 25.5558,25.0035 26.0036,24.5557 26.0036,24.0034C 26.0036,23.451 25.5558,23.0032 25.0035,23.0032L 25.9306,21.1489C 27.134,21.5395 28.0039,22.6698 28.0039,24.0034 Z
+        </Geometry>
+        <Geometry
+            x:Key="Volume2">
+            F1 M 13.0018,21.0029L 17.0024,21.0029L 23.0032,16.0022L 23.0032,33.0046L 17.0024,27.0038L 13.0018,27.0038C 11.8971,27.0038 11.0015,26.1082 11.0015,25.0035L 11.0015,23.0032C 11.0015,21.8985 11.8971,21.0029 13.0018,21.0029 Z M 32.0045,24.0034C 32.0045,26.1913 31.0008,28.1449 29.4287,29.4287L 28.0041,28.0041C 29.2186,27.0918 30.0042,25.6393 30.0042,24.0034C 30.0042,22.3674 29.2186,20.9149 28.0041,20.0026L 29.4287,18.578C 31.0008,19.8618 32.0045,21.8154 32.0045,24.0034 Z M 28.0039,24.0034C 28.0039,25.3369 27.134,26.4672 25.9306,26.8578L 25.0035,25.0035C 25.5558,25.0035 26.0036,24.5557 26.0036,24.0034C 26.0036,23.451 25.5558,23.0032 25.0035,23.0032L 25.9306,21.1489C 27.134,21.5395 28.0039,22.6698 28.0039,24.0034 Z
+        </Geometry>
+        <Geometry
+            x:Key="Volume3">
+            F1 M 13.0018,21.0029L 17.0024,21.0029L 23.0032,16.0022L 23.0032,33.0046L 17.0024,27.0038L 13.0018,27.0038C 11.8971,27.0038 11.0015,26.1082 11.0015,25.0035L 11.0015,23.0032C 11.0015,21.8985 11.8971,21.0029 13.0018,21.0029 Z M 36.005,24.0034C 36.005,27.0413 34.7736,29.7917 32.7827,31.7826L 31.3683,30.3682C 32.9972,28.7393 34.0047,26.489 34.0047,24.0034C 34.0047,21.4913 32.9757,19.2196 31.3161,17.5868L 32.5252,15.9747C 34.6669,17.982 36.005,20.8364 36.005,24.0034 Z M 32.0045,24.0034C 32.0045,26.1913 31.0008,28.1449 29.4287,29.4287L 28.0041,28.0041C 29.2186,27.0918 30.0042,25.6393 30.0042,24.0034C 30.0042,22.3674 29.2186,20.9149 28.0041,20.0026L 29.4287,18.578C 31.0008,19.8618 32.0045,21.8154 32.0045,24.0034 Z M 28.0039,24.0034C 28.0039,25.3369 27.134,26.4672 25.9306,26.8578L 25.0035,25.0035C 25.5558,25.0035 26.0036,24.5557 26.0036,24.0034C 26.0036,23.451 25.5558,23.0032 25.0035,23.0032L 25.9306,21.1489C 27.134,21.5395 28.0039,22.6698 28.0039,24.0034 Z
+        </Geometry>
+    </UserControl.Resources>
     <DockPanel>
-        <Resources:VolumeIcon
+        <Viewbox
             DockPanel.Dock="Left"
-            MaxHeight="14"
-            VerticalAlignment="Bottom" />
+            Height="16"
+            Width="16"
+            Margin="0,0,2,2"
+            VerticalAlignment="Bottom">
+            <ContentControl
+                Width="25.0035"
+                Height="17.0299"
+                Content="{Binding}">
+                <ContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <Path
+                            Name="VolumePath"
+                            Width="25.0035"
+                            Height="17.0299"
+                            Stretch="Uniform"
+                            HorizontalAlignment="Left"
+                            Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                            Data="{StaticResource Volume2}" />
+                        <DataTemplate.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Player.Volume, Converter={StaticResource IsLessOrEqualToConverter}, ConverterParameter=1.0}"
+                                Value="True">
+                                <Setter
+                                    Property="Data"
+                                    Value="{StaticResource Volume3}"
+                                    TargetName="VolumePath" />
+                            </DataTrigger>
+                            <DataTrigger
+                                Binding="{Binding Player.Volume, Converter={StaticResource IsLessOrEqualToConverter}, ConverterParameter=0.5}"
+                                Value="True">
+                                <Setter
+                                    Property="Data"
+                                    Value="{StaticResource Volume2}"
+                                    TargetName="VolumePath" />
+                            </DataTrigger>
+                            <DataTrigger
+                                Binding="{Binding Player.Volume, Converter={StaticResource IsLessOrEqualToConverter}, ConverterParameter=0.2}"
+                                Value="True">
+                                <Setter
+                                    Property="Data"
+                                    Value="{StaticResource Volume1}"
+                                    TargetName="VolumePath" />
+                            </DataTrigger>
+                            <DataTrigger
+                                Binding="{Binding Player.Volume, Converter={StaticResource IsLessOrEqualToConverter}, ConverterParameter=0.0}"
+                                Value="True">
+                                <Setter
+                                    Property="Data"
+                                    Value="{StaticResource Mute}"
+                                    TargetName="VolumePath" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+        </Viewbox>
         <DockPanel>
             <Controls:DragSlider
                 DockPanel.Dock="Bottom"
@@ -84,8 +159,8 @@
                                                 <DoubleAnimation
                                                     Storyboard.TargetName="img"
                                                     Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
-                                                    To="0" 
-                                                    Duration="0:0:0"/>
+                                                    To="0"
+                                                    Duration="0:0:0" />
                                             </Storyboard>
                                         </BeginStoryboard>
                                     </DataTrigger.ExitActions>
