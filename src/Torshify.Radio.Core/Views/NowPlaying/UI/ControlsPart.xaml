@@ -6,23 +6,30 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Resources="clr-namespace:Torshify.Radio.Core.Resources"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
-    xmlns:Converters="clr-namespace:Torshify.Radio.Core.Views.NowPlaying.UI.Converters"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300"
-    Height="60"
-    Foreground="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}">
-    <UserControl.Resources>
-        <Converters:BrushOpacityConverter
-            x:Key="BrushOpacityConverter" />
-    </UserControl.Resources>
-    <Grid
-        Background="{Binding Foreground, ElementName=Root, Converter={StaticResource BrushOpacityConverter}}">
+    Height="68">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush
+                StartPoint="0,0"
+                EndPoint="0,1">
+                <GradientStop
+                    Color="#00000000"
+                    Offset="0" />
+                <GradientStop
+                    Color="#02000000"
+                    Offset="0.2" />
+                <GradientStop
+                    Color="#A0000000"
+                    Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
         <i:Interaction.Behaviors>
             <Behaviors:InactivityFadeBehavior />
         </i:Interaction.Behaviors>
@@ -32,7 +39,7 @@
                 Width="Auto" />
         </Grid.ColumnDefinitions>
         <DockPanel
-            Margin="0,0,12,0"
+            Margin="0,0,20,8"
             Grid.Column="1">
             <Resources:VolumeIcon
                 DockPanel.Dock="Left"

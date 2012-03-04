@@ -61,7 +61,7 @@
                 </Controls:SizeTemplateControl.Templates>
             </Controls:SizeTemplateControl>
             <UI:ControlsPart
-                Margin="0,8,0,0"
+                Margin="-8,8,-8,-8"
                 Grid.Row="1"
                 IsPlaying="{Binding Player.IsPlaying}"
                 TogglePlayPauseCommand="{Binding TogglePlayPauseCommand}"
