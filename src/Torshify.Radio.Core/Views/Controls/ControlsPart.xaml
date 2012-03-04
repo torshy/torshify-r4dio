@@ -63,7 +63,7 @@
                                     TargetName="VolumePath" />
                             </DataTrigger>
                             <DataTrigger
-                                Binding="{Binding Player.Volume, Converter={StaticResource IsLessOrEqualToConverter}, ConverterParameter=0.5}"
+                                Binding="{Binding Player.Volume, Converter={StaticResource IsLessOrEqualToConverter}, ConverterParameter=0.66}"
                                 Value="True">
                                 <Setter
                                     Property="Data"
@@ -71,7 +71,7 @@
                                     TargetName="VolumePath" />
                             </DataTrigger>
                             <DataTrigger
-                                Binding="{Binding Player.Volume, Converter={StaticResource IsLessOrEqualToConverter}, ConverterParameter=0.2}"
+                                Binding="{Binding Player.Volume, Converter={StaticResource IsLessOrEqualToConverter}, ConverterParameter=0.33}"
                                 Value="True">
                                 <Setter
                                     Property="Data"
