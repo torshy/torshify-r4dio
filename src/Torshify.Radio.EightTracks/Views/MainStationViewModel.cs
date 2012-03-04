@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.Linq;
 
 using Microsoft.Practices.Prism.Regions;
@@ -26,7 +27,10 @@ namespace Torshify.Radio.EightTracks.Views
 
         public bool KeepAlive
         {
-            get { return false; }
+            get
+            {
+                return false;
+            }
         }
 
         public IRegionManager RegionManager
@@ -48,14 +52,23 @@ namespace Torshify.Radio.EightTracks.Views
 
         public void OnTuneAway(NavigationContext context)
         {
-            
+            var region = RegionManager.Regions[MainStationView.TabViewRegion];
+            var activeTab = region.ActiveViews.FirstOrDefault().GetType().FullName;
+            var newUri = typeof(MainStationView).FullName + "?ActiveTab=" + activeTab;
+            context.NavigationService.Journal.CurrentEntry.Uri = new Uri(newUri, UriKind.RelativeOrAbsolute);
         }
 
         public void OnTuneIn(NavigationContext context)
         {
             SearchBarService.SetActive(bar => bar.NavigationUri.OriginalString.StartsWith(context.Uri.OriginalString));
 
-            if (!string.IsNullOrEmpty(context.Parameters[SearchBar.IsFromSearchBarParameter]))
+            if (!string.IsNullOrEmpty(context.Parameters["ActiveTab"]))
+            {
+                RegionManager.RequestNavigate(
+                    MainStationView.TabViewRegion,
+                    context.Parameters["ActiveTab"]);
+            }
+            else if (!string.IsNullOrEmpty(context.Parameters[SearchBar.IsFromSearchBarParameter]))
             {
                 RegionManager.RequestNavigate(
                     MainStationView.TabViewRegion,
@@ -65,7 +78,7 @@ namespace Torshify.Radio.EightTracks.Views
             {
                 RegionManager.RequestNavigate(
                     MainStationView.TabViewRegion,
-                    typeof (MainTabView).FullName);
+                    typeof(MainTabView).FullName);
             }
         }
 
