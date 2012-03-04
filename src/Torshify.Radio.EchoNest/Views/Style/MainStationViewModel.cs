@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Net;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -493,7 +494,7 @@ namespace Torshify.Radio.EchoNest.Views.Style
                     }
 
                     // Load stuff from db, such as number of times its been used etc
-                    return task.Result.Select(t => new TermModel(t.Name, ListTermsType.Mood));
+                    return task.Result.Select(t => new TermModel(WebUtility.HtmlDecode(t.Name), ListTermsType.Mood));
                 })
                 .ContinueWith(task =>
                 {
@@ -516,7 +517,7 @@ namespace Torshify.Radio.EchoNest.Views.Style
                     }
 
                     // Load stuff from db, such as number of times its been used etc
-                    return task.Result.Select(t => new TermModel(t.Name, ListTermsType.Style));
+                    return task.Result.Select(t => new TermModel(WebUtility.HtmlDecode(t.Name), ListTermsType.Style));
                 })
                 .ContinueWith(task =>
                 {

@@ -9,7 +9,7 @@ namespace Torshify.Radio.EchoNest.Views.Style.Models
         #region Fields
 
         private bool _ban;
-        private string _count;
+        private int _count;
         private bool _require;
 
         #endregion Fields
@@ -38,7 +38,7 @@ namespace Torshify.Radio.EchoNest.Views.Style.Models
             private set;
         }
 
-        public string Count
+        public int Count
         {
             get
             {
