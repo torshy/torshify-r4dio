@@ -16,8 +16,9 @@ namespace Torshify.Radio.EchoNest.Views.Style.Models
 
         #region Constructors
 
-        public TermModel(string name, ListTermsType type)
+        public TermModel(string id, string name, ListTermsType type)
         {
+            ID = id;
             Name = name;
             Type = type;
         }
@@ -25,6 +26,12 @@ namespace Torshify.Radio.EchoNest.Views.Style.Models
         #endregion Constructors
 
         #region Properties
+
+        public string ID
+        {
+            get; 
+            private set;
+        }
 
         public string Name
         {

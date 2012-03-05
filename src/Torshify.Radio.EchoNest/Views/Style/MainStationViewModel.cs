@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Timers;
@@ -13,10 +14,11 @@ using EchoNest.Playlist;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
-
+using Raven.Client;
 using Torshify.Radio.EchoNest.Views.Style.Models;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
+using Term = Torshify.Radio.Framework.Term;
 
 namespace Torshify.Radio.EchoNest.Views.Style
 {
@@ -29,6 +31,7 @@ namespace Torshify.Radio.EchoNest.Views.Style
 
         private readonly ILoadingIndicatorService _loadingIndicatorService;
         private readonly ILoggerFacade _logger;
+        private readonly IDocumentStore _documentStore;
         private readonly IRadio _radio;
         private readonly IToastService _toastService;
 
@@ -57,12 +60,14 @@ namespace Torshify.Radio.EchoNest.Views.Style
             ILoadingIndicatorService loadingIndicatorService,
             IRadio radio,
             IToastService toastService,
-            ILoggerFacade logger)
+            ILoggerFacade logger,
+            IDocumentStore documentStore)
         {
             _loadingIndicatorService = loadingIndicatorService;
             _radio = radio;
             _toastService = toastService;
             _logger = logger;
+            _documentStore = documentStore;
             _fetchPreviewTimer = new Timer(1000);
             _fetchPreviewTimer.Elapsed += FetchPreviewTimerTick;
             _scheduler = TaskScheduler.FromCurrentSynchronizationContext();
@@ -164,7 +169,7 @@ namespace Torshify.Radio.EchoNest.Views.Style
             {
                 if (_selectedStyles.Count > 0)
                 {
-                    return "(" + string.Join(", ", _selectedStyles.Select(s => s.Name)) + ")";
+                    return "(" + string.Join(", ", EnumerableExtensions.Select(_selectedStyles, s => s.Name)) + ")";
                 }
 
                 return string.Empty;
@@ -177,7 +182,7 @@ namespace Torshify.Radio.EchoNest.Views.Style
             {
                 if (_selectedMoods.Count > 0)
                 {
-                    return "(" + string.Join(", ", _selectedMoods.Select(s => s.Name)) + ")";
+                    return "(" + string.Join(", ", EnumerableExtensions.Select(_selectedMoods, s => s.Name)) + ")";
                 }
 
                 return string.Empty;
@@ -398,6 +403,46 @@ namespace Torshify.Radio.EchoNest.Views.Style
         {
             Task.Factory.StartNew(() =>
             {
+                SelectedMoods.ForEach(s => s.Count = s.Count + 1);
+                SelectedStyles.ForEach(s => s.Count = s.Count + 1);
+
+                using (var session = _documentStore.OpenSession())
+                {
+                    foreach (var selectedStyle in SelectedStyles)
+                    {
+                        var styleTerm = session.Load<StyleTerm>(selectedStyle.ID);
+
+                        if (styleTerm != null)
+                        {
+                            styleTerm.Count = selectedStyle.Count;
+                            session.Store(styleTerm);
+                        }
+                    }
+
+                    foreach (var selectedMood in SelectedMoods)
+                    {
+                        var styleTerm = session.Load<MoodTerm>(selectedMood.ID);
+
+                        if (styleTerm != null)
+                        {
+                            styleTerm.Count = selectedMood.Count;
+                            session.Store(styleTerm);
+                        }
+                    }
+
+                    session.SaveChanges();
+                }
+            })
+            .ContinueWith(task =>
+            {
+                if (task.Exception != null)
+                {
+                    _logger.Log(task.Exception.ToString(), Category.Exception, Priority.Medium);
+                }
+            });
+
+            Task.Factory.StartNew(() =>
+            {
                 using (_loadingIndicatorService.EnterLoadingBlock())
                 {
                     using (var session = new EchoNestSession(EchoNestModule.ApiKey))
@@ -485,7 +530,44 @@ namespace Torshify.Radio.EchoNest.Views.Style
         private void InitializeMoods()
         {
             Task.Factory
-                .StartNew(() => GetItems(ListTermsType.Mood))
+                .StartNew(() =>
+                {
+                    var moods = new List<MoodTerm>();
+                    IEnumerable<MoodTerm> result;
+                    using (var session = _documentStore.OpenSession())
+                    {
+                        result = session
+                            .Query<MoodTerm>()
+                            .ToArray();
+                    }
+
+                    if (!result.Any())
+                    {
+                        var allMoods = GetItems(ListTermsType.Mood);
+                        using (var session = _documentStore.OpenSession())
+                        {
+                            int i = 0;
+                            foreach (var listTermsItem in allMoods)
+                            {
+                                MoodTerm term = new MoodTerm();
+                                term.Name = listTermsItem.Name;
+                                term.Index = i;
+                                moods.Add(term);
+                                session.Store(term);
+
+                                i++;
+                            }
+
+                            session.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        moods.AddRange(result.OrderBy(m => m.Id));
+                    }
+
+                    return moods;
+                })
                 .ContinueWith(task =>
                 {
                     if (task.Exception != null)
@@ -494,7 +576,10 @@ namespace Torshify.Radio.EchoNest.Views.Style
                     }
 
                     // Load stuff from db, such as number of times its been used etc
-                    return task.Result.Select(t => new TermModel(WebUtility.HtmlDecode(t.Name), ListTermsType.Mood));
+                    return EnumerableExtensions.Select(task.Result, t => new TermModel(t.Id, WebUtility.HtmlDecode(t.Name), ListTermsType.Mood)
+                    {
+                        Count = t.Count
+                    });
                 })
                 .ContinueWith(task =>
                 {
@@ -508,7 +593,44 @@ namespace Torshify.Radio.EchoNest.Views.Style
         private void InitializeStyles()
         {
             Task.Factory
-                .StartNew(() => GetItems(ListTermsType.Style))
+                .StartNew(() =>
+                {
+                    var styles = new List<StyleTerm>();
+                    IEnumerable<StyleTerm> result;
+                    using (var session = _documentStore.OpenSession())
+                    {
+                        result = session
+                            .Query<StyleTerm>()
+                            .ToArray();
+                    }
+
+                    if (!result.Any())
+                    {
+                        var allStyles = GetItems(ListTermsType.Style);
+                        using (var session = _documentStore.OpenSession())
+                        {
+                            int i = 0;
+                            foreach (var listTermsItem in allStyles)
+                            {
+                                StyleTerm term = new StyleTerm();
+                                term.Name = listTermsItem.Name;
+                                term.Index = i;
+                                styles.Add(term);
+                                session.Store(term);
+
+                                i++;
+                            }
+
+                            session.SaveChanges();
+                        }
+                    }
+                    else
+                    {
+                        styles.AddRange(result.OrderBy(s => s.Index));
+                    }
+
+                    return styles;
+                })
                 .ContinueWith(task =>
                 {
                     if (task.Exception != null)
@@ -517,7 +639,10 @@ namespace Torshify.Radio.EchoNest.Views.Style
                     }
 
                     // Load stuff from db, such as number of times its been used etc
-                    return task.Result.Select(t => new TermModel(WebUtility.HtmlDecode(t.Name), ListTermsType.Style));
+                    return EnumerableExtensions.Select(task.Result, t => new TermModel(t.Id, WebUtility.HtmlDecode(t.Name), ListTermsType.Style)
+                    {
+                        Count = t.Count
+                    });
                 })
                 .ContinueWith(task =>
                 {

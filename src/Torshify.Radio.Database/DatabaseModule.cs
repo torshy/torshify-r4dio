@@ -1,12 +1,9 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Runtime.Serialization.Formatters;
 
 using Microsoft.Practices.Prism.MefExtensions.Modularity;
 using Microsoft.Practices.Prism.Modularity;
-
-using Newtonsoft.Json;
 
 using Raven.Client;
 using Raven.Client.Document;

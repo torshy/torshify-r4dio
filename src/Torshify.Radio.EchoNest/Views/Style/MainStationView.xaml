@@ -13,6 +13,8 @@
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
+        <Converters:CountToFontSizeConverter
+            x:Key="CountToFontSizeConverter" />
         <ControlTemplate
             x:Key="ExpanderToggleButton"
             TargetType="ToggleButton">
@@ -253,6 +255,7 @@
                                     BorderThickness="0.5"
                                     Content="{Binding Name}"
                                     Margin="1"
+                                    FontSize="{Binding Count, Converter={StaticResource CountToFontSizeConverter}}"
                                     Command="{Binding DataContext.ToggleStyleCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                     CommandParameter="{Binding}" />
                             </DataTemplate>
@@ -291,6 +294,7 @@
                                     BorderBrush="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
                                     BorderThickness="0.5"
                                     Content="{Binding Name}"
+                                    FontSize="{Binding Count, Converter={StaticResource CountToFontSizeConverter}}"
                                     Margin="1"
                                     Command="{Binding DataContext.ToggleMoodCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                     CommandParameter="{Binding}" />

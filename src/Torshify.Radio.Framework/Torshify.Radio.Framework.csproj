@@ -227,6 +227,7 @@
     </Compile>
     <Compile Include="SearchBar.cs" />
     <Compile Include="SearchBarData.cs" />
+    <Compile Include="Term.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="TileData.cs" />
     <Compile Include="ToastData.cs" />

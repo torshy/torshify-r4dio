@@ -139,7 +139,7 @@ namespace Torshify.Radio.EchoNest
 
             _dispatcher.BeginInvoke(new Action(() => TileService.Add<Views.Style.MainStationView>(new TileData
             {
-                Title = "Custom",
+                Title = "Eclectic",
                 BackgroundImage = new Uri("pack://siteoforigin:,,,/Resources/Tiles/MB_0008_touch.png")
             })),
             DispatcherPriority.Background);
