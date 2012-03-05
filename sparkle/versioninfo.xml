@@ -5,11 +5,24 @@
         <link>https://raw.github.com/torshy/torshify-r4dio/master/sparkle/versioninfo.xml</link>
         <description></description>
         <language>en</language>
-	<item>
+        <item>
+            <title>Version 0.7.0</title>
+            <sparkle:releaseNotesLink>https://raw.github.com/torshy/torshify-r4dio/master/sparkle/0.7.0/releasenotes.txt</sparkle:releaseNotesLink>
+
+            <pubDate>Mon, 5 Mar 2012 12:41:11 +0000</pubDate>
+            <enclosure
+                url="https://github.com/downloads/torshy/torshify-r4dio/r4dio_setup_0_7_0_0.exe"
+                length="5120"
+                type="application/octet-stream"
+                sparkle:version="0.7.0"
+                sparkle:dsaSignature="VADR0nyY/SWX36vD4UJ1XGbLerCLNIzUwQj9KO5PubbymoKLgGdHeg=="
+            />
+        </item>
+        <item>
             <title>Version 0.6.0</title>
             <sparkle:releaseNotesLink>https://raw.github.com/torshy/torshify-r4dio/master/sparkle/0.6.0/releasenotes.txt</sparkle:releaseNotesLink>
 
-            <pubDate>Mon, 29 Feb 2012 10:21:11 +0000</pubDate>
+            <pubDate>Wed, 29 Feb 2012 10:21:11 +0000</pubDate>
             <enclosure
                 url="https://github.com/downloads/torshy/torshify-r4dio/r4dio_setup_0_6_0_0.exe"
                 length="5120"
@@ -18,7 +31,7 @@
                 sparkle:dsaSignature="5k6M1YPMbtwHE8kiOhdiVQFl6rvLXVOJbzVbaBlzFJte7F6df3TWfQ=="
             />
         </item>
-	<item>
+        <item>
             <title>Version 0.5.1</title>
             <sparkle:releaseNotesLink>https://raw.github.com/torshy/torshify-r4dio/master/sparkle/0.5.1/releasenotes.txt</sparkle:releaseNotesLink>
 
