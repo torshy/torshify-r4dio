@@ -448,8 +448,8 @@ namespace Torshify.Radio.EchoNest.Views.Style
                     using (var session = new EchoNestSession(EchoNestModule.ApiKey))
                     {
                         SearchArgument arg = new SearchArgument();
-                        SelectedMoods.ForEach(mood => arg.Moods.Add(mood.Name));
-                        SelectedStyles.ForEach(style => arg.Styles.Add(style.Name));
+                        FillTermList(SelectedMoods, arg.Moods);
+                        FillTermList(SelectedStyles, arg.Styles);
                         arg.MinFamiliarity = ArtistFamiliarity.Minimum;
                         arg.MinHotttnesss = ArtistHotness.Minimum;
 
@@ -465,8 +465,8 @@ namespace Torshify.Radio.EchoNest.Views.Style
                         {
                             StaticArgument arg2 = new StaticArgument();
                             arg2.Results = 75;
-                            SelectedMoods.ForEach(mood => arg2.Moods.Add(mood.Name));
-                            SelectedStyles.ForEach(style => arg2.Styles.Add(style.Name));
+                            FillTermList(SelectedMoods, arg2.Moods);
+                            FillTermList(SelectedStyles, arg2.Styles);
                             arg2.Type = "artist-radio";
                             arg2.Artist.Add(response.Artists[0].Name);
                             arg2.MinTempo = Tempo.Minimum;
@@ -691,8 +691,8 @@ namespace Torshify.Radio.EchoNest.Views.Style
             using (var session = new EchoNestSession(EchoNestModule.ApiKey))
             {
                 SearchArgument arg = new SearchArgument();
-                SelectedMoods.ForEach(mood => arg.Moods.Add(mood.Name));
-                SelectedStyles.ForEach(style => arg.Styles.Add(style.Name));
+                FillTermList(SelectedMoods, arg.Moods);
+                FillTermList(SelectedStyles, arg.Styles);
                 arg.MinFamiliarity = ArtistFamiliarity.Minimum;
                 arg.MinHotttnesss = ArtistHotness.Minimum;
 
@@ -707,6 +707,29 @@ namespace Torshify.Radio.EchoNest.Views.Style
                     PreviewArtistList = null;
                 }
             }
+        }
+
+        private void FillTermList(IEnumerable<TermModel> source, TermList target)
+        {
+            source.ForEach(s=>
+            {
+                var term = target.Add(s.Name);
+
+                if (s.Boost.HasValue)
+                {
+                    term.Boost(s.Boost.Value);
+                }
+
+                if (s.Require)
+                {
+                    term.Require();
+                }
+
+                if (s.Ban)
+                {
+                    term.Ban();
+                }
+            });
         }
 
         #endregion Methods

@@ -9,6 +9,7 @@ namespace Torshify.Radio.EchoNest.Views.Style.Models
         #region Fields
 
         private bool _ban;
+        private double? _boost;
         private int _count;
         private bool _require;
 
@@ -29,7 +30,7 @@ namespace Torshify.Radio.EchoNest.Views.Style.Models
 
         public string ID
         {
-            get; 
+            get;
             private set;
         }
 
@@ -55,6 +56,19 @@ namespace Torshify.Radio.EchoNest.Views.Style.Models
             {
                 _count = value;
                 RaisePropertyChanged("Count");
+            }
+        }
+
+        public double? Boost
+        {
+            get { return _boost; }
+            set
+            {
+                if (_boost != value)
+                {
+                    _boost = value;
+                    RaisePropertyChanged("Boost");
+                }
             }
         }
 
