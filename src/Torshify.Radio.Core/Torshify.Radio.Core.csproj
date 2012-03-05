@@ -250,7 +250,13 @@
     <Compile Include="Views\Stations\StationsView.xaml.cs">
       <DependentUpon>StationsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Stations\StationsViewMedium.xaml.cs">
+      <DependentUpon>StationsViewMedium.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Stations\StationsViewModel.cs" />
+    <Compile Include="Views\Stations\StationsViewSmall.xaml.cs">
+      <DependentUpon>StationsViewSmall.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Twitter\TwitterView.xaml.cs">
       <DependentUpon>TwitterView.xaml</DependentUpon>
     </Compile>
@@ -374,6 +380,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Stations\StationsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Stations\StationsViewMedium.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Stations\StationsViewSmall.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
