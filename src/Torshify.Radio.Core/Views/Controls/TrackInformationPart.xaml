@@ -22,7 +22,7 @@
             Width="52"
             Background="{DynamicResource {x:Static Framework:AppTheme.ContrastBackgroundKey}}"
             BorderThickness="1"
-            BorderBrush="{DynamicResource {x:Static Framework:AppTheme.ContrastForegroundKey}}">
+            Padding="2">
             <Controls:ImageWithPlaceholder
                 RenderOptions.BitmapScalingMode="HighQuality"
                 Stretch="Uniform"
