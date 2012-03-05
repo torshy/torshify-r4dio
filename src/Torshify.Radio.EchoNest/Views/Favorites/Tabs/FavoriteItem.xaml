@@ -35,11 +35,12 @@
         Height="64"
         Width="64">
         <Grid>
-            <Image
-                Name="playImageBackground"
-                Stretch="UniformToFill"
-                Source="{Binding ImageUri, ElementName=Root}">
-                <Image.Triggers>
+            <Controls:ImageWithPlaceholder
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Stretch="Uniform"
+                ImageUri="{Binding ImageUri, ElementName=Root}"
+                InitialImage="pack://siteoforigin:,,,/Resources/no-cover.png">
+                <Controls:ImageWithPlaceholder.Triggers>
                     <EventTrigger
                         RoutedEvent="UIElement.MouseEnter">
                         <BeginStoryboard>
@@ -64,8 +65,8 @@
                             </Storyboard>
                         </BeginStoryboard>
                     </EventTrigger>
-                </Image.Triggers>
-            </Image>
+                </Controls:ImageWithPlaceholder.Triggers>
+            </Controls:ImageWithPlaceholder>
             <Image
                 IsHitTestVisible="False"
                 Name="playIcon"
