@@ -111,7 +111,7 @@
                     Value="{Binding Player.Volume, UpdateSourceTrigger=PropertyChanged}"
                     Minimum="0.0"
                     Maximum="1.0"
-                    SmallChange="0.01"
+                    SmallChange="0.05"
                     LargeChange="0.1">
                     <i:Interaction.Behaviors>
                         <Behaviors:EnableSliderMouseWheel />

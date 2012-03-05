@@ -163,8 +163,8 @@ namespace Torshify.Radio.Core
             {
                 if (CurrentPlayer != null)
                 {
-                    _volumeMap[CurrentPlayer.Metadata.Name] = value;
-                    CurrentPlayer.Value.Volume = value;
+                    _volumeMap[CurrentPlayer.Metadata.Name] = Math.Max(0.0, value);
+                    CurrentPlayer.Value.Volume = Math.Max(0.0, value);
                 }
 
                 RaisePropertyChanged("Volume");
