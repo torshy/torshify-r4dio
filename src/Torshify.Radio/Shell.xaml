@@ -9,7 +9,7 @@
     Title="r4dio"
     Height="600"
     Width="800"
-    MinHeight="390"
+    MinHeight="425"
     MinWidth="600"
     Icon="Resources\r4dio_app.ico"
     TextElement.FontFamily="Segoe UI"

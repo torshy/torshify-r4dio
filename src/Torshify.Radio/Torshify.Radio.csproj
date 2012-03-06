@@ -45,6 +45,9 @@
     <Reference Include="AppLimit.NetSparkle.Net40">
       <HintPath>..\..\packages\NetSparkle.1.0.83\lib\net40\AppLimit.NetSparkle.Net40.dll</HintPath>
     </Reference>
+    <Reference Include="Hardcodet.Scheduling">
+      <HintPath>..\..\lib\Hardcodet.Scheduling\Hardcodet.Scheduling.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
@@ -401,6 +404,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Tiles\MS_0000s_0036_search.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Tiles\MS_hot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

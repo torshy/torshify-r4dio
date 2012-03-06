@@ -7,6 +7,8 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
+using Hardcodet.Scheduling;
+
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -29,12 +31,28 @@ namespace Torshify.Radio
 {
     public class Bootstrapper : MefBootstrapper
     {
+        #region Constructors
+
+        public Bootstrapper()
+        {
+            Scheduler = new Scheduler();
+        }
+
+        #endregion Constructors
+
         #region Properties
 
         [Export]
         public Dispatcher Dispatcher
         {
             get { return Application.Current.Dispatcher; }
+        }
+
+        [Export]
+        public Scheduler Scheduler
+        {
+            get;
+            private set;
         }
 
         #endregion Properties

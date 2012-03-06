@@ -78,10 +78,10 @@
                                             RenderOptions.BitmapScalingMode="LowQuality"
                                             Stretch="UniformToFill"
                                             Source="{Binding Data.BackgroundImage}" />
-                                        <ContentPresenter
-                                            Content="{Binding Data.Content}" />
                                     </Grid>
                                 </Border>
+                                <ContentPresenter
+                                    Content="{Binding Data.Content}" />
                                 <TextBlock
                                     Text="{Binding Data.Title}"
                                     TextWrapping="Wrap"

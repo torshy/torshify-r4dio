@@ -39,6 +39,10 @@
       <HintPath>..\..\lib\EchoNestSharp\EchoNest-Sharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Hardcodet.Scheduling">
+      <HintPath>..\..\lib\Hardcodet.Scheduling\Hardcodet.Scheduling.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.Prism">
       <HintPath>..\..\packages\Prism.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
@@ -83,6 +87,10 @@
       <HintPath>..\..\packages\WpfLocalizeExtension.1.0.2\lib\WPFLocalizeExtension.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="WpfShaderEffects">
+      <HintPath>..\..\lib\WpfShaderEffects\WpfShaderEffects.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
@@ -111,6 +119,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Startables\HotTileController.cs" />
     <Compile Include="Views\Browse\MainStationView.xaml.cs">
       <DependentUpon>MainStationView.xaml</DependentUpon>
     </Compile>
@@ -151,6 +160,12 @@
       <DependentUpon>FavoritesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Favorites\Tabs\FavoritesViewModel.cs" />
+    <Compile Include="Views\Hot\HotArtistsView.xaml.cs">
+      <DependentUpon>HotArtistsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Hot\HotArtistsViewModel.cs" />
+    <Compile Include="Views\Hot\TopHotttTrackStream.cs" />
+    <Compile Include="Views\Hot\TopHotttTrackStreamData.cs" />
     <Compile Include="Views\LoveHate\LoveHateTrackStream.cs" />
     <Compile Include="Views\LoveHate\LoveHateTrackStreamData.cs" />
     <Compile Include="Views\LoveHate\LoveHateView.xaml.cs">
@@ -240,6 +255,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Favorites\Tabs\FavoritesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Hot\HotArtistsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

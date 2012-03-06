@@ -1,0 +1,574 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Hardcodet.Scheduling</name>
+    </assembly>
+    <members>
+        <member name="T:Hardcodet.Scheduling.JobSchedule">
+            <summary>
+            Provides the fluent API to configure a given <see cref="T:Hardcodet.Scheduling.Job"/>.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.JobSchedule.#ctor(Hardcodet.Scheduling.Job)">
+            <summary>
+            Creates the instance object with the job to be
+            configured.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.JobSchedule.From(System.DateTimeOffset)">
+            <summary>
+            Sets the job's starting time.
+            </summary>
+            <param name="startTime">The first execution of the job.</param>
+        </member>
+        <member name="M:Hardcodet.Scheduling.JobSchedule.Once">
+            <summary>
+            Configures the job to run only once.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.JobSchedule.EveryInternal(System.TimeSpan)">
+            <summary>
+            Defines an interval for periodic execution of the
+            job. The interval needs to be set if the job is
+            supposed to run more than once.
+            </summary>
+            <param name="jobInterval">The job's planned
+            interval.</param>
+        </member>
+        <member name="M:Hardcodet.Scheduling.JobSchedule.Times(System.Int32)">
+            <summary>
+            Configures the job to run a fixed number of times.
+            </summary>
+            <param name="loops">The number of times the job
+            is supposed to run.</param>
+        </member>
+        <member name="M:Hardcodet.Scheduling.JobSchedule.Until(System.DateTimeOffset)">
+            <summary>
+            Specifies an <see cref="P:Hardcodet.Scheduling.Job.ExpirationTime"/> for the job. Not
+            required it the job runs only a number of times, or is supposed
+            to run indefinitely with the specified <see cref="P:Hardcodet.Scheduling.Job.Interval"/>.
+            </summary>
+            <param name="jobExpirationTime">The specified expiration time.</param>
+        </member>
+        <member name="P:Hardcodet.Scheduling.JobSchedule.Every">
+            <summary>
+            Defines an interval for periodic execution of the
+            job. The interval needs to be set if the job is
+            supposed to run more than once.
+            </summary>
+        </member>
+        <member name="T:Hardcodet.Scheduling.Intervals">
+            <summary>
+            Helper struct that simplifies interval configuration.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Intervals.#ctor(Hardcodet.Scheduling.JobSchedule)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Object"/> class.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Intervals.Milliseconds(System.Int64)">
+            <summary>
+            Sets an interval of a given number of milliseconds.
+            </summary>
+            <param name="value">The interval in milliseconds.</param>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Intervals.Seconds(System.Double)">
+            <summary>
+            Sets an interval of a given number of seconds.
+            </summary>
+            <param name="value">The interval in seconds.</param>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Intervals.Minutes(System.Double)">
+            <summary>
+            Sets an interval of a given number of minutes.
+            </summary>
+            <param name="value">The interval in minutes.</param>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Intervals.Days(System.Double)">
+            <summary>
+            Sets an interval of a given number of days.
+            </summary>
+            <param name="value">The interval in days.</param>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Intervals.TimeSpan(System.TimeSpan)">
+            <summary>
+            Sets an interval of a given time span.
+            </summary>
+            <param name="value">The interval.</param>
+        </member>
+        <member name="T:Hardcodet.Scheduling.Scheduler">
+            <summary>
+            Provides simple mechanisms to submit and run jobs.
+            </summary>
+        </member>
+        <member name="F:Hardcodet.Scheduling.Scheduler.syncRoot">
+            <summary>
+            Locking token.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.#ctor">
+            <summary>
+            Creates a new scheduler instance.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.SubmitJob``1(Hardcodet.Scheduling.Job{``0},System.Action{Hardcodet.Scheduling.Job{``0},``0})">
+            <summary>
+            Submits a generic job along with a callback that delivers the
+            job's <see cref="P:Hardcodet.Scheduling.Job`1.Data"/>.
+            </summary>
+            <typeparam name="T">The type of the state object that can be
+            attached to the job.</typeparam>
+            <param name="job">The job to be submitted.</param>
+            <param name="callback">A callback action that is being invoked
+            every time the job runs.</param>
+            <exception cref="T:System.ArgumentNullException">If one of the parameters
+            is a null reference.</exception>
+            <exception cref="T:System.InvalidOperationException">If the configuration does not allow
+            proper scheduling, e.g. because several loops were specified, but the inverval is
+            missing.</exception>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.SubmitJob(Hardcodet.Scheduling.Job,System.Action{Hardcodet.Scheduling.Job})">
+            <summary>
+            Submits a job to be executed.
+            </summary>
+            <param name="job">The job to be submitted.</param>
+            <param name="callback">A callback action that is being invoked
+            every time the job runs.</param>
+            <exception cref="T:System.ArgumentNullException">If one of the parameters
+            is a null reference.</exception>
+            <exception cref="T:System.InvalidOperationException">If the configuration does not allow
+            proper scheduling, e.g. because several loops were specified, but the inverval is
+            missing.</exception>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.TryGetJob(System.String)">
+            <summary>
+            Tries to get a job from the internal cache.
+            </summary>
+            <param name="jobId">The job identifier.</param>
+            <returns>The first job that matches the submitted ID, or null
+            if no matching job was found.</returns>
+            <remarks>Querying the scheduler for jobs might affect performance
+            if done frequently.</remarks>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.PauseJob(System.String)">
+            <summary>
+            Pauses the current job.
+            </summary>
+            <param name="jobId">The job identifier.</param>
+            <returns>True if the job's <see cref="P:Hardcodet.Scheduling.Job.State"/>
+            was <see cref="F:Hardcodet.Scheduling.JobState.Active"/> and was changed
+            to <see cref="F:Hardcodet.Scheduling.JobState.Paused"/>. False if the job was not found, or if the job's
+            <see cref="P:Hardcodet.Scheduling.Job.State"/> is not <see cref="F:Hardcodet.Scheduling.JobState.Active"/>.</returns>
+            <exception cref="T:System.InvalidOperationException">If the job has no
+            interval, and can thus not be rescheduled. For a job that runs
+            just once, set the <see cref="P:Hardcodet.Scheduling.Job.StartTime"/> accordingly.</exception>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.ResumeJob(System.String)">
+            <summary>
+            Resumes a paused job.
+            </summary>
+            <param name="jobId">The job identifier.</param>
+            <returns>True if the job's <see cref="P:Hardcodet.Scheduling.Job.State"/>
+            was <see cref="F:Hardcodet.Scheduling.JobState.Paused"/> and was changed
+            to <see cref="F:Hardcodet.Scheduling.JobState.Active"/>. False if the job was not found, or if the job's
+            <see cref="P:Hardcodet.Scheduling.Job.State"/> is not <see cref="F:Hardcodet.Scheduling.JobState.Paused"/>.</returns>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.CancelJob(System.String)">
+            <summary>
+            Cancels a job with a given ID and removes it from the scheduler's internal
+            cache.
+            </summary>
+            <param name="jobId">The job identifier.</param>
+            <returns>True if a matching job was found and removed from
+            the scheduler. False in case of an unknown job ID.</returns>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.CancelAll">
+            <summary>
+            Cancels all jobs.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.ProcessJobs(System.Object)">
+            <summary>
+            Timer event handler, which processes all currently
+            active jobs.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.VerifySystemTime">
+            <summary>
+            Verifies the system time was not changed. If a changed time was
+            detected, all jobs are being rescheduled in order to maintain the
+            relative execution time.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.SortJobs">
+            <summary>
+            Sorts the job list. This method does not perform any locking, this must
+            be done by the invoking party.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.RunPendingJobs">
+            <summary>
+            Processes all currently pending jobs. If a job is not
+            supposed to run anymore, it is being removed from the
+            internal cache.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.Reschedule">
+            <summary>
+            Reconfigures the timer according to the
+            next pending job execution time.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing,
+            releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Scheduler.SubmitJobException(Hardcodet.Scheduling.Job,System.Exception)">
+            <summary>
+            Forwards an exception to a registered <see cref="P:Hardcodet.Scheduling.Scheduler.JobExceptionHandler"/>,
+            if possible.
+            </summary>
+            <param name="job">The currently processed job. May be null.</param>
+            <param name="exception">The exception that occurred.</param>
+            <returns>True if the exception was forwarded to a registered
+            <see cref="P:Hardcodet.Scheduling.Scheduler.JobExceptionHandler"/>. False if no callback handler
+            was registered.</returns>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Scheduler.LastTimerInterval">
+            <summary>
+            The last interval that was assigned to the timer.
+            This is used along with the <see cref="P:Hardcodet.Scheduling.Scheduler.LastTimerRun"/>
+            value to detect whether the system time was changed.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Scheduler.LastTimerRun">
+            <summary>
+            A timestamp that marks the last timer run. Internally used along with
+            the <see cref="P:Hardcodet.Scheduling.Scheduler.LastTimerInterval"/> in order to detect
+            system time changes.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Scheduler.IsDisposed">
+            <summary>
+            Set to true as soon as the scheduler is disposed.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Scheduler.SystemTimeChangeRescheduling">
+            <summary>
+            Indicates whether the execution time of jobs should
+            be rescheduled in case a change of the system time
+            was detected. This can avoid delays or untimely execution
+            of jobs where no fixed execution times are desired, but
+            rather an execution within a time span.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Scheduler.JobExceptionHandler">
+            <summary>
+            An optional callback that handles exceptions that occur during
+            the execution of scheduled jobs. The handler receives both the
+            failing job and the exception that occurred.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Scheduler.SelfTestInterval">
+            <summary>
+            The minimum interval of the underlying timer in milliseconds.
+            If the next job's planned execution time is above this interval,
+            the timer runs anyway in order to reschedule or run suddenly
+            pending jobs in case the system time was changed.<br/>
+            Defaults to 120000 (2 minutes).
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Scheduler.MinJobInterval">
+            <summary>
+            The minimum interval in milliseconds that is being used within the internal
+            job processing loop. Submitting a job with an interval
+            below this threshold causes an exception.<br/>
+            Defaults to 100 milliseconds.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Scheduler.Timer">
+            <summary>
+            The internally used timer that is used to trigger
+            execution of the individual callbacks.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Scheduler.Jobs">
+            <summary>
+            An internal list of maintained jobs. The list is sorted
+            before processing.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Scheduler.SyncRoot">
+            <summary>
+            The scheduler's locking token.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Scheduler.IsSorted">
+            <summary>
+            Indicates whether the internal job list needs sorting or not.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Scheduler.NextExecution">
+            <summary>
+            The time of the next execution.
+            </summary>
+        </member>
+        <member name="T:Hardcodet.Scheduling.SystemTime">
+            <summary>
+            Simple helper class that provides an façade to
+            <see cref="P:System.DateTimeOffset.Now"/> which can be substituted
+            for simple testing of time-related code.<br/>
+            Pattern taken from Ayende: http://ayende.com/Blog/archive/2008/07/07/Dealing-with-time-in-tests.aspx
+            </summary>
+        </member>
+        <member name="F:Hardcodet.Scheduling.SystemTime.Now">
+            <summary>
+            Gets the system's current data and time. Only change for
+            testing scenarios. Use <see cref="M:Hardcodet.Scheduling.SystemTime.Reset"/> to
+            reset the function to its default implementation.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.SystemTime.Reset">
+            <summary>
+            Reverts the <see cref="F:Hardcodet.Scheduling.SystemTime.Now"/> function to its default
+            implementation which just returns <see cref="P:System.DateTimeOffset.Now"/>.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.SystemTime.#cctor">
+            <summary>
+            Inits the <see cref="F:Hardcodet.Scheduling.SystemTime.Now"/> delegate.
+            </summary>
+        </member>
+        <member name="T:Hardcodet.Scheduling.JobContext">
+            <summary>
+            Contains the context of a managed job. Internally used by
+            the scheduler.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.JobContext.#ctor(Hardcodet.Scheduling.Job,System.Action{Hardcodet.Scheduling.Job})">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Object"/> class.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">If one of the parameters is
+            is a null reference.</exception>
+            <exception cref="T:System.InvalidOperationException">If the configuration does not allow
+            proper scheduling, e.g. because several loops were specified, but the inverval is
+            missing.</exception>
+        </member>
+        <member name="M:Hardcodet.Scheduling.JobContext.ExecuteAsync(Hardcodet.Scheduling.Scheduler)">
+            <summary>
+            Invokes the managed job's <see cref="P:Hardcodet.Scheduling.JobContext.CallbackAction"/> through
+            the thread pool, and updates the job's internal state.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.JobContext.UpdateState">
+            <summary>
+            Updates the internal state after an execution, and updates the
+            <see cref="P:Hardcodet.Scheduling.JobContext.LastJobEvaluation"/> and <see cref="P:Hardcodet.Scheduling.JobContext.NextExecution"/>
+            values. If the job is not supposed to run anymore, the
+            <see cref="P:Hardcodet.Scheduling.JobContext.NextExecution"/> property is set to null.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.JobContext.CallbackAction">
+            <summary>
+            The callback action that is being invoked.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.JobContext.ManagedJob">
+            <summary>
+            The maintained job.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.JobContext.LastJobEvaluation">
+            <summary>
+            The timestamp of the last job execution. Returns null
+            if the job hasn't been executed yet.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.JobContext.NextExecution">
+            <summary>
+            The next execution time. Returns null if the job is done.
+            After initialization, this is the job's <see cref="P:Hardcodet.Scheduling.Job.StartTime"/>.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.JobContext.RemainingExecutions">
+            <summary>
+            The remaining executions, if the job was configured
+            to run a specific number of times.
+            </summary>
+        </member>
+        <member name="T:Hardcodet.Scheduling.JobState">
+            <summary>
+            State flags for maintainted jobs.
+            </summary>
+        </member>
+        <member name="F:Hardcodet.Scheduling.JobState.Active">
+            <summary>
+            The job is currently active.
+            </summary>
+        </member>
+        <member name="F:Hardcodet.Scheduling.JobState.Paused">
+            <summary>
+            The job was paused.
+            </summary>
+        </member>
+        <member name="F:Hardcodet.Scheduling.JobState.Finished">
+            <summary>
+            The job was finished, either because it ran
+            the designated amount of times or expired.
+            </summary>
+        </member>
+        <member name="F:Hardcodet.Scheduling.JobState.Canceled">
+            <summary>
+            The job was aborted.
+            </summary>
+        </member>
+        <member name="T:Hardcodet.Scheduling.ReschedulingStrategy">
+            <summary>
+            Defines how the <see cref="T:Hardcodet.Scheduling.Scheduler"/> class performs
+            rescheduling if a changed system time was detected.
+            </summary>
+        </member>
+        <member name="F:Hardcodet.Scheduling.ReschedulingStrategy.KeepFixedTimes">
+            <summary>
+            Jobs are not rescheduled if a system time
+            change was detected.
+            </summary>
+        </member>
+        <member name="F:Hardcodet.Scheduling.ReschedulingStrategy.RescheduleNextExecution">
+            <summary>
+            Only the jobs' next execution time is rescheduled.
+            The expiration time remains fixed.
+            </summary>
+        </member>
+        <member name="F:Hardcodet.Scheduling.ReschedulingStrategy.RescheduleNextExecutionAndExpirationTime">
+            <summary>
+            Both the jobs' next execution times and the
+            expiration times are being shifted according
+            to the time change.
+            </summary>
+        </member>
+        <member name="T:Hardcodet.Scheduling.Job">
+            <summary>
+            Encapsulates the scheduling for a given job.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Job.#ctor">
+            <summary>
+            Creates a new job, and generates a unique job ID on the fly.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Job.#ctor(System.String)">
+            <summary>
+            Initializes a new job with a given identifier.
+            </summary>
+            <param name="jobId">A unique ID for the job. Unique
+            job IDs are not evaluated by the scheduler, the calling
+            party must ensure unique IDs.</param>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Job.Cancel">
+            <summary>
+            Cancels the job in order to have it removed
+            during the next processing loop. This method
+            can be invoked by clients in order to
+            cancel job execution without having to reference
+            the job's <see cref="T:Hardcodet.Scheduling.Scheduler"/>.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Job.Pause">
+            <summary>
+            Pauses the current job.
+            </summary>
+            <returns>True if the job's <see cref="P:Hardcodet.Scheduling.Job.State"/>
+            was <see cref="F:Hardcodet.Scheduling.JobState.Active"/> and was changed
+            to <see cref="F:Hardcodet.Scheduling.JobState.Paused"/>. False if the job's
+            <see cref="P:Hardcodet.Scheduling.Job.State"/> is not <see cref="F:Hardcodet.Scheduling.JobState.Active"/>.</returns>
+            <exception cref="T:System.InvalidOperationException">If the job has no
+            interval, and can thus not be rescheduled. For a job that runs
+            just once, set the <see cref="P:Hardcodet.Scheduling.Job.StartTime"/> accordingly.</exception>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Job.Resume">
+            <summary>
+            Resumes a paused job.
+            </summary>
+            <returns>True if the job's <see cref="P:Hardcodet.Scheduling.Job.State"/>
+            was <see cref="F:Hardcodet.Scheduling.JobState.Paused"/> and was changed
+            to <see cref="F:Hardcodet.Scheduling.JobState.Active"/>. False if the job's
+            <see cref="P:Hardcodet.Scheduling.Job.State"/> is not <see cref="F:Hardcodet.Scheduling.JobState.Paused"/>.</returns>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Job.JobId">
+            <summary>
+            A unique identifier for the job.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Job.SyncRoot">
+            <summary>
+            Gets a synchronization token for the job.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Job.StartTime">
+            <summary>
+            The designated start time for the job. If not set, the
+            job starts immediately.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Job.Interval">
+            <summary>
+            The interval of the job. Required if the job is to supposed multiple
+            times.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Job.Loops">
+            <summary>
+            The number of executed loops. If set, the
+            job runs the specified number of times, unless
+            it aborts because the <see cref="P:Hardcodet.Scheduling.Job.ExpirationTime"/>
+            was set and causes the job to be cancelled earlier.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Job.ExpirationTime">
+            <summary>
+            The expiration time of the job. This date is optional
+            in case the job runs only a specified number of times,
+            or indefinitely.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Job.State">
+            <summary>
+            The job's current state.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Job.Run">
+            <summary>
+            Configures how often the job is being repeated.
+            </summary>
+        </member>
+        <member name="T:Hardcodet.Scheduling.Job`1">
+            <summary>
+            A generic job implementation which allows to attach
+            strongly typed state information directly to the
+            job.
+            </summary>
+            <typeparam name="T">The type of the job's
+            <see cref="P:Hardcodet.Scheduling.Job`1.Data"/> object.</typeparam>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Job`1.#ctor">
+            <summary>
+            Creates a new job, and generates a unique job identifier on the fly.
+            </summary>
+        </member>
+        <member name="M:Hardcodet.Scheduling.Job`1.#ctor(System.String)">
+            <summary>
+            Initializes a new job with a given identifier.
+            </summary>
+        </member>
+        <member name="P:Hardcodet.Scheduling.Job`1.Data">
+            <summary>
+            Gets or sets the state object that is attached to the job.
+            </summary>
+        </member>
+    </members>
+</doc>
