@@ -107,7 +107,9 @@ namespace Torshify.Radio.EchoNest.Startables
                                     {
                                         Text = artist.Name,
                                         TextTrimming = TextTrimming.CharacterEllipsis,
-                                        Margin = new Thickness(4)
+                                        Margin = new Thickness(4),
+                                        HorizontalAlignment = HorizontalAlignment.Left,
+                                        VerticalAlignment = VerticalAlignment.Top
                                     };
                                 }));
                             }

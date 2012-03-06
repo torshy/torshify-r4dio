@@ -424,11 +424,19 @@ namespace Torshify.Radio.Core
             Track firstTrack;
             if (_trackQueue.TryDequeue(out firstTrack))
             {
-                _dispatcher.BeginInvoke(new Func<Track, bool>(_trackQueuePublic.Remove), firstTrack);
-                _corePlayer.Load(firstTrack);
-                _corePlayer.Play();
+                try
+                {
+                    _dispatcher.BeginInvoke(new Func<Track, bool>(_trackQueuePublic.Remove), firstTrack);
+                    _corePlayer.Load(firstTrack);
+                    _corePlayer.Play();
 
-                CurrentTrack = firstTrack;
+                    CurrentTrack = firstTrack;
+                }
+                catch (Exception e)
+                {
+                    _logger.Log(e.ToString(), Category.Exception, Priority.Low);
+                    MoveToNextTrack();
+                }
             }
             else
             {
