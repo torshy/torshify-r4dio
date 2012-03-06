@@ -135,6 +135,11 @@ namespace Torshify.Radio.Core.Startables
                 new MouseBinding(
                     AppCommands.NavigateForwardCommand,
                     new ExtendedMouseGesture(MouseButton.XButton2)));
+
+            Application.Current.MainWindow.InputBindings.Add(
+                new KeyBinding(
+                    AppCommands.TogglePlayCommand,
+                     new KeyGesture(Key.Space)));
         }
 
         private void ExecuteQueueTrackStream(object parameter)
