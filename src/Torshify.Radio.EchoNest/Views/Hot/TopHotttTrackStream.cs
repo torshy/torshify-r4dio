@@ -90,7 +90,7 @@ namespace Torshify.Radio.EchoNest.Views.Hot
 
                 if (response != null && response.Status.Code == ResponseCode.Success)
                 {
-                    _start = response.Artists.Count;
+                    _start += response.Artists.Count;
 
                     List<Track> tracks = new List<Track>();
 
