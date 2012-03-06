@@ -254,7 +254,14 @@ namespace Torshify.Radio.Core
 
                         _corePlayer.Stop();
 
-                        MoveToNextTrack();
+                        while (!MoveToNextTrack())
+                        {
+                            if (!GetNextBatch())
+                            {
+                                break;
+                            }
+                        }
+
                         PeekToNextTrack();
                     }
                 })
@@ -309,7 +316,14 @@ namespace Torshify.Radio.Core
                             GetNextBatch();
                         }
 
-                        MoveToNextTrack();
+                        while (!MoveToNextTrack())
+                        {
+                            if (!GetNextBatch())
+                            {
+                                break;
+                            }
+                        }
+
                         PeekToNextTrack();
                     }
                 })
@@ -347,7 +361,15 @@ namespace Torshify.Radio.Core
 
                             CurrentTrackStream = nextTrackStream;
                             GetNextBatch();
-                            MoveToNextTrack();
+
+                            while (!MoveToNextTrack())
+                            {
+                                if (!GetNextBatch())
+                                {
+                                    break;
+                                }
+                            }
+
                             PeekToNextTrack();
                         }
                     })
@@ -373,7 +395,7 @@ namespace Torshify.Radio.Core
             return TrackSources.Any(s => s.Value.SupportsLink(trackLink));
         }
 
-        private void GetNextBatch()
+        private bool GetNextBatch()
         {
             if (CurrentTrackStream != null && CurrentTrackStream.MoveNext())
             {
@@ -385,25 +407,27 @@ namespace Torshify.Radio.Core
                     _trackQueue.Enqueue(track);
                     _dispatcher.BeginInvoke(new Action<Track>(_trackQueuePublic.Add), track);
                 }
-            }
-            else
-            {
-                ITrackStream nextTrackStream;
-                if (_trackStreamQueue.TryDequeue(out nextTrackStream))
-                {
-                    _logger.Log("Changing current track stream to " + nextTrackStream.Description, Category.Debug, Priority.Low);
-                    _dispatcher.BeginInvoke(new Func<ITrackStream, bool>(_trackStreamQueuePublic.Remove), nextTrackStream);
-                    CurrentTrackStream = nextTrackStream;
-                    GetNextBatch();
-                }
-                else
-                {
-                    _logger.Log("No more track streams to play", Category.Debug, Priority.Low);
-                    CurrentTrackStream = null;
-                }
 
                 RaisePropertyChanged("CanGoToNextTrackStream");
+
+                return true;
             }
+
+            ITrackStream nextTrackStream;
+            if (_trackStreamQueue.TryDequeue(out nextTrackStream))
+            {
+                _logger.Log("Changing current track stream to " + nextTrackStream.Description, Category.Debug, Priority.Low);
+                _dispatcher.BeginInvoke(new Func<ITrackStream, bool>(_trackStreamQueuePublic.Remove), nextTrackStream);
+                CurrentTrackStream = nextTrackStream;
+                RaisePropertyChanged("CanGoToNextTrackStream");
+                return GetNextBatch();
+            }
+
+            _logger.Log("No more track streams to play", Category.Debug, Priority.Low);
+            CurrentTrackStream = null;
+            RaisePropertyChanged("CanGoToNextTrackStream");
+
+            return false;
         }
 
         private void PeekToNextTrack()
@@ -419,7 +443,7 @@ namespace Torshify.Radio.Core
             }
         }
 
-        private void MoveToNextTrack()
+        private bool MoveToNextTrack()
         {
             Track firstTrack;
             if (_trackQueue.TryDequeue(out firstTrack))
@@ -431,17 +455,17 @@ namespace Torshify.Radio.Core
                     _corePlayer.Play();
 
                     CurrentTrack = firstTrack;
+                    return true;
                 }
                 catch (Exception e)
                 {
                     _logger.Log(e.ToString(), Category.Exception, Priority.Low);
-                    MoveToNextTrack();
+                    return MoveToNextTrack();
                 }
             }
-            else
-            {
-                CurrentTrack = null;
-            }
+
+            CurrentTrack = null;
+            return false;
         }
 
         private void OnTrackComplete(object sender, TrackEventArgs e)
@@ -457,7 +481,14 @@ namespace Torshify.Radio.Core
                             GetNextBatch();
                         }
 
-                        MoveToNextTrack();
+                        while (!MoveToNextTrack())
+                        {
+                            if (!GetNextBatch())
+                            {
+                                break;
+                            }
+                        }
+
                         PeekToNextTrack();
                     }
                 })
@@ -514,7 +545,7 @@ namespace Torshify.Radio.Core
 
                             //if (mismatch.Any())
                             //{
-                                    
+
                             //}
 
                             return sources;
