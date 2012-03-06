@@ -8,6 +8,7 @@ using Torshify.Radio.EchoNest.Views.Browse.Tabs;
 using Torshify.Radio.EchoNest.Views.LoveHate;
 using Torshify.Radio.EchoNest.Views.Similar;
 using Torshify.Radio.Framework;
+using Torshify.Radio.Framework.Commands;
 using Torshify.Radio.Framework.Events;
 
 namespace Torshify.Radio.EchoNest
@@ -38,6 +39,9 @@ namespace Torshify.Radio.EchoNest
             _eventAggregator
                 .GetEvent<BuildAlbumRelatedCommandBarEvent>()
                 .Subscribe(OnBuildAlbumRelatedCommandBar, ThreadOption.PublisherThread);
+
+            AppCommands.GoToArtistCommand.RegisterCommand(new DelegateCommand<object>(ExecuteBrowseForArtist));
+            AppCommands.GoToAlbumCommand.RegisterCommand(new DelegateCommand<object>(ExecuteBrowseForAlbum));
         }
 
         private void OnBuildArtistRelatedCommandBar(ArtistRelatedCommandBarPayload payload)
@@ -80,6 +84,23 @@ namespace Torshify.Radio.EchoNest
                 });
         }
 
+        private void ExecuteBrowseForArtist(object parameter)
+        {
+            var track = parameter as Track;
+
+            if (track != null)
+            {
+                ExecuteBrowseForArtist(track.Artist);
+            }
+
+            var artistName = parameter as string;
+
+            if (artistName != null)
+            {
+                ExecuteBrowseForArtist(artistName);
+            }
+        }
+
         private void ExecuteBrowseForArtist(string artistName)
         {
             if (!string.IsNullOrEmpty(artistName))
@@ -109,6 +130,30 @@ namespace Torshify.Radio.EchoNest
                 query.Add(SearchBar.IsFromSearchBarParameter, "true");
                 query.Add(SearchBar.ValueParameter, artistName);
                 _regionManager.RequestNavigate(AppRegions.ViewRegion, typeof(MainStationView).FullName + query);
+            }
+        }
+
+        private void ExecuteBrowseForAlbum(object parameter)
+        {
+            var track = parameter as Track;
+
+            if (track != null)
+            {
+                ExecuteBrowseForAlbum(Tuple.Create(track.Artist, track.Album));
+            }
+
+            var container = parameter as TrackContainer;
+
+            if (container != null)
+            {
+                ExecuteBrowseForAlbum(Tuple.Create(container.Owner.Name, container.Name));
+            }
+
+            var tuple = parameter as Tuple<string, string>;
+
+            if (tuple != null)
+            {
+                ExecuteBrowseForAlbum(tuple);
             }
         }
 

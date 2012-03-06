@@ -90,11 +90,13 @@
                     Padding="0"
                     VerticalAlignment="Top">
                     <Grid>
-                        <Image
+                        <Controls:ImageWithPlaceholder
                             Name="playImageBackground"
+                            RenderOptions.BitmapScalingMode="HighQuality"
                             Stretch="UniformToFill"
-                            Source="{Binding CurrentTrackContainer.Image}">
-                            <Image.Triggers>
+                            ImageUri="{Binding CurrentTrackContainer.Image}"
+                            InitialImage="pack://siteoforigin:,,,/Resources/no-cover.png">
+                            <Controls:ImageWithPlaceholder.Triggers>
                                 <EventTrigger
                                     RoutedEvent="UIElement.MouseEnter">
                                     <BeginStoryboard>
@@ -119,8 +121,8 @@
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </EventTrigger>
-                            </Image.Triggers>
-                        </Image>
+                            </Controls:ImageWithPlaceholder.Triggers>
+                        </Controls:ImageWithPlaceholder>
                         <Image
                             IsHitTestVisible="False"
                             Name="playIcon"

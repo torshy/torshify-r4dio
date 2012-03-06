@@ -54,18 +54,24 @@
                 TextOptions.TextFormattingMode="Ideal"
                 FontSize="{Binding TrackNameFontSize, ElementName=Root, Mode=OneWay}"
                 Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
-            <TextBlock
-                Text="{Binding ArtistName, ElementName=Root, Mode=OneWay, Converter={StaticResource StringToUpperConverter}}"
-                TextTrimming="CharacterEllipsis"
-                TextOptions.TextFormattingMode="Ideal"
-                FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}"
-                FontSize="{Binding AlbumNameFontSize, ElementName=Root, Mode=OneWay}"
-                Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
-                Cursor="Hand">
-                <i:Interaction.Behaviors>
-                    <Behaviors:ArtistRelatedCommandBarBehavior
-                        ArtistName="{Binding ArtistName, ElementName=Root, Mode=OneWay}" />
-                </i:Interaction.Behaviors>
+            <TextBlock>
+                <Hyperlink
+                    Command="{x:Static Framework:AppCommands.GoToArtistCommand}"
+                    CommandParameter="{Binding ArtistName, ElementName=Root, Mode=OneWay}">
+                    <TextBlock
+                        Text="{Binding ArtistName, ElementName=Root, Mode=OneWay, Converter={StaticResource StringToUpperConverter}}"
+                        TextTrimming="CharacterEllipsis"
+                        TextOptions.TextFormattingMode="Ideal"
+                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}"
+                        FontSize="{Binding AlbumNameFontSize, ElementName=Root, Mode=OneWay}"
+                        Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                        Cursor="Hand">
+                        <i:Interaction.Behaviors>
+                            <Behaviors:ArtistRelatedCommandBarBehavior
+                                ArtistName="{Binding ArtistName, ElementName=Root, Mode=OneWay}" />
+                        </i:Interaction.Behaviors>
+                    </TextBlock>
+                </Hyperlink>
             </TextBlock>
             <ContentControl
                 Content="{Binding SubContent, ElementName=Root}" />

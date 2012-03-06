@@ -177,6 +177,7 @@
     <Compile Include="Converters\InstanceToObjectTypeConverter.cs" />
     <Compile Include="Converters\NegateValueConverter.cs" />
     <Compile Include="Converters\StringEmptyToVisibilityConverter.cs" />
+    <Compile Include="Converters\StringPairToTupleConverter.cs" />
     <Compile Include="Converters\StringToUpperConverter.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Events\ApplicationInactivityEvent.cs" />

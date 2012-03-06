@@ -112,25 +112,37 @@
             </UniformGrid>
             <StackPanel
                 VerticalAlignment="Center">
-                <TextBlock
-                    Text="{Binding CurrentTrack.Artist, Converter={StaticResource StringToUpperConverter}}"
-                    TextTrimming="CharacterEllipsis"
-                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}">
-                    <i:Interaction.Behaviors>
-                        <Behaviors:ArtistRelatedCommandBarBehavior
-                            ArtistName="{Binding CurrentTrack.Artist}" />
-                    </i:Interaction.Behaviors>
+                <TextBlock>
+                    <Hyperlink
+                        Command="{x:Static Framework:AppCommands.GoToArtistCommand}"
+                        CommandParameter="{Binding CurrentTrack.Artist}">
+                        <TextBlock
+                            Text="{Binding CurrentTrack.Artist, Converter={StaticResource StringToUpperConverter}}"
+                            TextTrimming="CharacterEllipsis"
+                            FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyBold}}">
+                            <i:Interaction.Behaviors>
+                                <Behaviors:ArtistRelatedCommandBarBehavior
+                                        ArtistName="{Binding CurrentTrack.Artist}" />
+                            </i:Interaction.Behaviors>
+                        </TextBlock>
+                    </Hyperlink>
                 </TextBlock>
-                <TextBlock
-                    Margin="0,-4,0,0"
-                    Text="{Binding CurrentTrack.Album, Converter={StaticResource StringToUpperConverter}}"
-                    TextTrimming="CharacterEllipsis"
-                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}">
-                    <i:Interaction.Behaviors>
-                        <Behaviors:AlbumRelatedCommandBarBehavior
-                            ArtistName="{Binding CurrentTrack.Artist}"
-                            AlbumName="{Binding CurrentTrack.Album}" />
-                </i:Interaction.Behaviors>
+                <TextBlock>
+                    <Hyperlink
+                        Command="{x:Static Framework:AppCommands.GoToAlbumCommand}"
+                        CommandParameter="{Binding CurrentTrack}">
+                        <TextBlock
+                            Margin="0,-4,0,0"
+                            Text="{Binding CurrentTrack.Album, Converter={StaticResource StringToUpperConverter}}"
+                            TextTrimming="CharacterEllipsis"
+                            FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}">
+                            <i:Interaction.Behaviors>
+                                <Behaviors:AlbumRelatedCommandBarBehavior
+                                    ArtistName="{Binding CurrentTrack.Artist}"
+                                    AlbumName="{Binding CurrentTrack.Album}" />
+                            </i:Interaction.Behaviors>
+                        </TextBlock>
+                    </Hyperlink>
                 </TextBlock>
                 <TextBlock
                     Text="{Binding CurrentTrack.Name}"

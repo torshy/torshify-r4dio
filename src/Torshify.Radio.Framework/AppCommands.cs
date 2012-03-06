@@ -22,5 +22,8 @@ namespace Torshify.Radio.Framework
         public static readonly CompositeCommand AddTrackStreamDataToFavoriteCommand = new CompositeCommand();
 
         public static readonly CompositeCommand LikeTrackCommand = new CompositeCommand();
+
+        public static readonly CompositeCommand GoToArtistCommand = new CompositeCommand();
+        public static readonly CompositeCommand GoToAlbumCommand = new CompositeCommand();
     }
 }
