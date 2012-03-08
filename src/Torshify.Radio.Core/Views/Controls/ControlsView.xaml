@@ -23,10 +23,6 @@
         <local:TrackInformationPart
             ToolTipService.Placement="Top"
             DockPanel.Dock="Left">
-            <local:TrackInformationPart.ToolTip>
-                <local:ExtendedTrackInformationPart
-                    Height="128" />
-            </local:TrackInformationPart.ToolTip>
         </local:TrackInformationPart>
         <DockPanel />
     </DockPanel>
