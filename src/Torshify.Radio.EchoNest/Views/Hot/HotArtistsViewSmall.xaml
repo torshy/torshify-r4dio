@@ -1,0 +1,194 @@
+﻿<UserControl
+    x:Class="Torshify.Radio.EchoNest.Views.Hot.HotArtistsViewSmall"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
+    xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
+    Engine:LocalizeDictionary.DesignCulture="en-US"
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="300">
+    <UserControl.Resources>
+        <Converters:StringToUpperConverter
+            x:Key="StringToUpperConverter" />
+        <BooleanToVisibilityConverter
+            x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+    <DockPanel>
+        <StackPanel
+            Visibility="{Binding HasItems, ElementName=artistList, Converter={StaticResource BooleanToVisibilityConverter}}"
+            DockPanel.Dock="Top"
+            Orientation="Horizontal">
+            <Button
+                Content="Play all"
+                Command="{Binding PlayAllTracksCommand}" />
+        </StackPanel>
+        <ScrollViewer
+            x:Name="Scroller"
+            HorizontalScrollBarVisibility="Auto"
+            VerticalScrollBarVisibility="Disabled">
+            <ItemsControl
+                Name="artistList"
+                ItemsSource="{Binding Artists}"
+                VerticalAlignment="Center">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel
+                            ItemHeight="156"
+                            ItemWidth="156"
+                            Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                            Name="bd"
+                            Padding="2">
+                            <DockPanel>
+                                <Grid
+                                    DockPanel.Dock="Bottom"
+                                    Background="Black">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition
+                                            Width="40" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Rectangle
+                                        Grid.ColumnSpan="2"
+                                        Fill="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}"
+                                        Opacity="0.3" />
+                                    <TextBlock
+                                        Margin="4,4,2,4"
+                                        Grid.Column="0"
+                                        Text="{Binding Index, StringFormat={}{0:00}}"
+                                        TextTrimming="CharacterEllipsis"
+                                        FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeExtraLarge}}"
+                                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                                        Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                                    <StackPanel
+                                        Margin="2,4,4,4"
+                                        Grid.Column="1">
+                                        <TextBlock
+                                            Text="{Binding HotSongTitle}"
+                                            TextTrimming="CharacterEllipsis"
+                                            FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeMedium}}"
+                                            FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                                            Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
+                                        <TextBlock>
+                                            <Hyperlink
+                                                Command="{x:Static Framework:AppCommands.GoToArtistCommand}"
+                                                CommandParameter="{Binding Name}">
+                                                <TextBlock
+                                                    Text="{Binding Name, Converter={StaticResource StringToUpperConverter}}"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeSmall}}"
+                                                    Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}">
+                                                    <i:Interaction.Behaviors>
+                                                        <Behaviors:ArtistRelatedCommandBarBehavior
+                                                            ArtistName="{Binding Name}" />
+                                                    </i:Interaction.Behaviors>
+                                                </TextBlock>
+                                             </Hyperlink>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                                <Button
+                                    Name="playButton"
+                                    BorderThickness="0"
+                                    Padding="0"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch"
+                                    Background="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}"
+                                    Command="{Binding DataContext.PlayTopTrackCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                    CommandParameter="{Binding}">
+                                    <Grid>
+                                        <Controls:ImageWithPlaceholder
+                                            RenderOptions.BitmapScalingMode="HighQuality"
+                                            Stretch="UniformToFill"
+                                            ImageUri="{Binding ArtistImage}"
+                                            InitialImage="pack://siteoforigin:,,,/Resources/no-cover.png">
+                                            <Image.Triggers>
+                                                <EventTrigger
+                                                    RoutedEvent="UIElement.MouseEnter">
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation
+                                                                Storyboard.TargetProperty="Opacity"
+                                                                To="0.3"
+                                                                From="1.0"
+                                                                Duration="0:0:0.2" />
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger>
+                                                <EventTrigger
+                                                    RoutedEvent="UIElement.MouseLeave">
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <DoubleAnimation
+                                                                Storyboard.TargetProperty="Opacity"
+                                                                To="1.0"
+                                                                From="0.3"
+                                                                Duration="0:0:0.2" />
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger>
+                                            </Image.Triggers>
+                                        </Controls:ImageWithPlaceholder>
+                                        <Image
+                                            IsHitTestVisible="False"
+                                            Name="playIcon"
+                                            Stretch="None"
+                                            Source="pack://siteoforigin:,,,/Resources/Icons/play.png"
+                                            RenderOptions.BitmapScalingMode="HighQuality"
+                                            Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <Button
+                                            Command="{Binding DataContext.QueueTopTrackCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                            CommandParameter="{Binding}"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            BorderThickness="0"
+                                            Padding="0"
+                                            ToolTip="{lex:LocText Key=Add_To_Queue, Dict=Strings, Assembly=Torshify.Radio.EchoNest}"
+                                            Visibility="{Binding IsMouseOver, ElementName=playButton, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <Grid
+                                                Height="40"
+                                                Width="48">
+                                                <Path
+                                                    Stretch="Fill"
+                                                    Fill="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}"
+                                                    Data="M0,0 L1,1 1,0z" />
+                                                <Image
+                                                    Width="24"
+                                                    Height="24"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Top"
+                                                    Source="{Binding Source={x:Static Framework:AppIcons.Add}}" />
+                                            </Grid>
+                                        </Button>
+                                    </Grid>
+                                </Button>
+                            </DockPanel>
+                        </Border>
+                        <DataTemplate.Triggers>
+                            <Trigger
+                                Property="IsMouseOver"
+                                Value="True">
+                                <Setter
+                                    Property="Background"
+                                    Value="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}"
+                                    TargetName="bd" />
+                            </Trigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

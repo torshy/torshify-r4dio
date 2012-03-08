@@ -114,9 +114,13 @@
     <Compile Include="Commands\WeakCollection.cs" />
     <Compile Include="Commands\WeakReference.cs" />
     <Compile Include="Common\DoubleUtilities.cs" />
+    <Compile Include="Common\GeoHelper.cs" />
     <Compile Include="Common\ObjectExtensions.cs" />
+    <Compile Include="Controls\AnimatingPanel.cs" />
+    <Compile Include="Controls\AnimatingTilePanel.cs" />
     <Compile Include="Controls\CircleButton.cs" />
     <Compile Include="Controls\CommandBarContextMenu.cs" />
+    <Compile Include="Controls\CompositionTargetRenderingListening.cs" />
     <Compile Include="Controls\DependencyPropHelper.cs" />
     <Compile Include="Controls\DragPreviewAdorner.cs" />
     <Compile Include="Controls\DragSlider.cs" />

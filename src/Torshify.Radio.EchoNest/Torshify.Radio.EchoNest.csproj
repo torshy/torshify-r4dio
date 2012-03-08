@@ -164,6 +164,13 @@
       <DependentUpon>HotArtistsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Hot\HotArtistsViewModel.cs" />
+    <Compile Include="Views\Hot\HotArtistsViewSmall.xaml.cs">
+      <DependentUpon>HotArtistsViewSmall.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Hot\Models\HotArtistModel.cs" />
+    <Compile Include="Views\Hot\HotArtistsViewMedium.xaml.cs">
+      <DependentUpon>HotArtistsViewMedium.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Hot\TopHotttTrackStream.cs" />
     <Compile Include="Views\Hot\TopHotttTrackStreamData.cs" />
     <Compile Include="Views\LoveHate\LoveHateTrackStream.cs" />
@@ -259,6 +266,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Hot\HotArtistsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Hot\HotArtistsViewSmall.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Hot\HotArtistsViewMedium.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

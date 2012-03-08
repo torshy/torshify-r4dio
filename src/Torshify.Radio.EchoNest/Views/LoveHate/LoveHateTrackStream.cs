@@ -137,6 +137,7 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
 
                                 _currentTracks =
                                     queryResult
+                                        .Where(s => s.Artist.Equals(_initialArtistName, StringComparison.InvariantCultureIgnoreCase))
                                         .Take(1)
                                         .ToArray();
 

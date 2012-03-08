@@ -4,12 +4,19 @@ using System.Windows.Controls;
 namespace Torshify.Radio.EchoNest.Views.Hot
 {
     [Export]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class HotArtistsView : UserControl
     {
+        #region Constructors
+
         public HotArtistsView()
         {
             InitializeComponent();
         }
+
+        #endregion Constructors
+
+        #region Properties
 
         [Import]
         public HotArtistsViewModel Model
@@ -23,5 +30,7 @@ namespace Torshify.Radio.EchoNest.Views.Hot
                 DataContext = value;
             }
         }
+
+        #endregion Properties
     }
 }
