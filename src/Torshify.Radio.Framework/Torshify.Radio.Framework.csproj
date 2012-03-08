@@ -235,6 +235,7 @@
     <Compile Include="Term.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="TileData.cs" />
+    <Compile Include="TileEventArgs.cs" />
     <Compile Include="ToastData.cs" />
     <Compile Include="TrackBufferingEventArgs.cs" />
     <Compile Include="TrackChangedEventArgs.cs" />

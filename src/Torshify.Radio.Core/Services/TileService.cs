@@ -33,6 +33,12 @@ namespace Torshify.Radio.Core.Services
 
         #endregion Constructors
 
+        #region Events
+
+        public event EventHandler<TileEventArgs> TileAdded;
+
+        #endregion Events
+
         #region Properties
 
         public IEnumerable<Tile> Tiles
@@ -79,7 +85,19 @@ namespace Torshify.Radio.Core.Services
             }
 
             Uri navigationUri = new Uri(typeof(T).FullName + query, UriKind.RelativeOrAbsolute);
-            _tiles.Add(new Tile(navigationUri, tileData, regionName));
+            var item = new Tile(navigationUri, tileData, regionName);
+            _tiles.Add(item);
+            OnTileAdded(new TileEventArgs(item));
+        }
+
+        protected void OnTileAdded(TileEventArgs e)
+        {
+            var handler = TileAdded;
+
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
 
         #endregion Methods

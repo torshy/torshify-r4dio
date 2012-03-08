@@ -11,6 +11,7 @@ namespace Torshify.Radio
         #region Fields
 
         private const string ApplicationID = "Torshify.R4dio";
+        private Bootstrapper _bootstrapper;
 
         #endregion Fields
 
@@ -44,6 +45,11 @@ namespace Torshify.Radio
 
             MainWindow.Activate();
 
+            if (_bootstrapper != null)
+            {
+                _bootstrapper.HandleCommandLineArguments(args);
+            }
+
             return true;
         }
 
@@ -51,8 +57,8 @@ namespace Torshify.Radio
         {
             base.OnStartup(e);
 
-            Bootstrapper bootstrapper = new Bootstrapper();
-            bootstrapper.Run();
+            _bootstrapper = new Bootstrapper();
+            _bootstrapper.Run();
         }
 
         #endregion Methods

@@ -5,6 +5,12 @@ namespace Torshify.Radio.Framework
 {
     public interface ITileService
     {
+        #region Events
+
+        event EventHandler<TileEventArgs> TileAdded;
+
+        #endregion Events
+
         #region Properties
 
         IEnumerable<Tile> Tiles

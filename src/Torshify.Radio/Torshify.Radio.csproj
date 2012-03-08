@@ -63,6 +63,9 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell">
+      <HintPath>..\..\lib\Windows API Code Pack\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.5.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -113,6 +116,8 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Controls\FaderFrame.cs" />
+    <Compile Include="MefExports.cs" />
+    <Compile Include="MefScheduler.cs" />
     <Compile Include="Regions\TransitionContentControlRegionAdapter.cs" />
     <Compile Include="Regions\TransitionSingleActiveRegion.cs" />
     <Compile Include="Utilities\ConsoleManager.cs" />

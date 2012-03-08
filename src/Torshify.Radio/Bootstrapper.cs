@@ -1,20 +1,20 @@
 ﻿using System;
-using System.ComponentModel.Composition;
+using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using System.Windows.Threading;
-
-using Hardcodet.Scheduling;
-
+using System.Windows.Shell;
+using MS.WindowsAPICodePack.Internal;
 using log4net;
 using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 
+using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.MefExtensions;
 using Microsoft.Practices.Prism.Regions;
@@ -31,33 +31,36 @@ namespace Torshify.Radio
 {
     public class Bootstrapper : MefBootstrapper
     {
-        #region Constructors
+        #region Fields
 
-        public Bootstrapper()
-        {
-            Scheduler = new Scheduler();
-        }
+        private JumpList _jumpList;
+        private IRegionManager _regionManager;
+        private ITileService _tileService;
 
-        #endregion Constructors
-
-        #region Properties
-
-        [Export]
-        public Dispatcher Dispatcher
-        {
-            get { return Application.Current.Dispatcher; }
-        }
-
-        [Export]
-        public Scheduler Scheduler
-        {
-            get;
-            private set;
-        }
-
-        #endregion Properties
+        #endregion Fields
 
         #region Methods
+
+        public void HandleCommandLineArguments(IEnumerable<string> args)
+        {
+            string query;
+
+            if (args.Count() > 1)
+            {
+                query = args.Skip(1).FirstOrDefault();
+            }
+            else
+            {
+                query = args.FirstOrDefault();
+            }
+
+            UriQuery q = new UriQuery(query);
+
+            if (!string.IsNullOrEmpty(q["ViewId"]) && !string.IsNullOrEmpty(q["RegionId"]))
+            {
+                _regionManager.RequestNavigate(q["RegionId"], q["ViewId"]);
+            }
+        }
 
         protected override void ConfigureAggregateCatalog()
         {
@@ -84,13 +87,19 @@ namespace Torshify.Radio
         {
             Timeline
                 .DesiredFrameRateProperty
-                .OverrideMetadata(typeof(Timeline), new FrameworkPropertyMetadata { DefaultValue = 30 });
+                .OverrideMetadata(
+                    typeof(Timeline), 
+                    new FrameworkPropertyMetadata
+                    {
+                        DefaultValue = 30
+                    });
 
             return Container.GetExportedValue<Shell>();
         }
 
         protected override void InitializeShell()
         {
+            InitializeJumpLists();
             base.InitializeShell();
             Application.Current.MainWindow = (Shell)Shell;
             Application.Current.MainWindow.InputBindings.Add(new KeyBinding(new StaticCommand(ConsoleManager.Toggle), Key.D0, ModifierKeys.Alt));
@@ -101,6 +110,31 @@ namespace Torshify.Radio
             RegionAdapterMappings mappings = base.ConfigureRegionAdapterMappings();
             mappings.RegisterMapping(typeof(TransitioningContentControl), ServiceLocator.Current.GetInstance<TransitionContentControlRegionAdapter>());
             return mappings;
+        }
+
+        protected void InitializeJumpLists()
+        {
+            _tileService = Container.GetExportedValue<ITileService>();
+            _regionManager = Container.GetExportedValue<IRegionManager>();
+
+            if (!CoreHelpers.RunningOnXP)
+            {
+                _jumpList = new JumpList();
+                JumpList.SetJumpList(Application.Current, _jumpList);
+                _tileService.TileAdded += (sender, args) =>
+                {
+                    UriQuery q = new UriQuery();
+                    q.Add("ViewId", args.Tile.NavigationUri.OriginalString);
+                    q.Add("RegionId", args.Tile.TargetRegionName);
+
+                    JumpTask task = new JumpTask();
+                    task.Title = args.Tile.Data.Title;
+                    task.Arguments = q.ToString();
+
+                    _jumpList.JumpItems.Add(task);
+                    _jumpList.Apply();
+                };
+            }
         }
 
         private void InitializeLogging()
