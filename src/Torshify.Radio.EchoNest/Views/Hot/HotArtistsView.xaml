@@ -12,7 +12,7 @@
     <Controls:SizeTemplateControl>
         <Controls:SizeTemplateControl.Templates>
             <Controls:SizeControlTemplate
-                MinHeight="600">
+                MinHeight="750">
                 <ControlTemplate>
                     <Hot:HotArtistsViewMedium />
                 </ControlTemplate>
