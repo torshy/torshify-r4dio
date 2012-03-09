@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Shell;
-
+using System.Windows.Threading;
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -122,21 +123,27 @@ namespace Torshify.Radio
             if (CoreHelpers.RunningOnWin7)
             {
                 _jumpList = new JumpList();
-                JumpList.SetJumpList(Application.Current, _jumpList);
                 _tileService.TileAdded += (sender, args) =>
                 {
-                    UriQuery q = new UriQuery();
-                    q.Add("ViewId", args.Tile.NavigationUri.OriginalString);
-                    q.Add("RegionId", args.Tile.TargetRegionName);
+                    Application.Current.Dispatcher.BeginInvoke(
+                        new Action<Tile>(t =>
+                        {
+                            UriQuery q = new UriQuery();
+                            q.Add("ViewId", t.NavigationUri.OriginalString);
+                            q.Add("RegionId", t.TargetRegionName);
 
-                    JumpTask task = new JumpTask();
-                    task.Title = args.Tile.Data.Title;
-                    task.Arguments = q.ToString();
+                            JumpTask task = new JumpTask();
+                            task.Title = t.Data.Title;
+                            task.Arguments = q.ToString();
 
-                    _jumpList.JumpItems.Add(task);
-                    _jumpList.Apply();
+                            _jumpList.JumpItems.Add(task);
+                            _jumpList.Apply();
+                        }), 
+                        DispatcherPriority.ContextIdle,
+                        args.Tile);
                 };
-                _jumpList.Apply();
+
+                JumpList.SetJumpList(Application.Current, _jumpList);
             }
         }
 
