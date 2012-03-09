@@ -115,6 +115,15 @@ namespace Torshify.Radio.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @Button_GoToNowPlaying.
+        /// </summary>
+        internal static string Button_GoToNowPlaying {
+            get {
+                return ResourceManager.GetString("Button_GoToNowPlaying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @Enable_Disable_TrackSource.
         /// </summary>
         internal static string Enable_Disable_TrackSource {

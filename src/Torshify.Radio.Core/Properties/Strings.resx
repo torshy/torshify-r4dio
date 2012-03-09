@@ -135,6 +135,9 @@
   <data name="Button_Forward_Unable_ToolTip" xml:space="preserve">
     <value>@Button_Forward_Unable_ToolTip</value>
   </data>
+  <data name="Button_GoToNowPlaying" xml:space="preserve">
+    <value>@Button_GoToNowPlaying</value>
+  </data>
   <data name="Enable_Disable_TrackSource" xml:space="preserve">
     <value>@Enable_Disable_TrackSource</value>
   </data>

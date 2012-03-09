@@ -135,6 +135,9 @@
   <data name="Button_Forward_Unable_ToolTip" xml:space="preserve">
     <value>You can't go forward from where you are right now</value>
   </data>
+  <data name="Button_GoToNowPlaying" xml:space="preserve">
+    <value>Now playing</value>
+  </data>
   <data name="Enable_Disable_TrackSource" xml:space="preserve">
     <value>Enable / Disable tracksource</value>
   </data>

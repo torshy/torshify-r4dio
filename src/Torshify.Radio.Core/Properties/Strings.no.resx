@@ -135,6 +135,9 @@
   <data name="Button_Forward_Unable_ToolTip" xml:space="preserve">
     <value>Du kan ikke gå fremover fra hvor du er nå</value>
   </data>
+  <data name="Button_GoToNowPlaying" xml:space="preserve">
+    <value>Spiller nå</value>
+  </data>
   <data name="Enable_Disable_TrackSource" xml:space="preserve">
     <value>Skru musikk kilde på/av</value>
   </data>

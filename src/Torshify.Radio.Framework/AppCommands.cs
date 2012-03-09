@@ -25,5 +25,6 @@ namespace Torshify.Radio.Framework
 
         public static readonly CompositeCommand GoToArtistCommand = new CompositeCommand();
         public static readonly CompositeCommand GoToAlbumCommand = new CompositeCommand();
+        public static readonly CompositeCommand GoToNowPlayingCommand = new CompositeCommand();
     }
 }

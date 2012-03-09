@@ -116,6 +116,8 @@ namespace Torshify.Radio.Core.Startables
 
             AppCommands.LikeTrackCommand.RegisterCommand(_addTrackToLikesCommand);
 
+            AppCommands.GoToNowPlayingCommand.RegisterCommand(new DelegateCommand(ExecuteGoToNowPlaying));
+
             Application.Current.MainWindow.InputBindings.Add(
                 new KeyBinding(
                     AppCommands.NavigateBackCommand,
@@ -399,6 +401,14 @@ namespace Torshify.Radio.Core.Startables
         private void ExecuteIncreaseVolume()
         {
             Player.Volume = Math.Min(1.0f, Player.Volume + 0.01f);
+        }
+
+        private void ExecuteGoToNowPlaying()
+        {
+            if (!NowPlayingViewIsActive())
+            {
+                RegionManager.RequestNavigate(AppRegions.MainRegion, typeof (NowPlayingView).FullName);
+            }
         }
 
         private bool NowPlayingViewIsActive()
