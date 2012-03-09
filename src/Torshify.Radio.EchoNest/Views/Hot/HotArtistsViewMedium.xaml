@@ -33,7 +33,8 @@
         <ScrollViewer
             x:Name="Scroller"
             HorizontalScrollBarVisibility="Auto"
-            VerticalScrollBarVisibility="Disabled">
+            VerticalScrollBarVisibility="Disabled"
+            PanningMode="HorizontalOnly">
             <ItemsControl
                 Name="artistList"
                 ItemsSource="{Binding Artists}"
