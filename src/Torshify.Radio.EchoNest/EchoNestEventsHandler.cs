@@ -1,14 +1,15 @@
 using System;
 using System.ComponentModel.Composition;
+
 using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Regions;
+
 using Torshify.Radio.EchoNest.Views.Browse.Tabs;
 using Torshify.Radio.EchoNest.Views.LoveHate;
 using Torshify.Radio.EchoNest.Views.Similar;
 using Torshify.Radio.Framework;
-using Torshify.Radio.Framework.Commands;
 using Torshify.Radio.Framework.Events;
 
 namespace Torshify.Radio.EchoNest
@@ -18,13 +19,10 @@ namespace Torshify.Radio.EchoNest
         #region Properties
 
         [Import]
-        private IEventAggregator _eventAggregator;
+        private IEventAggregator _eventAggregator = null;
 
         [Import]
-        private IRegionManager _regionManager;
-
-        [Import]
-        private IToastService _toastService;
+        private IRegionManager _regionManager = null;
 
         #endregion Properties
 

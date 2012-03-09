@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel.Composition;
 using System.Linq;
 
 using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Regions;
+using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
 
@@ -13,12 +15,15 @@ namespace Torshify.Radio.Core.Services
 {
     [Export(typeof(ITileService))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class TileService : ITileService
+    public class TileService : NotificationObject, ITileService
     {
         #region Fields
 
+        private readonly ObservableCollection<string> _observedRegions;
         private readonly IRegionManager _regionManager;
         private readonly ObservableCollection<Tile> _tiles;
+
+        private Tile _currentTile;
 
         #endregion Fields
 
@@ -29,6 +34,8 @@ namespace Torshify.Radio.Core.Services
         {
             _regionManager = regionManager;
             _tiles = new ObservableCollection<Tile>();
+            _observedRegions = new ObservableCollection<string>();
+            _observedRegions.CollectionChanged += ObservedRegionsChanged;
         }
 
         #endregion Constructors
@@ -46,6 +53,22 @@ namespace Torshify.Radio.Core.Services
             get
             {
                 return _tiles;
+            }
+        }
+
+        public Tile CurrentTile
+        {
+            get
+            {
+                return _currentTile;
+            }
+            private set
+            {
+                if (_currentTile != value)
+                {
+                    _currentTile = value;
+                    RaisePropertyChanged("CurrentTile");
+                }
             }
         }
 
@@ -74,6 +97,11 @@ namespace Torshify.Radio.Core.Services
                 _regionManager.RegisterViewWithRegion(regionName, typeof(T));
             }
 
+            if (!_observedRegions.Contains(regionName))
+            {
+                _observedRegions.Add(regionName);
+            }
+
             UriQuery query = new UriQuery();
 
             if (parameters != null)
@@ -98,6 +126,25 @@ namespace Torshify.Radio.Core.Services
             {
                 handler(this, e);
             }
+        }
+
+        protected void ObservedRegionsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                string regionName = e.NewItems[0].ToString();
+
+                if (_regionManager.Regions.ContainsRegionWithName(regionName))
+                {
+                    var region = _regionManager.Regions[regionName];
+                    region.NavigationService.Navigated += ObservedRegionNavigated;
+                }
+            }
+        }
+
+        protected void ObservedRegionNavigated(object sender, RegionNavigationEventArgs e)
+        {
+            CurrentTile = _tiles.FirstOrDefault(t => t.NavigationUri.OriginalString.StartsWith(e.Uri.OriginalString));
         }
 
         #endregion Methods

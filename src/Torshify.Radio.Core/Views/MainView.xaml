@@ -24,6 +24,8 @@
             Collapse="True" />
         <Converters:ImageLoaderConverter
             x:Key="ImageLoaderConverter" />
+        <Converters:StringToUpperConverter
+            x:Key="StringToUpperConverter" />
     </DockPanel.Resources>
     <DockPanel
         DockPanel.Dock="Top">
@@ -182,6 +184,17 @@
                     </DataTemplate>
                 </Button.ContentTemplate>
             </Button>
+        </StackPanel>
+        <StackPanel
+            VerticalAlignment="Center">
+            <TextBlock
+                Opacity="0.5"
+                Text="{Binding TileService.CurrentTile.Data.Title, Converter={StaticResource StringToUpperConverter}, StringFormat={}// {0}}"
+                TextTrimming="CharacterEllipsis"
+                Margin="8,0,0,0"
+                FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
+                Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
         </StackPanel>
     </DockPanel>
     <DockPanel>

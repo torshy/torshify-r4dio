@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Shell;
-using MS.WindowsAPICodePack.Internal;
+
 using log4net;
 using log4net.Appender;
 using log4net.Core;
@@ -19,6 +19,8 @@ using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.MefExtensions;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.ServiceLocation;
+
+using MS.WindowsAPICodePack.Internal;
 
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
@@ -88,7 +90,7 @@ namespace Torshify.Radio
             Timeline
                 .DesiredFrameRateProperty
                 .OverrideMetadata(
-                    typeof(Timeline), 
+                    typeof(Timeline),
                     new FrameworkPropertyMetadata
                     {
                         DefaultValue = 30

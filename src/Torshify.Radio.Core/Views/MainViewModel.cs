@@ -21,7 +21,7 @@ namespace Torshify.Radio.Core.Views
     {
         #region Fields
 
-        private ObservableCollection<string> _autoCompleteList;
+        private readonly ObservableCollection<string> _autoCompleteList;
 
         #endregion Fields
 
@@ -105,6 +105,13 @@ namespace Torshify.Radio.Core.Views
         public ILoggerFacade Logger
         {
             get;
+            set;
+        }
+
+        [Import]
+        public ITileService TileService
+        {
+            get; 
             set;
         }
 

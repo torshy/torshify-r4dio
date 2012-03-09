@@ -18,6 +18,11 @@ namespace Torshify.Radio.Framework
             get;
         }
 
+        Tile CurrentTile
+        {
+            get;
+        }
+
         #endregion Properties
 
         #region Methods
