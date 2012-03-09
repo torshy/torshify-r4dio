@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Threading.Tasks;
 
 using EchoNest;
@@ -98,23 +99,31 @@ namespace Torshify.Radio.EchoNest.Views.Hot
             Task.Factory
                 .StartNew(() =>
                 {
-                    using (_loadingIndicator.EnterLoadingBlock())
-                    {
-                        using (var session = new EchoNestSession(EchoNestModule.ApiKey))
-                        {
-                            var response = session.Query<TopHottt>().Execute(50,
-                                                                             bucket:
-                                                                                 ArtistBucket.Images |
-                                                                                 ArtistBucket.Songs);
+                    var response = MemoryCache.Default.Get("TopHotArtists") as TopHotttResponse;
 
-                            if (response != null)
+                    if (response == null)
+                    {
+                        using (_loadingIndicator.EnterLoadingBlock())
+                        {
+                            using (var session = new EchoNestSession(EchoNestModule.ApiKey))
                             {
-                                return response;
+                                response = session.Query<TopHottt>().Execute(99, bucket:
+                                                                                     ArtistBucket.Images |
+                                                                                     ArtistBucket.Songs);
+
+                                if (response != null)
+                                {
+                                    MemoryCache
+                                        .Default
+                                        .Add("TopHotArtists", response, DateTimeOffset.Now.AddHours(6));
+
+                                    return response;
+                                }
                             }
                         }
                     }
 
-                    return null;
+                    return response;
                 })
                 .ContinueWith(task =>
                 {
