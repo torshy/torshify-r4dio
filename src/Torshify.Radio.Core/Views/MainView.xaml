@@ -187,14 +187,22 @@
         </StackPanel>
         <StackPanel
             VerticalAlignment="Center">
-            <TextBlock
-                Opacity="0.5"
-                Text="{Binding TileService.CurrentTile.Data.Title, Converter={StaticResource StringToUpperConverter}, StringFormat={}// {0}}"
-                TextTrimming="CharacterEllipsis"
-                Margin="8,0,0,0"
-                FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
-                FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
-                Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+            <Controls:TransitioningContentControl
+                Content="{Binding TileService.CurrentTile}"
+                Transition="RightTransition">
+                <Controls:TransitioningContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <TextBlock
+                            Opacity="0.5"
+                            Text="{Binding Data.Title, Converter={StaticResource StringToUpperConverter}, StringFormat={}// {0}}"
+                            TextTrimming="CharacterEllipsis"
+                            Margin="8,0,0,0"
+                            FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
+                            FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
+                            Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                    </DataTemplate>
+                </Controls:TransitioningContentControl.ContentTemplate>
+            </Controls:TransitioningContentControl>
         </StackPanel>
     </DockPanel>
     <DockPanel>
