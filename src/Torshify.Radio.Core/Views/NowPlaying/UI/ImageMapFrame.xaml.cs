@@ -194,7 +194,7 @@ namespace Torshify.Radio.Core.Views.NowPlaying.UI
                             bitmap.Freeze();
 
                             CacheItemPolicy policy = new CacheItemPolicy();
-                            policy.SlidingExpiration = TimeSpan.FromMinutes(2);
+                            policy.SlidingExpiration = TimeSpan.FromSeconds(5);
                             MemoryCache.Default.Add(imagePath, bitmap, policy);
                         }
                         catch (Exception)
@@ -243,10 +243,11 @@ namespace Torshify.Radio.Core.Views.NowPlaying.UI
 
         private void CreateMap(IEnumerable<ImageMapEntry> map)
         {
-            foreach (ImageMapEntry entry in map.AsParallel())
-            {
-                Dispatcher.BeginInvoke((Action<ImageMapEntry>)AddImage, DispatcherPriority.ContextIdle, entry);
-            }
+            Parallel.ForEach(map,
+                             entry =>
+                             {
+                                 Dispatcher.BeginInvoke((Action<ImageMapEntry>)AddImage, DispatcherPriority.ContextIdle, entry);
+                             });
         }
 
         private void AddImage(ImageMapEntry entry)
@@ -257,48 +258,45 @@ namespace Torshify.Radio.Core.Views.NowPlaying.UI
             rectangle.Opacity = 0.0;
             rectangle.RenderTransform = new ScaleTransform(0.7, 0.7);
             rectangle.RenderTransformOrigin = new Point(0.5, 0.5);
-            rectangle.Loaded += delegate
+            var animationDuration = new Duration(TimeSpan.FromMilliseconds(700));
+
+            DoubleAnimation opacityAnimation = new DoubleAnimation();
+            opacityAnimation.To = 1.0;
+            opacityAnimation.Duration = animationDuration;
+
+            DoubleAnimation scaleXAnimation = new DoubleAnimation();
+            scaleXAnimation.To = 1.0;
+            scaleXAnimation.Duration = animationDuration;
+            scaleXAnimation.EasingFunction = new CubicEase
             {
-                var animationDuration = new Duration(TimeSpan.FromMilliseconds(700));
-
-                DoubleAnimation opacityAnimation = new DoubleAnimation();
-                opacityAnimation.To = 1.0;
-                opacityAnimation.Duration = animationDuration;
-
-                DoubleAnimation scaleXAnimation = new DoubleAnimation();
-                scaleXAnimation.To = 1.0;
-                scaleXAnimation.Duration = animationDuration;
-                scaleXAnimation.EasingFunction = new CubicEase
-                {
-                    EasingMode = EasingMode.EaseIn
-                };
-
-                DoubleAnimation scaleYAnimation = new DoubleAnimation();
-                scaleYAnimation.To = 1.0;
-                scaleYAnimation.Duration = animationDuration;
-                scaleYAnimation.EasingFunction = new CubicEase
-                {
-                    EasingMode = EasingMode.EaseIn
-                };
-
-                Timeline.SetDesiredFrameRate(opacityAnimation, 10);
-                Timeline.SetDesiredFrameRate(scaleXAnimation, 10);
-                Timeline.SetDesiredFrameRate(scaleYAnimation, 10);
-
-                Storyboard.SetTarget(opacityAnimation, rectangle);
-                Storyboard.SetTarget(scaleXAnimation, rectangle);
-                Storyboard.SetTarget(scaleYAnimation, rectangle);
-                Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath("Opacity"));
-                Storyboard.SetTargetProperty(scaleXAnimation, new PropertyPath("RenderTransform.ScaleX"));
-                Storyboard.SetTargetProperty(scaleYAnimation, new PropertyPath("RenderTransform.ScaleY"));
-
-                Storyboard s = new Storyboard();
-                s.BeginTime = TimeSpan.FromMilliseconds(_random.Next(0, 500));
-                s.Children.Add(opacityAnimation);
-                s.Children.Add(scaleXAnimation);
-                s.Children.Add(scaleYAnimation);
-                s.Begin();
+                EasingMode = EasingMode.EaseIn
             };
+
+            DoubleAnimation scaleYAnimation = new DoubleAnimation();
+            scaleYAnimation.To = 1.0;
+            scaleYAnimation.Duration = animationDuration;
+            scaleYAnimation.EasingFunction = new CubicEase
+            {
+                EasingMode = EasingMode.EaseIn
+            };
+
+            Timeline.SetDesiredFrameRate(opacityAnimation, 10);
+            Timeline.SetDesiredFrameRate(scaleXAnimation, 10);
+            Timeline.SetDesiredFrameRate(scaleYAnimation, 10);
+
+            Storyboard.SetTarget(opacityAnimation, rectangle);
+            Storyboard.SetTarget(scaleXAnimation, rectangle);
+            Storyboard.SetTarget(scaleYAnimation, rectangle);
+            Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath("Opacity"));
+            Storyboard.SetTargetProperty(scaleXAnimation, new PropertyPath("RenderTransform.ScaleX"));
+            Storyboard.SetTargetProperty(scaleYAnimation, new PropertyPath("RenderTransform.ScaleY"));
+
+            Storyboard s = new Storyboard();
+            s.BeginTime = TimeSpan.FromMilliseconds(_random.Next(0, 500));
+            s.Children.Add(opacityAnimation);
+            s.Children.Add(scaleXAnimation);
+            s.Children.Add(scaleYAnimation);
+            s.Begin();
 
             if (entry.Bitmap != null)
             {
