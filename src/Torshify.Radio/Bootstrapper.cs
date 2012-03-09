@@ -117,7 +117,7 @@ namespace Torshify.Radio
             _tileService = Container.GetExportedValue<ITileService>();
             _regionManager = Container.GetExportedValue<IRegionManager>();
 
-            if (CoreHelpers.RunningOnVista)
+            if (CoreHelpers.RunningOnWin7)
             {
                 _jumpList = new JumpList();
                 JumpList.SetJumpList(Application.Current, _jumpList);
