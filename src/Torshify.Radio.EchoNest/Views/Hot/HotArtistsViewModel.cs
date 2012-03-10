@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Threading.Tasks;
-
+using System.Windows.Threading;
 using EchoNest;
 using EchoNest.Artist;
 
@@ -27,10 +28,11 @@ namespace Torshify.Radio.EchoNest.Views.Hot
 
         private readonly ILoadingIndicatorService _loadingIndicator;
         private readonly ILoggerFacade _logger;
+        private readonly Dispatcher _dispatcher;
         private readonly IRadio _radio;
         private readonly IToastService _toastService;
 
-        private IEnumerable<HotArtistModel> _artists;
+        private ObservableCollection<HotArtistModel> _artists;
 
         #endregion Fields
 
@@ -41,12 +43,15 @@ namespace Torshify.Radio.EchoNest.Views.Hot
             IRadio radio,
             IToastService toastService,
             ILoadingIndicatorService loadingIndicator,
-            ILoggerFacade logger)
+            ILoggerFacade logger,
+            Dispatcher dispatcher)
         {
             _radio = radio;
             _toastService = toastService;
             _loadingIndicator = loadingIndicator;
             _logger = logger;
+            _dispatcher = dispatcher;
+            _artists = new ObservableCollection<HotArtistModel>();
 
             PlayAllTracksCommand = new DelegateCommand(ExecutePlayAllTracks);
             PlayTopTrackCommand = new DelegateCommand<HotArtistModel>(ExecutePlayTopTrack);
@@ -81,12 +86,6 @@ namespace Torshify.Radio.EchoNest.Views.Hot
             {
                 return _artists;
             }
-            set
-            {
-                _artists = value;
-                RaisePropertyChanged("Artists");
-
-            }
         }
 
         #endregion Properties
@@ -95,7 +94,6 @@ namespace Torshify.Radio.EchoNest.Views.Hot
 
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
-            var ui = TaskScheduler.FromCurrentSynchronizationContext();
             Task.Factory
                 .StartNew(() =>
                 {
@@ -138,13 +136,34 @@ namespace Torshify.Radio.EchoNest.Views.Hot
                         {
                             if (task.Result.Status.Code == ResponseCode.Success)
                             {
-                                Artists = task.Result.Artists.Select((a, i) =>
+                                var artists = task.Result.Artists.Select((a, i) =>
                                 {
                                     string name = a.Name;
                                     string image = a.Images.Count > 0 ? a.Images[0].Url : null;
                                     string song = a.Songs.Count > 0 ? a.Songs[0].Title : null;
                                     return new HotArtistModel((i + 1), name, image, song);
                                 });
+
+                                const int numberOfObjectsPerPage = 10;
+                                int numberOfObjectsTaken = 0;
+                                int count = artists.Count();
+                                int pageNumber = 0;
+                                
+                                while (numberOfObjectsTaken < count)
+                                {
+                                    IEnumerable<HotArtistModel> queryResultPage = artists
+                                        .Skip(numberOfObjectsPerPage * pageNumber)
+                                        .Take(numberOfObjectsPerPage).ToArray();
+
+                                    numberOfObjectsTaken += queryResultPage.Count();
+                                    pageNumber++;
+
+                                    _dispatcher
+                                        .BeginInvoke(
+                                            new Action<IEnumerable<HotArtistModel>>(m => m.ForEach(model => _artists.Add(model))),
+                                            DispatcherPriority.Background,
+                                            queryResultPage);
+                                }
                             }
                             else
                             {
@@ -152,7 +171,7 @@ namespace Torshify.Radio.EchoNest.Views.Hot
                             }
                         }
                     }
-                }, ui);
+                });
         }
 
         bool INavigationAware.IsNavigationTarget(NavigationContext navigationContext)

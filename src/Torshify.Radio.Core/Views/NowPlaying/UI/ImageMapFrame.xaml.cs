@@ -184,12 +184,8 @@ namespace Torshify.Radio.Core.Views.NowPlaying.UI
                             bitmap = new BitmapImage();
                             bitmap.BeginInit();
                             bitmap.UriSource = new Uri(imagePath, UriKind.Absolute);
-                            //bitmap.DecodePixelHeight = 3 * SquareSize;
-                            //bitmap.DecodePixelWidth = 3 * SquareSize;
-                            //bitmap.DecodePixelHeight = blockSize * SquareSize;
                             bitmap.DecodePixelWidth = blockSize * SquareSize;
                             bitmap.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
-                            //bitmap.CacheOption = BitmapCacheOption.OnDemand;
                             bitmap.EndInit();
                             bitmap.Freeze();
 
