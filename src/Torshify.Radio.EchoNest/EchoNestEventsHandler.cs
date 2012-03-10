@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Events;
@@ -13,33 +15,27 @@ using Torshify.Radio.EchoNest.Views.LoveHate;
 using Torshify.Radio.EchoNest.Views.Similar;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Events;
-using System.Linq;
 
 namespace Torshify.Radio.EchoNest
 {
     public class EchoNestEventsHandler : IStartable
     {
-        #region Properties
+        #region Fields
 
         [Import]
         private IEventAggregator _eventAggregator = null;
-
-        [Import]
-        private IRegionManager _regionManager = null;
-
-        [Import]
-        private IRadio _radio = null;
-
         [Import]
         private ILoadingIndicatorService _loadingIndicator = null;
-
+        [Import]
+        private ILoggerFacade _logger = null;
+        [Import]
+        private IRadio _radio = null;
+        [Import]
+        private IRegionManager _regionManager = null;
         [Import]
         private IToastService _toastService = null;
 
-        [Import]
-        private ILoggerFacade _logger = null;
-
-        #endregion Properties
+        #endregion Fields
 
         #region Methods
 
@@ -122,7 +118,7 @@ namespace Torshify.Radio.EchoNest
                     CommandParameter = Tuple.Create(payload.ArtistName, payload.AlbumName),
                     Icon = AppIcons.Play.ToImage()
                 });
-            
+
             payload.CommandBar.AddCommand(
                 new CommandModel
                 {
@@ -303,7 +299,7 @@ namespace Torshify.Radio.EchoNest
                         {
                             return result.Tracks;
                         }
-                        
+
                         return new Track[0];
                     }
                 }, artistAlbum);

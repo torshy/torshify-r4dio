@@ -150,15 +150,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
                     Icon = AppIcons.Add.ToImage(),
                     Command = QueueTracksCommand,
                     CommandParameter = tracks
-                })
-                .AddSeparator();
-
-            var lastItem = tracks.LastOrDefault();
-            if (lastItem != null)
-            {
-                var payload = new ArtistRelatedCommandBarPayload(lastItem.Artist, CommandBar);
-                EventAggregator.GetEvent<BuildArtistRelatedCommandBarEvent>().Publish(payload);
-            }
+                });
         }
 
         private void ExecuteQueueTracks(IEnumerable tracks)
