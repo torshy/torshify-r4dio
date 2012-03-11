@@ -175,6 +175,7 @@
     <Compile Include="Controls\PasswordBoxMonitor.cs" />
     <Compile Include="Controls\WindowChrome.cs" />
     <Compile Include="Controls\WindowChromeWorker.cs" />
+    <Compile Include="Events\ApplicationArgumentsEvent.cs" />
     <Compile Include="Converters\BoolToVisibleOrHidden.cs" />
     <Compile Include="Converters\CountToFontSizeConverter.cs" />
     <Compile Include="Converters\ImageLoaderConverter.cs" />

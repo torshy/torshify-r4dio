@@ -2,30 +2,26 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
-using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using System.Windows.Shell;
-using System.Windows.Threading;
+
 using log4net;
 using log4net.Appender;
 using log4net.Core;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 
-using Microsoft.Practices.Prism;
+using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.MefExtensions;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.ServiceLocation;
 
-using MS.WindowsAPICodePack.Internal;
-
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 using Torshify.Radio.Framework.Controls;
+using Torshify.Radio.Framework.Events;
 using Torshify.Radio.Logging;
 using Torshify.Radio.Regions;
 using Torshify.Radio.Utilities;
@@ -36,9 +32,7 @@ namespace Torshify.Radio
     {
         #region Fields
 
-        private JumpList _jumpList;
-        private IRegionManager _regionManager;
-        private ITileService _tileService;
+        private IEventAggregator _eventAggregator;
 
         #endregion Fields
 
@@ -46,23 +40,7 @@ namespace Torshify.Radio
 
         public void HandleCommandLineArguments(IEnumerable<string> args)
         {
-            string query;
-
-            if (args.Count() > 1)
-            {
-                query = args.Skip(1).FirstOrDefault();
-            }
-            else
-            {
-                query = args.FirstOrDefault();
-            }
-
-            UriQuery q = new UriQuery(query);
-
-            if (!string.IsNullOrEmpty(q["ViewId"]) && !string.IsNullOrEmpty(q["RegionId"]))
-            {
-                _regionManager.RequestNavigate(q["RegionId"], q["ViewId"]);
-            }
+            _eventAggregator.GetEvent<ApplicationArgumentsEvent>().Publish(args);
         }
 
         protected override void ConfigureAggregateCatalog()
@@ -102,7 +80,8 @@ namespace Torshify.Radio
 
         protected override void InitializeShell()
         {
-            InitializeJumpLists();
+            _eventAggregator = Container.GetExportedValue<IEventAggregator>();
+
             base.InitializeShell();
             Application.Current.MainWindow = (Shell)Shell;
             Application.Current.MainWindow.InputBindings.Add(new KeyBinding(new StaticCommand(ConsoleManager.Toggle), Key.D0, ModifierKeys.Alt));
@@ -113,38 +92,6 @@ namespace Torshify.Radio
             RegionAdapterMappings mappings = base.ConfigureRegionAdapterMappings();
             mappings.RegisterMapping(typeof(TransitioningContentControl), ServiceLocator.Current.GetInstance<TransitionContentControlRegionAdapter>());
             return mappings;
-        }
-
-        protected void InitializeJumpLists()
-        {
-            _tileService = Container.GetExportedValue<ITileService>();
-            _regionManager = Container.GetExportedValue<IRegionManager>();
-
-            if (CoreHelpers.RunningOnWin7)
-            {
-                _jumpList = new JumpList();
-                _tileService.TileAdded += (sender, args) =>
-                {
-                    Application.Current.Dispatcher.BeginInvoke(
-                        new Action<Tile>(t =>
-                        {
-                            UriQuery q = new UriQuery();
-                            q.Add("ViewId", t.NavigationUri.OriginalString);
-                            q.Add("RegionId", t.TargetRegionName);
-
-                            JumpTask task = new JumpTask();
-                            task.Title = t.Data.Title;
-                            task.Arguments = q.ToString();
-
-                            _jumpList.JumpItems.Add(task);
-                            _jumpList.Apply();
-                        }), 
-                        DispatcherPriority.ContextIdle,
-                        args.Tile);
-                };
-
-                JumpList.SetJumpList(Application.Current, _jumpList);
-            }
         }
 
         private void InitializeLogging()

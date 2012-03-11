@@ -43,6 +43,14 @@
       <HintPath>..\..\packages\Prism.MEFExtensions.4.0.0.0\lib\NET40\Microsoft.Practices.Prism.MefExtensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack">
+      <HintPath>..\..\lib\Windows API Code Pack\Microsoft.WindowsAPICodePack.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell">
+      <HintPath>..\..\lib\Windows API Code Pack\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.5.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.4.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -131,6 +139,7 @@
     <Compile Include="Services\ToastService.cs" />
     <Compile Include="Startables\AppCommandsHandler.cs" />
     <Compile Include="Startables\GlobalHotkeyHandler.cs" />
+    <Compile Include="Startables\TaskbarHandler.cs" />
     <Compile Include="Startables\TwitterHandler.cs" />
     <Compile Include="Utilities\Hooks\BaseHookListener.cs" />
     <Compile Include="Utilities\Hooks\Controls\HookType.cs" />
