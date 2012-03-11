@@ -114,6 +114,7 @@
                                             RenderOptions.BitmapScalingMode="HighQuality"
                                             Stretch="UniformToFill"
                                             ImageUri="{Binding ArtistImage}"
+                                            DecodePixelWidth="156"
                                             InitialImage="pack://siteoforigin:,,,/Resources/no-cover.png">
                                             <Image.Triggers>
                                                 <EventTrigger

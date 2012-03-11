@@ -113,6 +113,7 @@
                                         <Controls:ImageWithPlaceholder
                                             RenderOptions.BitmapScalingMode="HighQuality"
                                             Stretch="UniformToFill"
+                                            DecodePixelWidth="256"
                                             ImageUri="{Binding ArtistImage}"
                                             InitialImage="pack://siteoforigin:,,,/Resources/no-cover.png">
                                             <Image.Triggers>

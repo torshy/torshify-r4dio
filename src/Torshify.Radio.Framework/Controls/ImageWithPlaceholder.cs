@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Interactivity;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -11,7 +10,10 @@ namespace Torshify.Radio.Framework.Controls
     {
         #region Fields
 
-        public static readonly DependencyProperty ImageUriProperty =
+        public static readonly DependencyProperty DecodePixelWidthProperty = 
+            DependencyProperty.Register("DecodePixelWidth", typeof(int?), typeof(ImageWithPlaceholder),
+                new FrameworkPropertyMetadata((int?)null));
+        public static readonly DependencyProperty ImageUriProperty = 
             DependencyProperty.Register(
                 "ImageUri",
                 typeof(Uri),
@@ -23,6 +25,18 @@ namespace Torshify.Radio.Framework.Controls
         #endregion Fields
 
         #region Properties
+
+        public int? DecodePixelWidth
+        {
+            get
+            {
+                return (int?)GetValue(DecodePixelWidthProperty);
+            }
+            set
+            {
+                SetValue(DecodePixelWidthProperty, value);
+            }
+        }
 
         public string LoadFailedImage
         {
@@ -80,6 +94,12 @@ namespace Torshify.Radio.Framework.Controls
                 _loadedImage.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
                 _loadedImage.DownloadCompleted += OnDownloadCompleted;
                 _loadedImage.DownloadFailed += OnDownloadFailed;
+
+                if (DecodePixelWidth.HasValue)
+                {
+                    _loadedImage.DecodePixelWidth = DecodePixelWidth.Value;
+                }
+
                 _loadedImage.UriSource = (Uri)e.NewValue;
                 _loadedImage.EndInit();
 
