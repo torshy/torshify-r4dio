@@ -12,7 +12,7 @@
     xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
     Engine:LocalizeDictionary.DesignCulture="en-US"
     xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
-    mc:Ignorable="d"
+    xmlns:Hot="clr-namespace:Torshify.Radio.EchoNest.Views.Hot" mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
@@ -30,7 +30,7 @@
                 Content="Play all"
                 Command="{Binding PlayAllTracksCommand}" />
         </StackPanel>
-        <ScrollViewer
+        <Hot:AniScrollViewer
             x:Name="Scroller"
             HorizontalScrollBarVisibility="Auto"
             VerticalScrollBarVisibility="Disabled"
@@ -191,6 +191,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </ScrollViewer>
+        </Hot:AniScrollViewer>
     </DockPanel>
 </UserControl>

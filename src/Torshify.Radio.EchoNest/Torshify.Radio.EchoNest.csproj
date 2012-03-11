@@ -161,6 +161,7 @@
       <DependentUpon>FavoritesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Favorites\Tabs\FavoritesViewModel.cs" />
+    <Compile Include="Views\Hot\AniScrollViewer.cs" />
     <Compile Include="Views\Hot\HotArtistsView.xaml.cs">
       <DependentUpon>HotArtistsView.xaml</DependentUpon>
     </Compile>
