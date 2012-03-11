@@ -11,8 +11,12 @@ namespace Torshify.Radio.Core.Views.Settings.General
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class HotkeySection : ISettingsSection
     {
+        #region Fields
+
         [Import]
-        private IHotkeyService _hotkeyService;
+        private IHotkeyService _hotkeyService = null;
+
+        #endregion Fields
 
         #region Constructors
 
@@ -107,6 +111,7 @@ namespace Torshify.Radio.Core.Views.Settings.General
         {
             _hotkeyService.Add(new GlobalHotkey());
         }
+
         #endregion Methods
     }
 }

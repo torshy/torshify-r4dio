@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Shell;
 using System.Windows.Threading;
 
@@ -27,10 +28,17 @@ namespace Torshify.Radio.Core.Startables
         private JumpList _jumpList;
         [Import]
         private IRadio _radio = null;
+        [Import("CorePlayer")]
+        private ITrackPlayer _player = null;
         [Import]
         private IRegionManager _regionManager = null;
         [Import]
         private ITileService _tileService = null;
+        [Import]
+        private Dispatcher _dispatcher = null;
+
+        private ThumbnailToolBarButton _togglePlayPauseButton;
+        private ThumbnailToolBarButton _nextTrackButton;
 
         #endregion Fields
 
@@ -45,6 +53,79 @@ namespace Torshify.Radio.Core.Startables
                 _tileService.Tiles.ForEach(AddJumpTask);
                 _tileService.TileAdded += (sender, args) => AddJumpTask(args.Tile);
                 JumpList.SetJumpList(Application.Current, _jumpList);
+
+                _radio.CurrentTrackChanged += RadioOnCurrentTrackChanged;
+                _player.IsPlayingChanged += PlayerOnIsPlayingChanged;
+                _togglePlayPauseButton = new ThumbnailToolBarButton(Properties.Resources.play_circle, "Play");
+                _togglePlayPauseButton.Click += TogglePlayPauseButtonOnClick;
+                _togglePlayPauseButton.Enabled = false;
+                _nextTrackButton = new ThumbnailToolBarButton(Properties.Resources.ff_circle, "Next");
+                _nextTrackButton.Click += NextTrackButtonOnClick;
+                _nextTrackButton.Enabled = false;
+                
+                TaskbarManager
+                    .Instance
+                    .ThumbnailToolBars
+                    .AddButtons(
+                        new WindowInteropHelper(
+                            Application.Current.MainWindow).Handle,
+                            _togglePlayPauseButton,
+                            _nextTrackButton);
+
+            }
+        }
+
+        private void PlayerOnIsPlayingChanged(object sender, EventArgs e)
+        {
+            if (_player.IsPlaying)
+            {
+                _dispatcher.BeginInvoke(new Action(() =>
+                {
+                    _togglePlayPauseButton.Icon = Properties.Resources.pause_circle;
+                }));
+            }
+            else
+            {
+                _dispatcher.BeginInvoke(new Action(() =>
+                {
+                    _togglePlayPauseButton.Icon = Properties.Resources.play_circle;
+                }));
+            }
+        }
+
+        private void RadioOnCurrentTrackChanged(object sender, TrackChangedEventArgs e)
+        {
+            if (e.CurrentTrack != null)
+            {
+                _dispatcher.BeginInvoke(new Action(() =>
+                {
+                    _togglePlayPauseButton.Enabled = true;
+                    _nextTrackButton.Enabled = true;
+                }));
+            }
+            else
+            {
+                _dispatcher.BeginInvoke(new Action(() =>
+                {
+                    _togglePlayPauseButton.Enabled = false;
+                    _nextTrackButton.Enabled = false;
+                }));
+            }
+        }
+
+        private void NextTrackButtonOnClick(object sender, ThumbnailButtonClickedEventArgs e)
+        {
+            if (_radio.CanGoToNextTrack)
+            {
+                _radio.NextTrack();
+            }
+        }
+
+        private void TogglePlayPauseButtonOnClick(object sender, ThumbnailButtonClickedEventArgs e)
+        {
+            if (AppCommands.TogglePlayCommand.CanExecute(null))
+            {
+                AppCommands.TogglePlayCommand.Execute(null);
             }
         }
 

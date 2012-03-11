@@ -59,5 +59,26 @@ namespace Torshify.Radio.Core.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Icon ff_circle {
+            get {
+                object obj = ResourceManager.GetObject("ff_circle", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon pause_circle {
+            get {
+                object obj = ResourceManager.GetObject("pause_circle", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Icon play_circle {
+            get {
+                object obj = ResourceManager.GetObject("play_circle", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }
