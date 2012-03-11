@@ -91,9 +91,9 @@ namespace Torshify.Radio.EchoNest.Startables
                                 tile.Effect = new ColorToneShaderEffect
                                 {
                                     DarkColor = Colors.Black,
-                                    LightColor = Colors.DarkGray,
-                                    Desaturation = 0.2,
-                                    Toned = 1.0
+                                    LightColor = Colors.DarkOrange,
+                                    Desaturation = 0.5,
+                                    Toned = 0.5
                                 };
 
                                 tile.Effect.Freeze();
