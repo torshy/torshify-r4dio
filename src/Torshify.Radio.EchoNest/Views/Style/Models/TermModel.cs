@@ -11,6 +11,7 @@ namespace Torshify.Radio.EchoNest.Views.Style.Models
         private bool _ban;
         private double? _boost;
         private int _count;
+        private bool _isSelected;
         private bool _require;
 
         #endregion Fields
@@ -94,6 +95,19 @@ namespace Torshify.Radio.EchoNest.Views.Style.Models
                 {
                     _ban = value;
                     RaisePropertyChanged("Ban");
+                }
+            }
+        }
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    RaisePropertyChanged("IsSelected");
                 }
             }
         }

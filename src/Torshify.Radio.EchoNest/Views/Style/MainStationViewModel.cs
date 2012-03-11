@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -14,11 +15,12 @@ using EchoNest.Playlist;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Prism.ViewModel;
+
 using Raven.Client;
+
 using Torshify.Radio.EchoNest.Views.Style.Models;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
-using Term = Torshify.Radio.Framework.Term;
 
 namespace Torshify.Radio.EchoNest.Views.Style
 {
@@ -29,9 +31,9 @@ namespace Torshify.Radio.EchoNest.Views.Style
     {
         #region Fields
 
+        private readonly IDocumentStore _documentStore;
         private readonly ILoadingIndicatorService _loadingIndicatorService;
         private readonly ILoggerFacade _logger;
-        private readonly IDocumentStore _documentStore;
         private readonly IRadio _radio;
         private readonly IToastService _toastService;
 
@@ -336,8 +338,55 @@ namespace Torshify.Radio.EchoNest.Views.Style
 
         void INavigationAware.OnNavigatedTo(NavigationContext navigationContext)
         {
-            InitializeStyles();
-            InitializeMoods();
+            InitializeStyles()
+                .ContinueWith(task =>
+                {
+                    string styleString = navigationContext.Parameters["Styles"];
+
+                    if (!string.IsNullOrEmpty(styleString))
+                    {
+                        string[] styles = styleString.Split(new[] { ',' });
+
+                        foreach (var style in styles)
+                        {
+                            var term = Styles.FirstOrDefault(s => s.Name.Equals(WebUtility.HtmlDecode(style), StringComparison.InvariantCultureIgnoreCase));
+
+                            if (term != null)
+                            {
+                                ToggleStyleCommand.Execute(term);
+                            }
+                        }
+                    }
+                });
+
+            InitializeMoods()
+                .ContinueWith(task =>
+                {
+                    string moodString = navigationContext.Parameters["Moods"];
+
+                    if (!string.IsNullOrEmpty(moodString))
+                    {
+                        string[] moods = moodString.Split(new[] { ',' });
+
+                        foreach (var mood in moods)
+                        {
+                            var term = Moods.FirstOrDefault(s => s.Name.Equals(WebUtility.HtmlDecode(mood), StringComparison.InvariantCultureIgnoreCase));
+
+                            if (term != null)
+                            {
+                                ToggleMoodCommand.Execute(term);
+                            }
+                        }
+                    }
+                });
+
+            Tempo.Minimum = GetParameterValue("Tempo", navigationContext.Parameters);
+            Loudness.Minimum = GetParameterValue("Loudness", navigationContext.Parameters);
+            Danceability.Minimum = GetParameterValue("Danceability", navigationContext.Parameters);
+            Energy.Minimum = GetParameterValue("Energy", navigationContext.Parameters);
+            ArtistHotness.Minimum = GetParameterValue("ArtistHotness", navigationContext.Parameters);
+            ArtistFamiliarity.Minimum = GetParameterValue("ArtistFamiliarity", navigationContext.Parameters);
+            SongHotness.Minimum = GetParameterValue("SongHotness", navigationContext.Parameters);
         }
 
         bool INavigationAware.IsNavigationTarget(NavigationContext navigationContext)
@@ -347,6 +396,52 @@ namespace Torshify.Radio.EchoNest.Views.Style
 
         void INavigationAware.OnNavigatedFrom(NavigationContext navigationContext)
         {
+            Microsoft.Practices.Prism.UriQuery q = new Microsoft.Practices.Prism.UriQuery();
+
+            var selectedMoods = SelectedMoods.Select(t => WebUtility.HtmlEncode(t.Name)).ToArray();
+            if (selectedMoods.Any())
+            {
+                q.Add("Moods", string.Join(",", selectedMoods));
+            }
+
+            var selectedStyles = SelectedStyles.Select(t => WebUtility.HtmlEncode(t.Name)).ToArray();
+            if (selectedStyles.Any())
+            {
+                q.Add("Styles", string.Join(",", selectedStyles));
+            }
+
+            SetParameterValue("Tempo", q, Tempo.Minimum);
+            SetParameterValue("Loudness", q, Loudness.Minimum);
+            SetParameterValue("Danceability", q, Danceability.Minimum);
+            SetParameterValue("Energy", q, Energy.Minimum);
+            SetParameterValue("ArtistHotness", q, ArtistHotness.Minimum);
+            SetParameterValue("ArtistFamiliarity", q, ArtistFamiliarity.Minimum);
+            SetParameterValue("SongHotness", q, SongHotness.Minimum);
+
+            var newUri = typeof(MainStationView).FullName + q;
+            navigationContext.NavigationService.Journal.CurrentEntry.Uri = new Uri(newUri, UriKind.RelativeOrAbsolute);
+        }
+
+        private double? GetParameterValue(string parameterName, Microsoft.Practices.Prism.UriQuery query)
+        {
+            if (!string.IsNullOrEmpty(query[parameterName]))
+            {
+                double value;
+                if (double.TryParse(query[parameterName], NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+                {
+                    return value;
+                }
+            }
+
+            return null;
+        }
+
+        private void SetParameterValue(string parameterName, Microsoft.Practices.Prism.UriQuery query, double? value)
+        {
+            if (value.HasValue)
+            {
+                query.Add(parameterName, value.Value.ToString(CultureInfo.InvariantCulture));
+            }
         }
 
         private void MetricChanged(object sender, EventArgs e)
@@ -507,10 +602,12 @@ namespace Torshify.Radio.EchoNest.Views.Style
         {
             if (_selectedMoods.Contains(term))
             {
+                term.IsSelected = false;
                 _selectedMoods.Remove(term);
             }
             else
             {
+                term.IsSelected = true;
                 _selectedMoods.Add(term);
             }
         }
@@ -519,17 +616,19 @@ namespace Torshify.Radio.EchoNest.Views.Style
         {
             if (_selectedStyles.Contains(term))
             {
+                term.IsSelected = false;
                 _selectedStyles.Remove(term);
             }
             else
             {
+                term.IsSelected = true;
                 _selectedStyles.Add(term);
             }
         }
 
-        private void InitializeMoods()
+        private Task InitializeMoods()
         {
-            Task.Factory
+            return Task.Factory
                 .StartNew(() =>
                 {
                     var moods = new List<MoodTerm>();
@@ -590,9 +689,9 @@ namespace Torshify.Radio.EchoNest.Views.Style
                 }, _scheduler);
         }
 
-        private void InitializeStyles()
+        private Task InitializeStyles()
         {
-            Task.Factory
+            return Task.Factory
                 .StartNew(() =>
                 {
                     var styles = new List<StyleTerm>();
@@ -711,7 +810,7 @@ namespace Torshify.Radio.EchoNest.Views.Style
 
         private void FillTermList(IEnumerable<TermModel> source, TermList target)
         {
-            source.ForEach(s=>
+            source.ForEach(s =>
             {
                 var term = target.Add(s.Name);
 

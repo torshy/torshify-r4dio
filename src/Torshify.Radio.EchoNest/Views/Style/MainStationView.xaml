@@ -256,6 +256,7 @@
                                     Content="{Binding Name}"
                                     Margin="1"
                                     FontSize="{Binding Count, Converter={StaticResource CountToFontSizeConverter}}"
+                                    IsChecked="{Binding IsSelected, Mode=TwoWay}"
                                     Command="{Binding DataContext.ToggleStyleCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                     CommandParameter="{Binding}" />
                             </DataTemplate>
@@ -296,6 +297,7 @@
                                     Content="{Binding Name}"
                                     FontSize="{Binding Count, Converter={StaticResource CountToFontSizeConverter}}"
                                     Margin="1"
+                                    IsChecked="{Binding IsSelected, Mode=TwoWay}"
                                     Command="{Binding DataContext.ToggleMoodCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                     CommandParameter="{Binding}" />
                             </DataTemplate>
