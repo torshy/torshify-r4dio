@@ -4,48 +4,224 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
     xmlns:Tabs="clr-namespace:Torshify.Radio.EchoNest.Views.Favorites.Tabs"
+    xmlns:Framework="clr-namespace:Torshify.Radio.Framework;assembly=Torshify.Radio.Framework"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
-    <UserControl.Resources>
-        <DataTemplate
-            DataType="{x:Type Framework:TrackFavorite}">
-            <Tabs:FavoriteItem
-                Title="{Binding Track.Name}"
-                SubTitle="{Binding Track.Artist}"
-                Description="{Binding Track.Album}"
-                ImageUri="{Binding Track.AlbumArt}" />
-        </DataTemplate>
-        <DataTemplate
-            DataType="{x:Type Framework:TrackContainerFavorite}">
-            <Tabs:FavoriteItem
-                Title="{Binding TrackContainer.Name}"
-                SubTitle="{Binding TrackContainer.Owner.Name}"
-                Description="{Binding TrackContainer.Year}"
-                ImageUri="{Binding TrackContainer.Image}" />
-        </DataTemplate>
-        <DataTemplate
-            DataType="{x:Type Framework:TrackStreamFavorite}">
-            <Tabs:FavoriteItem
-                Title="{Binding StreamData.Name}"
-                SubTitle="{Binding StreamData.Source}"
-                Description="{Binding StreamData.Description}"
-                ImageUri="{Binding StreamData.Image}" />
-        </DataTemplate>
-    </UserControl.Resources>
-    <Controls:ReorderListBox
-        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-        AlternationCount="2"
+    <DataGrid
+        Name="favoritesList"
         ItemsSource="{Binding FavoriteList}"
-        SelectionChanged="ListBoxSelectionChanged"
-        ReorderRequested="ListBoxReorderRequested">
-        <ListBox.ContextMenu>
+        SelectionChanged="SelectionChanged">
+        <DataGrid.ContextMenu>
             <Controls:CommandBarContextMenu
                 Tag="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}"
                 DataContext="{Binding Tag.DataContext.CommandBar, RelativeSource={RelativeSource Self}}" />
-        </ListBox.ContextMenu>
-    </Controls:ReorderListBox>
+        </DataGrid.ContextMenu>
+        <i:Interaction.Behaviors>
+            <Behaviors:DataGridTriStateSortingBehavior />
+            <Behaviors:DataGridRowActionBehavior
+                Command="{Binding DataContext.PlayFavoritesCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Mode=OneTime}"
+                CommandParameter="{Binding SelectedItems, ElementName=favoritesList}" />
+        </i:Interaction.Behaviors>
+        <DataGrid.Columns>
+            <DataGridTemplateColumn
+                Header="">
+                <DataGridTemplateColumn.CellTemplateSelector>
+                    <Tabs:FavoritesItemTemplateSelector>
+                        <Tabs:FavoritesItemTemplateSelector.TrackFavorite>
+                            <DataTemplate>
+                                <Viewbox
+                                    Height="24">
+                                    <Canvas
+                                        Width="48"
+                                        Height="48">
+                                        <Path
+                                            Width="21"
+                                            Height="24"
+                                            Canvas.Left="13"
+                                            Canvas.Top="12"
+                                            Stretch="Fill"
+                                            Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                                            Data="F1 M 17,30L 18,30.0945L 18,18L 18,17L 18,15L 34,12L 34,14L 34,15L 34,30C 34,31.6569 32.2091,33 30,33C 27.7909,33 26,31.6569 26,30C 26,28.3431 27.7908,27 30,27C 30.3453,27 30.6804,27.0328 31,27.0945L 31,15.5625L 21,17.4375L 21,33C 21,34.6569 19.2091,36 17,36C 14.7909,36 13,34.6569 13,33C 13,31.3431 14.7909,30 17,30 Z " />
+                                    </Canvas>
+                                </Viewbox>
+                            </DataTemplate>
+                        </Tabs:FavoritesItemTemplateSelector.TrackFavorite>
+                        <Tabs:FavoritesItemTemplateSelector.TrackContainerFavorite>
+                            <DataTemplate>
+                                <Viewbox
+                                    Height="24">
+                                    <Canvas
+                                        Width="48"
+                                        Height="48"
+                                        Canvas.Left="0"
+                                        Canvas.Top="0">
+                                        <Path
+                                            Width="22"
+                                            Height="19"
+                                            Canvas.Left="13"
+                                            Canvas.Top="13"
+                                            Stretch="Fill"
+                                            Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                                            Data="F1 M 13,16L 23,16L 23,15C 23,13.8954 23.8954,13 25,13L 32,13C 33.1046,13 35,14.8954 35,16L 35,32L 13,32L 13,16 Z " />
+                                    </Canvas>
+                                </Viewbox>
+                            </DataTemplate>
+                        </Tabs:FavoritesItemTemplateSelector.TrackContainerFavorite>
+                        <Tabs:FavoritesItemTemplateSelector.TrackStreamFavorite>
+                            <DataTemplate>
+                                <Viewbox
+                                    Height="24">
+                                    <Canvas
+                                        Width="48"
+                                        Height="48"
+                                        Canvas.Left="0"
+                                        Canvas.Top="0">
+                                        <Path
+                                            Width="22"
+                                            Height="19"
+                                            Canvas.Left="13"
+                                            Canvas.Top="13"
+                                            Stretch="Fill"
+                                            Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                                            Data="F1 M 13,16L 23,16L 23,15C 23,13.8954 23.8954,13 25,13L 32,13C 33.1046,13 35,14.8954 35,16L 35,32L 13,32L 13,16 Z " />
+                                    </Canvas>
+                                </Viewbox>
+                            </DataTemplate>
+                        </Tabs:FavoritesItemTemplateSelector.TrackStreamFavorite>
+                    </Tabs:FavoritesItemTemplateSelector>
+                </DataGridTemplateColumn.CellTemplateSelector>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn
+                Header="Name"
+                Width="250">
+                <DataGridTemplateColumn.CellTemplateSelector>
+                    <Tabs:FavoritesItemTemplateSelector>
+                        <Tabs:FavoritesItemTemplateSelector.TrackFavorite>
+                            <DataTemplate>
+                                <TextBlock
+                                    Text="{Binding Track.Name}"
+                                    TextTrimming="CharacterEllipsis"
+                                    Margin="2,0,2,0" />
+                            </DataTemplate>
+                        </Tabs:FavoritesItemTemplateSelector.TrackFavorite>
+                        <Tabs:FavoritesItemTemplateSelector.TrackContainerFavorite>
+                            <DataTemplate>
+                                <TextBlock
+                                    Text="{Binding TrackContainer.Name}"
+                                    TextTrimming="CharacterEllipsis"
+                                    Margin="2,0,2,0" />
+                            </DataTemplate>
+                        </Tabs:FavoritesItemTemplateSelector.TrackContainerFavorite>
+                        <Tabs:FavoritesItemTemplateSelector.TrackStreamFavorite>
+                            <DataTemplate>
+                                <TextBlock
+                                    Text="{Binding StreamData.Name}"
+                                    TextTrimming="CharacterEllipsis"
+                                    Margin="2,0,2,0" />
+                            </DataTemplate>
+                        </Tabs:FavoritesItemTemplateSelector.TrackStreamFavorite>
+                    </Tabs:FavoritesItemTemplateSelector>
+                </DataGridTemplateColumn.CellTemplateSelector>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn
+                Header=""
+                Width="250">
+                <DataGridTemplateColumn.CellTemplateSelector>
+                    <Tabs:FavoritesItemTemplateSelector>
+                        <Tabs:FavoritesItemTemplateSelector.TrackFavorite>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Hyperlink
+                                        Command="{x:Static Framework:AppCommands.GoToArtistCommand}"
+                                        CommandParameter="{Binding Track.Artist}">
+                                        <TextBlock
+                                            Text="{Binding Track.Artist}"
+                                            TextTrimming="CharacterEllipsis"
+                                            Margin="2,0,2,0">
+                                            <i:Interaction.Behaviors>
+                                                <Behaviors:ArtistRelatedCommandBarBehavior
+                                                    ArtistName="{Binding Track.Artist}" />
+                                            </i:Interaction.Behaviors>
+                                        </TextBlock>
+                                    </Hyperlink>
+                                </TextBlock>
+                            </DataTemplate>
+                        </Tabs:FavoritesItemTemplateSelector.TrackFavorite>
+                        <Tabs:FavoritesItemTemplateSelector.TrackContainerFavorite>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Hyperlink
+                                        Command="{x:Static Framework:AppCommands.GoToArtistCommand}"
+                                        CommandParameter="{Binding TrackContainer.Owner.Name}">
+                                        <TextBlock
+                                            Text="{Binding TrackContainer.Owner.Name}"
+                                            TextTrimming="CharacterEllipsis"
+                                            Margin="2,0,2,0">
+                                            <i:Interaction.Behaviors>
+                                                <Behaviors:ArtistRelatedCommandBarBehavior
+                                                    ArtistName="{Binding TrackContainer.Owner.Name}" />
+                                            </i:Interaction.Behaviors> 
+                                        </TextBlock>
+                                    </Hyperlink>
+                                </TextBlock>
+                            </DataTemplate>
+                        </Tabs:FavoritesItemTemplateSelector.TrackContainerFavorite>
+                        <Tabs:FavoritesItemTemplateSelector.TrackStreamFavorite>
+                            <DataTemplate>
+                                <TextBlock
+                                    Text="{Binding StreamData.Source}"
+                                    TextTrimming="CharacterEllipsis"
+                                    Margin="2,0,2,0" />
+                            </DataTemplate>
+                        </Tabs:FavoritesItemTemplateSelector.TrackStreamFavorite>
+                    </Tabs:FavoritesItemTemplateSelector>
+                </DataGridTemplateColumn.CellTemplateSelector>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn
+                Header=""
+                Width="*">
+                <DataGridTemplateColumn.CellTemplateSelector>
+                    <Tabs:FavoritesItemTemplateSelector>
+                        <Tabs:FavoritesItemTemplateSelector.TrackFavorite>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Hyperlink
+                                        Command="{x:Static Framework:AppCommands.GoToAlbumCommand}"
+                                        CommandParameter="{Binding Track}">
+                                        <TextBlock
+                                            Text="{Binding Track.Album}"
+                                            TextTrimming="CharacterEllipsis"
+                                            Margin="2,0,2,0">
+                                            <i:Interaction.Behaviors>
+                                                <Behaviors:AlbumRelatedCommandBarBehavior
+                                                    ArtistName="{Binding Track.Artist}"
+                                                    AlbumName="{Binding Track.Album}" />
+                                            </i:Interaction.Behaviors>
+                                        </TextBlock>
+                                    </Hyperlink>
+                                </TextBlock>
+                            </DataTemplate>
+                        </Tabs:FavoritesItemTemplateSelector.TrackFavorite>
+                        <Tabs:FavoritesItemTemplateSelector.TrackContainerFavorite>
+                            <DataTemplate>
+                            </DataTemplate>
+                        </Tabs:FavoritesItemTemplateSelector.TrackContainerFavorite>
+                        <Tabs:FavoritesItemTemplateSelector.TrackStreamFavorite>
+                            <DataTemplate>
+                                <TextBlock
+                                    Text="{Binding StreamData.Description}"
+                                    TextTrimming="CharacterEllipsis"
+                                    Margin="2,0,2,0" />
+                            </DataTemplate>
+                        </Tabs:FavoritesItemTemplateSelector.TrackStreamFavorite>
+                    </Tabs:FavoritesItemTemplateSelector>
+                </DataGridTemplateColumn.CellTemplateSelector>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+    </DataGrid>
 </UserControl>

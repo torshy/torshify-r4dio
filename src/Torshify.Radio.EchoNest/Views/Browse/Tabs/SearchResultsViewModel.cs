@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.Practices.Prism;
-using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
@@ -14,7 +13,6 @@ using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
-using Torshify.Radio.Framework.Events;
 
 namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 {
@@ -24,7 +22,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
     {
         #region Fields
 
-        private ObservableCollection<Track> _results;
+        private readonly ObservableCollection<Track> _results;
 
         #endregion Fields
 
@@ -163,15 +161,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
                     Icon = AppIcons.AddToFavorites.ToImage(),
                     Command = AppCommands.AddTrackToFavoriteCommand,
                     CommandParameter = selectedItems.ToArray()
-                })
-                .AddSeparator();
-
-            var lastItem = selectedItems.LastOrDefault();
-            if (lastItem != null)
-            {
-                var payload = new ArtistRelatedCommandBarPayload(lastItem.Artist, CommandBar);
-                EventAggregator.GetEvent<BuildArtistRelatedCommandBarEvent>().Publish(payload);
-            }
+                });
         }
 
         void INavigationAware.OnNavigatedTo(NavigationContext context)
@@ -251,7 +241,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
         {
             if (tracks == null)
                 return;
-
+            
             ITrackStream stream = tracks.OfType<Track>().ToTrackStream("Browsing");
             Radio.Queue(stream);
 

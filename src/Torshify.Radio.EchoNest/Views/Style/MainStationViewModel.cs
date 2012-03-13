@@ -720,6 +720,31 @@ namespace Torshify.Radio.EchoNest.Views.Style
                                 i++;
                             }
 
+                            string[] additionalStyles = new[]
+                            {
+                                "dubstep",
+                                "british metal",
+                                "doom metal",
+                                "industrial metal",
+                                "metalcore",
+                                "post-rock",
+                                "post-metal"
+                            };
+
+                            foreach (var additionalStyle in additionalStyles)
+                            {
+                                var term = new StyleTerm
+                                {
+                                    Name = additionalStyle,
+                                    Index = i
+                                };
+
+                                styles.Add(term);
+                                session.Store(term);
+
+                                i++;
+                            }
+                            
                             session.SaveChanges();
                         }
                     }
@@ -727,8 +752,8 @@ namespace Torshify.Radio.EchoNest.Views.Style
                     {
                         styles.AddRange(result.OrderBy(s => s.Index));
                     }
-
-                    return styles;
+                    
+                    return styles.OrderBy(s => s.Name);
                 })
                 .ContinueWith(task =>
                 {
@@ -749,6 +774,7 @@ namespace Torshify.Radio.EchoNest.Views.Style
                     {
                         _styles.Add(termModel);
                     }
+                    
                 }, _scheduler);
         }
 

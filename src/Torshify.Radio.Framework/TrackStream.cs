@@ -15,7 +15,6 @@ namespace Torshify.Radio.Framework
         private readonly List<IEnumerable<Track>> _tracks;
         private IEnumerable<Track> _current;
         private string _description;
-        private Func<TrackStreamData> _streamData;
 
         #endregion Fields
 
@@ -24,7 +23,7 @@ namespace Torshify.Radio.Framework
         public TrackStream(IEnumerable<Track> tracks, string description, string source)
             : this(tracks, description, () => null)
         {
-            _streamData = () =>
+            DataGenerator = () =>
             {
                 _enumerator.Reset();
 
@@ -48,7 +47,7 @@ namespace Torshify.Radio.Framework
             _enumerator = _tracks.GetEnumerator();
 
             _description = description;
-            _streamData = streamData;
+            Data = streamData();
 
             SupportsTrackSkipping = true;
         }
@@ -89,22 +88,13 @@ namespace Torshify.Radio.Framework
 
         public TrackStreamData Data
         {
-            get
-            {
-                return _streamData();
-            }
+            get;
+            private set;
         }
 
         public Func<TrackStreamData> DataGenerator
         {
-            get
-            {
-                return _streamData;
-            }
-            set
-            {
-                _streamData = value;
-            }
+            set { Data = value(); }
         }
 
         object IEnumerator.Current

@@ -158,11 +158,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             if (tracks == null)
                 return;
 
-            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(
-                CurrentTrackContainer.Name + " by " + CurrentTrackContainer.Owner.Name,
-                "Albums");
-            Radio.Queue(stream);
-
+            Radio.Queue(GetTrackStream(tracks.OfType<Track>()));
             ToastService.Show(new ToastData
             {
                 Message = "Tracks queued",
@@ -174,11 +170,23 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
         {
             if (tracks == null)
                 return;
+            
+            Radio.Play(GetTrackStream(tracks.OfType<Track>()));
+        }
 
-            ITrackStream stream = tracks.OfType<Track>().ToTrackStream(
-                CurrentTrackContainer.Name + " by " + CurrentTrackContainer.Owner.Name,
-                "Albums");
-            Radio.Play(stream);
+        private ITrackStream GetTrackStream(IEnumerable<Track> tracks)
+        {
+            return new TrackStream(
+                tracks, 
+                CurrentTrackContainer.Name, 
+                ()=> new TrackListStreamData
+                {
+                        Name = CurrentTrackContainer.Name,
+                        Description = "Album",
+                        Image = CurrentTrackContainer.Image,
+                        Source = CurrentTrackContainer.Owner.Name,
+                        Tracks = tracks.ToArray()
+                });
         }
 
         private void ExecuteSearchForAlbum(string artist, string album)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
@@ -39,9 +40,9 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
             };
 
             CommandBar = new CommandBar();
-            PlayFavoriteCommand = new StaticCommand<Favorite>(ExecutePlayFavorite);
-            QueueFavoriteCommand = new StaticCommand<Favorite>(ExecuteQueueFavorite);
-            DeleteFavoriteCommand = new StaticCommand<Favorite>(ExecuteDeleteFavorite);
+            PlayFavoritesCommand = new StaticCommand<IEnumerable>(ExecutePlayFavorite);
+            QueueFavoritesCommand = new StaticCommand<IEnumerable>(ExecuteQueueFavorite);
+            DeleteFavoritesCommand = new StaticCommand<IEnumerable>(ExecuteDeleteFavorite);
         }
 
         #endregion Constructors
@@ -54,19 +55,19 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
             private set;
         }
 
-        public StaticCommand<Favorite> PlayFavoriteCommand
+        public StaticCommand<IEnumerable> PlayFavoritesCommand
         {
             get;
             private set;
         }
 
-        public StaticCommand<Favorite> QueueFavoriteCommand
+        public StaticCommand<IEnumerable> QueueFavoritesCommand
         {
             get;
             private set;
         }
 
-        public StaticCommand<Favorite> DeleteFavoriteCommand
+        public StaticCommand<IEnumerable> DeleteFavoritesCommand
         {
             get;
             private set;
@@ -138,14 +139,14 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
                 {
                     Content = "Play",
                     Icon = AppIcons.Play.ToImage(),
-                    Command = PlayFavoriteCommand,
-                    CommandParameter = selectedFavorites.LastOrDefault()
+                    Command = PlayFavoritesCommand,
+                    CommandParameter = selectedFavorites.ToArray()
                 })
                 .AddCommand(new CommandModel
                 {
                     Content = "Queue",
                     Icon = AppIcons.Add.ToImage(),
-                    Command = new DelegateCommand<IEnumerable<Favorite>>(favorites => favorites.ForEach(f => QueueFavoriteCommand.Execute(f))),
+                    Command = QueueFavoritesCommand,
                     CommandParameter = selectedFavorites.ToArray()
                 })
                 .AddSeparator()
@@ -153,7 +154,7 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
                 {
                     Content = "Remove",
                     Icon = AppIcons.Delete.ToImage(),
-                    Command = new DelegateCommand<IEnumerable<Favorite>>(favorites => favorites.ForEach(f => DeleteFavoriteCommand.Execute(f))),
+                    Command = DeleteFavoritesCommand,
                     CommandParameter = selectedFavorites.ToArray()
                 });
         }
@@ -240,49 +241,65 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
             }
         }
 
-        private void ExecutePlayFavorite(Favorite favorite)
+        private void ExecutePlayFavorite(IEnumerable list)
         {
-            var favoriteHandler = FavoriteHandlers.FirstOrDefault(f => f.CanHandleFavorite(favorite));
+            var favorites = list.OfType<Favorite>();
+            var firstFavorite = favorites.FirstOrDefault();
 
-            if (favoriteHandler != null)
+            if (firstFavorite != null)
             {
-                favoriteHandler.Play(favorite);
-            }
-            else
-            {
-                ToastService.Show("Unable to play favorite");
-                Logger.Log("Unable to find favorite handler for type " + favorite.GetType() + " and id " + favorite.Id, Category.Warn, Priority.Medium);
-            }
-        }
+                var favoriteHandler = FavoriteHandlers.FirstOrDefault(f => f.CanHandleFavorite(firstFavorite));
 
-        private void ExecuteQueueFavorite(Favorite favorite)
-        {
-            var favoriteHandler = FavoriteHandlers.FirstOrDefault(f => f.CanHandleFavorite(favorite));
-
-            if (favoriteHandler != null)
-            {
-                favoriteHandler.Queue(favorite);
-
-                ToastService.Show(new ToastData
+                if (favoriteHandler != null)
                 {
-                    Message = "Favorite queued",
-                    Icon = AppIcons.Add
-                });
-            }
-            else
-            {
-                ToastService.Show("Unable to queue favorite");
-                Logger.Log("Unable to find favorite handler for type " + favorite.GetType() + " and id " + favorite.Id, Category.Warn, Priority.Medium);
+                    favoriteHandler.Play(firstFavorite);
+                }
+                else
+                {
+                    ToastService.Show("Unable to play favorite");
+                    Logger.Log("Unable to find favorite handler for type " + firstFavorite.GetType() + " and id " + firstFavorite.Id, Category.Warn, Priority.Medium);
+                }
+
+                ExecuteQueueFavorite(favorites.Skip(1));
             }
         }
 
-        private void ExecuteDeleteFavorite(Favorite favorite)
+        private void ExecuteQueueFavorite(IEnumerable list)
+        {
+            var favorites = list.OfType<Favorite>();
+
+            foreach (var favorite in favorites)
+            {
+                var favoriteHandler = FavoriteHandlers.FirstOrDefault(f => f.CanHandleFavorite(favorite));
+
+                if (favoriteHandler != null)
+                {
+                    favoriteHandler.Queue(favorite);
+
+                    ToastService.Show(new ToastData
+                    {
+                        Message = "Favorite queued",
+                        Icon = AppIcons.Add
+                    });
+                }
+                else
+                {
+                    ToastService.Show("Unable to queue favorite");
+                    Logger.Log("Unable to find favorite handler for type " + favorite.GetType() + " and id " + favorite.Id, Category.Warn, Priority.Medium);
+                }
+            }
+        }
+
+        private void ExecuteDeleteFavorite(IEnumerable list)
         {
             var ui = TaskScheduler.FromCurrentSynchronizationContext();
             Task.Factory.StartNew(() =>
             {
-                _session.Delete(favorite);
-                _session.SaveChanges();
+                foreach (Favorite favorite in list)
+                {
+                    _session.Delete(favorite);
+                    _session.SaveChanges();
+                }
             })
             .ContinueWith(task =>
             {
@@ -298,7 +315,10 @@ namespace Torshify.Radio.EchoNest.Views.Favorites.Tabs
                 }
                 else
                 {
-                    _favoriteList.Remove(favorite);
+                    foreach (Favorite favorite in list)
+                    {
+                        _favoriteList.Remove(favorite);
+                    }
 
                     ToastService.Show(new ToastData
                     {

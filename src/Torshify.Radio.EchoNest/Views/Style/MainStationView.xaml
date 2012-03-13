@@ -202,7 +202,9 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock>
-                                    <Hyperlink>
+                                    <Hyperlink
+                                        Command="{x:Static Framework:AppCommands.GoToArtistCommand}"
+                                        CommandParameter="{Binding Name}">
                                         <TextBlock
                                             Text="{Binding Name}"
                                             TextTrimming="CharacterEllipsis">

@@ -62,16 +62,22 @@ namespace Torshify.Radio.Core.Startables
                 _nextTrackButton = new ThumbnailToolBarButton(Properties.Resources.ff_circle, "Next");
                 _nextTrackButton.Click += NextTrackButtonOnClick;
                 _nextTrackButton.Enabled = false;
-                
-                TaskbarManager
-                    .Instance
-                    .ThumbnailToolBars
-                    .AddButtons(
-                        new WindowInteropHelper(
-                            Application.Current.MainWindow).Handle,
+
+                try
+                {
+                    TaskbarManager
+                        .Instance
+                        .ThumbnailToolBars
+                        .AddButtons(
+                            new WindowInteropHelper(
+                                Application.Current.MainWindow).Handle,
                             _togglePlayPauseButton,
                             _nextTrackButton);
-
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
         }
 
