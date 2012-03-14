@@ -1,0 +1,4 @@
+0.9.0
+-----------------------
+* Changed the Favorites UI
+* Added a few more styles to Eclectic Station
