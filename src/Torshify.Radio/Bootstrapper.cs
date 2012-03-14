@@ -47,11 +47,13 @@ namespace Torshify.Radio
         {
             base.ConfigureAggregateCatalog();
 
-            AggregateCatalog.Catalogs.Add(new AssemblyCatalog(GetType().Assembly));
-            AggregateCatalog.Catalogs.Add(new DirectoryCatalog(Environment.CurrentDirectory, "Torshify.Radio*.dll"));
+            var assembly = GetType().Assembly;
+            var assemblyLocation = Path.GetDirectoryName(assembly.Location) ?? Environment.CurrentDirectory;
+            AggregateCatalog.Catalogs.Add(new AssemblyCatalog(assembly));
+            AggregateCatalog.Catalogs.Add(new DirectoryCatalog(assemblyLocation, "Torshify.Radio*.dll"));
 
             Directory.CreateDirectory("Modules");
-            var modules = Directory.EnumerateDirectories(Path.Combine(Environment.CurrentDirectory, "Modules"));
+            var modules = Directory.EnumerateDirectories(Path.Combine(assemblyLocation, "Modules"));
             foreach (var module in modules)
             {
                 AggregateCatalog.Catalogs.Add(new DirectoryCatalog(module, "Torshify.Radio*.dll"));
@@ -85,6 +87,12 @@ namespace Torshify.Radio
             base.InitializeShell();
             Application.Current.MainWindow = (Shell)Shell;
             Application.Current.MainWindow.InputBindings.Add(new KeyBinding(new StaticCommand(ConsoleManager.Toggle), Key.D0, ModifierKeys.Alt));
+        }
+
+        protected override void InitializeModules()
+        {
+            base.InitializeModules();
+            HandleCommandLineArguments(Environment.GetCommandLineArgs());
         }
 
         protected override RegionAdapterMappings ConfigureRegionAdapterMappings()

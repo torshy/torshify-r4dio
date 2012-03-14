@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
+
 using Torshify.Origo;
 
 namespace Torshify.Radio.Spotify
@@ -21,6 +21,11 @@ namespace Torshify.Radio.Spotify
 
         static SpotifyAppDomainHandler()
         {
+        }
+
+        private SpotifyAppDomainHandler()
+        {
+            
         }
 
         #endregion Constructors
@@ -87,9 +92,12 @@ namespace Torshify.Radio.Spotify
 
         private void StartOrigo()
         {
+            var assembly = GetType().Assembly;
+            var assemblyLocation = Path.GetDirectoryName(assembly.Location) ?? Environment.CurrentDirectory;
+
             AppDomainSetup setup = new AppDomainSetup();
             setup.ApplicationName = "Spotify";
-            setup.ApplicationBase = Environment.CurrentDirectory;
+            setup.ApplicationBase = assemblyLocation;
             setup.PrivateBinPath = Path.Combine("Modules", "Spotify");
             setup.PrivateBinPathProbe = "true";
 
