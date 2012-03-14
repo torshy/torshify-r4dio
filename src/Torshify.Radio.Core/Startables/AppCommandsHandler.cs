@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -9,11 +10,11 @@ using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 
 using Raven.Client;
+
 using Torshify.Radio.Core.Views.NowPlaying;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 using Torshify.Radio.Framework.Input;
-using System.Linq;
 
 namespace Torshify.Radio.Core.Startables
 {
@@ -321,7 +322,14 @@ namespace Torshify.Radio.Core.Startables
 
         private void ExecuteToggleMute()
         {
-            Player.IsMuted = !Player.IsMuted;
+            try
+            {
+                Player.IsMuted = !Player.IsMuted;
+            }
+            catch (Exception e)
+            {
+                ToastService.Show(e.Message);
+            }
         }
 
         private bool CanTogglePlay()
@@ -331,13 +339,20 @@ namespace Torshify.Radio.Core.Startables
 
         private void ExecuteTogglePlay()
         {
-            if (Player.IsPlaying)
+            try
             {
-                Player.Pause();
+                if (Player.IsPlaying)
+                {
+                    Player.Pause();
+                }
+                else
+                {
+                    Player.Play();
+                }
             }
-            else
+            catch (Exception e)
             {
-                Player.Play();
+                ToastService.Show(e.Message);
             }
         }
 
@@ -395,12 +410,26 @@ namespace Torshify.Radio.Core.Startables
 
         private void ExecuteDecreaseVolume()
         {
-            Player.Volume = Math.Max(0.0f, Player.Volume - 0.01f);
+            try
+            {
+                Player.Volume = Math.Max(0.0f, Player.Volume - 0.01f);
+            }
+            catch (Exception e)
+            {
+                ToastService.Show(e.Message);
+            }
         }
 
         private void ExecuteIncreaseVolume()
         {
-            Player.Volume = Math.Min(1.0f, Player.Volume + 0.01f);
+            try
+            {
+                Player.Volume = Math.Min(1.0f, Player.Volume + 0.01f);
+            }
+            catch (Exception e)
+            {
+                ToastService.Show(e.Message);
+            }
         }
 
         private void ExecuteGoToNowPlaying()
@@ -422,6 +451,7 @@ namespace Torshify.Radio.Core.Startables
                     return true;
                 }
             }
+
             return false;
         }
 
