@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Windows.Threading;
-
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.ViewModel;
 
 using Torshify.Radio.Framework;
@@ -15,6 +15,8 @@ namespace Torshify.Radio.Core.Views.Controls
         #region Fields
 
         private readonly Dispatcher _dispatcher;
+        private readonly IToastService _toastService;
+        private readonly ILoggerFacade _logger;
         private readonly ITrackPlayer _player;
         private readonly IRadio _radio;
 
@@ -23,7 +25,12 @@ namespace Torshify.Radio.Core.Views.Controls
         #region Constructors
 
         [ImportingConstructor]
-        public ControlsViewModel(IRadio radio, [Import("CorePlayer")] ITrackPlayer player, Dispatcher dispatcher)
+        public ControlsViewModel(
+            IRadio radio, 
+            [Import("CorePlayer")] ITrackPlayer player, 
+            Dispatcher dispatcher,
+            IToastService toastService,
+            ILoggerFacade logger)
         {
             _radio = radio;
             _radio.CurrentTrackChanged += RadioOnCurrentTrackChanged;
@@ -32,6 +39,8 @@ namespace Torshify.Radio.Core.Views.Controls
             _radio.TrackStreamQueued += RadioOnTrackStreamQueued;
             _player = player;
             _dispatcher = dispatcher;
+            _toastService = toastService;
+            _logger = logger;
             _player.IsPlayingChanged += (sender, args) =>
                                         {
                                             RaisePropertyChanged("IsPlaying");
@@ -149,13 +158,21 @@ namespace Torshify.Radio.Core.Views.Controls
 
         private void ExecuteTogglePlayPause()
         {
-            if (_player.IsPlaying)
+            try
             {
-                _player.Pause();
+                if (_player.IsPlaying)
+                {
+                    _player.Pause();
+                }
+                else
+                {
+                    _player.Play();
+                }
             }
-            else
+            catch (Exception e)
             {
-                _player.Play();
+                _toastService.Show("Error while toggling play/pause");
+                _logger.Log(e.ToString(), Category.Exception, Priority.Medium);
             }
         }
 

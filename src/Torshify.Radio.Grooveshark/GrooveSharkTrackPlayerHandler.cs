@@ -188,43 +188,50 @@ namespace Torshify.Radio.Grooveshark
                 }
                 else if (_bufferedWaveProvider != null)
                 {
-                    var bufferedSeconds = _bufferedWaveProvider.BufferedDuration.TotalSeconds;
-                    // make it stutter less if we buffer up a decent amount before playing
-                    if (bufferedSeconds < 0.5 && _playbackState == StreamingPlaybackState.Playing && !_fullyDownloaded)
+                    try
                     {
-                        _isBuffering(true);
-
-                        _log.Log("Grooveshark: Buffering..", Category.Info, Priority.Medium);
-
-                        _playbackState = StreamingPlaybackState.Buffering;
-
-                        if (_waveOut != null)
+                        var bufferedSeconds = _bufferedWaveProvider.BufferedDuration.TotalSeconds;
+                        // make it stutter less if we buffer up a decent amount before playing
+                        if (bufferedSeconds < 0.5 && _playbackState == StreamingPlaybackState.Playing && !_fullyDownloaded)
                         {
-                            _waveOut.Pause();
+                            _isBuffering(true);
+
+                            _log.Log("Grooveshark: Buffering..", Category.Info, Priority.Medium);
+
+                            _playbackState = StreamingPlaybackState.Buffering;
+
+                            if (_waveOut != null)
+                            {
+                                _waveOut.Pause();
+                                _isPlaying(false);
+                            }
+                        }
+                        else if (bufferedSeconds > 4 && _playbackState == StreamingPlaybackState.Buffering)
+                        {
+                            _log.Log("Grooveshark: Buffering complete", Category.Info, Priority.Medium);
+
+                            if (_waveOut != null)
+                            {
+                                _waveOut.Play();
+                                _playbackState = StreamingPlaybackState.Playing;
+                                _isPlaying(true);
+                            }
+
+                            _isBuffering(false);
+                        }
+                        else if (_fullyDownloaded && bufferedSeconds < 0.5)
+                        {
+                            _log.Log("Grooveshark: Buffer empty and the stream is fully downloaded. Complete..", Category.Info, Priority.Medium);
+                            _elapsedTimeSpan = TimeSpan.Zero;
                             _isPlaying(false);
+                            _playbackState = StreamingPlaybackState.Stopped;
+                            _timer.Stop();
+                            _trackComplete(_track);
                         }
                     }
-                    else if (bufferedSeconds > 4 && _playbackState == StreamingPlaybackState.Buffering)
+                    catch (Exception exception)
                     {
-                        _log.Log("Grooveshark: Buffering complete", Category.Info, Priority.Medium);
-
-                        if (_waveOut != null)
-                        {
-                            _waveOut.Play();
-                            _playbackState = StreamingPlaybackState.Playing;
-                            _isPlaying(true);
-                        }
-
-                        _isBuffering(false);
-                    }
-                    else if (_fullyDownloaded && bufferedSeconds < 0.5)
-                    {
-                        _log.Log("Grooveshark: Buffer empty and the stream is fully downloaded. Complete..", Category.Info, Priority.Medium);
-                        _elapsedTimeSpan = TimeSpan.Zero;
-                        _isPlaying(false);
-                        _playbackState = StreamingPlaybackState.Stopped;
-                        _timer.Stop();
-                        _trackComplete(_track);
+                        _log.Log(exception.ToString(), Category.Exception, Priority.Medium);
                     }
                 }
 
