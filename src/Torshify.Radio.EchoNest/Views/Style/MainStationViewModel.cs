@@ -576,14 +576,14 @@ namespace Torshify.Radio.EchoNest.Views.Style
                         }
                         else
                         {
-                            if (response.Artists.Count == 0)
+                            if (response.Artists != null && response.Artists.Count == 0)
                             {
                                 // TODO : Localize
                                 _toastService.Show("Unable to find songs matching the current criterias");
                             }
                             else
                             {
-                                _toastService.Show(response.Status.Message);
+                                _toastService.Show("EchoNest : " + response.Status.Message);
                             }
                         }
                     }
