@@ -33,7 +33,7 @@ namespace Torshify.Radio.Grooveshark
         private Timer _timer;
         private float _volume;
         private VolumeWaveProvider16 _volumeProvider;
-        private WaveOut _waveOut;
+        private WaveOutEvent _waveOut;
 
         #endregion Fields
 
@@ -171,7 +171,7 @@ namespace Torshify.Radio.Grooveshark
 
                     try
                     {
-                        _waveOut = new WaveOut();
+                        _waveOut = new WaveOutEvent();
                         _volumeProvider = new VolumeWaveProvider16(_bufferedWaveProvider);
                         _volumeProvider.Volume = Volume;
                         _waveOut.Init(_volumeProvider);
