@@ -46,8 +46,8 @@
     <Reference Include="NAudio">
       <HintPath>..\..\lib\NAudio\NAudio.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json.Compact">
-      <HintPath>..\..\lib\Grooveshark\Newtonsoft.Json.Compact.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\lib\Grooveshark\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="SciLors Logger">
