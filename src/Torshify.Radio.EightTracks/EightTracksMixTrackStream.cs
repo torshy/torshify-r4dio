@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Xml;
 using EightTracks;
 
@@ -106,11 +107,6 @@ namespace Torshify.Radio.EightTracks
             set;
         }
 
-        object IEnumerator.Current
-        {
-            get { return Current; }
-        }
-
         #endregion Properties
 
         #region Methods
@@ -121,7 +117,7 @@ namespace Torshify.Radio.EightTracks
             _currentPlayResponse = null;
         }
 
-        public bool MoveNext()
+        public bool MoveNext(CancellationToken token)
         {
             using (var session = new EightTracksSession(EightTracksModule.ApiKey))
             {

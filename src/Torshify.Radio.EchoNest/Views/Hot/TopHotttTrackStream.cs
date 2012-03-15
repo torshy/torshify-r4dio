@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading;
 using EchoNest;
 using EchoNest.Artist;
 
@@ -66,14 +66,6 @@ namespace Torshify.Radio.EchoNest.Views.Hot
             }
         }
 
-        object IEnumerator.Current
-        {
-            get
-            {
-                return Current;
-            }
-        }
-
         #endregion Properties
 
         #region Methods
@@ -82,10 +74,15 @@ namespace Torshify.Radio.EchoNest.Views.Hot
         {
         }
 
-        public bool MoveNext()
+        public bool MoveNext(CancellationToken token)
         {
             using (var session = new EchoNestSession(EchoNestModule.ApiKey))
             {
+                if (token.IsCancellationRequested)
+                {
+                    token.ThrowIfCancellationRequested();
+                }
+
                 var response = session.Query<TopHottt>().Execute(2, _start);
 
                 if (response != null && response.Status.Code == ResponseCode.Success)
@@ -96,6 +93,11 @@ namespace Torshify.Radio.EchoNest.Views.Hot
 
                     foreach (var artist in response.Artists.OrderBy(k => Guid.NewGuid()))
                     {
+                        if (token.IsCancellationRequested)
+                        {
+                            token.ThrowIfCancellationRequested();
+                        }
+
                         var result = _radio
                             .GetTracksByName(artist.Name)
                             .Where(a => a.Artist.Equals(artist.Name, StringComparison.InvariantCultureIgnoreCase))

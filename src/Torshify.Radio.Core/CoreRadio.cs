@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
@@ -37,6 +38,7 @@ namespace Torshify.Radio.Core
         private ObservableCollection<Track> _trackQueuePublic;
         private ObservableCollection<ITrackStream> _trackStreamQueuePublic;
         private Track _upcomingTrack;
+        private CancellationTokenSource _currentTokenSource;
 
         #endregion Fields
 
@@ -244,19 +246,34 @@ namespace Torshify.Radio.Core
 
             CurrentTrackStream = trackStream;
 
+            try
+            {
+                if (_currentTokenSource != null && !_currentTokenSource.IsCancellationRequested)
+                {
+                    _currentTokenSource.Cancel();
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Log(e.ToString(), Category.Exception, Priority.Low);
+            }
+
+            _currentTokenSource = new CancellationTokenSource();
+            var tct = _currentTokenSource.Token;
+
             Task
                 .Factory
                 .StartNew(() =>
                 {
                     using (_loadingIndicatorService.EnterLoadingBlock())
                     {
-                        GetNextBatch();
+                        GetNextBatch(tct);
 
                         _corePlayer.Stop();
 
                         while (!MoveToNextTrack())
                         {
-                            if (!GetNextBatch())
+                            if (!GetNextBatch(tct))
                             {
                                 break;
                             }
@@ -264,7 +281,7 @@ namespace Torshify.Radio.Core
 
                         PeekToNextTrack();
                     }
-                })
+                }, tct)
                 .ContinueWith(task =>
                 {
                     if (task.Exception != null)
@@ -302,6 +319,9 @@ namespace Torshify.Radio.Core
 
         public void NextTrack()
         {
+            _currentTokenSource = new CancellationTokenSource();
+            var tct = _currentTokenSource.Token;
+
             Task
                 .Factory
                 .StartNew(() =>
@@ -313,12 +333,12 @@ namespace Torshify.Radio.Core
                         if (_trackQueue.IsEmpty)
                         {
                             _logger.Log("Current track stream is empty. Trying to move on", Category.Debug, Priority.Low);
-                            GetNextBatch();
+                            GetNextBatch(tct);
                         }
 
                         while (!MoveToNextTrack())
                         {
-                            if (!GetNextBatch())
+                            if (!GetNextBatch(tct))
                             {
                                 break;
                             }
@@ -326,7 +346,7 @@ namespace Torshify.Radio.Core
 
                         PeekToNextTrack();
                     }
-                })
+                }, tct)
                 .ContinueWith(task =>
                 {
                     if (task.Exception != null)
@@ -345,6 +365,9 @@ namespace Torshify.Radio.Core
         {
             if (CanGoToNextTrackStream)
             {
+                _currentTokenSource = new CancellationTokenSource();
+                var tct = _currentTokenSource.Token;
+
                 Task
                     .Factory
                     .StartNew(() =>
@@ -360,11 +383,11 @@ namespace Torshify.Radio.Core
                             _dispatcher.BeginInvoke(new Func<ITrackStream, bool>(_trackStreamQueuePublic.Remove), nextTrackStream);
 
                             CurrentTrackStream = nextTrackStream;
-                            GetNextBatch();
+                            GetNextBatch(tct);
 
                             while (!MoveToNextTrack())
                             {
-                                if (!GetNextBatch())
+                                if (!GetNextBatch(tct))
                                 {
                                     break;
                                 }
@@ -372,7 +395,7 @@ namespace Torshify.Radio.Core
 
                             PeekToNextTrack();
                         }
-                    })
+                    }, tct)
                     .ContinueWith(task =>
                     {
                         if (task.Exception != null)
@@ -395,9 +418,9 @@ namespace Torshify.Radio.Core
             return TrackSources.Any(s => s.Value.SupportsLink(trackLink));
         }
 
-        private bool GetNextBatch()
+        private bool GetNextBatch(CancellationToken token)
         {
-            if (CurrentTrackStream != null && CurrentTrackStream.MoveNext())
+            if (CurrentTrackStream != null && CurrentTrackStream.MoveNext(token))
             {
                 var tracks = CurrentTrackStream.Current;
 
@@ -420,7 +443,7 @@ namespace Torshify.Radio.Core
                 _dispatcher.BeginInvoke(new Func<ITrackStream, bool>(_trackStreamQueuePublic.Remove), nextTrackStream);
                 CurrentTrackStream = nextTrackStream;
                 RaisePropertyChanged("CanGoToNextTrackStream");
-                return GetNextBatch();
+                return GetNextBatch(token);
             }
 
             _logger.Log("No more track streams to play", Category.Debug, Priority.Low);
@@ -470,6 +493,9 @@ namespace Torshify.Radio.Core
 
         private void OnTrackComplete(object sender, TrackEventArgs e)
         {
+            _currentTokenSource = new CancellationTokenSource();
+            var tct = _currentTokenSource.Token;
+
             Task
                 .Factory
                 .StartNew(() =>
@@ -478,12 +504,12 @@ namespace Torshify.Radio.Core
                     {
                         if (_trackQueue.IsEmpty)
                         {
-                            GetNextBatch();
+                            GetNextBatch(tct);
                         }
 
                         while (!MoveToNextTrack())
                         {
-                            if (!GetNextBatch())
+                            if (!GetNextBatch(tct))
                             {
                                 break;
                             }
@@ -491,7 +517,7 @@ namespace Torshify.Radio.Core
 
                         PeekToNextTrack();
                     }
-                })
+                }, tct)
                 .ContinueWith(task =>
                 {
                     if (task.Exception != null)

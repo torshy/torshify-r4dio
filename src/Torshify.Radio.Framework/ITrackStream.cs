@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Torshify.Radio.Framework
 {
-    public interface ITrackStream : IEnumerator<IEnumerable<Track>>
+    public interface ITrackStream
     {
         bool SupportsTrackSkipping
         {
@@ -18,5 +19,13 @@ namespace Torshify.Radio.Framework
         {
             get;
         }
+
+        IEnumerable<Track> Current { get; }
+
+        void Dispose();
+
+        bool MoveNext(CancellationToken token);
+
+        void Reset();
     }
 }

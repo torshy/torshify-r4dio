@@ -3,6 +3,7 @@ using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Threading;
 
 using EchoNest;
@@ -30,6 +31,7 @@ namespace Torshify.Radio.EchoNest.Startables
 
         private Scheduler _scheduler;
         private TileData _tileData;
+        private Effect _tileEffect;
 
         #endregion Fields
 
@@ -61,11 +63,20 @@ namespace Torshify.Radio.EchoNest.Startables
                 BackgroundImage = _tileIcon
             };
 
+            _tileEffect = new ColorToneShaderEffect
+            {
+                DarkColor = Colors.Black,
+                LightColor = Colors.DarkOrange,
+                Desaturation = 0.5,
+                Toned = 0.5
+            };
+            _tileEffect.Freeze();
+
             _dispatcher.BeginInvoke(new Action(() => _tileService.Add<Views.Hot.HotArtistsView>(_tileData)), DispatcherPriority.ContextIdle);
 
             Job<TileData> job = new Job<TileData>("HotTile");
             job.Data = _tileData;
-            job.Run.From(DateTime.Now).Every.Seconds(30);
+            job.Run.From(DateTime.Now).Every.Seconds(60);
             _scheduler.SubmitJob(job, HotTileJobExecution);
         }
 
@@ -88,16 +99,7 @@ namespace Torshify.Radio.EchoNest.Startables
 
                             if (artist.Images.Count > 0)
                             {
-                                tile.Effect = new ColorToneShaderEffect
-                                {
-                                    DarkColor = Colors.Black,
-                                    LightColor = Colors.DarkOrange,
-                                    Desaturation = 0.5,
-                                    Toned = 0.5
-                                };
-
-                                tile.Effect.Freeze();
-
+                                tile.Effect = _tileEffect;
                                 index = _random.Next(0, artist.Images.Count - 1);
                                 tile.BackgroundImage = new Uri(artist.Images[index].Url, UriKind.RelativeOrAbsolute);
 

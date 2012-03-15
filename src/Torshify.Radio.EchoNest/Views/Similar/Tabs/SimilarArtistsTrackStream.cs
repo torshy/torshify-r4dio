@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Torshify.Radio.Framework;
 using System.Linq;
 
@@ -61,11 +62,6 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             }
         }
 
-        object IEnumerator.Current
-        {
-            get { return Current; }
-        }
-
         #endregion Properties
 
         #region Methods
@@ -75,7 +71,7 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
             _similarArtistsEnumerator.Dispose();
         }
 
-        public bool MoveNext()
+        public bool MoveNext(CancellationToken token)
         {
             if (_similarArtistsEnumerator.MoveNext())
             {
@@ -83,7 +79,7 @@ namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 
                 if (!_currentTrackList.Any())
                 {
-                    return MoveNext();
+                    return MoveNext(token);
                 }
 
                 return true;

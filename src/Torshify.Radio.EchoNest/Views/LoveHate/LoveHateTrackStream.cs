@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading;
 using EchoNest;
 using EchoNest.Playlist;
 
@@ -82,14 +82,6 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
             }
         }
 
-        object IEnumerator.Current
-        {
-            get
-            {
-                return Current;
-            }
-        }
-
         #endregion Properties
 
         #region Methods
@@ -98,7 +90,7 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
         {
         }
 
-        public bool MoveNext()
+        public bool MoveNext(CancellationToken token)
         {
             using (_loadingIndicator.EnterLoadingBlock())
             {
@@ -128,6 +120,11 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
 
                             if (song != null)
                             {
+                                if (token.IsCancellationRequested)
+                                {
+                                    token.ThrowIfCancellationRequested();
+                                }
+
                                 var queryResult = _radio.GetTracksByName(_initialArtistName + " " + song.Title);
 
                                 if (!queryResult.Any())
@@ -160,6 +157,11 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                 {
                     using (var session = new EchoNestSession(EchoNestModule.ApiKey))
                     {
+                        if (token.IsCancellationRequested)
+                        {
+                            token.ThrowIfCancellationRequested();
+                        }
+
                         var argument = new DynamicArgument
                         {
                             SessionId = _sessionId
@@ -207,7 +209,7 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
 
                                     if (response.Songs.Any())
                                     {
-                                        return MoveNext();
+                                        return MoveNext(token);
                                     }
 
                                     return false;
@@ -221,7 +223,6 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
                             _toastService.Show(response.Status.Message);
                         }
                     }
-
                 }
             }
 

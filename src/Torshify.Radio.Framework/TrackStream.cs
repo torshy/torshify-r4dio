@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading;
 using Microsoft.Practices.Prism.ViewModel;
 
 namespace Torshify.Radio.Framework
@@ -97,14 +97,6 @@ namespace Torshify.Radio.Framework
             set { Data = value(); }
         }
 
-        object IEnumerator.Current
-        {
-            get
-            {
-                return Current;
-            }
-        }
-
         #endregion Properties
 
         #region Methods
@@ -113,7 +105,7 @@ namespace Torshify.Radio.Framework
         {
         }
 
-        public bool MoveNext()
+        public bool MoveNext(CancellationToken token)
         {
             var result = _enumerator.MoveNext();
             if (result)

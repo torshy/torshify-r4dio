@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading;
 using EchoNest;
 using EchoNest.Playlist;
 using EchoNest.Song;
@@ -73,14 +73,6 @@ namespace Torshify.Radio.EchoNest.Views.Style
             }
         }
 
-        object IEnumerator.Current
-        {
-            get
-            {
-                return Current;
-            }
-        }
-
         #endregion Properties
 
         #region Methods
@@ -89,7 +81,7 @@ namespace Torshify.Radio.EchoNest.Views.Style
         {
         }
 
-        public bool MoveNext()
+        public bool MoveNext(CancellationToken token)
         {
             if (_songQueue == null)
             {
@@ -122,6 +114,11 @@ namespace Torshify.Radio.EchoNest.Views.Style
 
             while (_songQueue.Count > 0)
             {
+                if (token.IsCancellationRequested)
+                {
+                    token.ThrowIfCancellationRequested();
+                }
+
                 var song = _songQueue.Dequeue();
 
                 var queryResult = _radio.GetTracksByName(song.ArtistName + " " + song.Title).ToArray();
