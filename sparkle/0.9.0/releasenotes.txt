@@ -1,4 +1,5 @@
 0.9.0
 -----------------------
+* Updated Grooveshark
 * Changed the Favorites UI
 * Added a few more styles to Eclectic Station
