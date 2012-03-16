@@ -9,6 +9,7 @@ using System.Windows.Threading;
 
 using Microsoft.Practices.Prism;
 using Microsoft.Practices.Prism.Events;
+using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.WindowsAPICodePack.Taskbar;
 
@@ -24,21 +25,22 @@ namespace Torshify.Radio.Core.Startables
         #region Fields
 
         [Import]
+        private Dispatcher _dispatcher = null;
+        [Import]
         private IEventAggregator _eventAggregator = null;
         private JumpList _jumpList;
         [Import]
-        private IRadio _radio = null;
+        private ILoggerFacade _logger = null;
+        private ThumbnailToolBarButton _nextTrackButton;
         [Import("CorePlayer")]
         private ITrackPlayer _player = null;
+        [Import]
+        private IRadio _radio = null;
         [Import]
         private IRegionManager _regionManager = null;
         [Import]
         private ITileService _tileService = null;
-        [Import]
-        private Dispatcher _dispatcher = null;
-
         private ThumbnailToolBarButton _togglePlayPauseButton;
-        private ThumbnailToolBarButton _nextTrackButton;
 
         #endregion Fields
 
@@ -56,6 +58,25 @@ namespace Torshify.Radio.Core.Startables
 
                 _radio.CurrentTrackChanged += RadioOnCurrentTrackChanged;
                 _player.IsPlayingChanged += PlayerOnIsPlayingChanged;
+
+                if (Application.Current.MainWindow.IsLoaded)
+                {
+                    InitializeTaskBarButtons();
+                }
+                else
+                {
+                    Application.Current.MainWindow.Loaded += delegate
+                    {
+                        InitializeTaskBarButtons();
+                    };
+                }
+            }
+        }
+
+        private void InitializeTaskBarButtons()
+        {
+            try
+            {
                 _togglePlayPauseButton = new ThumbnailToolBarButton(Properties.Resources.play_circle, "Play");
                 _togglePlayPauseButton.Click += TogglePlayPauseButtonOnClick;
                 _togglePlayPauseButton.Enabled = false;
@@ -63,21 +84,18 @@ namespace Torshify.Radio.Core.Startables
                 _nextTrackButton.Click += NextTrackButtonOnClick;
                 _nextTrackButton.Enabled = false;
 
-                try
-                {
-                    TaskbarManager
-                        .Instance
-                        .ThumbnailToolBars
-                        .AddButtons(
-                            new WindowInteropHelper(
-                                Application.Current.MainWindow).Handle,
-                            _togglePlayPauseButton,
-                            _nextTrackButton);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
+                TaskbarManager
+                    .Instance
+                    .ThumbnailToolBars
+                    .AddButtons(
+                        new WindowInteropHelper(
+                            Application.Current.MainWindow).Handle,
+                        _togglePlayPauseButton,
+                        _nextTrackButton);
+            }
+            catch (Exception e)
+            {
+                _logger.Log(e.ToString(), Category.Exception, Priority.Medium);
             }
         }
 
