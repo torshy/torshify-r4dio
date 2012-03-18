@@ -1,8 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+
 using EchoNest;
 using EchoNest.Playlist;
 
@@ -35,15 +35,13 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
             string initialArtistName,
             IRadio radio,
             ILoggerFacade logger,
-            IToastService toastService,
-            ILoadingIndicatorService loadingIndicator)
+            IToastService toastService)
         {
             _currentTracks = new Track[0];
             _initialArtistName = initialArtistName;
             _radio = radio;
             _logger = logger;
             _toastService = toastService;
-            _loadingIndicator = loadingIndicator;
         }
 
         #endregion Constructors
@@ -78,7 +76,13 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
         {
             get
             {
-                return new LoveHateTrackStreamData();
+                return new LoveHateTrackStreamData
+                {
+                    InitialArtist = _initialArtistName,
+                    Name = _initialArtistName,
+                    Description = "Love/hate radio",
+                    Source = "Love/hate"
+                };
             }
         }
 
@@ -92,136 +96,133 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
 
         public bool MoveNext(CancellationToken token)
         {
-            using (_loadingIndicator.EnterLoadingBlock())
+            if (string.IsNullOrEmpty(_sessionId))
             {
-                if (string.IsNullOrEmpty(_sessionId))
+                using (var session = new EchoNestSession(EchoNestModule.ApiKey))
                 {
-                    using (var session = new EchoNestSession(EchoNestModule.ApiKey))
+                    var argument = new DynamicArgument();
+                    argument.Type = "artist-radio";
+                    argument.Artist.Add(_initialArtistName);
+                    argument.Dmca = true;
+
+                    var response = session.Query<Dynamic>().Execute(argument);
+
+                    if (response.Status.Code == ResponseCode.Success)
                     {
-                        var argument = new DynamicArgument();
-                        argument.Type = "artist-radio";
-                        argument.Artist.Add(_initialArtistName);
-                        argument.Dmca = true;
+                        _sessionId = response.SessionId;
 
-                        var response = session.Query<Dynamic>().Execute(argument);
+                        var song = response
+                            .Songs
+                            .FirstOrDefault(s => s.ArtistName.Equals(_initialArtistName, StringComparison.InvariantCultureIgnoreCase));
 
-                        if (response.Status.Code == ResponseCode.Success)
+                        if (song == null)
                         {
-                            _sessionId = response.SessionId;
-
-                            var song = response
-                                .Songs
-                                .FirstOrDefault(s => s.ArtistName.Equals(_initialArtistName, StringComparison.InvariantCultureIgnoreCase));
-
-                            if (song == null)
-                            {
-                                song = response.Songs.FirstOrDefault();
-                            }
-
-                            if (song != null)
-                            {
-                                if (token.IsCancellationRequested)
-                                {
-                                    token.ThrowIfCancellationRequested();
-                                }
-
-                                var queryResult = _radio.GetTracksByName(_initialArtistName + " " + song.Title);
-
-                                if (!queryResult.Any())
-                                {
-                                    queryResult = _radio.GetTracksByName(_initialArtistName);
-                                }
-
-                                _currentTracks =
-                                    queryResult
-                                        .Where(s => s.Artist.Equals(_initialArtistName, StringComparison.InvariantCultureIgnoreCase))
-                                        .Take(1)
-                                        .ToArray();
-
-                                if (!_currentTracks.Any())
-                                {
-                                    _toastService.Show("Unable to find any tracks matching the query");
-                                    return false;
-                                }
-
-                                return true;
-                            }
+                            song = response.Songs.FirstOrDefault();
                         }
-                        else
+
+                        if (song != null)
                         {
-                            _toastService.Show(response.Status.Message);
+                            if (token.IsCancellationRequested)
+                            {
+                                token.ThrowIfCancellationRequested();
+                            }
+
+                            var queryResult = _radio.GetTracksByName(_initialArtistName + " " + song.Title);
+
+                            if (!queryResult.Any())
+                            {
+                                queryResult = _radio.GetTracksByName(_initialArtistName);
+                            }
+
+                            _currentTracks =
+                                queryResult
+                                    .Where(s => s.Artist.Equals(_initialArtistName, StringComparison.InvariantCultureIgnoreCase))
+                                    .Take(1)
+                                    .ToArray();
+
+                            if (!_currentTracks.Any())
+                            {
+                                _toastService.Show("Unable to find any tracks matching the query");
+                                return false;
+                            }
+
+                            return true;
                         }
                     }
-                }
-                else
-                {
-                    using (var session = new EchoNestSession(EchoNestModule.ApiKey))
+                    else
                     {
-                        if (token.IsCancellationRequested)
+                        _toastService.Show(response.Status.Message);
+                    }
+                }
+            }
+            else
+            {
+                using (var session = new EchoNestSession(EchoNestModule.ApiKey))
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        token.ThrowIfCancellationRequested();
+                    }
+
+                    var argument = new DynamicArgument
+                    {
+                        SessionId = _sessionId
+                    };
+
+                    if (_likesCurrentTrack.HasValue)
+                    {
+                        if (!_likesCurrentTrack.Value)
                         {
-                            token.ThrowIfCancellationRequested();
+                            argument.Ban = "artist";
                         }
+                    }
 
-                        var argument = new DynamicArgument
-                        {
-                            SessionId = _sessionId
-                        };
+                    if (_currentTrackRating.HasValue)
+                    {
+                        argument.Rating = Convert.ToInt32(_currentTrackRating.GetValueOrDefault(1));
+                    }
 
-                        if (_likesCurrentTrack.HasValue)
+                    var response = session.Query<Dynamic>().Execute(argument);
+
+                    _likesCurrentTrack = null;
+                    _currentTrackRating = null;
+
+                    if (response.Status.Code == ResponseCode.Success)
+                    {
+                        var song = response.Songs.FirstOrDefault();
+
+                        if (song != null)
                         {
-                            if (!_likesCurrentTrack.Value)
+                            var queryResult = _radio.GetTracksByName(song.ArtistName + " " + song.Title);
+
+                            if (!queryResult.Any())
                             {
-                                argument.Ban = "artist";
+                                queryResult = _radio.GetTracksByName(song.ArtistName);
                             }
-                        }
 
-                        if (_currentTrackRating.HasValue)
-                        {
-                            argument.Rating = Convert.ToInt32(_currentTrackRating.GetValueOrDefault(1));
-                        }
+                            _currentTracks =
+                                queryResult
+                                    .Take(1)
+                                    .ToArray();
 
-                        var response = session.Query<Dynamic>().Execute(argument);
-
-                        _likesCurrentTrack = null;
-                        _currentTrackRating = null;
-
-                        if (response.Status.Code == ResponseCode.Success)
-                        {
-                            var song = response.Songs.FirstOrDefault();
-
-                            if (song != null)
+                            if (!_currentTracks.Any())
                             {
-                                var queryResult = _radio.GetTracksByName(song.ArtistName + " " + song.Title);
+                                _toastService.Show("Unable to find any tracks matching the query");
 
-                                if (!queryResult.Any())
+                                if (response.Songs.Any())
                                 {
-                                    queryResult = _radio.GetTracksByName(song.ArtistName);
+                                    return MoveNext(token);
                                 }
 
-                                _currentTracks =
-                                    queryResult
-                                        .Take(1)
-                                        .ToArray();
-
-                                if (!_currentTracks.Any())
-                                {
-                                    _toastService.Show("Unable to find any tracks matching the query");
-
-                                    if (response.Songs.Any())
-                                    {
-                                        return MoveNext(token);
-                                    }
-
-                                    return false;
-                                }
-
-                                return true;
+                                return false;
                             }
+
+                            return true;
                         }
-                        else
-                        {
-                            _toastService.Show(response.Status.Message);
-                        }
+                    }
+                    else
+                    {
+                        _toastService.Show(response.Status.Message);
                     }
                 }
             }

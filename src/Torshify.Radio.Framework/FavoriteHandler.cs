@@ -1,4 +1,5 @@
 using System.ComponentModel.Composition;
+using Microsoft.Practices.Prism.Logging;
 
 namespace Torshify.Radio.Framework
 {
@@ -18,6 +19,13 @@ namespace Torshify.Radio.Framework
         public IToastService ToastService
         {
             get;
+            set;
+        }
+
+        [Import]
+        public ILoggerFacade Logger
+        {
+            get; 
             set;
         }
 

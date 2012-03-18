@@ -1,7 +1,6 @@
-﻿using Torshify.Radio.EchoNest.Views.Similar.Tabs;
-using Torshify.Radio.Framework;
+﻿using Torshify.Radio.Framework;
 
-namespace Torshify.Radio.EchoNest.FavoriteHandlers
+namespace Torshify.Radio.EchoNest.Views.Similar.Tabs
 {
     public class SimilarArtistsFavoriteHandler : FavoriteHandler<TrackStreamFavorite>
     {
