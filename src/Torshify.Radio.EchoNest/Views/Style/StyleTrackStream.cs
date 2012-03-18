@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using EchoNest;
 using EchoNest.Playlist;
 using EchoNest.Song;
 
-using Torshify.Radio.EchoNest.Views.Similar.Tabs;
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Views.Style
@@ -69,7 +66,21 @@ namespace Torshify.Radio.EchoNest.Views.Style
         {
             get
             {
-                return new SimilarArtistsTrackStreamData();
+                return new StyleTrackStreamData
+                {
+                    Description = "Customised playlist",
+                    Name = "Eclectic",
+                    Source = "Eclectic",
+                    Moods = _argument.Moods.ToArray(),
+                    Styles = _argument.Styles.ToArray(),
+                    MinLoudness = _argument.MinLoudness,
+                    MinTempo = _argument.MinTempo,
+                    MinDanceability = _argument.MinDanceability,
+                    ArtistMinFamiliarity = _argument.ArtistMinFamiliarity,
+                    ArtistMinHotttnesss = _argument.ArtistMinHotttnesss,
+                    SongMinHotttnesss = _argument.SongMinHotttnesss,
+                    MinEnergy = _argument.MinEnergy
+                };
             }
         }
 
