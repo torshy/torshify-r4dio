@@ -23,6 +23,9 @@
             Property="FontSize"
             Value="12" />
         <Setter
+            Property="Focusable"
+            Value="False" />
+        <Setter
             Property="Template">
             <Setter.Value>
                 <ControlTemplate
