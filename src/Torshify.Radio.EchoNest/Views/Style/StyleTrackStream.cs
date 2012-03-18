@@ -66,10 +66,19 @@ namespace Torshify.Radio.EchoNest.Views.Style
         {
             get
             {
+                string description = string.Empty;
+
+                if  (_argument.Styles.Any() || _argument.Moods.Any())
+                {
+                    description += string.Join(", ", 
+                        _argument.Styles.Take(3).Select(s => s.Name).Concat(
+                        _argument.Moods.Take(3).Select(m => m.Name)));
+                }
+
                 return new StyleTrackStreamData
                 {
-                    Description = "Customised playlist",
-                    Name = "Eclectic",
+                    Description = description,
+                    Name = "Customised playlist",
                     Source = "Eclectic",
                     Artist = _argument.Artist.ToArray(),
                     Type = _argument.Type,
