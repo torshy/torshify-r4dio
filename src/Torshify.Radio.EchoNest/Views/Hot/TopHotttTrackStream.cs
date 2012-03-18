@@ -1,8 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+
 using EchoNest;
 using EchoNest.Artist;
 
@@ -62,7 +62,12 @@ namespace Torshify.Radio.EchoNest.Views.Hot
         {
             get
             {
-                return new TopHotttTrackStreamData();
+                return new TopHotttTrackStreamData
+                {
+                    Name = "Top hot artists",
+                    Description = "100 hottest artists radio",
+                    Source = "Hot artists"
+                };
             }
         }
 

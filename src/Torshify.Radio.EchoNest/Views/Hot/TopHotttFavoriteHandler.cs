@@ -1,8 +1,8 @@
 using Torshify.Radio.Framework;
 
-namespace Torshify.Radio.EchoNest.Views.LoveHate
+namespace Torshify.Radio.EchoNest.Views.Hot
 {
-    public class LoveHateFavoriteHandler : FavoriteHandler<TrackStreamFavorite>
+    public class TopHotttFavoriteHandler : FavoriteHandler<TrackStreamFavorite>
     {
         #region Methods
 
@@ -12,7 +12,7 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
 
             if (streamFavorite != null)
             {
-                return streamFavorite.StreamData is LoveHateTrackStreamData;
+                return streamFavorite.StreamData is TopHotttTrackStreamData;
             }
 
             return false;
@@ -20,11 +20,11 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
 
         protected override void Play(TrackStreamFavorite favorite)
         {
-            var data = favorite.StreamData as LoveHateTrackStreamData;
+            var data = favorite.StreamData as TopHotttTrackStreamData;
 
             if (data != null)
             {
-                Radio.Play(new LoveHateTrackStream(data.InitialArtist, Radio, ToastService));
+                Radio.Play(new TopHotttTrackStream(Radio));
             }
             else
             {
@@ -34,11 +34,11 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
 
         protected override void Queue(TrackStreamFavorite favorite)
         {
-            var data = favorite.StreamData as LoveHateTrackStreamData;
+            var data = favorite.StreamData as TopHotttTrackStreamData;
 
             if (data != null)
             {
-                Radio.Queue(new LoveHateTrackStream(data.InitialArtist, Radio, ToastService));
+                Radio.Queue(new TopHotttTrackStream(Radio));
             }
             else
             {

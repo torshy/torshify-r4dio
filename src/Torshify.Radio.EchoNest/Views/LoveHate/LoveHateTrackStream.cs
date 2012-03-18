@@ -6,8 +6,6 @@ using System.Threading;
 using EchoNest;
 using EchoNest.Playlist;
 
-using Microsoft.Practices.Prism.Logging;
-
 using Torshify.Radio.Framework;
 
 namespace Torshify.Radio.EchoNest.Views.LoveHate
@@ -17,8 +15,6 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
         #region Fields
 
         private readonly string _initialArtistName;
-        private readonly ILoadingIndicatorService _loadingIndicator;
-        private readonly ILoggerFacade _logger;
         private readonly IRadio _radio;
         private readonly IToastService _toastService;
 
@@ -34,13 +30,11 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
         public LoveHateTrackStream(
             string initialArtistName,
             IRadio radio,
-            ILoggerFacade logger,
             IToastService toastService)
         {
             _currentTracks = new Track[0];
             _initialArtistName = initialArtistName;
             _radio = radio;
-            _logger = logger;
             _toastService = toastService;
         }
 

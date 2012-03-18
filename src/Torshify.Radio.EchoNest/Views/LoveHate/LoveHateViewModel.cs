@@ -260,7 +260,6 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
             {
                 _loveHateTrackStream = new LoveHateTrackStream(Radio.CurrentTrack.Artist,
                                                                Radio,
-                                                               Logger,
                                                                ToastService);
             }
         }
@@ -312,7 +311,7 @@ namespace Torshify.Radio.EchoNest.Views.LoveHate
 
         private void Execute(string artistName)
         {
-            _loveHateTrackStream = new LoveHateTrackStream(artistName, Radio, Logger, ToastService);
+            _loveHateTrackStream = new LoveHateTrackStream(artistName, Radio, ToastService);
 
             Radio.Play(_loveHateTrackStream);
         }
