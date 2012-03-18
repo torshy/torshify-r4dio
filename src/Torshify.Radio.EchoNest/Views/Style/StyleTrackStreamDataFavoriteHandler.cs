@@ -59,6 +59,10 @@ namespace Torshify.Radio.EchoNest.Views.Style
             argument.ArtistMinFamiliarity = data.ArtistMinFamiliarity;
             argument.ArtistMinHotttnesss = data.ArtistMinHotttnesss;
             argument.SongMinHotttnesss = data.SongMinHotttnesss;
+            argument.Type = data.Type;
+            FillTermList(data.Artist, argument.Artist);
+            FillTermList(data.Styles, argument.Styles);
+            FillTermList(data.Moods, argument.Moods);
             return argument;
         }
 
@@ -66,7 +70,7 @@ namespace Torshify.Radio.EchoNest.Views.Style
         {
             foreach (var term in terms)
             {
-                // TODO : TermList stuff in EchoNest-Sharp needs to be redone
+                target.Add(term);
             }
         }
 

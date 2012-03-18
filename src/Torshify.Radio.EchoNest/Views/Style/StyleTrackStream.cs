@@ -71,6 +71,8 @@ namespace Torshify.Radio.EchoNest.Views.Style
                     Description = "Customised playlist",
                     Name = "Eclectic",
                     Source = "Eclectic",
+                    Artist = _argument.Artist.ToArray(),
+                    Type = _argument.Type,
                     Moods = _argument.Moods.ToArray(),
                     Styles = _argument.Styles.ToArray(),
                     MinLoudness = _argument.MinLoudness,

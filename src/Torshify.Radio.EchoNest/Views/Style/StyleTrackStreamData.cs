@@ -4,7 +4,38 @@ using Term = EchoNest.Term;
 namespace Torshify.Radio.EchoNest.Views.Style
 {
     public class StyleTrackStreamData : TrackStreamData
-    {
+    {        
+        /// <summary>
+        ///     Name(s) of seed artist(s) for the playlist
+        ///     Multiples allowed (no more than 5 total total artist_id, artist, track_id, and song_id parameters)
+        /// </summary>
+        /// <example>
+        ///     Weezer, the+beatles
+        /// </example>
+        public Term[] Artist
+        {
+            get;
+            set;
+        }
+        /// <summary>
+        ///     the type of the playlist to be generated.
+        /// </summary>
+        /// <example>
+        ///     <list type = "bullet">
+        ///         <item>artist - plays songs for the given artists</item>
+        ///         <item>artist-radio - plays songs for the given artists and similar artists</item>
+        ///         <item>artist-description - plays songs from artists matching the given description</item>
+        ///         <item>song-radio - plays songs similar to the song specified.</item>
+        ///         <item>catalog - the playlist is personalized based upon the given seed catalog. Results are limited to items listed in the given catalog.</item>
+        ///         <item>catalog-radio - the playlist is personalized based upon the given seed catalog. Results are limited to items listed in the given catalog and items that are similar to items in the given catalog.</item>
+        ///     </list>
+        /// </example>
+        public string Type
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         ///     The artist_pick parameter is used to determine how songs are picked for each artist in artist-type playlists. If the asc or desc suffix is ommitted, artist_pick defaults to descending.
         /// </summary>
