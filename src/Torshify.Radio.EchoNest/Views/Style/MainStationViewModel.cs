@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Globalization;
 using System.Linq;
@@ -21,6 +22,7 @@ using Raven.Client;
 using Torshify.Radio.EchoNest.Views.Style.Models;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
+using Torshify.Radio.Framework.Common;
 
 namespace Torshify.Radio.EchoNest.Views.Style
 {
@@ -94,6 +96,8 @@ namespace Torshify.Radio.EchoNest.Views.Style
             ToggleStyleCommand = new StaticCommand<TermModel>(ExecuteToggleStyle);
             ToggleMoodCommand = new StaticCommand<TermModel>(ExecuteToggleMood);
             StartRadioCommand = new AutomaticCommand(ExecuteStartRadio, CanExecuteStartRadio);
+            IncreaseBoostCommand = new StaticCommand<TermModel>(ExecuteIncreaseBoost);
+            DecreaseBoostCommand = new StaticCommand<TermModel>(ExecuteDecreaseBoost);
             Tempo = new Range();
             Tempo.Rounding = MidpointRounding.ToEven;
             Tempo.RangeChanged += MetricChanged;
@@ -131,6 +135,16 @@ namespace Torshify.Radio.EchoNest.Views.Style
         {
             get;
             private set;
+        }
+
+        public StaticCommand<TermModel> IncreaseBoostCommand
+        {
+            get; private set;
+        }
+
+        public StaticCommand<TermModel> DecreaseBoostCommand
+        {
+            get; private set;
         }
 
         public IEnumerable<TermModel> Moods
@@ -422,6 +436,32 @@ namespace Torshify.Radio.EchoNest.Views.Style
             navigationContext.NavigationService.Journal.CurrentEntry.Uri = new Uri(newUri, UriKind.RelativeOrAbsolute);
         }
 
+        private void ExecuteDecreaseBoost(TermModel model)
+        {
+            if (!model.Boost.HasValue)
+            {
+                model.Boost = 1.0;
+            }
+
+            if (DoubleUtilities.GreaterThan(model.Boost.GetValueOrDefault(), 0.0))
+            {
+                model.Boost -= 0.5;
+            }
+        }
+
+        private void ExecuteIncreaseBoost(TermModel model)
+        {
+            if (!model.Boost.HasValue)
+            {
+                model.Boost = 1.0;
+            }
+
+            if (DoubleUtilities.LessThan(model.Boost.GetValueOrDefault(), 5.0))
+            {
+                model.Boost += 0.5;
+            }
+        }
+
         private double? GetParameterValue(string parameterName, Microsoft.Practices.Prism.UriQuery query)
         {
             if (!string.IsNullOrEmpty(query[parameterName]))
@@ -684,6 +724,7 @@ namespace Torshify.Radio.EchoNest.Views.Style
                 {
                     foreach (var termModel in task.Result)
                     {
+                        termModel.PropertyChanged += TermModelOnPropertyChanged;
                         _moods.Add(termModel);
                     }
                 }, _scheduler);
@@ -744,7 +785,7 @@ namespace Torshify.Radio.EchoNest.Views.Style
 
                                 i++;
                             }
-                            
+
                             session.SaveChanges();
                         }
                     }
@@ -752,7 +793,7 @@ namespace Torshify.Radio.EchoNest.Views.Style
                     {
                         styles.AddRange(result.OrderBy(s => s.Index));
                     }
-                    
+
                     return styles.OrderBy(s => s.Name);
                 })
                 .ContinueWith(task =>
@@ -772,9 +813,10 @@ namespace Torshify.Radio.EchoNest.Views.Style
                 {
                     foreach (var termModel in task.Result)
                     {
+                        termModel.PropertyChanged += TermModelOnPropertyChanged;
                         _styles.Add(termModel);
                     }
-                    
+
                 }, _scheduler);
         }
 
@@ -793,6 +835,15 @@ namespace Torshify.Radio.EchoNest.Views.Style
                 }
 
                 return new ListTermsItem[0];
+            }
+        }
+
+        private void TermModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            if (propertyChangedEventArgs.PropertyName == "Boost")
+            {
+                _fetchPreviewTimer.Stop();
+                _fetchPreviewTimer.Start();
             }
         }
 

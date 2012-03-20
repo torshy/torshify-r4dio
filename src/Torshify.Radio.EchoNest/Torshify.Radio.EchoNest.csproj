@@ -102,6 +102,8 @@
     <Compile Include="Views\Hot\TopHotttFavoriteHandler.cs" />
     <Compile Include="Views\LoveHate\LoveHateFavoriteHandler.cs" />
     <Compile Include="Views\Similar\Tabs\SimilarArtistsFavoriteHandler.cs" />
+    <Compile Include="Views\Style\ColorExtensions.cs" />
+    <Compile Include="Views\Style\HslColor.cs" />
     <Compile Include="Views\Style\StyleTrackStreamDataFavoriteHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -208,6 +210,7 @@
     <Compile Include="Views\Style\Models\Range.cs" />
     <Compile Include="Views\Style\StyleTrackStream.cs" />
     <Compile Include="Views\Style\StyleTrackStreamData.cs" />
+    <Compile Include="Views\Style\ValueToIntensityBrushConverter.cs" />
     <EmbeddedResource Include="Properties\Strings.no.resx" />
     <EmbeddedResource Include="Properties\Strings.en.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">

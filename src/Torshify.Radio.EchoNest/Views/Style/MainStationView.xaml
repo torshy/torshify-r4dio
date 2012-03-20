@@ -9,6 +9,8 @@
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
+    xmlns:Models="clr-namespace:Torshify.Radio.EchoNest.Views.Style.Models"
+    xmlns:EchoNest="clr-namespace:Torshify.Radio.EchoNest.Views.Style"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -159,6 +161,91 @@
             x:Key="InvertedBooleanToVisibilityConverter"
             Reverse="True"
             Collapse="True" />
+        <EchoNest:ValueToIntensityBrushConverter
+            x:Key="ValueToIntensityBrushConverter"
+            LeastIntensiveColor="White"
+            Maximum="5.0" />
+        <DataTemplate
+            DataType="{x:Type Models:TermModel}">
+            <Grid
+                x:Name="grid">
+                <Rectangle
+                    Height="5"
+                    VerticalAlignment="Bottom"
+                    Margin="-4.5,0,-4.5,-4.5"
+                    Name="rect"
+                    Visibility="Hidden"
+                    Fill="{Binding Boost, Converter={StaticResource ValueToIntensityBrushConverter}}" />
+                <TextBlock
+                    Name="Tb"
+                    Text="{Binding Name}"
+                    VerticalAlignment="Center" />
+                <Popup
+                    Name="Popup"
+                    IsOpen="False"
+                    Placement="Bottom"
+                    PlacementTarget="{Binding RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
+                    MinWidth="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
+                    <Border
+                        Background="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}"
+                        BorderBrush="{DynamicResource {x:Static Framework:AppTheme.AccentBrushKey}}"
+                        BorderThickness="1"
+                        Padding="2">
+                        <UniformGrid
+                            Columns="2">
+                            <Button
+                                Height="20"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                BorderThickness="0"
+                                Command="{Binding DataContext.DecreaseBoostCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding}">
+                                <Path
+                                    Stretch="Uniform"
+                                    Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                                    Data="{DynamicResource Geometry_ArrowDown}" />
+                            </Button>
+                            <Button
+                                Height="20"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                BorderThickness="0"
+                                Command="{Binding DataContext.IncreaseBoostCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding}">
+                                <Path
+                                    Stretch="Uniform"
+                                    Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
+                                    Data="{DynamicResource Geometry_ArrowUp}" />
+                            </Button>
+                        </UniformGrid>
+                    </Border>
+                </Popup>
+            </Grid>
+            <DataTemplate.Triggers>
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition
+                            Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
+                            Value="True" />
+                        <Condition
+                            Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
+                            Value="True" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter
+                        Property="IsOpen"
+                        Value="True"
+                        TargetName="Popup" />
+                </MultiDataTrigger>
+                <DataTrigger
+                    Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType={x:Type ToggleButton}}}"
+                    Value="True">
+                    <Setter
+                        Property="Visibility"
+                        Value="Visible"
+                        TargetName="rect" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
     </UserControl.Resources>
     <DockPanel>
         <Button
@@ -255,8 +342,10 @@
                                     x:Name="btn"
                                     BorderBrush="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
                                     BorderThickness="0.5"
-                                    Content="{Binding Name}"
+                                    Content="{Binding}"
                                     Margin="1"
+                                    VerticalContentAlignment="Stretch"
+                                    HorizontalContentAlignment="Stretch"
                                     FontSize="{Binding Count, Converter={StaticResource CountToFontSizeConverter}}"
                                     IsChecked="{Binding IsSelected, Mode=TwoWay}"
                                     Command="{Binding DataContext.ToggleStyleCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
@@ -296,7 +385,7 @@
                                     x:Name="btn"
                                     BorderBrush="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
                                     BorderThickness="0.5"
-                                    Content="{Binding Name}"
+                                    Content="{Binding}"
                                     FontSize="{Binding Count, Converter={StaticResource CountToFontSizeConverter}}"
                                     Margin="1"
                                     IsChecked="{Binding IsSelected, Mode=TwoWay}"

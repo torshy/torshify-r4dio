@@ -1103,7 +1103,11 @@
     <Style
         TargetType="{x:Type ToggleButton}"
         BasedOn="{StaticResource {x:Type ButtonBase}}" />
-
+    
+    <Style
+        TargetType="{x:Type RepeatButton}"
+        BasedOn="{StaticResource {x:Type ButtonBase}}" />
+    
     <Style
         TargetType="{x:Type Controls:CircleButton}">
         <Setter
