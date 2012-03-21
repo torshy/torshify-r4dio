@@ -123,8 +123,14 @@
   <data name="Add_To_Queue" xml:space="preserve">
     <value>Legg til spillekø</value>
   </data>
+  <data name="Decrease_Boost_Term" xml:space="preserve">
+    <value>Vekt denne mindre</value>
+  </data>
   <data name="Hate" xml:space="preserve">
     <value>Hater</value>
+  </data>
+  <data name="Increase_Boost_Term" xml:space="preserve">
+    <value>Vekt denne mer</value>
   </data>
   <data name="Love" xml:space="preserve">
     <value>Liker</value>

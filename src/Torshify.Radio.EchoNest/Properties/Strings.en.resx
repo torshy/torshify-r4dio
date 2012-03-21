@@ -123,8 +123,14 @@
   <data name="Add_To_Queue" xml:space="preserve">
     <value>Add to queue</value>
   </data>
+  <data name="Decrease_Boost_Term" xml:space="preserve">
+    <value>Decrease the weight of the term</value>
+  </data>
   <data name="Hate" xml:space="preserve">
     <value>Hate</value>
+  </data>
+  <data name="Increase_Boost_Term" xml:space="preserve">
+    <value>Increase the weight of the term</value>
   </data>
   <data name="Love" xml:space="preserve">
     <value>Love</value>

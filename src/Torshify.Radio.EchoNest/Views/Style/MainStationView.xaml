@@ -11,6 +11,9 @@
     xmlns:Behaviors="clr-namespace:Torshify.Radio.Framework.Behaviors;assembly=Torshify.Radio.Framework"
     xmlns:Models="clr-namespace:Torshify.Radio.EchoNest.Views.Style.Models"
     xmlns:EchoNest="clr-namespace:Torshify.Radio.EchoNest.Views.Style"
+    xmlns:Engine="clr-namespace:WPFLocalizeExtension.Engine;assembly=WPFLocalizeExtension"
+    Engine:LocalizeDictionary.DesignCulture="en-US"
+    xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
@@ -200,7 +203,8 @@
                                 VerticalContentAlignment="Center"
                                 BorderThickness="0"
                                 Command="{Binding DataContext.DecreaseBoostCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                CommandParameter="{Binding}">
+                                CommandParameter="{Binding}"
+                                ToolTip="{lex:LocText Key=Decrease_Boost_Term, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
                                 <Path
                                     Stretch="Uniform"
                                     Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"
@@ -213,7 +217,8 @@
                                 VerticalContentAlignment="Center"
                                 BorderThickness="0"
                                 Command="{Binding DataContext.IncreaseBoostCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                CommandParameter="{Binding}">
+                                CommandParameter="{Binding}"
+                                ToolTip="{lex:LocText Key=Increase_Boost_Term, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
                                 <Path
                                     Stretch="Uniform"
                                     Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}"

@@ -79,11 +79,29 @@ namespace Torshify.Radio.EchoNest.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @Decrease_Boost_Term.
+        /// </summary>
+        internal static string Decrease_Boost_Term {
+            get {
+                return ResourceManager.GetString("Decrease_Boost_Term", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @Hate.
         /// </summary>
         internal static string Hate {
             get {
                 return ResourceManager.GetString("Hate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Increase_Boost_Term.
+        /// </summary>
+        internal static string Increase_Boost_Term {
+            get {
+                return ResourceManager.GetString("Increase_Boost_Term", resourceCulture);
             }
         }
         
