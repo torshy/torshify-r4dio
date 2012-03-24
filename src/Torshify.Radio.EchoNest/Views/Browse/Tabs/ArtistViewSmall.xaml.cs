@@ -31,6 +31,11 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
                 {
                     var parent = container.FindVisualDescendantByType<DataGrid>();
 
+                    if (parent == null)
+                    {
+                        continue;
+                    }
+
                     if (parent != e.Source)
                     {
                         if (Keyboard.Modifiers != ModifierKeys.Control)

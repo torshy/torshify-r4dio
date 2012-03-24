@@ -98,6 +98,8 @@ namespace Torshify.Radio.EchoNest.Views.Style
             StartRadioCommand = new AutomaticCommand(ExecuteStartRadio, CanExecuteStartRadio);
             IncreaseBoostCommand = new StaticCommand<TermModel>(ExecuteIncreaseBoost);
             DecreaseBoostCommand = new StaticCommand<TermModel>(ExecuteDecreaseBoost);
+            RequireTermCommand = new StaticCommand<TermModel>(ExecuteRequireTerm);
+            BanTermCommand = new StaticCommand<TermModel>(ExecuteBanTerm);
             Tempo = new Range();
             Tempo.Rounding = MidpointRounding.ToEven;
             Tempo.RangeChanged += MetricChanged;
@@ -118,6 +120,16 @@ namespace Torshify.Radio.EchoNest.Views.Style
         #endregion Constructors
 
         #region Properties
+
+        public StaticCommand<TermModel> BanTermCommand
+        {
+            get; private set;
+        }
+
+        public StaticCommand<TermModel> RequireTermCommand
+        {
+            get; private set;
+        }
 
         public AutomaticCommand StartRadioCommand
         {
@@ -436,12 +448,29 @@ namespace Torshify.Radio.EchoNest.Views.Style
             navigationContext.NavigationService.Journal.CurrentEntry.Uri = new Uri(newUri, UriKind.RelativeOrAbsolute);
         }
 
+        private void ExecuteBanTerm(TermModel model)
+        {
+            model.Require = false;
+            model.Ban = true;
+            model.Boost = null;
+        }
+
+        private void ExecuteRequireTerm(TermModel model)
+        {
+            model.Require = true;
+            model.Ban = false;
+            model.Boost = null;
+        }
+
         private void ExecuteDecreaseBoost(TermModel model)
         {
             if (!model.Boost.HasValue)
             {
                 model.Boost = 1.0;
             }
+
+            model.Ban = false;
+            model.Require = false;
 
             if (DoubleUtilities.GreaterThan(model.Boost.GetValueOrDefault(), 0.0))
             {
@@ -455,6 +484,9 @@ namespace Torshify.Radio.EchoNest.Views.Style
             {
                 model.Boost = 1.0;
             }
+
+            model.Ban = false;
+            model.Require = false;
 
             if (DoubleUtilities.LessThan(model.Boost.GetValueOrDefault(), 5.0))
             {
@@ -838,9 +870,11 @@ namespace Torshify.Radio.EchoNest.Views.Style
             }
         }
 
-        private void TermModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        private void TermModelOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (propertyChangedEventArgs.PropertyName == "Boost")
+            if (e.PropertyName == "Boost" 
+                || e.PropertyName == "Ban"
+                || e.PropertyName == "Require")
             {
                 _fetchPreviewTimer.Stop();
                 _fetchPreviewTimer.Start();
