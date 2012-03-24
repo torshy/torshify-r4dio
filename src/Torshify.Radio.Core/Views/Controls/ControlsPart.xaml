@@ -95,6 +95,7 @@
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
                 <Button
+                    Focusable="False"
                     BorderThickness="0"
                     Command="{Binding TogglePlayPauseCommand}"
                     Content="{Binding}">
@@ -161,6 +162,7 @@
                     </Button.ContentTemplate>
                 </Button>
                 <Button
+                    Focusable="False"
                     BorderThickness="0"
                     Command="{Binding NextTrackCommand}">
                     <Button.ContentTemplate>
@@ -196,6 +198,7 @@
                     </Button.ContentTemplate>
                 </Button>
                 <Button
+                    Focusable="False"
                     BorderThickness="0"
                     Height="30"
                     Background="Transparent"
