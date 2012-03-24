@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
-
-using Microsoft.Practices.Prism;
+using EchoNest;
+using EchoNest.Artist;
 using Microsoft.Practices.Prism.Events;
 using Microsoft.Practices.Prism.Logging;
 using Microsoft.Practices.Prism.Regions;
@@ -15,6 +15,7 @@ using Torshify.Radio.EchoNest.Views.Browse.Tabs.Models;
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Commands;
 using Torshify.Radio.Framework.Events;
+using UriQuery = Microsoft.Practices.Prism.UriQuery;
 
 namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
 {
@@ -103,7 +104,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
         [Import]
         public ILoggerFacade Logger
         {
-            get; 
+            get;
             set;
         }
 
@@ -134,6 +135,57 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
             CurrentArtist = new ArtistModel();
             CurrentArtist.Name = navigationContext.Parameters["artistName"];
 
+            // Retrieve artist information
+            Task.Factory.StartNew(state =>
+            {
+                var artist = (ArtistModel)state;
+                using(LoadingIndicatorService.EnterLoadingBlock())
+                {
+                    using(var session = new EchoNestSession(EchoNestModule.ApiKey))
+                    {
+                        var response = session.Query<Profile>().Execute(artist.Name, 
+                            ArtistBucket.Images | 
+                            ArtistBucket.YearsActive | 
+                            ArtistBucket.Biographies);
+
+                        if (response != null && response.Status.Code == ResponseCode.Success)
+                        {
+                            var image = response.Artist.Images.FirstOrDefault();
+                            if (image != null)
+                            {
+                                artist.ArtistInfo.Image = image.Url;
+                            }
+
+                            var biography = response.Artist.Biographies.OrderByDescending(b => b.Text.Length).FirstOrDefault();
+                            if (biography != null)
+                            {
+                                artist.ArtistInfo.Biography = biography.Text;
+                            }
+
+                            if (response.Artist.YearsActive.Count > 0)
+                            {
+                                var @select = response.Artist.YearsActive.Select(t => t.Start + "-" + (t.End.HasValue ? t.End.Value.ToString() : string.Empty));
+                                artist.ArtistInfo.YearsActive = string.Join(", ", @select);
+                            }
+                        }
+                    }
+                }
+
+                artist.ArtistInfo.Owner = new TrackContainerOwner(CurrentArtist.Name);
+            }, CurrentArtist)
+            .ContinueWith(task =>
+            {
+                if (task.IsFaulted && task.Exception != null)
+                {
+                    task.Exception.Handle(e =>
+                    {
+                        Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
+                        return true;
+                    });
+                }
+            });
+
+            // Retrieve albums
             Task.Factory
               .StartNew(state =>
               {
@@ -147,7 +199,7 @@ namespace Torshify.Radio.EchoNest.Views.Browse.Tabs
               {
                   if (task.Exception != null)
                   {
-                      task.Exception.Handle(e=>
+                      task.Exception.Handle(e =>
                       {
                           Logger.Log(e.ToString(), Category.Exception, Priority.Medium);
                           return true;

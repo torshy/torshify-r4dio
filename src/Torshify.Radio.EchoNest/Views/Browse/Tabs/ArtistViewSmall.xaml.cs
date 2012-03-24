@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
-
 using Torshify.Radio.Framework;
 using Torshify.Radio.Framework.Controls;
 

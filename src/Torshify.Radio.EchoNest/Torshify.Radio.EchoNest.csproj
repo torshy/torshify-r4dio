@@ -99,6 +99,8 @@
     </Compile>
     <Compile Include="EchoNestEventsHandler.cs" />
     <Compile Include="EchoNestModule.cs" />
+    <Compile Include="Views\Browse\Tabs\Models\ArtistInformationContainer.cs" />
+    <Compile Include="Views\Browse\Tabs\TrackContainerTemplateSelector.cs" />
     <Compile Include="Views\Hot\TopHotttFavoriteHandler.cs" />
     <Compile Include="Views\LoveHate\LoveHateFavoriteHandler.cs" />
     <Compile Include="Views\Similar\Tabs\SimilarArtistsFavoriteHandler.cs" />

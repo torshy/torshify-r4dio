@@ -11,7 +11,9 @@
     Engine:LocalizeDictionary.DesignCulture="en-US"
     xmlns:lex="clr-namespace:WPFLocalizeExtension.Extensions;assembly=WPFLocalizeExtension"
     xmlns:Converters="clr-namespace:Torshify.Radio.Framework.Converters;assembly=Torshify.Radio.Framework"
-    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework" mc:Ignorable="d"
+    xmlns:Controls="clr-namespace:Torshify.Radio.Framework.Controls;assembly=Torshify.Radio.Framework"
+    xmlns:Tabs="clr-namespace:Torshify.Radio.EchoNest.Views.Browse.Tabs"
+    mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
     <UserControl.Resources>
@@ -19,33 +21,67 @@
             x:Key="BooleanToVisibilityConverter" />
         <Converters:ImageLoaderConverter
             x:Key="ImageLoaderConverter" />
-    </UserControl.Resources>
-    <Grid>
-        <TreeView
-            x:Name="_albumsTreeView"
-            ItemsSource="{Binding CurrentArtist.Albums}"
-            VirtualizingStackPanel.IsVirtualizing="True"
-            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-            ScrollViewer.PanningMode="VerticalOnly">
-            <TreeView.ItemContainerStyle>
-                <Style
-                    TargetType="{x:Type TreeViewItem}">
-                    <Setter
-                        Property="IsExpanded"
-                        Value="True" />
-                    <Setter
-                        Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate
-                                TargetType="{x:Type TreeViewItem}">
-                                <ContentPresenter
-                                    ContentSource="Header" />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TreeView.ItemContainerStyle>
-            <TreeView.ItemTemplate>
+        <PopupAnimation
+            x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">Fade</PopupAnimation>
+        <Tabs:TrackContainerTemplateSelector
+            x:Key="TrackContainerTemplateSelector">
+            <Tabs:TrackContainerTemplateSelector.ArtistInfoTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <Controls:ImageWithPlaceholder
+                            Height="128"
+                            DockPanel.Dock="Left"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Stretch="Uniform"
+                            ImageUri="{Binding Image}"
+                            InitialImage="pack://siteoforigin:,,,/Resources/no-cover.png" />
+                        <DockPanel
+                            Margin="8,0,0,0">
+                            <DockPanel
+                                DockPanel.Dock="Top">
+                                <TextBlock
+                                    DockPanel.Dock="Right"
+                                    Text="{Binding YearsActive}"
+                                    Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
+                                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
+                                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}" />
+                                <TextBlock
+                                    Text="{Binding Owner.Name}"
+                                    TextTrimming="CharacterEllipsis"
+                                    Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
+                                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}" />
+                            </DockPanel>
+                            <TextBlock
+                                x:Name="bioText"
+                                Text="{Binding Biography}"
+                                FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeSmall}}"
+                                VerticalAlignment="Top"
+                                ToolTipService.Placement="Relative"
+                                ToolTipService.VerticalOffset="-4"
+                                ToolTipService.HorizontalOffset="-4"
+                                TextWrapping="WrapWithOverflow"
+                                TextTrimming="CharacterEllipsis"
+                                Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
+                                MaxHeight="70">
+                                <TextBlock.ToolTip>
+                                     <ToolTip
+                                        BorderThickness="0"
+                                        Width="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
+                                        <TextBlock
+                                            Text="{Binding Biography}"
+                                            FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeSmall}}"
+                                            TextWrapping="WrapWithOverflow"
+                                            TextTrimming="CharacterEllipsis"
+                                            Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                                    </ToolTip>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                        </DockPanel>
+                    </DockPanel>
+                </DataTemplate>
+            </Tabs:TrackContainerTemplateSelector.ArtistInfoTemplate>
+            <Tabs:TrackContainerTemplateSelector.AlbumTemplate>
                 <DataTemplate>
                     <DockPanel
                         Margin="0,12,0,0">
@@ -134,19 +170,19 @@
                             DockPanel.Dock="Top"
                             Focusable="False">
                                 <Hyperlink
-                                    Focusable="False"
-                                    Command="{Binding DataContext.GoToAlbumCommand, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
-                                    CommandParameter="{Binding}">
+                                Focusable="False"
+                                Command="{Binding DataContext.GoToAlbumCommand, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
+                                CommandParameter="{Binding}">
                                     <TextBlock
-                                        Text="{Binding Name, Mode=OneTime}"
-                                        TextTrimming="CharacterEllipsis"
-                                        FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
-                                        FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
-                                        Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}">
+                                    Text="{Binding Name, Mode=OneTime}"
+                                    TextTrimming="CharacterEllipsis"
+                                    FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}"
+                                    FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
+                                    Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}">
                                         <i:Interaction.Behaviors>
                                             <Behaviors:AlbumRelatedCommandBarBehavior
-                                                AlbumName="{Binding Name}"
-                                                ArtistName="{Binding Owner.Name}" />
+                                            AlbumName="{Binding Name}"
+                                            ArtistName="{Binding Owner.Name}" />
                                         </i:Interaction.Behaviors>
                                     </TextBlock>
                                 </Hyperlink>
@@ -186,7 +222,35 @@
                         </DataGrid>
                     </DockPanel>
                 </DataTemplate>
-            </TreeView.ItemTemplate>
+            </Tabs:TrackContainerTemplateSelector.AlbumTemplate>
+        </Tabs:TrackContainerTemplateSelector>
+    </UserControl.Resources>
+    <Grid>
+        <TreeView
+            x:Name="_albumsTreeView"
+            ItemsSource="{Binding CurrentArtist.Albums}"
+            VirtualizingStackPanel.IsVirtualizing="True"
+            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+            ScrollViewer.PanningMode="VerticalOnly"
+            ItemTemplateSelector="{StaticResource TrackContainerTemplateSelector}">
+            <TreeView.ItemContainerStyle>
+                <Style
+                    TargetType="{x:Type TreeViewItem}">
+                    <Setter
+                        Property="IsExpanded"
+                        Value="True" />
+                    <Setter
+                        Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate
+                                TargetType="{x:Type TreeViewItem}">
+                                <ContentPresenter
+                                    ContentSource="Header" />
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TreeView.ItemContainerStyle>
         </TreeView>
     </Grid>
 </UserControl>

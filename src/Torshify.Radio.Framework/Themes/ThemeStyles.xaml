@@ -25,6 +25,9 @@
             Property="HasDropShadow"
             Value="True" />
         <Setter
+            Property="BorderThickness"
+            Value="2" />
+        <Setter
             Property="Foreground"
             Value="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}" />
         <Setter
@@ -39,7 +42,7 @@
                         Height="{TemplateBinding Height}">
                         <Border
                             BorderBrush="{DynamicResource {x:Static Framework:AppTheme.ContrastBackgroundKey}}"
-                            BorderThickness="2">
+                            BorderThickness="{TemplateBinding BorderThickness}">
                             <Grid
                                 Background="{DynamicResource {x:Static Framework:AppTheme.BackgroundBrushKey}}">
                                 <ContentPresenter
