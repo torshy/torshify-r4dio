@@ -13,7 +13,7 @@ namespace Torshify.Radio.EchoNest.Views.Hot
         public HotArtistsViewMedium()
         {
             InitializeComponent();
-            Scroller.MouseMove += ScrollerOnMouseMove;
+            //Scroller.MouseMove += ScrollerOnMouseMove;
             Scroller.PreviewMouseWheel += ScrollerOnMouseWheel;
         }
 

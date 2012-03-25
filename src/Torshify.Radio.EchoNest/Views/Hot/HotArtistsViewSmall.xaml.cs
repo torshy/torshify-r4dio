@@ -14,7 +14,7 @@ namespace Torshify.Radio.EchoNest.Views.Hot
         {
             InitializeComponent();
 
-            Scroller.MouseMove += ScrollerOnMouseMove;
+            //Scroller.MouseMove += ScrollerOnMouseMove;
             Scroller.PreviewMouseWheel += ScrollerOnMouseWheel;
         }
 
