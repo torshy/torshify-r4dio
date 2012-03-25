@@ -55,7 +55,7 @@ namespace Torshify.Radio.Spotify
 
         public void Initialize()
         {
-#if !DEBUG
+            #if !DEBUG
             var processes = Process.GetProcesses().Where(p => p.ProcessName.StartsWith("Torshify.Origo.Host"));
 
             if (!processes.Any())
@@ -67,11 +67,30 @@ namespace Torshify.Radio.Spotify
 
                 if (File.Exists(origoPath))
                 {
-                    ProcessStartInfo startInfo = new ProcessStartInfo(origoPath);
-                    startInfo.WorkingDirectory = thisAssemblyDirectory;
-                    startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    _orgioProcess = Process.Start(startInfo);
-                    _orgioProcess.Refresh();
+                    const uint NORMAL_PRIORITY_CLASS = 0x0020;
+
+                    bool retValue;
+                    string Application = origoPath;
+                    PROCESS_INFORMATION pInfo = new PROCESS_INFORMATION();
+                    STARTUPINFO sInfo = new STARTUPINFO();
+                    sInfo.wShowWindow = 0;
+                    sInfo.dwFlags = 0x00000001;
+                    SECURITY_ATTRIBUTES pSec = new SECURITY_ATTRIBUTES();
+                    SECURITY_ATTRIBUTES tSec = new SECURITY_ATTRIBUTES();
+                    pSec.nLength = Marshal.SizeOf(pSec);
+                    tSec.nLength = Marshal.SizeOf(tSec);
+
+                    //Open Notepad
+                    retValue = CreateProcess(Application, string.Empty,
+                        ref pSec, ref tSec, false, NORMAL_PRIORITY_CLASS,
+                        IntPtr.Zero, null, ref sInfo, out pInfo);
+
+                    //ProcessStartInfo startInfo = new ProcessStartInfo(origoPath);
+                    //startInfo.WorkingDirectory = thisAssemblyDirectory;
+                    //startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    //_orgioProcess = Process.Start(startInfo);
+                    //_orgioProcess.Refresh();
+                    _orgioProcess = Process.GetProcessById(pInfo.dwProcessId);
                     AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnProcessExit;
                 }
             }
@@ -79,10 +98,18 @@ namespace Torshify.Radio.Spotify
             {
                 _orgioProcess = processes.FirstOrDefault();
             }
-#endif
+            #endif
 
             Login();
         }
+
+        [DllImport("kernel32.dll")]
+        static extern bool CreateProcess(string lpApplicationName,
+            string lpCommandLine, ref SECURITY_ATTRIBUTES lpProcessAttributes,
+            ref SECURITY_ATTRIBUTES lpThreadAttributes, bool bInheritHandles,
+            uint dwCreationFlags, IntPtr lpEnvironment, string lpCurrentDirectory,
+            [In] ref STARTUPINFO lpStartupInfo,
+            out PROCESS_INFORMATION lpProcessInformation);
 
         private void CurrentDomainOnProcessExit(object sender, EventArgs eventArgs)
         {
@@ -136,6 +163,46 @@ namespace Torshify.Radio.Spotify
         #endregion Methods
 
         #region Nested Types
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct SECURITY_ATTRIBUTES
+        {
+            public int nLength;
+            public IntPtr lpSecurityDescriptor;
+            public int bInheritHandle;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct PROCESS_INFORMATION
+        {
+            public IntPtr hProcess;
+            public IntPtr hThread;
+            public int dwProcessId;
+            public int dwThreadId;
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        struct STARTUPINFO
+        {
+            public Int32 cb;
+            public string lpReserved;
+            public string lpDesktop;
+            public string lpTitle;
+            public Int32 dwX;
+            public Int32 dwY;
+            public Int32 dwXSize;
+            public Int32 dwYSize;
+            public Int32 dwXCountChars;
+            public Int32 dwYCountChars;
+            public Int32 dwFillAttribute;
+            public Int32 dwFlags;
+            public Int16 wShowWindow;
+            public Int16 cbReserved2;
+            public IntPtr lpReserved2;
+            public IntPtr hStdInput;
+            public IntPtr hStdOutput;
+            public IntPtr hStdError;
+        }
 
         private class NoOpLoginCallback : LoginServiceCallback
         {
