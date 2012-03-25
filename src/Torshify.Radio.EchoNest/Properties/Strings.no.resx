@@ -123,6 +123,9 @@
   <data name="Add_To_Queue" xml:space="preserve">
     <value>Legg til spillekø</value>
   </data>
+  <data name="Ban_Term" xml:space="preserve">
+    <value>Filtrer vekk fra søke resultater</value>
+  </data>
   <data name="Decrease_Boost_Term" xml:space="preserve">
     <value>Vekt denne mindre</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Fjern</value>
+  </data>
+  <data name="Require_Term" xml:space="preserve">
+    <value>Skal oppstå i søke resultatene</value>
   </data>
   <data name="Search_For_Similar_Artist" xml:space="preserve">
     <value>Søk etter lignende artister</value>

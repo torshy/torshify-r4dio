@@ -21,8 +21,6 @@
             x:Key="BooleanToVisibilityConverter" />
         <Converters:ImageLoaderConverter
             x:Key="ImageLoaderConverter" />
-        <PopupAnimation
-            x:Key="{x:Static SystemParameters.ToolTipPopupAnimationKey}">Fade</PopupAnimation>
         <Tabs:TrackContainerTemplateSelector
             x:Key="TrackContainerTemplateSelector">
             <Tabs:TrackContainerTemplateSelector.ArtistInfoTemplate>
@@ -53,30 +51,13 @@
                                     FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}" />
                             </DockPanel>
                             <TextBlock
-                                x:Name="bioText"
                                 Text="{Binding Biography}"
                                 FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeSmall}}"
                                 VerticalAlignment="Top"
-                                ToolTipService.Placement="Relative"
-                                ToolTipService.VerticalOffset="-4"
-                                ToolTipService.HorizontalOffset="-4"
                                 TextWrapping="WrapWithOverflow"
                                 TextTrimming="CharacterEllipsis"
                                 Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
-                                MaxHeight="70">
-                                <!--<TextBlock.ToolTip>
-                                     <ToolTip
-                                        BorderThickness="0"
-                                        Width="{Binding PlacementTarget.ActualWidth, RelativeSource={RelativeSource Self}}">
-                                        <TextBlock
-                                            Text="{Binding Biography}"
-                                            FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeSmall}}"
-                                            TextWrapping="WrapWithOverflow"
-                                            TextTrimming="CharacterEllipsis"
-                                            Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
-                                    </ToolTip>
-                                </TextBlock.ToolTip>-->
-                            </TextBlock>
+                                MaxHeight="70" />
                         </DockPanel>
                     </DockPanel>
                 </DataTemplate>

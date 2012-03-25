@@ -123,6 +123,9 @@
   <data name="Add_To_Queue" xml:space="preserve">
     <value>Add to queue</value>
   </data>
+  <data name="Ban_Term" xml:space="preserve">
+    <value>Ban from appearing in the search results</value>
+  </data>
   <data name="Decrease_Boost_Term" xml:space="preserve">
     <value>Decrease the weight of the term</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Remove</value>
+  </data>
+  <data name="Require_Term" xml:space="preserve">
+    <value>Require to appear in the search results</value>
   </data>
   <data name="Search_For_Similar_Artist" xml:space="preserve">
     <value>Search for similar artists</value>

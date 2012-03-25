@@ -79,6 +79,15 @@ namespace Torshify.Radio.EchoNest.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to @Ban_Term.
+        /// </summary>
+        internal static string Ban_Term {
+            get {
+                return ResourceManager.GetString("Ban_Term", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to @Decrease_Boost_Term.
         /// </summary>
         internal static string Decrease_Boost_Term {
@@ -147,6 +156,15 @@ namespace Torshify.Radio.EchoNest.Properties {
         internal static string Remove {
             get {
                 return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @Require_Term.
+        /// </summary>
+        internal static string Require_Term {
+            get {
+                return ResourceManager.GetString("Require_Term", resourceCulture);
             }
         }
         

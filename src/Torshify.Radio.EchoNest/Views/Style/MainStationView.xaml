@@ -257,7 +257,8 @@
                                 MinWidth="20"
                                 BorderThickness="0"
                                 Command="{Binding DataContext.BanTermCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                CommandParameter="{Binding}">
+                                CommandParameter="{Binding}"
+                                ToolTip="{lex:LocText Key=Ban_Term, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
                                 <Path
                                     Stretch="Uniform"
                                     Stroke="Red"
@@ -270,7 +271,8 @@
                                 MinWidth="20"
                                 BorderThickness="0"
                                 Command="{Binding DataContext.RequireTermCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                CommandParameter="{Binding}">
+                                CommandParameter="{Binding}"
+                                ToolTip="{lex:LocText Key=Require_Term, Dict=Strings, Assembly=Torshify.Radio.EchoNest}">
                                 <Path
                                     Stretch="Uniform"
                                     Stroke="LimeGreen"
