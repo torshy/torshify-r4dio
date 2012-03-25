@@ -341,8 +341,28 @@
     <DockPanel>
         <Button
             DockPanel.Dock="Bottom"
-            Content="Start radio"
-            Command="{Binding StartRadioCommand}" />
+            Command="{Binding StartRadioCommand}">
+            <StackPanel
+                Orientation="Horizontal">
+                <Viewbox
+                    Height="24">
+                    <Canvas
+                        Width="48"
+                        Height="48">
+                        <Path
+                            Width="12.9999"
+                            Height="20"
+                            Canvas.Left="19"
+                            Canvas.Top="14"
+                            Stretch="Fill"
+                            Fill="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
+                            Data="F1 M 19,14L 31.9999,23.7501L 31.9999,24.5001L 19,34L 19,14 Z " />
+                    </Canvas>                </Viewbox>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="Start radio" />
+            </StackPanel>
+        </Button>
         <GroupBox
             MaxWidth="150"
             DockPanel.Dock="Right"
@@ -405,8 +425,48 @@
                 <Expander>
                     <Expander.Header>
                         <DockPanel>
+                            <Viewbox
+                                DockPanel.Dock="Left"
+                                Height="28">
+                                <Canvas
+                                    Width="48"
+                                    Height="48"
+                                    Canvas.Left="0"
+                                    Canvas.Top="0"
+                                    UseLayoutRounding="True">
+                                    <Rectangle
+                                        Width="11"
+                                        Height="11"
+                                        Canvas.Left="12"
+                                        Canvas.Top="12"
+                                        Stretch="Fill"
+                                        Fill="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                                    <Rectangle
+                                        Width="11"
+                                        Height="11"
+                                        Canvas.Left="12"
+                                        Canvas.Top="25"
+                                        Stretch="Fill"
+                                        Fill="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                                    <Rectangle
+                                        Width="11"
+                                        Height="11"
+                                        Canvas.Left="25"
+                                        Canvas.Top="25"
+                                        Stretch="Fill"
+                                        Fill="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                                    <Rectangle
+                                        Width="11"
+                                        Height="11"
+                                        Canvas.Left="25"
+                                        Canvas.Top="12"
+                                        Stretch="Fill"
+                                        Fill="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}" />
+                                </Canvas>
+                            </Viewbox>
                             <TextBlock
                                 DockPanel.Dock="Left"
+                                VerticalAlignment="Center"
                                 Text="Styles"
                                 Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
                                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
@@ -414,6 +474,7 @@
                             <TextBlock
                                 Margin="8,0,0,0"
                                 Text="{Binding SelectedStylesText}"
+                                VerticalAlignment="Center"
                                 TextWrapping="Wrap"
                                 Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
                                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
@@ -448,15 +509,36 @@
                 <Expander>
                     <Expander.Header>
                         <DockPanel>
+                            <Viewbox
+                                DockPanel.Dock="Left"
+                                Height="28">
+                                <Canvas
+                                    Width="48"
+                                    Height="48"
+                                    Canvas.Left="0"
+                                    Canvas.Top="0"
+                                    UseLayoutRounding="True">
+                                    <Path
+                                        Width="25.4782"
+                                        Height="23.2349"
+                                        Canvas.Left="11.2609"
+                                        Canvas.Top="12.3484"
+                                        Stretch="Fill"
+                                        Fill="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
+                                        Data="F1 M 11.5,20.5834C 10.3333,16.25 13.6667,12.9167 16.5,12.4167C 19.3334,11.9167 21.6667,14.25 24,16.5833C 26.3334,14.25 28.6667,11.9167 31.5,12.4167C 34.3333,12.9167 37.6666,16.25 36.5,20.5833C 35.3333,24.9167 29.6667,30.25 24,35.5833C 18.3334,30.25 12.6667,24.9167 11.5,20.5834 Z " />
+                                </Canvas>
+                            </Viewbox>
                             <TextBlock
                                 DockPanel.Dock="Left"
                                 Text="Moods"
+                                VerticalAlignment="Center"
                                 Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
                                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
                                 FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
                             <TextBlock
                                 Margin="8,0,0,0"
                                 Text="{Binding SelectedMoodsText}"
+                                VerticalAlignment="Center"
                                 TextWrapping="Wrap"
                                 Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
                                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"
@@ -489,15 +571,34 @@
                 <Expander>
                     <Expander.Header>
                         <DockPanel>
-                            <TextBlock
+                            <Viewbox
+                                DockPanel.Dock="Left"
+                                Height="28">
+                                <Canvas
+                                    Width="48"
+                                    Height="48"
+                                    Canvas.Left="0"
+                                    Canvas.Top="0"
+                                    UseLayoutRounding="True">
+                                    <Path
+                                        Width="26"
+                                        Height="19"
+                                        Canvas.Left="11"
+                                        Canvas.Top="15"
+                                        Stretch="Fill"
+                                        Fill="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
+                                        Data="F1 M 14,15L 16,15L 16,22L 19,22L 19,25L 16,25L 16,34L 14,34L 14,25L 11,25L 11,22L 14,22L 14,15 Z M 23,15L 25,15L 25,28L 28,28L 28,31L 25,31L 25,34L 23,34L 23,31L 20,31L 20,28L 23,28L 23,15 Z M 32,15L 34,15L 34,17L 37,17L 37,20L 34,20L 34,34L 32,34L 32,20L 29,20L 29,17L 32,17L 32,15 Z " />
+                                </Canvas>                            </Viewbox>                            <TextBlock
                                 DockPanel.Dock="Left"
                                 Text="Parameters"
+                                VerticalAlignment="Center"
                                 Foreground="{DynamicResource {x:Static Framework:AppTheme.ForegroundBrushKey}}"
                                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilySemiBold}}"
                                 FontSize="{DynamicResource {x:Static Framework:AppTheme.FontSizeLarge}}" />
                             <TextBlock
                                 Margin="8,0,0,0"
                                 Text="{Binding MetricsText}"
+                                VerticalAlignment="Center"
                                 TextWrapping="Wrap"
                                 Foreground="{DynamicResource {x:Static Framework:AppTheme.SubtleBrushKey}}"
                                 FontFamily="{DynamicResource {x:Static Framework:AppTheme.FontFamilyLight}}"

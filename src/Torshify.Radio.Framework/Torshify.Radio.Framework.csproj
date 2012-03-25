@@ -129,6 +129,7 @@
     <Compile Include="Controls\FormPanel.cs" />
     <Compile Include="Controls\IFormPanelCoordinator.cs" />
     <Compile Include="Controls\ImageWithPlaceholder.cs" />
+    <Compile Include="Controls\MetroButton.cs" />
     <Compile Include="Controls\MetroProgressBar.cs" />
     <Compile Include="Controls\MetroWindow.cs" />
     <Compile Include="Controls\Panorama.cs" />
@@ -280,6 +281,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\MetroButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\MetroProgressBar.xaml">
       <SubType>Designer</SubType>

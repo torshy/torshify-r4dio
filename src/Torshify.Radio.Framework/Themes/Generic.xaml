@@ -7,6 +7,8 @@
         <ResourceDictionary
             Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/MetroProgressBar.xaml" />
         <ResourceDictionary
+            Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/MetroButton.xaml" />
+        <ResourceDictionary
             Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/TransitioningContentControl.xaml" />
         <ResourceDictionary
             Source="pack://application:,,,/Torshify.Radio.Framework;component/Themes/Panorama.xaml" />
