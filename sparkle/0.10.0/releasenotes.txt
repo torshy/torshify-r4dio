@@ -1,0 +1,7 @@
+0.10.0
+-----------------------
+* Updated the Eclectic UI
+	- Added possibility to increase/decrease the importance of a style/mood
+	- Added Ban/Require style/mood button
+* Added artist header in the Artist view
+* Fixed a few problems with favorites
