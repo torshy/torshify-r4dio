@@ -174,7 +174,14 @@ namespace Torshify.Radio.Core.Startables
                                           Console.WriteLine(e);
                                       }
                                   }
-                              }, _ui);
+                              }, _ui)
+                              .ContinueWith(task=>
+                              {
+                                  if (task.IsFaulted && task.Exception != null)
+                                  {
+                                      task.Exception.Handle(e => true);
+                                  }
+                              });
         }
 
         private BitmapImage LoadImage(string location, int width)

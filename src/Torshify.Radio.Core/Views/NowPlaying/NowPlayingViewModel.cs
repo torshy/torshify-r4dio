@@ -276,7 +276,14 @@ namespace Torshify.Radio.Core.Views.NowPlaying
                             InitializeÌmageMap = true;
                         }
                     }
-                }, _taskScheduler);
+                }, _taskScheduler)
+                .ContinueWith(task =>
+                {
+                    if (task.IsFaulted && task.Exception != null)
+                    {
+                        task.Exception.Handle(e => true);
+                    }
+                });
         }
 
         private bool CanExecuteNavigateBack()
