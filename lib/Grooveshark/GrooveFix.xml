@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<GrooveFix version="20120313">
+<GrooveFix version="20120320">
   <htmlshark>
     <GrooveClient>htmlshark</GrooveClient>
     <GrooveClientRevision>20120312</GrooveClientRevision>
@@ -7,7 +7,7 @@
   </htmlshark>
   <jsqueue>
     <GrooveClient>jsqueue</GrooveClient>
-    <GrooveClientRevision>20120312.01</GrooveClientRevision>
+    <GrooveClientRevision>20120312.02</GrooveClientRevision>
     <GrooveStaticRandomizer>:closeButNoCigar:</GrooveStaticRandomizer>
   </jsqueue>
   <mobileshark>

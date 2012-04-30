@@ -132,21 +132,13 @@ namespace Torshify.Radio.Grooveshark
 
         private IEnumerable<Track> Convert(IEnumerable<SearchArtist.SearchArtistResult> songs)
         {
-            return songs.Select(result =>
+            return songs.Select(result => new GroovesharkTrack(result.SongID, result.AlbumID)
             {
-                int songId;
-                int albumId;
-                int.TryParse(result.SongID, out songId);
-                int.TryParse(result.AlbumID, out albumId);
-
-                return new GroovesharkTrack(songId, albumId)
-                {
-                    Name = result.SongName,
-                    Album = result.AlbumName,
-                    Artist = result.ArtistName,
-                    Index = TryParse(result.TrackNum),
-                    AlbumArt = "http://images.grooveshark.com/static/albums/90_" + result.AlbumID + ".jpg"
-                };
+                Name = result.SongName,
+                Album = result.AlbumName,
+                Artist = result.ArtistName,
+                Index = TryParse(result.TrackNum),
+                AlbumArt = "http://images.grooveshark.com/static/albums/90_" + result.AlbumID + ".jpg"
             });
         }
 
