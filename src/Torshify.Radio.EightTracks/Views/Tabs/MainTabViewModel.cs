@@ -161,6 +161,11 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                 {
                     _tags.Clear();
 
+                    if (t.Result == null)
+                    {
+                        return;
+                    }
+
                     foreach (var mix in t.Result)
                     {
                         foreach (var tag in mix.TagListCacheAsArray)
