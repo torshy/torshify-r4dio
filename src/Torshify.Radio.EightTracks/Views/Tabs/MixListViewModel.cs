@@ -19,6 +19,8 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
     {
         #region Fields
 
+        private const int OneMegaByte = 1048576;
+
         protected ObservableCollection<Mix> _mixes;
         protected ObservableCollection<string> _tagFilterList;
         protected ObservableCollection<string> _tags;
@@ -146,11 +148,12 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                 {
                     using (var session = new EightTracksSession(EightTracksModule.ApiKey))
                     {
+                        session.SetHttpClientMaxResponseContentBufferSize(OneMegaByte);
                         var response = session.Query<Mixes>().GetMix(
-                        sorting: sortType, 
-                        filter: String.Join("+", TagFilterList),
-                        page: page,
-                        resultsPerPage: 25);
+                            sorting: sortType, 
+                            filter: String.Join("+", TagFilterList),
+                            page: page,
+                            resultsPerPage: 25);
 
                         if (response != null)
                         {
