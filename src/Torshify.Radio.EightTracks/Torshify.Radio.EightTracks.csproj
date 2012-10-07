@@ -73,6 +73,7 @@
     <Compile Include="Converters\ListContainsItemToBoolConverter.cs" />
     <Compile Include="Converters\MixToImageConverter.cs" />
     <Compile Include="Converters\MixToTrackStreamDataConverter.cs" />
+    <Compile Include="EightTracksExtensions.cs" />
     <Compile Include="FavoriteHandlers\EightTracksFavoriteHandler.cs" />
     <Compile Include="EightTracksMixTrackStreamData.cs" />
     <Compile Include="EightTracksModule.cs" />

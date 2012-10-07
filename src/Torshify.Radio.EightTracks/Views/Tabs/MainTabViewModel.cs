@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +16,8 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
     public class MainTabViewModel : MixListViewModel, INavigationAware
     {
         #region Fields
+
+        private const int OneMegaByte = 1048576;
 
         private HeaderInfo _headerInfo;
 
@@ -87,6 +88,7 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                 {
                     using (var session = new EightTracksSession(EightTracksModule.ApiKey))
                     {
+                        session.SetHttpClientMaxResponseContentBufferSize(OneMegaByte);
                         if (type == "Tag")
                         {
                             var response = session.Query<Mixes>().GetMix(tag: text);
@@ -140,7 +142,10 @@ namespace Torshify.Radio.EightTracks.Views.Tabs
                 {
                     using (var session = new EightTracksSession(EightTracksModule.ApiKey))
                     {
-                        var response = session.Query<Mixes>().GetMix(sorting: global::EightTracks.Mixes.Sort.Random, resultsPerPage: 25);
+                        session.SetHttpClientMaxResponseContentBufferSize(OneMegaByte);
+                        var response = session.Query<Mixes>().GetMix(
+                            sorting: global::EightTracks.Mixes.Sort.Random,
+                            resultsPerPage: 25);
                         _currentPage = response.Page;
                         _numberOfPages = response.TotalPages;
                         return response.Mixes;
